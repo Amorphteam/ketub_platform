@@ -57,18 +57,49 @@ class EpubScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Container(
-        child: WebView(
-          initialUrl: '',
-          onWebViewCreated: (WebViewController webViewController) {
-            // Load HTML content when the WebView is created
-            webViewController.loadUrl(Uri.dataFromString(
-              htmlText,
-              mimeType: 'text/html',
-              encoding: Encoding.getByName('utf-8'),
-            ).toString());
-          },
-        ),
+      body: Row(
+        children: [
+          Expanded(
+            child: WebView(
+              initialUrl: '',
+              onWebViewCreated: (WebViewController webViewController) {
+                // Load HTML content when the WebView is created
+                webViewController.loadUrl(Uri.dataFromString(
+                  htmlText,
+                  mimeType: 'text/html',
+                  encoding: Encoding.getByName('utf-8'),
+                ).toString());
+              },
+            ),
+          ),
+          const VerticalSeekBar(), // Add the vertical SeekBar here
+        ],
+      ),
+    );
+  }
+}
+
+class VerticalSeekBar extends StatefulWidget {
+  const VerticalSeekBar({super.key});
+
+  @override
+  _VerticalSeekBarState createState() => _VerticalSeekBarState();
+}
+
+class _VerticalSeekBarState extends State<VerticalSeekBar> {
+  double _sliderValue = 0.5;
+
+  @override
+  Widget build(BuildContext context) {
+    return RotatedBox(
+      quarterTurns: 1, // Rotate the SeekBar 90 degrees (bottom-up orientation)
+      child: Slider(
+        value: _sliderValue,
+        onChanged: (newValue) {
+          setState(() {
+            _sliderValue = newValue;
+          });
+        },
       ),
     );
   }

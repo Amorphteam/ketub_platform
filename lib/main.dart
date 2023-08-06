@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ketub_platform/screen/epub_screen.dart';
+import 'package:ketub_platform/screen/epub/epub_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,11 +14,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
         useMaterial3: true,
       ),
-      home: const EpubScreen(),
+      home: EpubScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
