@@ -11,24 +11,27 @@ class TocPage extends StatelessWidget {
       itemCount: nodes.length,
       itemBuilder: (context, index) {
         TocGroupItem groupItem = nodes[index];
-        return _buildListTile(groupItem);
+        return _buildListTile(context, groupItem);
       },
     );
   }
 
-  Widget _buildListTile(TocGroupItem groupItem) {
+  Widget _buildListTile(BuildContext context, TocGroupItem groupItem) {
     if (groupItem.childItems != null) {
       return ExpansionTile(
-        title: Text(groupItem.bookTitle),
-        subtitle: Text(groupItem.bookName),
+        title: Text(groupItem.bookTitle,style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Colors.black)
+        ),
+        subtitle: Text(groupItem.bookName,style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey)
+        ),
         children: [
           _buildFirstChildList(groupItem.childItems),
         ],
+
       );
     } else {
       return ListTile(
-        title: Text(groupItem.bookTitle),
-        subtitle: Text(groupItem.bookName),
+        title: Text(groupItem.bookTitle,style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Colors.black)),
+        subtitle: Text(groupItem.bookName,style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Colors.grey)),
       );
     }
   }
@@ -40,24 +43,28 @@ class TocPage extends StatelessWidget {
       itemCount: childItems.length,
       itemBuilder: (context, index) {
         TocFirstChildItem firstChildItem = childItems[index];
-        return _buildFirstChildListTile(firstChildItem);
+        return _buildFirstChildListTile(context, firstChildItem);
       },
     );
   }
 
-  Widget _buildFirstChildListTile(TocFirstChildItem firstChildItem) {
+  Widget _buildFirstChildListTile(BuildContext context,TocFirstChildItem firstChildItem) {
     if (firstChildItem.childItems2 != null) {
       return ExpansionTile(
-        title: Text(firstChildItem.bookTitle),
-        subtitle: Text(firstChildItem.bookName),
+        title: Padding(
+          padding: const EdgeInsets.only(left: 16),
+          child: Text(firstChildItem.bookTitle, style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Colors.black)),
+        ),
         children: [
           _buildSecondChildList(firstChildItem.childItems2),
         ],
       );
     } else {
       return ListTile(
-        title: Text(firstChildItem.bookTitle),
-        subtitle: Text(firstChildItem.bookName),
+        title: Padding(
+          padding: const EdgeInsets.only(left: 16),
+          child: Text(firstChildItem.bookTitle, style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Colors.black)),
+        ),
       );
     }
   }
@@ -70,8 +77,10 @@ class TocPage extends StatelessWidget {
       itemBuilder: (context, index) {
         TocSecondChildItem secondChildItem = childItems2[index];
         return ListTile(
-          title: Text(secondChildItem.bookTitle),
-          subtitle: Text(secondChildItem.bookName),
+          title: Padding(
+            padding: const EdgeInsets.only(left: 32),
+            child: Text(secondChildItem.bookTitle, style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Colors.black)),
+          ),
         );
       },
     );
