@@ -13,7 +13,50 @@ class EpubScreen extends StatelessWidget {
         '<p>You can add any valid HTML content here.</p>';
 
     return Scaffold(
-      appBar: AppBar(title: Text('Book Name Here')),
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Button search was pressed!'),
+                ),
+              );
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.tune_rounded),
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Button setting was pressed!'),
+                ),
+              );
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.bookmark_border),
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Button bookmark was pressed!'),
+                ),
+              );
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.description_outlined),
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Button toc was pressed!'),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
       body: Container(
         child: WebView(
           initialUrl: '',
