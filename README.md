@@ -1,6 +1,6 @@
 # ketub_platform
 
-An epub reader app
+An epub reader platform
 
 ## Getting Started
 
