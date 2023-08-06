@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ketub_platform/models/book_item.dart';
+import 'package:ketub_platform/models/category_model.dart';
 import 'package:ketub_platform/pages/search_page.dart';
 import 'package:ketub_platform/pages/toc_page.dart';
 import 'package:ketub_platform/util/temp_data.dart';
@@ -46,7 +46,7 @@ class LibraryPage extends StatelessWidget {
                 mainAxisSpacing: 10, // Spacing between rows
                 childAspectRatio: 0.9,
               ),
-              itemCount: bookItems.length,
+              itemCount: categoryItems.length,
               itemBuilder: (context, index) {
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -56,7 +56,7 @@ class LibraryPage extends StatelessWidget {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           image: DecorationImage(
-                            image: AssetImage('assets/images/' + bookItems[index].imagePath),
+                            image: AssetImage('assets/images/' + categoryItems[index].catCover),
                             fit: BoxFit.contain,
                           ),
                         ),
@@ -64,7 +64,7 @@ class LibraryPage extends StatelessWidget {
                     ),
                     SizedBox(height: 5),
                     Text(
-                      bookItems[index].title,
+                      categoryItems[index].catName,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 12,

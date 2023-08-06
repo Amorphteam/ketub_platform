@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ketub_platform/pages/library_page.dart';
 import 'package:ketub_platform/pages/toc_page.dart';
+import 'package:ketub_platform/util/temp_data.dart';
 
 class NavPage extends StatefulWidget {
   @override
@@ -12,7 +13,7 @@ class _NavPageState extends State<NavPage> {
 
   final List<Widget> _pages = [
     LibraryPage(),
-    TocPage(),
+    TocPage(indexItems),
   ];
 
   @override
