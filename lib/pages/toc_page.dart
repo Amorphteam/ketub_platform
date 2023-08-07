@@ -36,12 +36,26 @@ class _TocPageState extends State<TocPage> {
   }
   @override
   Widget build(BuildContext context) {
+    String filter = '';
+
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 16,vertical: 10),
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           child: TextField(
-            onChanged: (value) => filterList(value),
+            onChanged: (value) {
+              filter = value;
+              if (value.isNotEmpty) {
+                setState(() {
+                  filterList(value);
+
+                });
+              } else {
+                setState(() {
+                  filteredList = widget.tocList;
+                });
+              }
+            },
             decoration: InputDecoration(
               contentPadding: EdgeInsets.zero,
               labelText: 'Search',
@@ -53,10 +67,11 @@ class _TocPageState extends State<TocPage> {
           ),
         ),
         Expanded(
-          child: filteredList.isNotEmpty
-              ? TocTreeListWidget(tocList: widget.tocList)
-              : TocListWidget(tocList: widget.tocList),
+          child: (filteredList.isNotEmpty && filter.isNotEmpty)
+              ? TocListWidget(tocList: filteredList) // Show TocListWidget if filteredList is not empty
+              : TocTreeListWidget(tocList: widget.tocList), // Show TocTreeListWidget if filteredList is empty
         ),
+
       ],
     );
   }

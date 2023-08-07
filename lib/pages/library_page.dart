@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ketub_platform/models/category_model.dart';
 import 'package:ketub_platform/pages/search_page.dart';
-import 'package:ketub_platform/pages/toc_page.dart';
 import 'package:ketub_platform/util/temp_data.dart';
 
 class LibraryPage extends StatelessWidget {
@@ -28,7 +26,7 @@ class LibraryPage extends StatelessWidget {
                   border: Border.all(color: Colors.grey),
                 ),
 
-                child: Row(
+                child: const Row(
                   children: [
                     Icon(Icons.search),
                     SizedBox(width: 10),
@@ -40,7 +38,7 @@ class LibraryPage extends StatelessWidget {
           ),
           Expanded(
             child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3, // Number of columns
                 crossAxisSpacing: 10, // Spacing between columns
                 mainAxisSpacing: 10, // Spacing between rows
@@ -66,7 +64,7 @@ class LibraryPage extends StatelessWidget {
                     Text(
                       categoryItems[index].catName,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 12,
                       ),
                     ),
