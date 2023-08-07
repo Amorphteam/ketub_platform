@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class StyleSheet extends StatefulWidget {
   const StyleSheet({super.key});
@@ -31,13 +32,46 @@ class _StyleSheetState extends State<StyleSheet> {
       _lineHeightSliderValue = newValue;
     });
   }
+
+  Color _selectedColor = Colors.black; // Default color
+
+  // ... Other methods ...
+
+  void _showColorPicker() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Pick a color'),
+          content: SingleChildScrollView(
+            child: ColorPicker(
+              pickerColor: _selectedColor,
+              onColorChanged: (color) {
+                setState(() {
+                  _selectedColor = color;
+                });
+              },
+              pickerAreaHeightPercent: 0.8,
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(16.0),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 16),
@@ -107,12 +141,12 @@ class _StyleSheetState extends State<StyleSheet> {
               ),
             ],
           ),
-          SizedBox(height: 26,),
+          SizedBox(height: 18,),
           Divider(), // Add a divider here
 
-          SizedBox(height: 26,),
+          SizedBox(height: 18,),
           Text('Advanced settings', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-          SizedBox(height: 26), // Add spacing before the Chip widgets
+          SizedBox(height: 18), // Add spacing before the Chip widgets
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -174,8 +208,14 @@ class _StyleSheetState extends State<StyleSheet> {
               Icon(Icons.format_line_spacing, size: 18, color: Colors.grey,),
             ],
           ),
+          IconButton(
+            icon: Icon(Icons.color_lens),
+            onPressed: _showColorPicker,
+          ),
         ],
       ),
+
+
     );
   }
 }
