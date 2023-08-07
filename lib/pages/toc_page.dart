@@ -1,93 +1,63 @@
 import 'package:flutter/material.dart';
 import 'package:ketub_platform/models/toc_model.dart';
+import 'package:ketub_platform/widget/toc_list_widget.dart';
+import 'package:ketub_platform/widget/toc_tree_list_widget.dart';
 
-class TocPage extends StatelessWidget {
-  final List<TocGroupItem> nodes;
-
-  TocPage(this.nodes);
-
-  Widget _buildTreeList(List<TocGroupItem> nodes) {
-    return ListView.builder(
-      itemCount: nodes.length,
-      itemBuilder: (context, index) {
-        TocGroupItem groupItem = nodes[index];
-        return _buildListTile(context, groupItem);
-      },
-    );
-  }
-
-  Widget _buildListTile(BuildContext context, TocGroupItem groupItem) {
-    if (groupItem.childItems != null) {
-      return ExpansionTile(
-        title: Text(groupItem.bookTitle,style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Colors.black)
-        ),
-        subtitle: Text(groupItem.bookName,style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey)
-        ),
-        children: [
-          _buildFirstChildList(groupItem.childItems),
-        ],
-
-      );
-    } else {
-      return ListTile(
-        title: Text(groupItem.bookTitle,style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Colors.black)),
-        subtitle: Text(groupItem.bookName,style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Colors.grey)),
-      );
-    }
-  }
-
-  Widget _buildFirstChildList(List<TocFirstChildItem> childItems) {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: ClampingScrollPhysics(),
-      itemCount: childItems.length,
-      itemBuilder: (context, index) {
-        TocFirstChildItem firstChildItem = childItems[index];
-        return _buildFirstChildListTile(context, firstChildItem);
-      },
-    );
-  }
-
-  Widget _buildFirstChildListTile(BuildContext context,TocFirstChildItem firstChildItem) {
-    if (firstChildItem.childItems2 != null) {
-      return ExpansionTile(
-        title: Padding(
-          padding: const EdgeInsets.only(left: 16),
-          child: Text(firstChildItem.bookTitle, style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Colors.black)),
-        ),
-        children: [
-          _buildSecondChildList(firstChildItem.childItems2),
-        ],
-      );
-    } else {
-      return ListTile(
-        title: Padding(
-          padding: const EdgeInsets.only(left: 16),
-          child: Text(firstChildItem.bookTitle, style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Colors.black)),
-        ),
-      );
-    }
-  }
-
-  Widget _buildSecondChildList(List<TocSecondChildItem> childItems2) {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: ClampingScrollPhysics(),
-      itemCount: childItems2.length,
-      itemBuilder: (context, index) {
-        TocSecondChildItem secondChildItem = childItems2[index];
-        return ListTile(
-          title: Padding(
-            padding: const EdgeInsets.only(left: 32),
-            child: Text(secondChildItem.bookTitle, style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Colors.black)),
-          ),
-        );
-      },
-    );
-  }
+class TocPage extends StatefulWidget {
+  final List<TocGroupItem> tocList;
+  const TocPage(this.tocList);
 
   @override
+  _TocPageState createState() => _TocPageState();
+}
+class _TocPageState extends State<TocPage> {
+  List<TocGroupItem> filteredList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    filteredList = widget.tocList;
+  }
+
+
+  void filterList(String query) {
+    setState(() {
+      filteredList = widget.tocList.where((item) {
+        return item.bookTitle.toLowerCase().contains(query.toLowerCase()) ||
+            item.childItems.any((childItem) {
+              return childItem.bookTitle.toLowerCase().contains(query.toLowerCase()) ||
+                  childItem.childItems2.any((secondChildItem) {
+                    return secondChildItem.bookTitle.toLowerCase().contains(query.toLowerCase());
+                  });
+            });
+      }).toList();
+
+    });
+  }
+  @override
   Widget build(BuildContext context) {
-    return _buildTreeList(nodes);
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 16,vertical: 10),
+          child: TextField(
+            onChanged: (value) => filterList(value),
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.zero,
+              labelText: 'Search',
+              prefixIcon: Icon(Icons.search),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+          child: filteredList.isNotEmpty
+              ? TocTreeListWidget(tocList: widget.tocList)
+              : TocListWidget(tocList: widget.tocList),
+        ),
+      ],
+    );
   }
 }
