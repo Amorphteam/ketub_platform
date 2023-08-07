@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:ketub_platform/widget/style_sheet.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class EpubScreen extends StatelessWidget {
@@ -107,85 +108,7 @@ void _showBottomSheet(BuildContext context) {
   showModalBottomSheet(
     context: context,
     builder: (BuildContext context) {
-      return Container(
-        width: double.infinity,
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 16),
-            Text(
-              'Text setting wizard',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 26),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.contrast),
-                      onPressed: () {
-
-                      },
-                    ),
-                    const Text(
-                      'High Contrast',
-                      style: TextStyle(fontSize: 10),
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.dark_mode),
-                      onPressed: () {
-
-                      },
-                    ),
-                    Text(
-                      'Dark Mode',
-                      style: TextStyle(fontSize: 10),
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.zoom_out_map),
-                      onPressed: () {
-
-                      },
-                    ),
-                    Text(
-                      'More readability',
-                      style: TextStyle(fontSize: 10),
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.article),
-                      onPressed: () {
-
-                      },
-                    ),
-                    Text(
-                      'High Contrast',
-                      style: TextStyle(fontSize: 10),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            SizedBox(height: 26,),
-            Center(child: Text('Advanced settings'))
-          ],
-        ),
-      );
+      return StyleSheet();
     },
   );
 }
