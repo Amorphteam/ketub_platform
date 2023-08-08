@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:ketub_platform/pages/search_page.dart';
-import 'package:ketub_platform/util/temp_data.dart';
+import 'package:ketub_platform/Screens/search_screen.dart';
+import 'package:ketub_platform/utils/temp_data.dart';
 
-class LibraryPage extends StatelessWidget {
+class LibraryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +15,7 @@ class LibraryPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => SearchPage(),
+                    builder: (context) => SearchScreen(),
                   ),
                 );
               },
@@ -44,7 +44,7 @@ class LibraryPage extends StatelessWidget {
                 mainAxisSpacing: 10, // Spacing between rows
                 childAspectRatio: 0.9,
               ),
-              itemCount: categoryItems.length,
+              itemCount: tempBook.length,
               itemBuilder: (context, index) {
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -54,7 +54,7 @@ class LibraryPage extends StatelessWidget {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           image: DecorationImage(
-                            image: AssetImage('assets/images/' + categoryItems[index].catCover),
+                            image: AssetImage('assets/images/' + tempBook[index].bookCover),
                             fit: BoxFit.contain,
                           ),
                         ),
@@ -62,7 +62,7 @@ class LibraryPage extends StatelessWidget {
                     ),
                     SizedBox(height: 5),
                     Text(
-                      categoryItems[index].catName,
+                      tempBook[index].bookName,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         fontSize: 12,

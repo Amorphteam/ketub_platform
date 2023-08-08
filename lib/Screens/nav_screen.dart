@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:ketub_platform/pages/library_page.dart';
-import 'package:ketub_platform/pages/toc_page.dart';
-import 'package:ketub_platform/util/temp_data.dart';
+import 'package:ketub_platform/Screens/bookmark_screen.dart';
+import 'package:ketub_platform/Screens/library_screen.dart';
+import 'package:ketub_platform/Screens/toc_screen.dart';
+import 'package:ketub_platform/utils/temp_data.dart';
 
-class NavPage extends StatefulWidget {
+class NavScreen extends StatefulWidget {
   @override
-  _NavPageState createState() => _NavPageState();
+  _NavScreenState createState() => _NavScreenState();
 }
 
-class _NavPageState extends State<NavPage> {
+class _NavScreenState extends State<NavScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    LibraryPage(),
-    TocPage(indexItems),
+    LibraryScreen(),
+    TocScreen(tempToc),
+    BookmarkScreen(tempReferences)
   ];
 
   @override
@@ -38,6 +40,10 @@ class _NavPageState extends State<NavPage> {
           NavigationDestination(
             icon: Icon(Icons.toc),
             label: 'toc',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.bookmark),
+            label: 'bookmark',
           ),
         ],
       ),
