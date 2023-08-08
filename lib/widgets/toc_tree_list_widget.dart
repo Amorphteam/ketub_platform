@@ -29,7 +29,7 @@ class TocTreeListWidget  extends StatelessWidget {
           subtitle: Text(groupItem.bookName,style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey)
           ),
           children: [
-            _buildFirstChildList(groupItem.childItems),
+            _buildFirstChildList(groupItem.childItems!),
           ],
 
         );
@@ -41,27 +41,27 @@ class TocTreeListWidget  extends StatelessWidget {
       }
     }
 
-    Widget _buildFirstChildList(List<TocFirstChildItem> childItems) {
+    Widget _buildFirstChildList(List<TocGroupItem> childItems) {
       return ListView.builder(
         shrinkWrap: true,
         physics: ClampingScrollPhysics(),
         itemCount: childItems.length,
         itemBuilder: (context, index) {
-          TocFirstChildItem firstChildItem = childItems[index];
+          TocGroupItem firstChildItem = childItems[index];
           return _buildFirstChildListTile(context, firstChildItem);
         },
       );
     }
 
-    Widget _buildFirstChildListTile(BuildContext context,TocFirstChildItem firstChildItem) {
-      if (firstChildItem.childItems2 != null) {
+    Widget _buildFirstChildListTile(BuildContext context,TocGroupItem firstChildItem) {
+      if (firstChildItem.childItems != null) {
         return ExpansionTile(
           title: Padding(
             padding: const EdgeInsets.only(left: 16),
             child: Text(firstChildItem.bookTitle, style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Colors.black)),
           ),
           children: [
-            _buildSecondChildList(firstChildItem.childItems2),
+            _buildSecondChildList(firstChildItem.childItems!),
           ],
         );
       } else {
@@ -74,13 +74,13 @@ class TocTreeListWidget  extends StatelessWidget {
       }
     }
 
-    Widget _buildSecondChildList(List<TocSecondChildItem> childItems2) {
+    Widget _buildSecondChildList(List<TocGroupItem> childItems2) {
       return ListView.builder(
         shrinkWrap: true,
         physics: ClampingScrollPhysics(),
         itemCount: childItems2.length,
         itemBuilder: (context, index) {
-          TocSecondChildItem secondChildItem = childItems2[index];
+          TocGroupItem secondChildItem = childItems2[index];
           return ListTile(
             title: Padding(
               padding: const EdgeInsets.only(left: 32),

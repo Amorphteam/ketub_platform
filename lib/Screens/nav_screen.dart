@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ketub_platform/Screens/bookmark_screen.dart';
 import 'package:ketub_platform/Screens/library_screen.dart';
 import 'package:ketub_platform/Screens/toc_screen.dart';
+import 'package:ketub_platform/cubits/bookmark_cubit.dart';
+import 'package:ketub_platform/repositories/reference_database.dart';
 import 'package:ketub_platform/utils/temp_data.dart';
 
 class NavScreen extends StatefulWidget {
@@ -13,15 +16,17 @@ class _NavScreenState extends State<NavScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    LibraryScreen(),
+    LibraryScreen(tempBook),
     TocScreen(tempToc),
-    BookmarkScreen(tempReferences)
+    BlocProvider(
+      create: (context) => BookmarkCubit(ReferenceDatabase.instance),
+      child: BookmarkScreen(),
+    )
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: SafeArea(
         child: _pages[_currentIndex],
       ),

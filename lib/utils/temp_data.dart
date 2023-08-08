@@ -71,24 +71,24 @@ List<TocGroupItem> tempToc = [
     bookTitle: loremIpsum(words: 7),
     bookName: loremIpsum(words: 3),
     childItems: [
-      TocFirstChildItem(
+      TocGroupItem(
         id: 1,
         bookTitle: loremIpsum(words: 7),
         bookName: loremIpsum(words: 3),
-        childItems2: [
-          TocSecondChildItem(id: 1, bookTitle: loremIpsum(words: 7), bookName: loremIpsum(words: 3)),
-          TocSecondChildItem(id: 2, bookTitle: loremIpsum(words: 7), bookName: loremIpsum(words: 3)),
-          TocSecondChildItem(id: 3, bookTitle: loremIpsum(words: 7), bookName: loremIpsum(words: 3)),
+        childItems: [
+          TocGroupItem(id: 1, bookTitle: loremIpsum(words: 7), bookName: loremIpsum(words: 3), childItems: null),
+          TocGroupItem(id: 2, bookTitle: loremIpsum(words: 7), bookName: loremIpsum(words: 3), childItems: null),
+          TocGroupItem(id: 3, bookTitle: loremIpsum(words: 7), bookName: loremIpsum(words: 3), childItems: null),
         ],
       ),
-      TocFirstChildItem(
+      TocGroupItem(
         id: 2,
         bookTitle: loremIpsum(words: 7),
         bookName: loremIpsum(words: 3),
-        childItems2: [
-          TocSecondChildItem(id: 1, bookTitle: loremIpsum(words: 7), bookName: loremIpsum(words: 3)),
-          TocSecondChildItem(id: 2, bookTitle: loremIpsum(words: 7), bookName: loremIpsum(words: 3)),
-          TocSecondChildItem(id: 3, bookTitle: loremIpsum(words: 7), bookName: loremIpsum(words: 3)),
+        childItems: [
+          TocGroupItem(id: 1, bookTitle: loremIpsum(words: 7), bookName: loremIpsum(words: 3), childItems: null),
+          TocGroupItem(id: 2, bookTitle: loremIpsum(words: 7), bookName: loremIpsum(words: 3), childItems: null),
+          TocGroupItem(id: 3, bookTitle: loremIpsum(words: 7), bookName: loremIpsum(words: 3), childItems: null),
         ],
       ),
     ],
@@ -98,24 +98,24 @@ List<TocGroupItem> tempToc = [
     bookTitle: loremIpsum(words: 10),
     bookName: loremIpsum(words: 3),
     childItems: [
-      TocFirstChildItem(
+      TocGroupItem(
         id: 1,
         bookTitle: loremIpsum(words: 10),
         bookName: loremIpsum(words: 3),
-        childItems2: [
-          TocSecondChildItem(id: 1, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3)),
-          TocSecondChildItem(id: 2, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3)),
-          TocSecondChildItem(id: 3, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3)),
+        childItems: [
+          TocGroupItem(id: 1, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
+          TocGroupItem(id: 2, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
+          TocGroupItem(id: 3, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
         ],
       ),
-      TocFirstChildItem(
+      TocGroupItem(
         id: 2,
         bookTitle: loremIpsum(words: 10),
         bookName: loremIpsum(words: 3),
-        childItems2: [
-          TocSecondChildItem(id: 1, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3)),
-          TocSecondChildItem(id: 2, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3)),
-          TocSecondChildItem(id: 3, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3)),
+        childItems: [
+          TocGroupItem(id: 1, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
+          TocGroupItem(id: 2, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
+          TocGroupItem(id: 3, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
         ],
       ),
     ],
@@ -125,24 +125,24 @@ List<TocGroupItem> tempToc = [
     bookTitle: loremIpsum(words: 10),
     bookName: loremIpsum(words: 3),
     childItems: [
-      TocFirstChildItem(
+      TocGroupItem(
         id: 1,
         bookTitle: loremIpsum(words: 10),
         bookName: loremIpsum(words: 3),
-        childItems2: [
-          TocSecondChildItem(id: 1, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3)),
-          TocSecondChildItem(id: 2, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3)),
-          TocSecondChildItem(id: 3, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3)),
+        childItems: [
+          TocGroupItem(id: 1, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
+          TocGroupItem(id: 2, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
+          TocGroupItem(id: 3, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
         ],
       ),
-      TocFirstChildItem(
+      TocGroupItem(
         id: 2,
         bookTitle: loremIpsum(words: 10),
         bookName: loremIpsum(words: 3),
-        childItems2: [
-          TocSecondChildItem(id: 1, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3)),
-          TocSecondChildItem(id: 2, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3)),
-          TocSecondChildItem(id: 3, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3)),
+        childItems: [
+          TocGroupItem(id: 1, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
+          TocGroupItem(id: 2, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
+          TocGroupItem(id: 3, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
         ],
       ),
     ],
@@ -152,24 +152,24 @@ List<TocGroupItem> tempToc = [
     bookTitle: loremIpsum(words: 10),
     bookName: loremIpsum(words: 3),
     childItems: [
-      TocFirstChildItem(
+      TocGroupItem(
         id: 1,
         bookTitle: loremIpsum(words: 10),
         bookName: loremIpsum(words: 3),
-        childItems2: [
-          TocSecondChildItem(id: 1, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3)),
-          TocSecondChildItem(id: 2, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3)),
-          TocSecondChildItem(id: 3, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3)),
+        childItems: [
+          TocGroupItem(id: 1, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
+          TocGroupItem(id: 2, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
+          TocGroupItem(id: 3, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
         ],
       ),
-      TocFirstChildItem(
+      TocGroupItem(
         id: 2,
         bookTitle: loremIpsum(words: 10),
         bookName: loremIpsum(words: 3),
-        childItems2: [
-          TocSecondChildItem(id: 1, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3)),
-          TocSecondChildItem(id: 2, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3)),
-          TocSecondChildItem(id: 3, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3)),
+        childItems: [
+          TocGroupItem(id: 1, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
+          TocGroupItem(id: 2, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
+          TocGroupItem(id: 3, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
         ],
       ),
     ],
@@ -179,24 +179,24 @@ List<TocGroupItem> tempToc = [
     bookTitle: loremIpsum(words: 10),
     bookName: loremIpsum(words: 3),
     childItems: [
-      TocFirstChildItem(
+      TocGroupItem(
         id: 1,
         bookTitle: loremIpsum(words: 10),
         bookName: loremIpsum(words: 3),
-        childItems2: [
-          TocSecondChildItem(id: 1, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3)),
-          TocSecondChildItem(id: 2, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3)),
-          TocSecondChildItem(id: 3, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3)),
+        childItems: [
+          TocGroupItem(id: 1, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
+          TocGroupItem(id: 2, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
+          TocGroupItem(id: 3, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
         ],
       ),
-      TocFirstChildItem(
+      TocGroupItem(
         id: 2,
         bookTitle: loremIpsum(words: 10),
         bookName: loremIpsum(words: 3),
-        childItems2: [
-          TocSecondChildItem(id: 1, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3)),
-          TocSecondChildItem(id: 2, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3)),
-          TocSecondChildItem(id: 3, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3)),
+        childItems: [
+          TocGroupItem(id: 1, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
+          TocGroupItem(id: 2, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
+          TocGroupItem(id: 3, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
         ],
       ),
     ],
