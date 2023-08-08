@@ -13,8 +13,8 @@ class EpubScreen extends StatefulWidget {
 
 class _EpubScreenState extends State<EpubScreen> {
   late PageController _pageController;
-  bool _webViewIsScrolling = false;
-
+  bool _webViewIsScrolling = true;
+  bool enableAgreeButton = false;
   @override
   void initState() {
     super.initState();
@@ -32,6 +32,13 @@ class _EpubScreenState extends State<EpubScreen> {
     String htmlText = '''
       <html>
         <head>
+        <script>
+window.onscroll = function(ev) {
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+    window.FLUTTER_CHANNEL.postMessage('end of scroll');
+    }
+};
+</script>
           <style>
           body {
           padding: 40px;
@@ -119,7 +126,7 @@ class _EpubScreenState extends State<EpubScreen> {
                     onPageChanged: (index){
                       // Reset the WebView scrolling flag when changing pages
                       setState(() {
-                        _webViewIsScrolling = false;
+                        _webViewIsScrolling = true;
                       });
                     },
                   ),
@@ -137,6 +144,7 @@ class _EpubScreenState extends State<EpubScreen> {
   Widget buildWebView(String htmlContent) {
     return WebView(
       initialUrl: '',
+      javascriptMode: JavascriptMode.unrestricted,
       onWebViewCreated: (WebViewController webViewController) {
         // Load HTML content when the WebView is created
         webViewController.loadUrl(Uri.dataFromString(
@@ -145,19 +153,33 @@ class _EpubScreenState extends State<EpubScreen> {
           encoding: Encoding.getByName('utf-8'),
         ).toString());
       },
+      javascriptChannels: [
+        JavascriptChannel(
+            name: 'FLUTTER_CHANNEL',
+            onMessageReceived: (message) {
+              if (message.message.toString() ==
+                  "end of scroll") {
+                setState((){
+                  _webViewIsScrolling = false;
+                });
+              }
+            })
+      ].toSet(),
+      gestureNavigationEnabled: true,
+      debuggingEnabled: true,
       onPageStarted: (url) {
         // WebView scrolling started, prevent PageView scrolling
-        setState(() {
-          _webViewIsScrolling = true;
-        });
+        // setState(() {
+        //   _webViewIsScrolling = true;
+        // });
         print('started');
 
       },
       onPageFinished: (url) {
         // WebView scrolling finished, allow PageView scrolling
-        setState(() {
-          _webViewIsScrolling = false;
-        });
+        // setState(() {
+        //   _webViewIsScrolling = false;
+        // });
         print('finished');
       },
     );
