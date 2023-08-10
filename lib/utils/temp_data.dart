@@ -6,33 +6,11 @@ import '../models/reference_model.dart';
 
 List<BookModel> tempBook = [
   BookModel(
-      id: 1, bookName: 'Item 1', bookCover: 'book_sample.png', des: ''),
+      id: 1, bookName: 'Item 1', bookCover: 'book_sample.png', description: ''),
   BookModel(
-      id: 2, bookName: 'Item 2', bookCover: 'book_sample.png', des: ''),
+      id: 2, bookName: 'Item 2', bookCover: 'book_sample.png', description: ''),
   BookModel(
-      id: 3, bookName: 'Item 3', bookCover: 'book_sample.png', des: ''),
-  BookModel(
-      id: 4, bookName: 'Item 4', bookCover: 'book_sample.png', des: ''),
-  BookModel(
-      id: 5, bookName: 'Item 5', bookCover: 'book_sample.png', des: ''),
-  BookModel(
-      id: 6, bookName: 'Item 6', bookCover: 'book_sample.png', des: ''),
-  BookModel(
-      id: 7, bookName: 'Item 7', bookCover: 'book_sample.png', des: ''),
-  BookModel(
-      id: 8, bookName: 'Item 8', bookCover: 'book_sample.png', des: ''),
-  BookModel(
-      id: 9, bookName: 'Item 9', bookCover: 'book_sample.png', des: ''),
-  BookModel(
-      id: 10, bookName: 'Item 10', bookCover: 'book_sample.png', des: ''),
-  BookModel(
-      id: 11, bookName: 'Item 11', bookCover: 'book_sample.png', des: ''),
-  BookModel(
-      id: 12, bookName: 'Item 12', bookCover: 'book_sample.png', des: ''),
-  BookModel(
-      id: 13, bookName: 'Item 13', bookCover: 'book_sample.png', des: ''),
-  BookModel(
-      id: 14, bookName: 'Item 14', bookCover: 'book_sample.png', des: ''),
+      id: 3, bookName: 'Item 3', bookCover: 'book_sample.png', description: ''),
 ];
 
 List<ReferenceModel> tempReferences = [

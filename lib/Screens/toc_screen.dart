@@ -4,11 +4,13 @@ import 'package:ketub_platform/widgets/toc_tree_list_widget.dart';
 
 class TocScreen extends StatefulWidget {
   final List<TocGroupItem> tocList;
+
   const TocScreen(this.tocList);
 
   @override
   _TocScreenState createState() => _TocScreenState();
 }
+
 class _TocScreenState extends State<TocScreen> {
   List<TocGroupItem> filteredList = [];
 
@@ -18,18 +20,16 @@ class _TocScreenState extends State<TocScreen> {
     filteredList = widget.tocList;
   }
 
-
   void filterList(String query) {
     setState(() {
       filteredList = widget.tocList.where((item) {
         return item.bookTitle.toLowerCase().contains(query.toLowerCase());
       }).toList();
-
     });
   }
+
   @override
   Widget build(BuildContext context) {
-
     return Column(
       children: [
         Container(
@@ -49,7 +49,6 @@ class _TocScreenState extends State<TocScreen> {
         Expanded(
           child: TocTreeListWidget(tocList: filteredList),
         ),
-
       ],
     );
   }

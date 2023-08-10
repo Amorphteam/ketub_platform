@@ -4,6 +4,8 @@ import 'package:ketub_platform/Screens/bookmark_screen.dart';
 import 'package:ketub_platform/Screens/library_screen.dart';
 import 'package:ketub_platform/Screens/toc_screen.dart';
 import 'package:ketub_platform/cubits/bookmark_cubit.dart';
+import 'package:ketub_platform/cubits/library_cubit.dart';
+import 'package:ketub_platform/repositories/book_database.dart';
 import 'package:ketub_platform/repositories/reference_database.dart';
 import 'package:ketub_platform/utils/temp_data.dart';
 
@@ -16,11 +18,14 @@ class _NavScreenState extends State<NavScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    LibraryScreen(tempBook),
+    BlocProvider(
+      create: (context) => LibraryCubit(BookDatabase.instance),
+      child: const LibraryScreen(),
+    ),
     TocScreen(tempToc),
     BlocProvider(
       create: (context) => BookmarkCubit(ReferenceDatabase.instance),
-      child: BookmarkScreen(),
+      child: const BookmarkScreen(),
     )
   ];
 

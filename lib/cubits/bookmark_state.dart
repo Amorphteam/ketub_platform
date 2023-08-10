@@ -1,10 +1,9 @@
 part of 'bookmark_cubit.dart';
 
+abstract class BookmarkState {}
 
-
-class BookmarkState {
-
+class AllBookmarkState extends BookmarkState {
   final List<ReferenceModel> bookmarks;
 
-  BookmarkState(this.bookmarks);
+  AllBookmarkState(this.bookmarks);
 }

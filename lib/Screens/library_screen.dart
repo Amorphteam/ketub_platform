@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ketub_platform/Screens/search_screen.dart';
+import 'package:ketub_platform/cubits/library_cubit.dart';
 import 'package:ketub_platform/models/book_model.dart';
 import 'package:ketub_platform/utils/temp_data.dart';
 import 'package:ketub_platform/widgets/book_list_widget.dart';
 
 class LibraryScreen extends StatefulWidget {
-  final List<BookModel> bookList;
-  const LibraryScreen(this.bookList);
+  const LibraryScreen();
 
   @override
   State<LibraryScreen> createState() => _LibraryScreenState();
 }
 
 class _LibraryScreenState extends State<LibraryScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _fetchBooks();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -36,7 +43,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              child: Text(
+              child: const Text(
                 'Search',
                 style: TextStyle(
                   fontSize: 16,
@@ -45,8 +52,20 @@ class _LibraryScreenState extends State<LibraryScreen> {
             ),
           ),
         ),
-        Expanded(child: BookListWidget(bookList: widget.bookList)),
+        BlocBuilder<LibraryCubit, LibraryState>(
+          builder: (context, state) {
+            if (state is AllBookState) {
+              return Flexible(child: BookListWidget(bookList: state.books));
+            } else {
+              return Flexible(child: BookListWidget(bookList: tempBook));
+            }
+          },
+        ),
       ],
     );
+  }
+
+  void _fetchBooks() {
+    BlocProvider.of<LibraryCubit>(context).fetchBooks();
   }
 }

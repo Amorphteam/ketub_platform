@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ketub_platform/cubits/bookmark_cubit.dart';
 import 'package:ketub_platform/models/reference_model.dart';
-import 'package:ketub_platform/repositories/reference_database.dart';
+import 'package:ketub_platform/utils/temp_data.dart';
 import 'package:ketub_platform/widgets/reference_list_widget.dart';
 
 class BookmarkScreen extends StatefulWidget {
@@ -20,57 +20,6 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
     super.initState();
     _fetchBookmarks();
   }
-
-  void _add() {
-    final bookmark = ReferenceModel(
-      id: _generateUniqueId(),
-      title: "Reference 2",
-      bookName: "Book 2",
-      bookPath: "path/to/book2.pdf",
-      navIndex: "2",
-      navUri: "nav2",
-      scrollPercent: 0.8,
-    );
-
-    BlocProvider.of<BookmarkCubit>(context).addBookmark(bookmark);
-    _update(context, bookmark);
-  }
-
-  int _generateUniqueId() {
-    final random = Random();
-    int id;
-    do {
-      id = random.nextInt(100); // Adjust the range as needed
-    } while (_isIdExists(id));
-    return id;
-  }
-
-  bool _isIdExists(int id) {
-    // Check if the generated id already exists in the table
-    final state = BlocProvider.of<BookmarkCubit>(context).state;
-    return state.bookmarks.any((bookmark) => bookmark.id == id);
-  }
-
-  void _fetchBookmarks() {
-    BlocProvider.of<BookmarkCubit>(context).fetchBookmarks();
-  }
-
-  void _update(BuildContext context, ReferenceModel bookmark) {
-    BlocProvider.of<BookmarkCubit>(context).updateBookmark(bookmark);
-  }
-
-  void _filterList(String query) {
-    BlocProvider.of<BookmarkCubit>(context).filterBookmarks(query);
-  }
-
-  // void _filterList(String query) {
-  //   final state = BlocProvider.of<BookmarkCubit>(context).state;
-  //   setState(() {
-  //     state.bookmarks.where((item) {
-  //     return item.title.toLowerCase().contains(query.toLowerCase());
-  //     }).toList();
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -103,11 +52,61 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
         ),
         BlocBuilder<BookmarkCubit, BookmarkState>(
           builder: (context, state) {
-            return Flexible(
-                child: ReferenceListWidget(referenceList: state.bookmarks));
+            if (state is AllBookmarkState) {
+              return Flexible(
+                  child: ReferenceListWidget(referenceList: state.bookmarks));
+            } else {
+              return Flexible(
+                  child: ReferenceListWidget(referenceList: tempReferences));
+            }
           },
         ),
       ],
     );
+  }
+
+  void _add() {
+    final bookmark = ReferenceModel(
+      id: _generateUniqueId(),
+      title: "Reference 2",
+      bookName: "Book 2",
+      bookPath: "path/to/book2.pdf",
+      navIndex: "2",
+      navUri: "nav2",
+      scrollPercent: 0.8,
+    );
+
+    BlocProvider.of<BookmarkCubit>(context).addBookmark(bookmark);
+    _update(context, bookmark);
+  }
+
+  int _generateUniqueId() {
+    final random = Random();
+    int id;
+    do {
+      id = random.nextInt(100);
+    } while (_isIdExists(id));
+    return id;
+  }
+
+  bool _isIdExists(int id) {
+    final state = BlocProvider.of<BookmarkCubit>(context).state;
+    if (state is AllBookmarkState) {
+      return state.bookmarks.any((bookmark) => bookmark.id == id);
+    } else {
+      return false;
+    }
+  }
+
+  void _fetchBookmarks() {
+    BlocProvider.of<BookmarkCubit>(context).fetchBookmarks();
+  }
+
+  void _update(BuildContext context, ReferenceModel bookmark) {
+    BlocProvider.of<BookmarkCubit>(context).updateBookmark(bookmark);
+  }
+
+  void _filterList(String query) {
+    BlocProvider.of<BookmarkCubit>(context).filterBookmarks(query);
   }
 }

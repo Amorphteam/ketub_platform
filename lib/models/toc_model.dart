@@ -11,5 +11,3 @@ class TocGroupItem {
     required this.childItems,
   });
 }
-
-

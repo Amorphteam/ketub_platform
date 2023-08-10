@@ -1,4 +1,3 @@
-
 class ReferenceModel {
   int id;
   String title;
