@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ketub_platform/screen/epub/epub_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ketub_platform/cubit/epub_cubit.dart';
+import 'package:ketub_platform/screens/epub/epub_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +18,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
       ),
-      home: EpubScreen(),
+      home: BlocProvider(
+        create: (context) => EpubCubit(),
+        child: EpubScreen(),
+      ),
       debugShowCheckedModeBanner: false,
     );
   }

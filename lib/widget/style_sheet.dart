@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:ketub_platform/cubit/epub_cubit.dart';
+import 'package:ketub_platform/models/style_model.dart';
 
 class StyleSheet extends StatefulWidget {
-  const StyleSheet({super.key});
+  final EpubCubit epubCubit;
+  const StyleSheet({required this.epubCubit});
 
   @override
   State<StyleSheet> createState() => _StyleSheetState();
@@ -20,9 +24,26 @@ class _StyleSheetState extends State<StyleSheet> {
   double _fontSizeSliderValue = 0.5; // Initialize with a default value
 
   void _handleFontSizeSliderChange(double newValue) {
+    print(newValue);
     setState(() {
       _fontSizeSliderValue = newValue;
     });
+
+    FontSize fontSize;
+
+    if (newValue <= 0.2) {
+      fontSize = FontSize.smallFontSize;
+    } else if (newValue <= 0.3) {
+      fontSize = FontSize.normalFontSize;
+    } else if (newValue <= 0.5) {
+      fontSize = FontSize.largeFontSize;
+    } else if (newValue <= 0.8) {
+      fontSize = FontSize.xlargeFontSize;
+    } else {
+      fontSize = FontSize.xxlargeFontSize;
+    }
+    print('Ali is very good $fontSize');
+    widget.epubCubit.onChangeFontSize(fontSize);
   }
 
   double _lineHeightSliderValue = 0.5; // Initialize with a default value

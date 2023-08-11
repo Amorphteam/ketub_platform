@@ -1,8 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ketub_platform/widget/style_sheet.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
+import '../../cubit/epub_cubit.dart';
 
 class EpubScreen extends StatefulWidget {
   const EpubScreen({Key? key}) : super(key: key);
@@ -15,6 +18,7 @@ class _EpubScreenState extends State<EpubScreen> {
   late PageController _pageController;
   bool _webViewIsScrolling = true;
   bool enableAgreeButton = false;
+  WebViewController? _webViewController;
   @override
   void initState() {
     super.initState();
@@ -27,6 +31,13 @@ class _EpubScreenState extends State<EpubScreen> {
     super.dispose();
   }
 
+
+  void changeFontSize(String className) {
+    print('Ali is good $className');
+    _webViewController?.evaluateJavascript('changeFontSize("$className")');
+  }
+
+
   @override
   Widget build(BuildContext context) {
     String htmlText = '''
@@ -38,10 +49,36 @@ window.onscroll = function(ev) {
     window.FLUTTER_CHANNEL.postMessage('end of scroll');
     }
 };
+
+function changeFontSize(className) {
+          document.body.className = className;
+        }
+        window.FLUTTER_CHANNEL.postMessage('loaded');
 </script>
           <style>
+          .normalFontSize {
+          font-size: 40px !important;
+          }
+          
+          .smallFontSize {
+          font-size: 30px !important;
+          }
+          
+          .LargeFontSize {
+          font-size: 50px !important;
+          }
+          
+          .xlargeFontSize {
+          font-size: 60px !important;
+          }
+          
+          .xxlargeFontSize {
+          font-size: 70px !important;
+          }
+
           body {
           padding: 40px;
+          font-size: 40px;
           direction: rtl;
           }
             h1 {
@@ -49,7 +86,6 @@ window.onscroll = function(ev) {
             }
             p {
               color: grey;
-              font-size: 40px;
             }
           </style>
         </head>
@@ -66,7 +102,7 @@ window.onscroll = function(ev) {
 
 
     return Scaffold(
-      appBar: AppBar(
+    appBar: AppBar(
         title: Text('Epub Screen'),
         actions: [
           IconButton(
@@ -82,7 +118,8 @@ window.onscroll = function(ev) {
           IconButton(
             icon: const Icon(Icons.tune_rounded),
             onPressed: () {
-              _showBottomSheet(context);
+              final epubCubit = BlocProvider.of<EpubCubit>(context);
+              _showBottomSheet(context, epubCubit);
             },
           ),
           IconButton(
@@ -142,18 +179,26 @@ window.onscroll = function(ev) {
   }
 
   Widget buildWebView(String htmlContent) {
+    return BlocConsumer<EpubCubit, EpubState>(
+  listener: (context, state) {
+    if (state is FontSizeState) {
+      // Call changeFontSize function with the provided className from the state
+      changeFontSize(state.fontSize.name);
+    }
+  },
+  builder: (context, state) {
     return WebView(
       initialUrl: '',
       javascriptMode: JavascriptMode.unrestricted,
       onWebViewCreated: (WebViewController webViewController) {
-        // Load HTML content when the WebView is created
+        _webViewController = webViewController;
         webViewController.loadUrl(Uri.dataFromString(
           htmlContent,
           mimeType: 'text/html',
           encoding: Encoding.getByName('utf-8'),
         ).toString());
       },
-      javascriptChannels: [
+      javascriptChannels: {
         JavascriptChannel(
             name: 'FLUTTER_CHANNEL',
             onMessageReceived: (message) {
@@ -164,32 +209,19 @@ window.onscroll = function(ev) {
                 });
               }
             })
-      ].toSet(),
+      },
       gestureNavigationEnabled: true,
       debuggingEnabled: true,
-      onPageStarted: (url) {
-        // WebView scrolling started, prevent PageView scrolling
-        // setState(() {
-        //   _webViewIsScrolling = true;
-        // });
-        print('started');
-
-      },
-      onPageFinished: (url) {
-        // WebView scrolling finished, allow PageView scrolling
-        // setState(() {
-        //   _webViewIsScrolling = false;
-        // });
-        print('finished');
-      },
     );
+  },
+);
   }
 
-  void _showBottomSheet(BuildContext context) {
+  void _showBottomSheet(BuildContext context, EpubCubit cubit) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return StyleSheet();
+        return StyleSheet(epubCubit: cubit);
       },
     );
   }
@@ -219,6 +251,7 @@ class _VerticalSeekBarState extends State<VerticalSeekBar> {
       ),
     );
   }
+
 }
 
 
