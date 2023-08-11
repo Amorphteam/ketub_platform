@@ -19,6 +19,19 @@ class _StyleSheetState extends State<StyleSheet> {
     setState(() {
       _selectedChipIndex = index;
     });
+    FontFamily fontFamily;
+    if (index == 0){
+      fontFamily = FontFamily.font1;
+    } else if (index == 1){
+      fontFamily = FontFamily.font2;
+    } else if (index == 2){
+      fontFamily = FontFamily.font3;
+    } else {
+      fontFamily = FontFamily.font4;
+    }
+
+    widget.epubCubit.onChangeFontFamily(fontFamily);
+
   }
 
   double _fontSizeSliderValue = 0.5; // Initialize with a default value
@@ -42,7 +55,6 @@ class _StyleSheetState extends State<StyleSheet> {
     } else {
       fontSize = FontSize.xxlargeFontSize;
     }
-    print('Ali is very good $fontSize');
     widget.epubCubit.onChangeFontSize(fontSize);
   }
 
@@ -52,6 +64,20 @@ class _StyleSheetState extends State<StyleSheet> {
     setState(() {
       _lineHeightSliderValue = newValue;
     });
+    LineSpace lineSpace;
+    if (newValue <= 0.2) {
+      lineSpace = LineSpace.smallLineSpace;
+    } else if (newValue <= 0.3) {
+      lineSpace = LineSpace.normalLineSpace;
+    } else if (newValue <= 0.5) {
+      lineSpace = LineSpace.largeLineSpace;
+    } else if (newValue <= 0.8) {
+      lineSpace = LineSpace.xlargeLineSpace;
+    } else {
+      lineSpace = LineSpace.xxlargeLineSpace;
+    }
+    widget.epubCubit.onChangeLineSpace(lineSpace);
+
   }
 
   Color _selectedColor = Colors.black; // Default color

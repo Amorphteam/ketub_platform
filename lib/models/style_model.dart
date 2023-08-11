@@ -14,3 +14,10 @@ enum LineSpace {
   xxlargeLineSpace
 }
 
+enum FontFamily{
+  font1,
+  font2,
+  font3,
+  font4
+}
+

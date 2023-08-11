@@ -33,10 +33,15 @@ class _EpubScreenState extends State<EpubScreen> {
 
 
   void changeFontSize(String className) {
-    print('Ali is good $className');
     _webViewController?.evaluateJavascript('changeFontSize("$className")');
   }
+  void changeLineSpace(String className) {
+    _webViewController?.evaluateJavascript('changeLineSpace("$className")');
+  }
 
+  void changeFontFamily(String className) {
+    _webViewController?.evaluateJavascript('changeFontFamily("$className")');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,8 +59,54 @@ function changeFontSize(className) {
           document.body.className = className;
         }
         window.FLUTTER_CHANNEL.postMessage('loaded');
+        
+        function changeLineSpace(className) {
+          document.body.className = className;
+        }
+        window.FLUTTER_CHANNEL.postMessage('loaded');
+        
+                function changeFontFamily(className) {
+          document.body.className = className;
+        }
+        window.FLUTTER_CHANNEL.postMessage('loaded');
 </script>
           <style>
+          .font1 {
+          font-family: serif !important; 
+          }
+                    .font2 {
+          font-family: monospace !important; 
+          }
+          
+                    .font3 {
+          font-family: cursive !important; 
+          }
+          
+                    .font4 {
+          font-family: sans-serif !important; 
+          }
+          
+          
+          .normalLineSpace {
+          line-height: 100% !important; 
+          }
+          
+                    .smallLineSpace {
+          line-height: 80% !important; 
+          }
+          
+                    .largeLineSpace {
+          line-height: 140% !important; 
+          }
+          
+                    .xlargeLineSpace {
+          line-height: 180% !important; 
+          }
+          
+                    .xxlargeLineSpace {
+          line-height: 220% !important; 
+          }
+          
           .normalFontSize {
           font-size: 40px !important;
           }
@@ -182,8 +233,11 @@ function changeFontSize(className) {
     return BlocConsumer<EpubCubit, EpubState>(
   listener: (context, state) {
     if (state is FontSizeState) {
-      // Call changeFontSize function with the provided className from the state
       changeFontSize(state.fontSize.name);
+    }else if (state is LineSpaceState){
+      changeLineSpace(state.lineSpace.name);
+    }else if (state is FontFamilyState){
+      changeFontFamily(state.fontFamily.name);
     }
   },
   builder: (context, state) {
