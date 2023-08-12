@@ -2,19 +2,24 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ketub_platform/widget/style_sheet.dart';
+import 'package:ketub_platform/widgets/style_sheet.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../cubit/epub_cubit.dart';
+import '../../models/book_model.dart';
+import '../../models/reference_model.dart';
 
 class EpubScreen extends StatefulWidget {
-  const EpubScreen({Key? key}) : super(key: key);
+  final ReferenceModel? referenceModel;
+  final BookModel? bookModel;
+  const EpubScreen({Key? key, this.referenceModel, this.bookModel}) : super(key: key);
 
   @override
   _EpubScreenState createState() => _EpubScreenState();
 }
 
 class _EpubScreenState extends State<EpubScreen> {
+
   late PageController _pageController;
   bool _webViewIsScrolling = true;
   bool enableAgreeButton = false;
