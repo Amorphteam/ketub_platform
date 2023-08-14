@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ketub_platform/Screens/detail_book_screen.dart';
-import 'package:ketub_platform/cubit/epub_cubit.dart';
+import 'package:ketub_platform/screens/epub/cubit/epub_cubit.dart';
 import 'package:ketub_platform/models/book_model.dart';
 import 'package:ketub_platform/screens/epub/epub_screen.dart';
 

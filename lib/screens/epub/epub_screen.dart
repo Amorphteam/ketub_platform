@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ketub_platform/widgets/style_sheet.dart';
+import 'package:ketub_platform/screens/epub/widgets/style_sheet.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import '../../cubit/epub_cubit.dart';
+import 'cubit/epub_cubit.dart';
 import '../../models/book_model.dart';
 import '../../models/reference_model.dart';
 

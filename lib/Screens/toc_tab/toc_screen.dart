@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ketub_platform/models/toc_model.dart';
-import 'package:ketub_platform/widgets/toc_tree_list_widget.dart';
+import 'package:ketub_platform/screens/toc_tab/widgets/toc_tree_list_widget.dart';
 
 class TocScreen extends StatefulWidget {
   final List<TocGroupItem> tocList;

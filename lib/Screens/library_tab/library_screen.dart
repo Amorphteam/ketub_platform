@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ketub_platform/Screens/search_screen.dart';
-import 'package:ketub_platform/cubits/library_cubit.dart';
-import 'package:ketub_platform/models/book_model.dart';
+import 'package:ketub_platform/screens/library_tab/widgets/book_list_widget.dart';
+import 'package:ketub_platform/screens/search/search_screen.dart';
 import 'package:ketub_platform/utils/temp_data.dart';
-import 'package:ketub_platform/widgets/book_list_widget.dart';
+
+import 'cubit/library_cubit.dart';
 
 class LibraryScreen extends StatefulWidget {
   const LibraryScreen();

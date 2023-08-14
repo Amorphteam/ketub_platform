@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 
-import '../models/style_model.dart';
+import '../../../models/style_model.dart';
 
 part 'epub_state.dart';
 

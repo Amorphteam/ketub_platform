@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ketub_platform/Screens/nav_screen.dart';
-import 'package:ketub_platform/cubit/epub_cubit.dart';
-import 'package:ketub_platform/screens/epub/epub_screen.dart';
+import 'package:ketub_platform/screens/main/nav_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,3 +20,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+

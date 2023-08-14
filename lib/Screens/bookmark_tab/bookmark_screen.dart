@@ -2,10 +2,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ketub_platform/cubits/bookmark_cubit.dart';
+import 'package:ketub_platform/screens/bookmark_tab/cubit/bookmark_cubit.dart';
 import 'package:ketub_platform/models/reference_model.dart';
-import 'package:ketub_platform/utils/temp_data.dart';
-import 'package:ketub_platform/widgets/reference_list_widget.dart';
+import 'package:ketub_platform/screens/bookmark_tab/widgets/reference_list_widget.dart';
+
+import '../../utils/temp_data.dart';
 
 class BookmarkScreen extends StatefulWidget {
   const BookmarkScreen();

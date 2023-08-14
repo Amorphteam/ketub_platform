@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:ketub_platform/cubit/epub_cubit.dart';
+import 'package:ketub_platform/screens/epub/cubit/epub_cubit.dart';
 import 'package:ketub_platform/models/style_model.dart';
 
 class StyleSheet extends StatefulWidget {

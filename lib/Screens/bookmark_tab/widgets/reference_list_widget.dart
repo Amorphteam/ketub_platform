@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ketub_platform/Screens/detail_book_screen.dart';
-import 'package:ketub_platform/cubits/bookmark_cubit.dart';
+import 'package:ketub_platform/screens/bookmark_tab/cubit/bookmark_cubit.dart';
 import 'package:ketub_platform/models/reference_model.dart';
+import 'package:ketub_platform/screens/epub/epub_screen.dart';
 
 class ReferenceListWidget extends StatelessWidget {
   final List<ReferenceModel> referenceList;
@@ -55,7 +55,7 @@ class ReferenceListWidget extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => DetailBookScreen(referenceModel: item),
+        builder: (context) => EpubScreen(referenceModel: item),
       ),
     );
   }
