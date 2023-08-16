@@ -1,21 +1,19 @@
 import 'package:bloc/bloc.dart';
-
-import '../../../models/style_model.dart';
-
+import 'package:ketub_platform/models/style_model.dart';
 part 'epub_state.dart';
 
 class EpubCubit extends Cubit<EpubState> {
-  EpubCubit() : super(FontSizeState(fontSize: FontSize.normalFontSize));
+  EpubCubit() : super(FontSizeChangedState(fontSize: FontSize.normalFontSize));
 
-  void onChangeFontSize(FontSize fontSize) {
-    emit(FontSizeState(fontSize: fontSize));
+  void changeFontSize(FontSize fontSize) {
+    emit(FontSizeChangedState(fontSize: fontSize));
   }
 
-  void onChangeLineSpace(LineSpace lineSpace){
-    emit(LineSpaceState(lineSpace: lineSpace));
+  void changeLineSpace(LineSpace lineSpace){
+    emit(LineSpaceChangedState(lineSpace: lineSpace));
   }
 
-  void onChangeFontFamily(FontFamily fontFamily){
-    emit(FontFamilyState(fontFamily: fontFamily));
+  void changeFontFamily(FontFamily fontFamily){
+    emit(FontFamilyChangedState(fontFamily: fontFamily));
   }
 }

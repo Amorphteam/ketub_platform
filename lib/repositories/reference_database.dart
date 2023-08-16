@@ -4,12 +4,12 @@ import 'package:sqflite/sqlite_api.dart';
 import 'package:path/path.dart';
 
 
-class ReferenceDatabase{
+class ReferencesDatabase{
 
-  static final ReferenceDatabase instance = ReferenceDatabase._init();
+  static final ReferencesDatabase instance = ReferencesDatabase._init();
   static Database? _database;
 
-  ReferenceDatabase._init();
+  ReferencesDatabase._init();
 
   Future<Database> get database async {
     if (_database != null) return _database!;
@@ -43,7 +43,7 @@ class ReferenceDatabase{
     return await db.insert('reference_database', referenceModel.toMap());
   }
 
-  Future<List<ReferenceModel>> getAllReference() async {
+  Future<List<ReferenceModel>> getAllReferences() async {
     final db = await instance.database;
     final List<Map<String, dynamic>> maps = await db.query('reference_database');
     return List.generate(maps.length, (i) {

@@ -4,6 +4,8 @@ import 'package:ketub_platform/screens/epub/cubit/epub_cubit.dart';
 import 'package:ketub_platform/models/book_model.dart';
 import 'package:ketub_platform/screens/epub/epub_screen.dart';
 
+import '../../../utils/epub_helper.dart';
+
 class BookListWidget extends StatelessWidget {
   final List<BookModel> bookList;
 
@@ -24,7 +26,7 @@ class BookListWidget extends StatelessWidget {
 
         return GestureDetector(
           onTap: () {
-            _navigateToDetailScreen(context, item);
+            openEpub(context, item, null, null);
           },
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -57,16 +59,5 @@ class BookListWidget extends StatelessWidget {
     );
   }
 
-  void _navigateToDetailScreen(BuildContext context, BookModel item) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) =>
-            BlocProvider(
-              create: (context) => EpubCubit(),
-              child: EpubScreen(bookModel: item),
-            ),
-      ),
-    );
-  }
+
 }

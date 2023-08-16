@@ -5,8 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ketub_platform/screens/bookmark_tab/cubit/bookmark_cubit.dart';
 import 'package:ketub_platform/models/reference_model.dart';
 import 'package:ketub_platform/screens/bookmark_tab/widgets/reference_list_widget.dart';
+import 'package:ketub_platform/screens/epub/cubit/epub_cubit.dart';
+import 'package:ketub_platform/utils/epub_helper.dart';
 
-import '../../utils/temp_data.dart';
+import '../epub/epub_screen.dart';
 
 class BookmarkScreen extends StatefulWidget {
   const BookmarkScreen();
@@ -19,7 +21,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
   @override
   void initState() {
     super.initState();
-    _fetchBookmarks();
+    _loadAllBookmarks();
   }
 
   @override
@@ -30,6 +32,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           child: TextField(
             onChanged: (value) => _filterList(value),
+            // Assuming _filterList is defined somewhere
             decoration: InputDecoration(
               contentPadding: EdgeInsets.zero,
               labelText: 'Search',
@@ -40,37 +43,55 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
             ),
           ),
         ),
-        BlocBuilder<BookmarkCubit, BookmarkState>(
-          builder: (context, state) {
-            return FloatingActionButton(
-              onPressed: () {
-                _add();
-              },
-              tooltip: 'Add',
-              child: const Icon(Icons.add),
-            );
+        FloatingActionButton(
+          onPressed: () {
+            _add(); // Assuming _add is defined somewhere
           },
+          tooltip: 'Add',
+          child: const Icon(Icons.add),
         ),
-        BlocBuilder<BookmarkCubit, BookmarkState>(
-          builder: (context, state) {
-            if (state is AllBookmarkState) {
-              return Flexible(
-                  child: ReferenceListWidget(referenceList: state.bookmarks));
-            } else {
-              return Flexible(
-                  child: ReferenceListWidget(referenceList: tempReferences));
+        BlocConsumer<BookmarkCubit, BookmarkState>(
+          listener: (context, state) {
+            if (state is BookmarkAddedState) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Bookmark Added')),
+              );
+            } else if (state is BookmarkDeletedState) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Bookmark Deleted')),
+              );
+            } else if (state is BookmarkErrorState) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(state.error.toString())));
+            } else if (state is BookmarkTappedState){
+                openEpub(context, null, state.item, null);
             }
           },
-        ),
+          builder: (context, state) {
+            if (state is AllBookmarksLoadedState) {
+              return Flexible(
+                child:
+                    ReferenceListWidget(referenceList: state.bookmarks),
+              );
+            } else if (state is BookmarkLoadingState) {
+              return CircularProgressIndicator();
+            } else {
+              return const SizedBox.shrink();
+            }
+          },
+          buildWhen: (previousState, state) {
+            return state is AllBookmarksLoadedState || state is BookmarkLoadingState;
+          },
+        )
       ],
     );
   }
 
   void _add() {
     final bookmark = ReferenceModel(
-      id: _generateUniqueId(),
-      title: "Reference 2",
-      bookName: "Book 2",
+      id: Random().nextInt(100),
+      title: "Reference${Random().nextInt(100)}",
+      bookName: "Book2",
       bookPath: "path/to/book2.pdf",
       navIndex: "2",
       navUri: "nav2",
@@ -78,36 +99,15 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
     );
 
     BlocProvider.of<BookmarkCubit>(context).addBookmark(bookmark);
-    _update(context, bookmark);
   }
 
-  int _generateUniqueId() {
-    final random = Random();
-    int id;
-    do {
-      id = random.nextInt(100);
-    } while (_isIdExists(id));
-    return id;
-  }
-
-  bool _isIdExists(int id) {
-    final state = BlocProvider.of<BookmarkCubit>(context).state;
-    if (state is AllBookmarkState) {
-      return state.bookmarks.any((bookmark) => bookmark.id == id);
-    } else {
-      return false;
-    }
-  }
-
-  void _fetchBookmarks() {
-    BlocProvider.of<BookmarkCubit>(context).fetchBookmarks();
-  }
-
-  void _update(BuildContext context, ReferenceModel bookmark) {
-    BlocProvider.of<BookmarkCubit>(context).updateBookmark(bookmark);
+  void _loadAllBookmarks() {
+    BlocProvider.of<BookmarkCubit>(context).loadAllBookmarks();
   }
 
   void _filterList(String query) {
     BlocProvider.of<BookmarkCubit>(context).filterBookmarks(query);
   }
+
+
 }

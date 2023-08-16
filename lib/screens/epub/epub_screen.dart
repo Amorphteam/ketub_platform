@@ -2,28 +2,30 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ketub_platform/models/book_model.dart';
+import 'package:ketub_platform/models/reference_model.dart';
+import 'package:ketub_platform/models/tree_toc_model.dart';
+import 'package:ketub_platform/screens/epub/cubit/epub_cubit.dart';
 import 'package:ketub_platform/screens/epub/widgets/style_sheet.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-
-import 'cubit/epub_cubit.dart';
-import '../../models/book_model.dart';
-import '../../models/reference_model.dart';
 
 class EpubScreen extends StatefulWidget {
   final ReferenceModel? referenceModel;
   final BookModel? bookModel;
-  const EpubScreen({Key? key, this.referenceModel, this.bookModel}) : super(key: key);
+  final TreeTocModel? tocModel;
+
+  const EpubScreen({Key? key, this.referenceModel, this.bookModel, this.tocModel})
+      : super(key: key);
 
   @override
   _EpubScreenState createState() => _EpubScreenState();
 }
 
 class _EpubScreenState extends State<EpubScreen> {
-
   late PageController _pageController;
   bool _webViewIsScrolling = true;
-  bool enableAgreeButton = false;
   WebViewController? _webViewController;
+
   @override
   void initState() {
     super.initState();
@@ -36,15 +38,15 @@ class _EpubScreenState extends State<EpubScreen> {
     super.dispose();
   }
 
-
-  void changeFontSize(String className) {
+  void _changeFontSize(String className) {
     _webViewController?.evaluateJavascript('changeFontSize("$className")');
   }
-  void changeLineSpace(String className) {
+
+  void _changeLineSpace(String className) {
     _webViewController?.evaluateJavascript('changeLineSpace("$className")');
   }
 
-  void changeFontFamily(String className) {
+  void _changeFontFamily(String className) {
     _webViewController?.evaluateJavascript('changeFontFamily("$className")');
   }
 
@@ -60,34 +62,32 @@ window.onscroll = function(ev) {
     }
 };
 
-function changeFontSize(className) {
+    function changeFontSize(className) {
           document.body.className = className;
         }
-        window.FLUTTER_CHANNEL.postMessage('loaded');
         
         function changeLineSpace(className) {
           document.body.className = className;
         }
-        window.FLUTTER_CHANNEL.postMessage('loaded');
         
-                function changeFontFamily(className) {
+         function changeFontFamily(className) {
           document.body.className = className;
         }
-        window.FLUTTER_CHANNEL.postMessage('loaded');
 </script>
           <style>
+         
           .font1 {
           font-family: serif !important; 
           }
-                    .font2 {
+          .font2 {
           font-family: monospace !important; 
           }
           
-                    .font3 {
+          .font3 {
           font-family: cursive !important; 
           }
           
-                    .font4 {
+          .font4 {
           font-family: sans-serif !important; 
           }
           
@@ -156,10 +156,9 @@ function changeFontSize(className) {
       </html>
     ''';
 
-
     return Scaffold(
-    appBar: AppBar(
-        title: Text('Epub Screen'),
+      appBar: AppBar(
+        title: const Text('Epub Screen'),
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
@@ -189,7 +188,7 @@ function changeFontSize(className) {
             },
           ),
           IconButton(
-            icon: Icon(Icons.description_outlined),
+            icon: const Icon(Icons.description_outlined),
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
@@ -208,23 +207,22 @@ function changeFontSize(className) {
                 Expanded(
                   child: PageView.builder(
                     controller: _pageController,
-                    scrollDirection: Axis.vertical, // Set vertical scroll direction
-                    itemCount: 20, // Number of pages (WebView instances)
+                    scrollDirection: Axis.vertical,
+                    itemCount: 20,
                     physics: _webViewIsScrolling
-                        ? NeverScrollableScrollPhysics() // Prevent PageView scrolling
-                        : AlwaysScrollableScrollPhysics(), // Allow PageView scrolling
+                        ? const NeverScrollableScrollPhysics()
+                        : const AlwaysScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
-                      return buildWebView(htmlText); // Pass your HTML content here
+                      return buildWebView(htmlText);
                     },
-                    onPageChanged: (index){
-                      // Reset the WebView scrolling flag when changing pages
+                    onPageChanged: (index) {
                       setState(() {
                         _webViewIsScrolling = true;
                       });
                     },
                   ),
                 ),
-                Container(padding: EdgeInsets.all(20), child: Text('12/344'))
+                const Padding(padding: EdgeInsets.all(20), child: Text('12/344'))
               ],
             ),
           ),
@@ -236,44 +234,44 @@ function changeFontSize(className) {
 
   Widget buildWebView(String htmlContent) {
     return BlocConsumer<EpubCubit, EpubState>(
-  listener: (context, state) {
-    if (state is FontSizeState) {
-      changeFontSize(state.fontSize.name);
-    }else if (state is LineSpaceState){
-      changeLineSpace(state.lineSpace.name);
-    }else if (state is FontFamilyState){
-      changeFontFamily(state.fontFamily.name);
-    }
-  },
-  builder: (context, state) {
-    return WebView(
-      initialUrl: '',
-      javascriptMode: JavascriptMode.unrestricted,
-      onWebViewCreated: (WebViewController webViewController) {
-        _webViewController = webViewController;
-        webViewController.loadUrl(Uri.dataFromString(
-          htmlContent,
-          mimeType: 'text/html',
-          encoding: Encoding.getByName('utf-8'),
-        ).toString());
+      listener: (context, state) {
+        if (state is FontSizeChangedState) {
+          _changeFontSize(state.fontSize.name);
+        } else if (state is LineSpaceChangedState) {
+          _changeLineSpace(state.lineSpace.name);
+        } else if (state is FontFamilyChangedState) {
+          _changeFontFamily(state.fontFamily.name);
+        }
       },
-      javascriptChannels: {
-        JavascriptChannel(
-            name: 'FLUTTER_CHANNEL',
-            onMessageReceived: (message) {
-              if (message.message.toString() ==
-                  "end of scroll") {
-                setState((){
-                  _webViewIsScrolling = false;
-                });
-              }
-            })
+      builder: (context, state) {
+        return WebView(
+          initialUrl: '',
+          javascriptMode: JavascriptMode.unrestricted,
+          onWebViewCreated: (WebViewController webViewController) {
+            _webViewController = webViewController;
+            webViewController.loadUrl(Uri.dataFromString(
+              htmlContent,
+              mimeType: 'text/html',
+              encoding: Encoding.getByName('utf-8'),
+            ).toString());
+          },
+          javascriptChannels: {
+            JavascriptChannel(
+              name: 'FLUTTER_CHANNEL',
+              onMessageReceived: (message) {
+                if (message.message.toString() == 'end of scroll') {
+                  setState(() {
+                    _webViewIsScrolling = false;
+                  });
+                }
+              },
+            )
+          },
+          gestureNavigationEnabled: true,
+          debuggingEnabled: true,
+        );
       },
-      gestureNavigationEnabled: true,
-      debuggingEnabled: true,
     );
-  },
-);
   }
 
   void _showBottomSheet(BuildContext context, EpubCubit cubit) {
@@ -286,20 +284,20 @@ function changeFontSize(className) {
   }
 }
 
-
 class VerticalSeekBar extends StatefulWidget {
-  const VerticalSeekBar({Key? key});
+  const VerticalSeekBar({Key? key}) : super(key: key);
 
   @override
   _VerticalSeekBarState createState() => _VerticalSeekBarState();
 }
+
 class _VerticalSeekBarState extends State<VerticalSeekBar> {
   double _sliderValue = 0.5;
 
   @override
   Widget build(BuildContext context) {
     return RotatedBox(
-      quarterTurns: 1, // Rotate the SeekBar 90 degrees (bottom-up orientation)
+      quarterTurns: 1,
       child: Slider(
         value: _sliderValue,
         onChanged: (newValue) {
@@ -310,7 +308,4 @@ class _VerticalSeekBarState extends State<VerticalSeekBar> {
       ),
     );
   }
-
 }
-
-

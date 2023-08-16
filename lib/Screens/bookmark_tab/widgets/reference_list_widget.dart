@@ -17,16 +17,8 @@ class ReferenceListWidget extends StatelessWidget {
       itemBuilder: (context, index) {
         ReferenceModel item = referenceList[index];
         return ListTile(
-          title: Text(item.title,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleSmall
-                  ?.copyWith(color: Colors.black)),
-          subtitle: Text(item.bookName,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall
-                  ?.copyWith(color: Colors.grey)),
+          title: Text(item.title),
+          subtitle: Text(item.bookName),
           trailing: IconButton(
             icon: Icon(Icons.delete),
             onPressed: () {
@@ -35,28 +27,21 @@ class ReferenceListWidget extends StatelessWidget {
             },
           ),
           onTap: () {
-            _update(context, item);
-            _navigateToDetailScreen(context, item);
+            _openEpub(context, item);
           },
         );
       },
     );
   }
 
-  void _update(BuildContext context, ReferenceModel bookmark) {
-    BlocProvider.of<BookmarkCubit>(context).updateBookmark(bookmark);
-  }
 
   void _delete(BuildContext context, int id) {
     BlocProvider.of<BookmarkCubit>(context).deleteBookmark(id);
   }
 
-  void _navigateToDetailScreen(BuildContext context, ReferenceModel item) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => EpubScreen(referenceModel: item),
-      ),
-    );
+  void _openEpub(BuildContext context, ReferenceModel item){
+    BlocProvider.of<BookmarkCubit>(context).openEpub(item);
   }
+
+
 }

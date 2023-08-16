@@ -1,32 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:ketub_platform/models/toc_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ketub_platform/screens/toc_tab/cubit/toc_cubit.dart';
 import 'package:ketub_platform/screens/toc_tab/widgets/toc_tree_list_widget.dart';
+import '../../utils/epub_helper.dart';
 
 class TocScreen extends StatefulWidget {
-  final List<TocGroupItem> tocList;
-
-  const TocScreen(this.tocList);
+  const TocScreen({super.key});
 
   @override
   _TocScreenState createState() => _TocScreenState();
 }
 
 class _TocScreenState extends State<TocScreen> {
-  List<TocGroupItem> filteredList = [];
 
   @override
   void initState() {
     super.initState();
-    filteredList = widget.tocList;
+    _loadToc(context, null);
   }
 
-  void filterList(String query) {
-    setState(() {
-      filteredList = widget.tocList.where((item) {
-        return item.bookTitle.toLowerCase().contains(query.toLowerCase());
-      }).toList();
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +27,7 @@ class _TocScreenState extends State<TocScreen> {
         Container(
           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           child: TextField(
-            onChanged: (value) => filterList(value),
+            onChanged: (value) => _loadToc(context, value),
             decoration: InputDecoration(
               contentPadding: EdgeInsets.zero,
               labelText: 'Search',
@@ -46,10 +38,36 @@ class _TocScreenState extends State<TocScreen> {
             ),
           ),
         ),
-        Expanded(
-          child: TocTreeListWidget(tocList: filteredList),
+        BlocConsumer<TocCubit, TocState>(
+          listener: (context, state) {
+            if (state is TocErrorState) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(state.error.toString())));
+            } else if (state is TocItemTappedState){
+              openEpub(context, null, null, state.toc);
+            }
+          },
+          builder: (context, state) {
+            if (state is TocLoadedState) {
+              return Expanded(
+                child: TocTreeListWidget(tocList: state.tocTreeList),
+              );
+            } else if (state is TocLoadingState) {
+              return CircularProgressIndicator();
+            } else {
+              return const SizedBox.shrink();
+            }
+          },
+          buildWhen: (previousState, state) {
+            return state is TocLoadedState || state is TocLoadingState;
+          },
         ),
       ],
     );
   }
+
+  _loadToc(BuildContext context, String? query) {
+    BlocProvider.of<TocCubit>(context).loadToc(query: query ?? '');
+  }
+
 }

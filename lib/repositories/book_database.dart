@@ -6,11 +6,11 @@ import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqlite_api.dart';
 import 'package:path/path.dart';
 
-class BookDatabase {
-  static final BookDatabase instance = BookDatabase._init();
+class BooksDatabase {
+  static final BooksDatabase instance = BooksDatabase._init();
   static Database? _database;
 
-  BookDatabase._init();
+  BooksDatabase._init();
 
   Future<Database> initDb() async {
     if (_database != null) {
@@ -43,7 +43,6 @@ class BookDatabase {
   }
 
   Future<List<BookModel>> getAllBooks() async {
-    try {
       final db = await initDb();
       final List<Map<String, dynamic>> bookMaps =
           await db.query('category_list');
@@ -55,9 +54,5 @@ class BookDatabase {
           description: bookMaps[i]['description'],
         );
       });
-    } catch (e) {
-      print(e);
-      return []; // or throw an exception
-    }
   }
 }

@@ -1,10 +1,10 @@
-class TocGroupItem {
+class TreeTocModel {
   final int id;
   final String bookTitle;
   final String bookName;
-  final List<TocGroupItem>? childItems;
+  final List<TreeTocModel>? childItems;
 
-  TocGroupItem({
+  TreeTocModel({
     required this.id,
     required this.bookTitle,
     required this.bookName,

@@ -30,7 +30,7 @@ class _StyleSheetState extends State<StyleSheet> {
       fontFamily = FontFamily.font4;
     }
 
-    widget.epubCubit.onChangeFontFamily(fontFamily);
+    widget.epubCubit.changeFontFamily(fontFamily);
 
   }
 
@@ -55,7 +55,7 @@ class _StyleSheetState extends State<StyleSheet> {
     } else {
       fontSize = FontSize.xxlargeFontSize;
     }
-    widget.epubCubit.onChangeFontSize(fontSize);
+    widget.epubCubit.changeFontSize(fontSize);
   }
 
   double _lineHeightSliderValue = 0.5; // Initialize with a default value
@@ -76,7 +76,7 @@ class _StyleSheetState extends State<StyleSheet> {
     } else {
       lineSpace = LineSpace.xxlargeLineSpace;
     }
-    widget.epubCubit.onChangeLineSpace(lineSpace);
+    widget.epubCubit.changeLineSpace(lineSpace);
 
   }
 

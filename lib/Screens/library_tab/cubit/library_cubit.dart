@@ -5,12 +5,21 @@ import 'package:ketub_platform/repositories/book_database.dart';
 part 'library_state.dart';
 
 class LibraryCubit extends Cubit<LibraryState> {
-  final BookDatabase bookDatabase;
+  LibraryCubit() : super(LibraryInitState());
+  final BooksDatabase booksDatabase = BooksDatabase.instance;
+  Future<void> loadAllBooks() async {
+    emit(LibraryLoadingState());
+    try {
+      final books = await booksDatabase.getAllBooks();
+      emit(AllBooksLoadedState(books));
+    }catch (error){
+      if (error is Exception){
+        emit(LibraryErrorState(error));
+      }
+    }
+  }
 
-  LibraryCubit(this.bookDatabase) : super(AllBookState([]));
-
-  Future<void> fetchBooks() async {
-    final books = await bookDatabase.getAllBooks();
-    emit(AllBookState(books));
+  void openEpub(BookModel book){
+    emit(BookClickedState(book));
   }
 }
