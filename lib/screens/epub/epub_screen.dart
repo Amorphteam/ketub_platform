@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ketub_platform/models/book_model.dart';
@@ -14,7 +13,8 @@ class EpubScreen extends StatefulWidget {
   final BookModel? bookModel;
   final TreeTocModel? tocModel;
 
-  const EpubScreen({Key? key, this.referenceModel, this.bookModel, this.tocModel})
+  const EpubScreen(
+      {Key? key, this.referenceModel, this.bookModel, this.tocModel})
       : super(key: key);
 
   @override
@@ -30,6 +30,7 @@ class _EpubScreenState extends State<EpubScreen> {
   void initState() {
     super.initState();
     _pageController = PageController();
+    _parseEpub();
   }
 
   @override
@@ -52,110 +53,6 @@ class _EpubScreenState extends State<EpubScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String htmlText = '''
-      <html>
-        <head>
-        <script>
-window.onscroll = function(ev) {
-    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-    window.FLUTTER_CHANNEL.postMessage('end of scroll');
-    }
-};
-
-    function changeFontSize(className) {
-          document.body.className = className;
-        }
-        
-        function changeLineSpace(className) {
-          document.body.className = className;
-        }
-        
-         function changeFontFamily(className) {
-          document.body.className = className;
-        }
-</script>
-          <style>
-         
-          .font1 {
-          font-family: serif !important; 
-          }
-          .font2 {
-          font-family: monospace !important; 
-          }
-          
-          .font3 {
-          font-family: cursive !important; 
-          }
-          
-          .font4 {
-          font-family: sans-serif !important; 
-          }
-          
-          
-          .normalLineSpace {
-          line-height: 100% !important; 
-          }
-          
-                    .smallLineSpace {
-          line-height: 80% !important; 
-          }
-          
-                    .largeLineSpace {
-          line-height: 140% !important; 
-          }
-          
-                    .xlargeLineSpace {
-          line-height: 180% !important; 
-          }
-          
-                    .xxlargeLineSpace {
-          line-height: 220% !important; 
-          }
-          
-          .normalFontSize {
-          font-size: 40px !important;
-          }
-          
-          .smallFontSize {
-          font-size: 30px !important;
-          }
-          
-          .LargeFontSize {
-          font-size: 50px !important;
-          }
-          
-          .xlargeFontSize {
-          font-size: 60px !important;
-          }
-          
-          .xxlargeFontSize {
-          font-size: 70px !important;
-          }
-
-          body {
-          padding: 40px;
-          font-size: 40px;
-          direction: rtl;
-          }
-            h1 {
-              font-size: 80px;
-            }
-            p {
-              color: grey;
-            }
-          </style>
-        </head>
-        <body>
-          <h1>این یک عنوان هست</h1>
-<p>هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى، حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى إضافة إلى زيادة عدد الحروف التى يولدها التطبيق.<br />إذا كنت تحتاج إلى عدد أكبر من الفقرات يتيح لك مولد النص العربى زيادة عدد الفقرات كما تريد، النص لن يبدو مقسما ولا يحوي أخطاء لغوية، مولد النص العربى مفيد لمصممي المواقع على وجه الخصوص، حيث يحتاج العميل فى كثير من الأحيان أن يطلع على صورة حقيقية لتصميم الموقع.<br />ومن هنا وجب على المصمم أن يضع نصوصا مؤقتة على التصميم ليظهر للعميل الشكل كاملاً،دور مولد النص العربى أن يوفر على المصمم عناء البحث عن نص بديل لا علاقة له بالموضوع الذى يتحدث عنه التصميم فيظهر بشكل لا يليق.<br />هذا النص يمكن أن يتم تركيبه على أي تصميم دون مشكلة فلن يبدو وكأنه نص منسوخ، غير منظم، غير منسق، أو حتى غير مفهوم. لأنه مازال نصاً بديلاً ومؤقتاً.</p>
-<p>هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى، حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى إضافة إلى زيادة عدد الحروف التى يولدها التطبيق.<br />إذا كنت تحتاج إلى عدد أكبر من الفقرات يتيح لك مولد النص العربى زيادة عدد الفقرات كما تريد، النص لن يبدو مقسما ولا يحوي أخطاء لغوية، مولد النص العربى مفيد لمصممي المواقع على وجه الخصوص، حيث يحتاج العميل فى كثير من الأحيان أن يطلع على صورة حقيقية لتصميم الموقع.<br />ومن هنا وجب على المصمم أن يضع نصوصا مؤقتة على التصميم ليظهر للعميل الشكل كاملاً،دور مولد النص العربى أن يوفر على المصمم عناء البحث عن نص بديل لا علاقة له بالموضوع الذى يتحدث عنه التصميم فيظهر بشكل لا يليق.<br />هذا النص يمكن أن يتم تركيبه على أي تصميم دون مشكلة فلن يبدو وكأنه نص منسوخ، غير منظم، غير منسق، أو حتى غير مفهوم. لأنه مازال نصاً بديلاً ومؤقتاً.</p>
-<p>هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى، حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى إضافة إلى زيادة عدد الحروف التى يولدها التطبيق.<br />إذا كنت تحتاج إلى عدد أكبر من الفقرات يتيح لك مولد النص العربى زيادة عدد الفقرات كما تريد، النص لن يبدو مقسما ولا يحوي أخطاء لغوية، مولد النص العربى مفيد لمصممي المواقع على وجه الخصوص، حيث يحتاج العميل فى كثير من الأحيان أن يطلع على صورة حقيقية لتصميم الموقع.<br />ومن هنا وجب على المصمم أن يضع نصوصا مؤقتة على التصميم ليظهر للعميل الشكل كاملاً،دور مولد النص العربى أن يوفر على المصمم عناء البحث عن نص بديل لا علاقة له بالموضوع الذى يتحدث عنه التصميم فيظهر بشكل لا يليق.<br />هذا النص يمكن أن يتم تركيبه على أي تصميم دون مشكلة فلن يبدو وكأنه نص منسوخ، غير منظم، غير منسق، أو حتى غير مفهوم. لأنه مازال نصاً بديلاً ومؤقتاً.</p>
-<p>هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى، حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى إضافة إلى زيادة عدد الحروف التى يولدها التطبيق.<br />إذا كنت تحتاج إلى عدد أكبر من الفقرات يتيح لك مولد النص العربى زيادة عدد الفقرات كما تريد، النص لن يبدو مقسما ولا يحوي أخطاء لغوية، مولد النص العربى مفيد لمصممي المواقع على وجه الخصوص، حيث يحتاج العميل فى كثير من الأحيان أن يطلع على صورة حقيقية لتصميم الموقع.<br />ومن هنا وجب على المصمم أن يضع نصوصا مؤقتة على التصميم ليظهر للعميل الشكل كاملاً،دور مولد النص العربى أن يوفر على المصمم عناء البحث عن نص بديل لا علاقة له بالموضوع الذى يتحدث عنه التصميم فيظهر بشكل لا يليق.<br />هذا النص يمكن أن يتم تركيبه على أي تصميم دون مشكلة فلن يبدو وكأنه نص منسوخ، غير منظم، غير منسق، أو حتى غير مفهوم. لأنه مازال نصاً بديلاً ومؤقتاً.</p>
-<p>هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى، حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى إضافة إلى زيادة عدد الحروف التى يولدها التطبيق.<br />إذا كنت تحتاج إلى عدد أكبر من الفقرات يتيح لك مولد النص العربى زيادة عدد الفقرات كما تريد، النص لن يبدو مقسما ولا يحوي أخطاء لغوية، مولد النص العربى مفيد لمصممي المواقع على وجه الخصوص، حيث يحتاج العميل فى كثير من الأحيان أن يطلع على صورة حقيقية لتصميم الموقع.<br />ومن هنا وجب على المصمم أن يضع نصوصا مؤقتة على التصميم ليظهر للعميل الشكل كاملاً،دور مولد النص العربى أن يوفر على المصمم عناء البحث عن نص بديل لا علاقة له بالموضوع الذى يتحدث عنه التصميم فيظهر بشكل لا يليق.<br />هذا النص يمكن أن يتم تركيبه على أي تصميم دون مشكلة فلن يبدو وكأنه نص منسوخ، غير منظم، غير منسق، أو حتى غير مفهوم. لأنه مازال نصاً بديلاً ومؤقتاً.</p>
-        </body>
-      </html>
-    ''';
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Epub Screen'),
@@ -205,24 +102,43 @@ window.onscroll = function(ev) {
             child: Column(
               children: [
                 Expanded(
-                  child: PageView.builder(
-                    controller: _pageController,
-                    scrollDirection: Axis.vertical,
-                    itemCount: 20,
-                    physics: _webViewIsScrolling
-                        ? const NeverScrollableScrollPhysics()
-                        : const AlwaysScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return buildWebView(htmlText);
+                  child: BlocConsumer<EpubCubit, EpubState>(
+                    listener: (context, state) {
+                      if (state is EpubErrorState){
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.error)));
+                      }
                     },
-                    onPageChanged: (index) {
-                      setState(() {
-                        _webViewIsScrolling = true;
-                      });
+                    builder: (context, state) {
+                      if (state is EpubLoadingState){
+                        return CircularProgressIndicator();
+                      } else if (state is SpineEpubLoadedState){
+                      return PageView.builder(
+                        controller: _pageController,
+                        scrollDirection: Axis.vertical,
+                        itemCount: state.spine.length,
+                        physics: _webViewIsScrolling
+                            ? const NeverScrollableScrollPhysics()
+                            : const AlwaysScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return buildWebView(state.spine[index]);
+                        },
+                        onPageChanged: (index) {
+                          setState(() {
+                            _webViewIsScrolling = true;
+                          });
+                        },
+                      );
+                      } else {
+                        return Placeholder();
+                      }
+                    },
+                    buildWhen: (previousState, state){
+                      return state is SpineEpubLoadedState || state is EpubLoadingState;
                     },
                   ),
                 ),
-                const Padding(padding: EdgeInsets.all(20), child: Text('12/344'))
+                const Padding(
+                    padding: EdgeInsets.all(20), child: Text('12/344'))
               ],
             ),
           ),
@@ -282,6 +198,11 @@ window.onscroll = function(ev) {
       },
     );
   }
+
+  void _parseEpub() {
+    BlocProvider.of<EpubCubit>(context).parseEpub('assets/epubs/57.epub');
+  }
+
 }
 
 class VerticalSeekBar extends StatefulWidget {
