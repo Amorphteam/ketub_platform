@@ -27,8 +27,8 @@ class EpubCubit extends Cubit<EpubState> {
     try {
         final epubBook = await parseEpubFromAsset(assetPath);
         final spine = await getSpineFromEpub(epubBook);
-        emit(BookTitleLoadedState(epubBook.Title));
         emit(SpineEpubLoadedState(spine));
+        emit(BookTitleLoadedState(epubBook.Title!));
 
     } catch (error) {
       if (error is Exception) {

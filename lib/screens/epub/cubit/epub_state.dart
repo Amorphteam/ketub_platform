@@ -16,7 +16,7 @@ class SpineEpubLoadedState extends EpubState{
 }
 
 class BookTitleLoadedState extends EpubState{
-  final String? bookTitle;
+  final String bookTitle;
 
   BookTitleLoadedState(this.bookTitle);
 }

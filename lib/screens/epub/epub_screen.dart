@@ -57,9 +57,9 @@ class _EpubScreenState extends State<EpubScreen> {
       appBar: AppBar(
         title: BlocBuilder<EpubCubit, EpubState>(
           builder: (context, state) {
-            if (state is BookTitleLoadedState){
+            if (state is BookTitleLoadedState) {
               return Text(state.bookTitle!);
-            }else {
+            } else {
               return Text('Epub Screen');
             }
           },
@@ -147,8 +147,9 @@ class _EpubScreenState extends State<EpubScreen> {
                     },
                   ),
                 ),
-                const Padding(
-                    padding: EdgeInsets.all(20), child: Text('12/344'))
+                 Padding(
+                    padding: EdgeInsets.all(20),
+                    child: Text('12/233'),)
               ],
             ),
           ),
