@@ -25,7 +25,9 @@ class EpubCubit extends Cubit<EpubState> {
   Future<void> parseEpub(String assetPath) async {
     emit(EpubLoadingState());
     try {
-        final spine = await parseEpubFromAsset(assetPath);
+        final epubBook = await parseEpubFromAsset(assetPath);
+        final spine = await getSpineFromEpub(epubBook);
+        emit(BookTitleLoadedState(epubBook.Title));
         emit(SpineEpubLoadedState(spine));
 
     } catch (error) {

@@ -27,11 +27,7 @@ void openEpub(BuildContext context, BookModel? book, ReferenceModel? reference, 
 }
 
 
-Future<List<String>> parseEpubFromAsset(String assetPath) async {
-  ByteData data = await rootBundle.load(assetPath);
-  List<int> bytes = data.buffer.asUint8List();
-
-  EpubBook epubBook = await EpubReader.readBook(Uint8List.fromList(bytes));
+Future<List<String>> getSpineFromEpub(EpubBook epubBook) async {
   EpubContent? bookContent = epubBook.Content;
 
   // All XHTML files in the book (file name is the key)
@@ -43,4 +39,13 @@ Future<List<String>> parseEpubFromAsset(String assetPath) async {
   }
 
   return spine;
+}
+
+Future<EpubBook> parseEpubFromAsset(String assetPath) async {
+  ByteData data = await rootBundle.load(assetPath);
+  List<int> bytes = data.buffer.asUint8List();
+
+  EpubBook epubBook = await EpubReader.readBook(Uint8List.fromList(bytes));
+
+  return epubBook;
 }

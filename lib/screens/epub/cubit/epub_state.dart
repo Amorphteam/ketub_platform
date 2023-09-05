@@ -14,6 +14,13 @@ class SpineEpubLoadedState extends EpubState{
 
   SpineEpubLoadedState(this.spine);
 }
+
+class BookTitleLoadedState extends EpubState{
+  final String? bookTitle;
+
+  BookTitleLoadedState(this.bookTitle);
+}
+
 class FontSizeChangedState extends EpubState {
   final FontSize fontSize;
   FontSizeChangedState({required this.fontSize});

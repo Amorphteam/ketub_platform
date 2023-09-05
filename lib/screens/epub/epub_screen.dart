@@ -55,7 +55,15 @@ class _EpubScreenState extends State<EpubScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Epub Screen'),
+        title: BlocBuilder<EpubCubit, EpubState>(
+          builder: (context, state) {
+            if (state is BookTitleLoadedState){
+              return Text(state.bookTitle!);
+            }else {
+              return Text('Epub Screen');
+            }
+          },
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
@@ -104,36 +112,38 @@ class _EpubScreenState extends State<EpubScreen> {
                 Expanded(
                   child: BlocConsumer<EpubCubit, EpubState>(
                     listener: (context, state) {
-                      if (state is EpubErrorState){
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.error)));
+                      if (state is EpubErrorState) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(state.error)));
                       }
                     },
                     builder: (context, state) {
-                      if (state is EpubLoadingState){
+                      if (state is EpubLoadingState) {
                         return CircularProgressIndicator();
-                      } else if (state is SpineEpubLoadedState){
-                      return PageView.builder(
-                        controller: _pageController,
-                        scrollDirection: Axis.vertical,
-                        itemCount: state.spine.length,
-                        physics: _webViewIsScrolling
-                            ? const NeverScrollableScrollPhysics()
-                            : const AlwaysScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return buildWebView(state.spine[index]);
-                        },
-                        onPageChanged: (index) {
-                          setState(() {
-                            _webViewIsScrolling = true;
-                          });
-                        },
-                      );
+                      } else if (state is SpineEpubLoadedState) {
+                        return PageView.builder(
+                          controller: _pageController,
+                          scrollDirection: Axis.vertical,
+                          itemCount: state.spine.length,
+                          physics: _webViewIsScrolling
+                              ? const NeverScrollableScrollPhysics()
+                              : const AlwaysScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return buildWebView(state.spine[index]);
+                          },
+                          onPageChanged: (index) {
+                            setState(() {
+                              _webViewIsScrolling = true;
+                            });
+                          },
+                        );
                       } else {
                         return Placeholder();
                       }
                     },
-                    buildWhen: (previousState, state){
-                      return state is SpineEpubLoadedState || state is EpubLoadingState;
+                    buildWhen: (previousState, state) {
+                      return state is SpineEpubLoadedState ||
+                          state is EpubLoadingState;
                     },
                   ),
                 ),
