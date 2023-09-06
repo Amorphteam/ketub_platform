@@ -222,7 +222,7 @@ class _EpubScreenState extends State<EpubScreen> {
     final headIndex = spine.indexOf('</head>');
     if (headIndex != -1) {
       // Insert the CSS link before '</head>'
-      return spine.replaceRange(headIndex, headIndex, ketubCss);
+      return spine.replaceRange(headIndex, headIndex, ketubCssJs);
     }
     return spine;
   }

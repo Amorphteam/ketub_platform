@@ -140,43 +140,29 @@ List<TreeTocModel> tempToc = [
   ),
 ];
 
-String ketubCss = '''<style>
+String ketubCssJs = '''<script>
+window.onscroll = function(ev) {
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+    window.FLUTTER_CHANNEL.postMessage('end of scroll');
+    }
+};
+
+    function changeFontSize(className) {
+          document.body.className = className;
+        }
+        
+        function changeLineSpace(className) {
+          document.body.className = className;
+        }
+        
+         function changeFontFamily(className) {
+          document.body.className = className;
+        }
+</script>
+<style>
 
 
 
-/**
- *  Style.css
- *  FolioReaderKit
- *
- *  Created by Heberti Almeida on 06/05/15.
- *  Copyright (c) 2015 Folio Reader. All rights reserved.
- */
-
-/* CSS Reset */
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-    margin: 0;
-    vertical-align: baseline;
-}
-
-/* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section {
-    display: block;
-}
-
-/* ePUB */
 html {
     -webkit-text-size-adjust: none; /* Never autoresize text */
     padding: 0 0 !important;
@@ -607,4 +593,62 @@ text-align: justify;
 }
 .pagenumbermanual{
 display: none;
-}</style>''';
+}
+
+          .font1 {
+          font-family: serif !important; 
+          }
+          .font2 {
+          font-family: monospace !important; 
+          }
+          
+          .font3 {
+          font-family: cursive !important; 
+          }
+          
+          .font4 {
+          font-family: sans-serif !important; 
+          }
+          
+          
+          .normalLineSpace {
+          line-height: 100% !important; 
+          }
+          
+                    .smallLineSpace {
+          line-height: 80% !important; 
+          }
+          
+                    .largeLineSpace {
+          line-height: 140% !important; 
+          }
+          
+                    .xlargeLineSpace {
+          line-height: 180% !important; 
+          }
+          
+                    .xxlargeLineSpace {
+          line-height: 220% !important; 
+          }
+          
+          .normalFontSize {
+          font-size: 40px !important;
+          }
+          
+          .smallFontSize {
+          font-size: 30px !important;
+          }
+          
+          .LargeFontSize {
+          font-size: 50px !important;
+          }
+          
+          .xlargeFontSize {
+          font-size: 60px !important;
+          }
+          
+          .xxlargeFontSize {
+          font-size: 70px !important;
+          }
+
+</style>''';
