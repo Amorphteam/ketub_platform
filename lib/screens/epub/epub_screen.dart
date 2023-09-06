@@ -46,17 +46,14 @@ class _EpubScreenState extends State<EpubScreen> {
   }
 
   void _changeFontSize(FontSize fontSize) {
-    styleHelper.changeFontSize(fontSize);
     _webViewController?.evaluateJavascript('changeFontSize("${fontSize.name}")');
   }
 
   void _changeLineSpace(LineSpace lineSpace) {
-    styleHelper.changeLineSpace(lineSpace);
     _webViewController?.evaluateJavascript('changeLineSpace("${lineSpace.name}")');
   }
 
   void _changeFontFamily(FontFamily fontFamily) {
-    styleHelper.changeFontFamily(fontFamily);
     _webViewController?.evaluateJavascript('changeFontFamily("${fontFamily.name}")');
   }
 
@@ -194,9 +191,9 @@ class _EpubScreenState extends State<EpubScreen> {
             ).toString());
           },
           onPageFinished: (String url){
-            _changeLineSpace(styleHelper.lineSpace);
-            _changeFontSize(styleHelper.fontSize);
-            _changeFontFamily(styleHelper.fontFamily);
+            BlocProvider.of<EpubCubit>(context).changeFontSize(styleHelper.fontSize);
+            BlocProvider.of<EpubCubit>(context).changeFontFamily(styleHelper.fontFamily);
+            BlocProvider.of<EpubCubit>(context).changeLineSpace(styleHelper.lineSpace);
           },
           javascriptChannels: {
             JavascriptChannel(
@@ -240,27 +237,7 @@ class _EpubScreenState extends State<EpubScreen> {
     return spine;
   }
 
-  void saveStyleHelperToPreferences() async {
-    final prefs = await SharedPreferences.getInstance();
-    final styleHelper = StyleHelper(); // Assuming you have an instance of StyleHelper
-    final styleJson = styleHelper.toJson();
-  print('toJson $styleJson');
-    prefs.setString('styleHelper', jsonEncode(styleJson));
-  }
 
-  void loadStyleHelperFromPreferences() async {
-    final prefs = await SharedPreferences.getInstance();
-    final styleJson = prefs.getString('styleHelper');
-    print('fromjson $styleJson');
-    if (styleJson != null) {
-      final decodedStyle = jsonDecode(styleJson);
-      final loadedStyleHelper = StyleHelper.fromJson(decodedStyle);
-      setState(() {
-        styleHelper = loadedStyleHelper;
-        print('Fromjson ${styleHelper.fontSize}');
-      });
-    }
-  }
 }
 
 class VerticalSeekBar extends StatefulWidget {
