@@ -37,14 +37,10 @@ class _EpubScreenState extends State<EpubScreen> {
     super.initState();
     _pageController = PageController();
     _parseEpub();
-    // Load the StyleHelper object from SharedPreferences when the screen is created
-    loadStyleHelperFromPreferences();
   }
 
   @override
   void dispose() {
-    // Save the StyleHelper object to SharedPreferences when closing the screen
-    saveStyleHelperToPreferences();
     _pageController.dispose();
     super.dispose();
   }
