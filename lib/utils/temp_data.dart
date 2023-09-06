@@ -148,16 +148,35 @@ window.onscroll = function(ev) {
 };
 
     function changeFontSize(className) {
-          document.body.className = className;
-        }
+        document.body.classList.remove('smallFontSize');
+        document.body.classList.remove('normalFontSize');
+        document.body.classList.remove('largeFontSize');
+        document.body.classList.remove('xlargeFontSize');
+        document.body.classList.remove('xxlargeFontSize');
+
+        document.body.classList.add(className);
+         }
+        
         
         function changeLineSpace(className) {
-          document.body.className = className;
+        document.body.classList.remove('smallLineSpace');
+        document.body.classList.remove('normalLineSpace');
+        document.body.classList.remove('largeLineSpace');
+        document.body.classList.remove('xlargeLineSpace');
+        document.body.classList.remove('xxlargeLineSpace');
+
+        document.body.classList.add(className);
+        
         }
         
          function changeFontFamily(className) {
-          document.body.className = className;
-        }
+        document.body.classList.remove('font1');
+        document.body.classList.remove('font2');
+        document.body.classList.remove('font3');
+        document.body.classList.remove('font4');
+
+        document.body.classList.add(className);
+         }
 </script>
 <style>
 

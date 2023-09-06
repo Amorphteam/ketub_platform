@@ -7,7 +7,11 @@ import 'package:ketub_platform/models/tree_toc_model.dart';
 import 'package:ketub_platform/screens/epub/cubit/epub_cubit.dart';
 import 'package:ketub_platform/screens/epub/widgets/style_sheet.dart';
 import 'package:ketub_platform/utils/temp_data.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
+import '../../models/style_model.dart';
+import '../../utils/style_helper.dart';
 
 class EpubScreen extends StatefulWidget {
   final ReferenceModel? referenceModel;
@@ -26,30 +30,38 @@ class _EpubScreenState extends State<EpubScreen> {
   late PageController _pageController;
   bool _webViewIsScrolling = true;
   WebViewController? _webViewController;
+  StyleHelper styleHelper = StyleHelper();
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController();
     _parseEpub();
+    // Load the StyleHelper object from SharedPreferences when the screen is created
+    loadStyleHelperFromPreferences();
   }
 
   @override
   void dispose() {
+    // Save the StyleHelper object to SharedPreferences when closing the screen
+    saveStyleHelperToPreferences();
     _pageController.dispose();
     super.dispose();
   }
 
-  void _changeFontSize(String className) {
-    _webViewController?.evaluateJavascript('changeFontSize("$className")');
+  void _changeFontSize(FontSize fontSize) {
+    styleHelper.changeFontSize(fontSize);
+    _webViewController?.evaluateJavascript('changeFontSize("${fontSize.name}")');
   }
 
-  void _changeLineSpace(String className) {
-    _webViewController?.evaluateJavascript('changeLineSpace("$className")');
+  void _changeLineSpace(LineSpace lineSpace) {
+    styleHelper.changeLineSpace(lineSpace);
+    _webViewController?.evaluateJavascript('changeLineSpace("${lineSpace.name}")');
   }
 
-  void _changeFontFamily(String className) {
-    _webViewController?.evaluateJavascript('changeFontFamily("$className")');
+  void _changeFontFamily(FontFamily fontFamily) {
+    styleHelper.changeFontFamily(fontFamily);
+    _webViewController?.evaluateJavascript('changeFontFamily("${fontFamily.name}")');
   }
 
   @override
@@ -166,11 +178,11 @@ class _EpubScreenState extends State<EpubScreen> {
     return BlocConsumer<EpubCubit, EpubState>(
       listener: (context, state) {
         if (state is FontSizeChangedState) {
-          _changeFontSize(state.fontSize.name);
+          _changeFontSize(state.fontSize);
         } else if (state is LineSpaceChangedState) {
-          _changeLineSpace(state.lineSpace.name);
+          _changeLineSpace(state.lineSpace);
         } else if (state is FontFamilyChangedState) {
-          _changeFontFamily(state.fontFamily.name);
+          _changeFontFamily(state.fontFamily);
         }
       },
       builder: (context, state) {
@@ -184,6 +196,11 @@ class _EpubScreenState extends State<EpubScreen> {
               mimeType: 'text/html',
               encoding: Encoding.getByName('utf-8'),
             ).toString());
+          },
+          onPageFinished: (String url){
+            _changeLineSpace(styleHelper.lineSpace);
+            _changeFontSize(styleHelper.fontSize);
+            _changeFontFamily(styleHelper.fontFamily);
           },
           javascriptChannels: {
             JavascriptChannel(
@@ -227,6 +244,27 @@ class _EpubScreenState extends State<EpubScreen> {
     return spine;
   }
 
+  void saveStyleHelperToPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    final styleHelper = StyleHelper(); // Assuming you have an instance of StyleHelper
+    final styleJson = styleHelper.toJson();
+  print('toJson $styleJson');
+    prefs.setString('styleHelper', jsonEncode(styleJson));
+  }
+
+  void loadStyleHelperFromPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    final styleJson = prefs.getString('styleHelper');
+    print('fromjson $styleJson');
+    if (styleJson != null) {
+      final decodedStyle = jsonDecode(styleJson);
+      final loadedStyleHelper = StyleHelper.fromJson(decodedStyle);
+      setState(() {
+        styleHelper = loadedStyleHelper;
+        print('Fromjson ${styleHelper.fontSize}');
+      });
+    }
+  }
 }
 
 class VerticalSeekBar extends StatefulWidget {
@@ -253,4 +291,6 @@ class _VerticalSeekBarState extends State<VerticalSeekBar> {
       ),
     );
   }
+
 }
+
