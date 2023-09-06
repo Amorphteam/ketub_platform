@@ -6,6 +6,7 @@ import 'package:ketub_platform/models/reference_model.dart';
 import 'package:ketub_platform/models/tree_toc_model.dart';
 import 'package:ketub_platform/screens/epub/cubit/epub_cubit.dart';
 import 'package:ketub_platform/screens/epub/widgets/style_sheet.dart';
+import 'package:ketub_platform/utils/temp_data.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class EpubScreen extends StatefulWidget {
@@ -129,7 +130,9 @@ class _EpubScreenState extends State<EpubScreen> {
                               ? const NeverScrollableScrollPhysics()
                               : const AlwaysScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
-                            return buildWebView(state.spine[index]);
+                            var htmlWithCssJs = injectCssJs(state.spine[index]);
+                            print(htmlWithCssJs);
+                            return buildWebView(htmlWithCssJs);
                           },
                           onPageChanged: (index) {
                             setState(() {
@@ -212,6 +215,16 @@ class _EpubScreenState extends State<EpubScreen> {
 
   void _parseEpub() {
     BlocProvider.of<EpubCubit>(context).parseEpub('assets/epubs/57.epub');
+  }
+
+  String injectCssJs(String spine) {
+    // Find the index of '</head>' in the HTML
+    final headIndex = spine.indexOf('</head>');
+    if (headIndex != -1) {
+      // Insert the CSS link before '</head>'
+      return spine.replaceRange(headIndex, headIndex, ketubCss);
+    }
+    return spine;
   }
 
 }
