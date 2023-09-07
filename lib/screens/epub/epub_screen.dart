@@ -46,15 +46,18 @@ class _EpubScreenState extends State<EpubScreen> {
   }
 
   void _changeFontSize(FontSize fontSize) {
-    _webViewController?.evaluateJavascript('changeFontSize("${fontSize.name}")');
+    _webViewController
+        ?.evaluateJavascript('changeFontSize("${fontSize.name}")');
   }
 
   void _changeLineSpace(LineSpace lineSpace) {
-    _webViewController?.evaluateJavascript('changeLineSpace("${lineSpace.name}")');
+    _webViewController
+        ?.evaluateJavascript('changeLineSpace("${lineSpace.name}")');
   }
 
   void _changeFontFamily(FontFamily fontFamily) {
-    _webViewController?.evaluateJavascript('changeFontFamily("${fontFamily.name}")');
+    _webViewController
+        ?.evaluateJavascript('changeFontFamily("${fontFamily.name}")');
   }
 
   @override
@@ -64,10 +67,13 @@ class _EpubScreenState extends State<EpubScreen> {
         title: BlocBuilder<EpubCubit, EpubState>(
           builder: (context, state) {
             if (state is BookTitleLoadedState) {
-              return Text(state.bookTitle!);
+              return Text(state.bookTitle);
             } else {
-              return Text('Epub Screen');
+              return Text('');
             }
+          },
+          buildWhen: (previousState, state) {
+            return state is BookTitleLoadedState;
           },
         ),
         actions: [
@@ -119,8 +125,8 @@ class _EpubScreenState extends State<EpubScreen> {
                   child: BlocConsumer<EpubCubit, EpubState>(
                     listener: (context, state) {
                       if (state is EpubErrorState) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(state.error)));
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(SnackBar(content: Text(state.error)));
                       }
                     },
                     builder: (context, state) {
@@ -155,9 +161,10 @@ class _EpubScreenState extends State<EpubScreen> {
                     },
                   ),
                 ),
-                 Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Text('12/233'),)
+                Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Text('12/233'),
+                )
               ],
             ),
           ),
@@ -190,10 +197,13 @@ class _EpubScreenState extends State<EpubScreen> {
               encoding: Encoding.getByName('utf-8'),
             ).toString());
           },
-          onPageFinished: (String url){
-            BlocProvider.of<EpubCubit>(context).changeFontSize(styleHelper.fontSize);
-            BlocProvider.of<EpubCubit>(context).changeFontFamily(styleHelper.fontFamily);
-            BlocProvider.of<EpubCubit>(context).changeLineSpace(styleHelper.lineSpace);
+          onPageFinished: (String url) {
+            BlocProvider.of<EpubCubit>(context)
+                .changeFontSize(styleHelper.fontSize);
+            BlocProvider.of<EpubCubit>(context)
+                .changeFontFamily(styleHelper.fontFamily);
+            BlocProvider.of<EpubCubit>(context)
+                .changeLineSpace(styleHelper.lineSpace);
           },
           javascriptChannels: {
             JavascriptChannel(
@@ -236,8 +246,6 @@ class _EpubScreenState extends State<EpubScreen> {
     }
     return spine;
   }
-
-
 }
 
 class VerticalSeekBar extends StatefulWidget {
@@ -264,6 +272,4 @@ class _VerticalSeekBarState extends State<VerticalSeekBar> {
       ),
     );
   }
-
 }
-
