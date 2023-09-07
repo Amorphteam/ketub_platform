@@ -39,6 +39,8 @@ class EpubCubit extends Cubit<EpubState> {
       final spine = await getSpineFromEpub(epubBook);
       emit(SpineEpubLoadedState(spine));
       emit(BookTitleLoadedState(epubBook.Title!));
+      final toc = await getToc(epubBook);
+
       _loadStyleHelperFromPreferences(); // Load StyleHelper when parsing is done
     } catch (error) {
       if (error is Exception) {

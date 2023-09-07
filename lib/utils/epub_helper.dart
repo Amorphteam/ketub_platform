@@ -49,3 +49,14 @@ Future<EpubBook> parseEpubFromAsset(String assetPath) async {
 
   return epubBook;
 }
+
+Future<void> getToc(EpubBook epubBook) async {
+  // EPUB NCX data
+  EpubNavigation? navigation = epubBook.Schema?.Navigation;
+
+// Enumerating NCX metadata
+  navigation?.NavMap?.Points?.forEach((epubNavigationPoint) {
+
+  });
+
+}
