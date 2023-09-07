@@ -50,13 +50,33 @@ Future<EpubBook> parseEpubFromAsset(String assetPath) async {
   return epubBook;
 }
 
-Future<void> getToc(EpubBook epubBook) async {
+
+
+
+
+Future<TreeNode> getToc(EpubBook epubBook) async {
   // EPUB NCX data
   EpubNavigation? navigation = epubBook.Schema?.Navigation;
 
-// Enumerating NCX metadata
-  navigation?.NavMap?.Points?.forEach((epubNavigationPoint) {
+  // Helper function to build the TOC tree
+  TreeNode buildTocTree(List? navigationPoints) {
+    if (navigationPoints == null) {
+      return TreeNode("", []);
+    }
 
-  });
+    List<TreeNode> children = [];
 
+    for (var point in navigationPoints) {
+      TreeNode childNode = buildTocTree(point.ChildNavigationPoints);
+      children.add(TreeNode(point.NavigationLabels.first.Text, [childNode]));
+    }
+
+    return TreeNode("", children);
+  }
+
+  TreeNode tocTree = buildTocTree(navigation?.NavMap?.Points);
+
+  // Print the TOC tree with levels
+  return tocTree;
 }
+

@@ -11,3 +11,9 @@ class TreeTocModel {
     required this.childItems,
   });
 }
+class TreeNode {
+  String label;
+  List<TreeNode> children;
+
+  TreeNode(this.label, this.children);
+}
