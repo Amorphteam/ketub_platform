@@ -50,7 +50,7 @@ class _TocScreenState extends State<TocScreen> {
           builder: (context, state) {
             if (state is TocLoadedState) {
               return Expanded(
-                child: TocTreeListWidget(tocList: state.tocTreeList),
+                child: EpubChapterListWidget(tocTreeList: state.tocTreeList),
               );
             } else if (state is TocLoadingState) {
               return CircularProgressIndicator();

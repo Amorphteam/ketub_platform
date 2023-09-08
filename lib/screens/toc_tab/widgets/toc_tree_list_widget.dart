@@ -1,101 +1,65 @@
 import 'package:epub_parser/epub_parser.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ketub_platform/models/tree_toc_model.dart';
-import 'package:ketub_platform/screens/toc_tab/cubit/toc_cubit.dart';
 
-class TocTreeListWidget extends StatelessWidget {
-  final List<EpubChapter> tocList;
+class EpubChapterListWidget extends StatefulWidget {
+  final List<EpubChapter> tocTreeList;
 
-  const TocTreeListWidget({Key? key, required this.tocList}) : super(key: key);
+  EpubChapterListWidget({required this.tocTreeList});
+
+  @override
+  _EpubChapterListWidgetState createState() => _EpubChapterListWidgetState();
+}
+
+class _EpubChapterListWidgetState extends State<EpubChapterListWidget> {
+  List<bool> _isExpanded = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _isExpanded = List<bool>.generate(widget.tocTreeList.length, (index) => false);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return _buildTreeList(tocList);
-  }
-
-  Widget _buildTreeList(List<EpubChapter> tocList) {
     return ListView.builder(
-      itemCount: tocList.length,
+      shrinkWrap: true,
+      physics: ClampingScrollPhysics(),
+      itemCount: widget.tocTreeList.length,
       itemBuilder: (context, index) {
-        EpubChapter groupItem = tocList[index];
-        return _buildListTile(context, groupItem);
+        return buildChapterTree(widget.tocTreeList[index], index, 0);
       },
     );
   }
 
-  Widget _buildListTile(BuildContext context, EpubChapter groupItem) {
-    if (groupItem.SubChapters != null) {
-      return ExpansionTile(
-        title: Text(groupItem.Title!),
-        children: [
-          _buildFirstChildList(groupItem.SubChapters!),
-        ],
-      );
-    } else {
-      return ListTile(
-        title: Text(groupItem.Title!),
-      );
-    }
-  }
+  Widget buildChapterTree(EpubChapter chapter, int parentIndex, int level) {
+    final hasSubChapters = chapter.SubChapters != null && chapter.SubChapters!.isNotEmpty;
 
-  Widget _buildFirstChildList(List<EpubChapter> childItems) {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: ClampingScrollPhysics(),
-      itemCount: childItems.length,
-      itemBuilder: (context, index) {
-        EpubChapter firstChildItem = childItems[index];
-        return _buildFirstChildListTile(context, firstChildItem);
-      },
-    );
-  }
-
-  Widget _buildFirstChildListTile(
-      BuildContext context, EpubChapter firstChildItem) {
-    if (firstChildItem.SubChapters != null) {
-      return ExpansionTile(
-        title: Padding(
-          padding: const EdgeInsets.only(left: 16),
-          child: Text(firstChildItem.Title!),
-        ),
-        children: [
-          _buildSecondChildList(firstChildItem.SubChapters!),
-        ],
-      );
-    } else {
-      return ListTile(
-        title: Padding(
-          padding: const EdgeInsets.only(left: 16),
-          child: Text(firstChildItem.Title!),
-        ),
-      );
-    }
-  }
-
-  Widget _buildSecondChildList(List<EpubChapter> childItems2) {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: ClampingScrollPhysics(),
-      itemCount: childItems2.length,
-      itemBuilder: (context, index) {
-        EpubChapter secondChildItem = childItems2[index];
-        return ListTile(
-          title: Padding(
-            padding: const EdgeInsets.only(left: 32),
-            child: Text(secondChildItem.Title!),
-          ),
-          onTap: () {
-            _openEpub(context, secondChildItem);
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.only(left: level * 16.0), // Adjust the left padding as needed
+          child: ListTile(
+            title: Text(chapter.Title ?? 'No Title'),
+            trailing: hasSubChapters
+                ? _isExpanded[parentIndex]
+                ? Icon(Icons.arrow_drop_up)
+                : Icon(Icons.arrow_drop_down)
+                : null,
+            // Add more content or actions for each chapter here
+            onTap: () {
+              setState(() {
+                _isExpanded[parentIndex] = !_isExpanded[parentIndex];
+              });
             },
-        );
-      },
+          ),
+        ),
+        if (hasSubChapters && _isExpanded[parentIndex])
+          Column(
+            children: chapter.SubChapters!.map((subChapter) {
+              return buildChapterTree(subChapter, parentIndex, level + 1);
+            }).toList(),
+          ),
+      ],
     );
-  }
-
-
-  void _openEpub(BuildContext context, EpubChapter item){
-    print('item is ${item.ContentFileName}');
-    // BlocProvider.of<TocCubit>(context).openEpub(item);
   }
 }
