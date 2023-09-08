@@ -1,10 +1,11 @@
+import 'package:epub_parser/epub_parser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ketub_platform/models/tree_toc_model.dart';
 import 'package:ketub_platform/screens/toc_tab/cubit/toc_cubit.dart';
 
 class TocTreeListWidget extends StatelessWidget {
-  final List<TreeTocModel> tocList;
+  final List<EpubChapter> tocList;
 
   const TocTreeListWidget({Key? key, required this.tocList}) : super(key: key);
 
@@ -13,78 +14,76 @@ class TocTreeListWidget extends StatelessWidget {
     return _buildTreeList(tocList);
   }
 
-  Widget _buildTreeList(List<TreeTocModel> tocList) {
+  Widget _buildTreeList(List<EpubChapter> tocList) {
     return ListView.builder(
       itemCount: tocList.length,
       itemBuilder: (context, index) {
-        TreeTocModel groupItem = tocList[index];
+        EpubChapter groupItem = tocList[index];
         return _buildListTile(context, groupItem);
       },
     );
   }
 
-  Widget _buildListTile(BuildContext context, TreeTocModel groupItem) {
-    if (groupItem.childItems != null) {
+  Widget _buildListTile(BuildContext context, EpubChapter groupItem) {
+    if (groupItem.SubChapters != null) {
       return ExpansionTile(
-        title: Text(groupItem.bookTitle),
-        subtitle: Text(groupItem.bookName),
+        title: Text(groupItem.Title!),
         children: [
-          _buildFirstChildList(groupItem.childItems!),
+          _buildFirstChildList(groupItem.SubChapters!),
         ],
       );
     } else {
       return ListTile(
-        title: Text(groupItem.bookTitle),
-        subtitle: Text(groupItem.bookName),
+        title: Text(groupItem.Title!),
       );
     }
   }
 
-  Widget _buildFirstChildList(List<TreeTocModel> childItems) {
+  Widget _buildFirstChildList(List<EpubChapter> childItems) {
     return ListView.builder(
       shrinkWrap: true,
       physics: ClampingScrollPhysics(),
       itemCount: childItems.length,
       itemBuilder: (context, index) {
-        TreeTocModel firstChildItem = childItems[index];
+        EpubChapter firstChildItem = childItems[index];
         return _buildFirstChildListTile(context, firstChildItem);
       },
     );
   }
 
   Widget _buildFirstChildListTile(
-      BuildContext context, TreeTocModel firstChildItem) {
-    if (firstChildItem.childItems != null) {
+      BuildContext context, EpubChapter firstChildItem) {
+    if (firstChildItem.SubChapters != null) {
       return ExpansionTile(
         title: Padding(
           padding: const EdgeInsets.only(left: 16),
-          child: Text(firstChildItem.bookTitle),
+          child: Text(firstChildItem.Title!),
         ),
         children: [
-          _buildSecondChildList(firstChildItem.childItems!),
+          _buildSecondChildList(firstChildItem.SubChapters!),
         ],
       );
     } else {
       return ListTile(
         title: Padding(
           padding: const EdgeInsets.only(left: 16),
-          child: Text(firstChildItem.bookTitle),
+          child: Text(firstChildItem.Title!),
         ),
       );
     }
   }
 
-  Widget _buildSecondChildList(List<TreeTocModel> childItems2) {
+  Widget _buildSecondChildList(List<EpubChapter> childItems2) {
     return ListView.builder(
       shrinkWrap: true,
       physics: ClampingScrollPhysics(),
       itemCount: childItems2.length,
       itemBuilder: (context, index) {
-        TreeTocModel secondChildItem = childItems2[index];
+        EpubChapter secondChildItem = childItems2[index];
         return ListTile(
           title: Padding(
             padding: const EdgeInsets.only(left: 32),
-            child: Text(secondChildItem.bookTitle),
+            child: Text(secondChildItem.Title!),
           ),
           onTap: () {
             _openEpub(context, secondChildItem);
@@ -95,7 +94,8 @@ class TocTreeListWidget extends StatelessWidget {
   }
 
 
-  void _openEpub(BuildContext context, TreeTocModel item){
-    BlocProvider.of<TocCubit>(context).openEpub(item);
+  void _openEpub(BuildContext context, EpubChapter item){
+    print('item is ${item.ContentFileName}');
+    // BlocProvider.of<TocCubit>(context).openEpub(item);
   }
 }

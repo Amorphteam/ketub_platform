@@ -11,7 +11,7 @@ class TocErrorState extends TocState {
 }
 
 class TocLoadedState extends TocState{
-  final List<TreeTocModel> tocTreeList;
+  final List<EpubChapter> tocTreeList;
   TocLoadedState(this.tocTreeList);
 }
 

@@ -40,17 +40,6 @@ class EpubCubit extends Cubit<EpubState> {
       final spine = await getSpineFromEpub(epubBook);
       emit(SpineEpubLoadedState(spine));
       emit(BookTitleLoadedState(epubBook.Title!));
-      await getToc(epubBook);
-
-      // if (toc.children.isEmpty) {
-      //   print("No TOC data found in the EPUB.");
-      // } else {
-      //   // Now you can work with tocNodes to access label and content information as needed.
-      //   for (var node in toc.children) {
-      //     print("Label: ${node.label}");
-      //     print("Content: ${node.children}");
-      //   }
-      // }
       _loadStyleHelperFromPreferences(); // Load StyleHelper when parsing is done
     } catch (error) {
       if (error is Exception) {

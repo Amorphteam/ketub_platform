@@ -49,35 +49,3 @@ Future<EpubBook> parseEpubFromAsset(String assetPath) async {
 
   return epubBook;
 }
-
-
-
-
-
-Future<void> getToc(EpubBook epubBook) async {
-  // EPUB NCX data
-// Enumerating chapters
-  epubBook.Chapters?.forEach((EpubChapter chapter) {
-    // Title of chapter
-    print('subChapters1 ${chapter.toString()}');
-
-
-  });// Enumerating NCX metadata
-}
-
-
-// Helper function to build the TOC tree
-TreeNode buildTocTree(List? navigationPoints) {
-  if (navigationPoints == null) {
-    return TreeNode("", []);
-  }
-
-  List<TreeNode> children = [];
-
-  for (var point in navigationPoints) {
-    TreeNode childNode = buildTocTree(point.ChildNavigationPoints);
-    children.add(TreeNode(point.NavigationLabels.first.Text, [childNode]));
-  }
-
-  return TreeNode("", children);
-}
