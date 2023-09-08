@@ -234,7 +234,7 @@ class _EpubScreenState extends State<EpubScreen> {
   }
 
   void _parseEpub() {
-    BlocProvider.of<EpubCubit>(context).parseEpub('assets/epubs/57.epub');
+    BlocProvider.of<EpubCubit>(context).parseEpub('assets/epubs/57new.epub');
   }
 
   String injectCssJs(String spine) {

@@ -54,29 +54,30 @@ Future<EpubBook> parseEpubFromAsset(String assetPath) async {
 
 
 
-Future<TreeNode> getToc(EpubBook epubBook) async {
+Future<void> getToc(EpubBook epubBook) async {
   // EPUB NCX data
-  EpubNavigation? navigation = epubBook.Schema?.Navigation;
+// Enumerating chapters
+  epubBook.Chapters?.forEach((EpubChapter chapter) {
+    // Title of chapter
+    print('subChapters1 ${chapter.toString()}');
 
-  // Helper function to build the TOC tree
-  TreeNode buildTocTree(List? navigationPoints) {
-    if (navigationPoints == null) {
-      return TreeNode("", []);
-    }
 
-    List<TreeNode> children = [];
-
-    for (var point in navigationPoints) {
-      TreeNode childNode = buildTocTree(point.ChildNavigationPoints);
-      children.add(TreeNode(point.NavigationLabels.first.Text, [childNode]));
-    }
-
-    return TreeNode("", children);
-  }
-
-  TreeNode tocTree = buildTocTree(navigation?.NavMap?.Points);
-
-  // Print the TOC tree with levels
-  return tocTree;
+  });// Enumerating NCX metadata
 }
 
+
+// Helper function to build the TOC tree
+TreeNode buildTocTree(List? navigationPoints) {
+  if (navigationPoints == null) {
+    return TreeNode("", []);
+  }
+
+  List<TreeNode> children = [];
+
+  for (var point in navigationPoints) {
+    TreeNode childNode = buildTocTree(point.ChildNavigationPoints);
+    children.add(TreeNode(point.NavigationLabels.first.Text, [childNode]));
+  }
+
+  return TreeNode("", children);
+}
