@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:epub_parser/epub_parser.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:ketub_platform/models/style_model.dart';
 import 'package:ketub_platform/utils/epub_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -38,6 +40,7 @@ class EpubCubit extends Cubit<EpubState> {
     try {
       final epubBook = await parseEpubFromAsset(assetPath);
       final spine = await getSpineFromEpub(epubBook);
+
       emit(SpineEpubLoadedState(spine));
       emit(BookTitleLoadedState(epubBook.Title!));
       _loadStyleHelperFromPreferences(); // Load StyleHelper when parsing is done

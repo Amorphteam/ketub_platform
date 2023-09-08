@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:epub_parser/epub_parser.dart';
@@ -29,16 +30,42 @@ void openEpub(BuildContext context, BookModel? book, ReferenceModel? reference, 
 
 Future<List<String>> getSpineFromEpub(EpubBook epubBook) async {
   EpubContent? bookContent = epubBook.Content;
-
-  // All XHTML files in the book (file name is the key)
+  Map<String, EpubByteContentFile>? images = bookContent?.Images;
   Map<String, EpubTextContentFile>? htmlFiles = bookContent?.Html;
   List<String> spine = [];
   for (var htmlFile in htmlFiles!.values) {
     String? htmlContent = htmlFile.Content;
+    if (htmlContent!.contains('<img ')) {
+      getImageName(htmlContent);
+      final imageByte = images?['Images/${getImageName(htmlContent)}']?.Content;
+      final base64Image = base64Encode(imageByte!);
+      htmlContent = htmlContent.replaceAll(RegExp(r'<img[^>]*>'),
+          "<img src=\"data:image/jpg;base64,$base64Image\" alt=\"My Image\" />");
+    }
     spine.add(htmlContent!);
   }
 
   return spine;
+}
+
+String getImageName(String htmlContent) {
+  // Define a regular expression to extract the image filename
+  final RegExp imgSrcRegex = RegExp(r'src="([^"]+)"');
+
+  // Find the first match of the regular expression in the HTML content
+  final Match? match = imgSrcRegex.firstMatch(htmlContent);
+
+  // Extract the image filename if a match is found
+  String imageName = '';
+  if (match != null && match.groupCount >= 1) {
+    imageName = match.group(1)!;
+    // Split the path and get the filename
+    final List<String> pathSegments = imageName.split('/');
+    if (pathSegments.isNotEmpty) {
+      imageName = pathSegments.last;
+    }
+  }
+  return imageName;
 }
 
 Future<EpubBook> parseEpubFromAsset(String assetPath) async {

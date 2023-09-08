@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ketub_platform/models/book_model.dart';
 import 'package:ketub_platform/models/reference_model.dart';
@@ -189,7 +190,7 @@ class _EpubScreenState extends State<EpubScreen> {
         return WebView(
           initialUrl: '',
           javascriptMode: JavascriptMode.unrestricted,
-          onWebViewCreated: (WebViewController webViewController) {
+          onWebViewCreated: (WebViewController webViewController) async {
             _webViewController = webViewController;
             webViewController.loadUrl(Uri.dataFromString(
               htmlContent,
@@ -234,7 +235,7 @@ class _EpubScreenState extends State<EpubScreen> {
   }
 
   void _parseEpub() {
-    BlocProvider.of<EpubCubit>(context).parseEpub('assets/epubs/57new.epub');
+    BlocProvider.of<EpubCubit>(context).parseEpub('assets/epubs/57.epub');
   }
 
   String injectCssJs(String spine) {
