@@ -8,7 +8,7 @@ import 'package:ketub_platform/screens/library_tab/cubit/library_cubit.dart';
 import 'package:ketub_platform/screens/library_tab/library_screen.dart';
 import 'package:ketub_platform/screens/toc_tab/cubit/toc_cubit.dart';
 import 'package:ketub_platform/screens/toc_tab/toc_screen.dart';
-import 'package:ketub_platform/utils/temp_data.dart';
+import 'package:ketub_platform/utils/style_handler.dart';
 
 
 class NavScreen extends StatefulWidget {

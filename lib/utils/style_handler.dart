@@ -1,144 +1,6 @@
+import 'package:flutter/services.dart';
 import 'package:ketub_platform/models/tree_toc_model.dart';
 import 'package:lorem_ipsum/lorem_ipsum.dart';
-
-
-List<TreeTocModel> tempToc = [
-  TreeTocModel(
-    id: 1,
-    bookTitle: loremIpsum(words: 7),
-    bookName: loremIpsum(words: 3),
-    childItems: [
-      TreeTocModel(
-        id: 1,
-        bookTitle: loremIpsum(words: 7),
-        bookName: loremIpsum(words: 3),
-        childItems: [
-          TreeTocModel(id: 1, bookTitle: loremIpsum(words: 7), bookName: loremIpsum(words: 3), childItems: null),
-          TreeTocModel(id: 2, bookTitle: loremIpsum(words: 7), bookName: loremIpsum(words: 3), childItems: null),
-          TreeTocModel(id: 3, bookTitle: loremIpsum(words: 7), bookName: loremIpsum(words: 3), childItems: null),
-        ],
-      ),
-      TreeTocModel(
-        id: 2,
-        bookTitle: loremIpsum(words: 7),
-        bookName: loremIpsum(words: 3),
-        childItems: [
-          TreeTocModel(id: 1, bookTitle: loremIpsum(words: 7), bookName: loremIpsum(words: 3), childItems: null),
-          TreeTocModel(id: 2, bookTitle: loremIpsum(words: 7), bookName: loremIpsum(words: 3), childItems: null),
-          TreeTocModel(id: 3, bookTitle: loremIpsum(words: 7), bookName: loremIpsum(words: 3), childItems: null),
-        ],
-      ),
-    ],
-  ),
-  TreeTocModel(
-    id: 1,
-    bookTitle: loremIpsum(words: 10),
-    bookName: loremIpsum(words: 3),
-    childItems: [
-      TreeTocModel(
-        id: 1,
-        bookTitle: loremIpsum(words: 10),
-        bookName: loremIpsum(words: 3),
-        childItems: [
-          TreeTocModel(id: 1, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
-          TreeTocModel(id: 2, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
-          TreeTocModel(id: 3, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
-        ],
-      ),
-      TreeTocModel(
-        id: 2,
-        bookTitle: loremIpsum(words: 10),
-        bookName: loremIpsum(words: 3),
-        childItems: [
-          TreeTocModel(id: 1, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
-          TreeTocModel(id: 2, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
-          TreeTocModel(id: 3, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
-        ],
-      ),
-    ],
-  ),
-  TreeTocModel(
-    id: 1,
-    bookTitle: loremIpsum(words: 10),
-    bookName: loremIpsum(words: 3),
-    childItems: [
-      TreeTocModel(
-        id: 1,
-        bookTitle: loremIpsum(words: 10),
-        bookName: loremIpsum(words: 3),
-        childItems: [
-          TreeTocModel(id: 1, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
-          TreeTocModel(id: 2, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
-          TreeTocModel(id: 3, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
-        ],
-      ),
-      TreeTocModel(
-        id: 2,
-        bookTitle: loremIpsum(words: 10),
-        bookName: loremIpsum(words: 3),
-        childItems: [
-          TreeTocModel(id: 1, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
-          TreeTocModel(id: 2, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
-          TreeTocModel(id: 3, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
-        ],
-      ),
-    ],
-  ),
-  TreeTocModel(
-    id: 1,
-    bookTitle: loremIpsum(words: 10),
-    bookName: loremIpsum(words: 3),
-    childItems: [
-      TreeTocModel(
-        id: 1,
-        bookTitle: loremIpsum(words: 10),
-        bookName: loremIpsum(words: 3),
-        childItems: [
-          TreeTocModel(id: 1, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
-          TreeTocModel(id: 2, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
-          TreeTocModel(id: 3, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
-        ],
-      ),
-      TreeTocModel(
-        id: 2,
-        bookTitle: loremIpsum(words: 10),
-        bookName: loremIpsum(words: 3),
-        childItems: [
-          TreeTocModel(id: 1, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
-          TreeTocModel(id: 2, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
-          TreeTocModel(id: 3, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
-        ],
-      ),
-    ],
-  ),
-  TreeTocModel(
-    id: 1,
-    bookTitle: loremIpsum(words: 10),
-    bookName: loremIpsum(words: 3),
-    childItems: [
-      TreeTocModel(
-        id: 1,
-        bookTitle: loremIpsum(words: 10),
-        bookName: loremIpsum(words: 3),
-        childItems: [
-          TreeTocModel(id: 1, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
-          TreeTocModel(id: 2, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
-          TreeTocModel(id: 3, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
-        ],
-      ),
-      TreeTocModel(
-        id: 2,
-        bookTitle: loremIpsum(words: 10),
-        bookName: loremIpsum(words: 3),
-        childItems: [
-          TreeTocModel(id: 1, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
-          TreeTocModel(id: 2, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
-          TreeTocModel(id: 3, bookTitle: loremIpsum(words: 10), bookName: loremIpsum(words: 3), childItems: null),
-        ],
-      ),
-    ],
-  ),
-];
 
 String ketubCssJs = '''<script>
 window.onscroll = function(ev) {
@@ -432,23 +294,23 @@ html.LIGHT {
 }
 
 .FONT0, .FONT0 p, .FONT0 span, .FONT0 div {
-    font-family: 'normal', arial;
+    font-family: 'font0', arial;
 }
 
 .FONT1, .FONT1 p, .FONT1 span, .FONT1 div {
-    font-family: 'heading1', arial;
+font-family: font1;
 }
 
 .FONT2, .FONT2 p, .FONT2 span, .FONT2 div {
-    font-family: 'heading2', arial;
+font-family: font2;
 }
 
 .FONT3, .FONT3 p, .FONT3 span, .FONT3 div {
-    font-family: 'custom1', arial;
+font-family: font3;
 }
 
 .FONT4, .FONT4 p, .FONT4 span, .FONT4 div {
-    font-family: 'custom2', arial;
+font-family: font4;
 }
 
 
@@ -615,18 +477,18 @@ display: none;
 }
 
           .font1 {
-          font-family: serif !important; 
+              font-family: font1;
           }
           .font2 {
-          font-family: monospace !important; 
+              font-family: font2;
           }
           
           .font3 {
-          font-family: cursive !important; 
+              font-family: font3;
           }
           
           .font4 {
-          font-family: sans-serif !important; 
+              font-family: font4;
           }
           
           
@@ -671,3 +533,32 @@ display: none;
           }
 
 </style>''';
+
+String getFontUri(ByteData data, String mime) {
+  final buffer = data.buffer;
+  return Uri.dataFromBytes(
+          buffer.asUint8List(data.offsetInBytes, data.lengthInBytes),
+          mimeType: mime)
+      .toString();
+}
+
+Future<String> addFontsToHtml(String htmlContent) async {
+  const fontMime = "font/opentype";
+  Map<String, String> fontsAssets = {
+    "font1": "assets/fonts/font1.ttf",
+    "font2": "assets/fonts/font2.ttf",
+    "font3": "assets/fonts/font3.ttf",
+    "font4": "assets/fonts/font4.ttf",
+  };
+
+  String fontCss = '';
+  for (final key in fontsAssets.keys) {
+    final value = fontsAssets[key];
+    final fontData = await rootBundle.load(value!);
+    final fontUri = getFontUri(fontData, fontMime).toString();
+    fontCss += '@font-face { font-family: "$key"; src: url("$fontUri"); }\n';
+  }
+
+  print('font is $fontCss');
+  return htmlContent.replaceAll("<style>", "<style>$fontCss");
+}

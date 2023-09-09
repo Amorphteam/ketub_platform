@@ -7,7 +7,7 @@ import 'package:ketub_platform/models/reference_model.dart';
 import 'package:ketub_platform/models/tree_toc_model.dart';
 import 'package:ketub_platform/screens/epub/cubit/epub_cubit.dart';
 import 'package:ketub_platform/screens/epub/widgets/style_sheet.dart';
-import 'package:ketub_platform/utils/temp_data.dart';
+import 'package:ketub_platform/utils/style_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -192,19 +192,19 @@ class _EpubScreenState extends State<EpubScreen> {
           javascriptMode: JavascriptMode.unrestricted,
           onWebViewCreated: (WebViewController webViewController) async {
             _webViewController = webViewController;
+
+            String htmlWithFont = await addFontsToHtml(htmlContent);
+
             webViewController.loadUrl(Uri.dataFromString(
-              htmlContent,
+              htmlWithFont,
               mimeType: 'text/html',
               encoding: Encoding.getByName('utf-8'),
             ).toString());
           },
           onPageFinished: (String url) {
-            BlocProvider.of<EpubCubit>(context)
-                .changeFontSize(styleHelper.fontSize);
-            BlocProvider.of<EpubCubit>(context)
-                .changeFontFamily(styleHelper.fontFamily);
-            BlocProvider.of<EpubCubit>(context)
-                .changeLineSpace(styleHelper.lineSpace);
+            _changeFontFamily(styleHelper.fontFamily);
+            _changeFontSize(styleHelper.fontSize);
+            _changeLineSpace(styleHelper.lineSpace);
           },
           javascriptChannels: {
             JavascriptChannel(
@@ -237,6 +237,7 @@ class _EpubScreenState extends State<EpubScreen> {
   void _parseEpub() {
     BlocProvider.of<EpubCubit>(context).parseEpub('assets/epubs/57.epub');
   }
+
 
   String injectCssJs(String spine) {
     // Find the index of '</head>' in the HTML
