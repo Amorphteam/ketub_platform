@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/services.dart';
 import 'package:ketub_platform/models/book_model.dart';
+import 'package:ketub_platform/models/category_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqlite_api.dart';
 import 'package:path/path.dart';
@@ -54,5 +55,24 @@ class BooksDatabase {
           description: bookMaps[i]['description'],
         );
       });
+  }
+
+
+  Future<List<CategoryModel>> getAllCats() async {
+    final db = await initDb();
+    final List<Map<String, dynamic>> catMaps =
+    await db.query('book_list');
+    return List.generate(catMaps.length, (i) {
+      return CategoryModel(
+          id: catMaps[i]['id'],
+          catId: catMaps[i]['cat_id'],
+          bookPath: catMaps[i]['book_path'],
+          bookName: catMaps[i]['book_name'],
+          bookCover: catMaps[i]['book_cover'],
+          bookStyle: catMaps[i]['book_style'],
+          bookAuthor: catMaps[i]['book_author'],
+          description: catMaps[i]['description']
+      );
+    });
   }
 }

@@ -1,14 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ketub_platform/models/book_model.dart';
+import 'package:ketub_platform/models/category_model.dart';
 import 'package:ketub_platform/models/reference_model.dart';
 import 'package:ketub_platform/models/tree_toc_model.dart';
 import 'package:ketub_platform/screens/epub/cubit/epub_cubit.dart';
 import 'package:ketub_platform/screens/epub/widgets/style_sheet.dart';
 import 'package:ketub_platform/utils/style_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../models/style_model.dart';
@@ -17,10 +16,11 @@ import '../../utils/style_helper.dart';
 class EpubScreen extends StatefulWidget {
   final ReferenceModel? referenceModel;
   final BookModel? bookModel;
+  final CategoryModel? catModel;
   final TreeTocModel? tocModel;
 
   const EpubScreen(
-      {Key? key, this.referenceModel, this.bookModel, this.tocModel})
+      {Key? key, this.referenceModel, this.bookModel, this.catModel, this.tocModel})
       : super(key: key);
 
   @override
@@ -37,7 +37,8 @@ class _EpubScreenState extends State<EpubScreen> {
   void initState() {
     super.initState();
     _pageController = PageController();
-    _parseEpub();
+    _parseEpub(widget.catModel!.bookPath!);
+
   }
 
   @override
@@ -234,8 +235,8 @@ class _EpubScreenState extends State<EpubScreen> {
     );
   }
 
-  void _parseEpub() {
-    BlocProvider.of<EpubCubit>(context).parseEpub('assets/epubs/57.epub');
+  void _parseEpub(String bookPath) {
+    BlocProvider.of<EpubCubit>(context).parseEpub('assets/epubs/$bookPath');
   }
 
 

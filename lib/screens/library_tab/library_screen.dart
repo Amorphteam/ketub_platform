@@ -57,14 +57,14 @@ class _LibraryScreenState extends State<LibraryScreen> {
               ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(state.error.toString())));
             } else if (state is BookClickedState){
-              openEpub(context, state.book, null, null);
+              openEpub(context,state.book , null, null, null);
             }
           },
           builder: (context, state) {
-            if (state is AllBooksLoadedState) {
+            if (state is AllBooksLoadedState ) {
               return Flexible(
                 child:
-                BookListWidget(bookList: state.books),
+                BookListWidget(bookList: state.books, catList: state.cats ),
               );
             } else if (state is LibraryLoadingState) {
               return CircularProgressIndicator();
