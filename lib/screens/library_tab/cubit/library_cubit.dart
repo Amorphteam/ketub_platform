@@ -24,7 +24,6 @@ class LibraryCubit extends Cubit<LibraryState> {
   }
 
   Future<void> openEpub(int catId) async{
-    emit(LibraryLoadingState());
     try {
       final category = await booksDatabase.getCategoriesByCatId(catId);
       emit(BookClickedState(category));
