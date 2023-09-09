@@ -40,7 +40,6 @@ class EpubCubit extends Cubit<EpubState> {
     try {
       final epubBook = await parseEpubFromAsset(assetPath);
       final spine = await getSpineFromEpub(epubBook);
-
       emit(SpineEpubLoadedState(spine));
       emit(BookTitleLoadedState(epubBook.Title!));
       _loadStyleHelperFromPreferences(); // Load StyleHelper when parsing is done

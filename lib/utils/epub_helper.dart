@@ -35,12 +35,23 @@ Future<List<String>> getSpineFromEpub(EpubBook epubBook) async {
   List<String> spine = [];
   for (var htmlFile in htmlFiles!.values) {
     String? htmlContent = htmlFile.Content;
-    if (htmlContent!.contains('<img ')) {
-      getImageName(htmlContent);
-      final imageByte = images?['Images/${getImageName(htmlContent)}']?.Content;
-      final base64Image = base64Encode(imageByte!);
-      htmlContent = htmlContent.replaceAll(RegExp(r'<img[^>]*>'),
-          "<img src=\"data:image/jpg;base64,$base64Image\" alt=\"My Image\" />");
+    final imgRegExp = RegExp(r'<img[^>]*>');
+    final imgTags = imgRegExp.allMatches(htmlContent!);
+
+    if (imgTags.isNotEmpty) {
+      for (var imgMatch in imgTags) {
+        final imgTag = imgMatch.group(0);
+        final imageName = getImageName(imgTag!);
+
+        if (images?['Images/$imageName'] != null) {
+          final imageByte = images?['Images/$imageName']!.Content;
+          final base64Image = base64Encode(imageByte!);
+
+          // Replace the image tag with base64 encoded image
+          final replacement = "<img src=\"data:image/jpg;base64,$base64Image\" alt=\"My Image\" />";
+          htmlContent = htmlContent?.replaceFirst(imgTag, replacement);
+        }
+      }
     }
     spine.add(htmlContent!);
   }
