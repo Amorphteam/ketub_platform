@@ -187,7 +187,15 @@ class _EpubScreenState extends State<EpubScreen> {
         }
       },
       builder: (context, state) {
-        return WebView(
+        return GestureDetector(
+            onDoubleTap: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Double-click detected'),
+                ),
+              );
+            },
+        child: WebView(
           initialUrl: '',
           javascriptMode: JavascriptMode.unrestricted,
           onWebViewCreated: (WebViewController webViewController) async {
@@ -220,7 +228,7 @@ class _EpubScreenState extends State<EpubScreen> {
           },
           gestureNavigationEnabled: true,
           debuggingEnabled: true,
-        );
+        ),);
       },
     );
   }
