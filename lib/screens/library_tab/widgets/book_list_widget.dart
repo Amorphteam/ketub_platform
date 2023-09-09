@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ketub_platform/models/book_model.dart';
 import 'package:ketub_platform/models/category_model.dart';
+import 'package:ketub_platform/screens/library_tab/cubit/library_cubit.dart';
 
 import '../../../utils/epub_helper.dart';
 
 class BookListWidget extends StatelessWidget {
   final List<BookModel> bookList;
-  final List<CategoryModel> catList;
 
-  const BookListWidget({Key? key, required this.bookList, required this.catList}) : super(key: key);
+  const BookListWidget({Key? key, required this.bookList}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +23,9 @@ class BookListWidget extends StatelessWidget {
       itemCount: bookList.length,
       itemBuilder: (context, index) {
         BookModel bookItem = bookList[index];
-        CategoryModel catItem = catList[index];
         return GestureDetector(
           onTap: () {
-            openEpub(context, bookItem, catItem, null,null);
+            BlocProvider.of<LibraryCubit>(context).openEpub(bookList[index].id!);
           },
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

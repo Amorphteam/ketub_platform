@@ -15,14 +15,14 @@ import '../screens/epub/cubit/epub_cubit.dart';
 import '../screens/epub/epub_screen.dart';
 
 //TODO: Change it
-void openEpub(BuildContext context, BookModel? book,CategoryModel? cat, ReferenceModel? reference, TreeTocModel? toc) {
+void openEpub(BuildContext context, CategoryModel? cat, ReferenceModel? reference, TreeTocModel? toc) {
   Navigator.push(
     context,
     MaterialPageRoute(
       builder: (context) =>
           BlocProvider(
             create: (context) => EpubCubit(),
-            child: EpubScreen(bookModel: book, catModel: cat, referenceModel: reference, tocModel: toc),
+            child: EpubScreen(catModel: cat, referenceModel: reference, tocModel: toc),
           ),
     ),
   );

@@ -5,13 +5,10 @@ abstract class LibraryState {}
 class LibraryInitState extends LibraryState{}
 class LibraryLoadingState extends LibraryState{}
 
+
 class BookClickedState extends LibraryState{
-  final BookModel book;
-  BookClickedState(this.book);
-}
-class CatClickedState extends LibraryState{
-  final CategoryModel cat;
-  CatClickedState(this.cat);
+  final List<CategoryModel> cats;
+  BookClickedState(this.cats);
 }
 
 class LibraryErrorState extends LibraryState{
@@ -22,9 +19,8 @@ class LibraryErrorState extends LibraryState{
 
 class AllBooksLoadedState extends LibraryState {
   final List<BookModel> books;
-  final List<CategoryModel> cats;
 
-  AllBooksLoadedState(this.books, this.cats);
+  AllBooksLoadedState(this.books);
 }
 
 

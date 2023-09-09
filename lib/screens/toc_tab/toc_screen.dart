@@ -44,7 +44,7 @@ class _TocScreenState extends State<TocScreen> {
               ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(state.error.toString())));
             } else if (state is TocItemTappedState){
-              openEpub(context, null, null, null, state.toc);
+              openEpub(context, null, null, state.toc);
             }
           },
           builder: (context, state) {

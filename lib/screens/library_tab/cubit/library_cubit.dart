@@ -14,9 +14,8 @@ class LibraryCubit extends Cubit<LibraryState> {
     emit(LibraryLoadingState());
     try {
       final books = await booksDatabase.getAllBooks();
-      final cats = await booksDatabase.getAllCats();
 
-      emit(AllBooksLoadedState(books, cats));
+      emit(AllBooksLoadedState(books));
     }catch (error){
       if (error is Exception){
         emit(LibraryErrorState(error));
@@ -24,8 +23,18 @@ class LibraryCubit extends Cubit<LibraryState> {
     }
   }
 
-  void openEpub(BookModel book){
-    emit(BookClickedState(book));
+  Future<void> openEpub(int catId) async{
+    emit(LibraryLoadingState());
+    try {
+      final category = await booksDatabase.getCategoriesByCatId(catId);
+      emit(BookClickedState(category));
+    }catch (error){
+      if (error is Exception){
+        emit(LibraryErrorState(error));
+      }
+    }
   }
+
+
 
 }

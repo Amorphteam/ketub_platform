@@ -64,7 +64,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
               ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(state.error.toString())));
             } else if (state is BookmarkTappedState){
-                openEpub(context, null, null, state.item, null);
+                openEpub(context, null, state.item, null);
             }
           },
           builder: (context, state) {

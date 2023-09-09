@@ -32,9 +32,9 @@ class BooksDatabase {
       } catch (_) {}
 
       final ByteData data =
-          await rootBundle.load('assets/databases/book_list.db');
+      await rootBundle.load('assets/databases/book_list.db');
       final bytes =
-          data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+      data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
       await file.writeAsBytes(bytes, flush: true);
       print('database copied');
       _database = await openDatabase(path);
@@ -44,17 +44,17 @@ class BooksDatabase {
   }
 
   Future<List<BookModel>> getAllBooks() async {
-      final db = await initDb();
-      final List<Map<String, dynamic>> bookMaps =
-          await db.query('category_list');
-      return List.generate(bookMaps.length, (i) {
-        return BookModel(
-          id: bookMaps[i]['id'],
-          bookName: bookMaps[i]['book_name'],
-          bookCover: bookMaps[i]['book_cover'],
-          description: bookMaps[i]['description'],
-        );
-      });
+    final db = await initDb();
+    final List<Map<String, dynamic>> bookMaps =
+    await db.query('category_list');
+    return List.generate(bookMaps.length, (i) {
+      return BookModel(
+        id: bookMaps[i]['id'],
+        bookName: bookMaps[i]['book_name'],
+        bookCover: bookMaps[i]['book_cover'],
+        description: bookMaps[i]['description'],
+      );
+    });
   }
 
 
@@ -75,4 +75,27 @@ class BooksDatabase {
       );
     });
   }
+
+
+  Future<List<CategoryModel>> getCategoriesByCatId(int catId) async {
+    final db = await initDb();
+    final List<Map<String, dynamic>> catMaps = await db.query(
+      'book_list',
+      where: 'cat_id = ?',
+      whereArgs: [catId],
+    );
+    return List.generate(catMaps.length, (i) {
+      return CategoryModel(
+        id: catMaps[i]['id'],
+        catId: catMaps[i]['cat_id'],
+        bookPath: catMaps[i]['book_path'],
+        bookName: catMaps[i]['book_name'],
+        bookCover: catMaps[i]['book_cover'],
+        bookStyle: catMaps[i]['book_style'],
+        bookAuthor: catMaps[i]['book_author'],
+        description: catMaps[i]['description'],
+      );
+    });
+  }
+
 }

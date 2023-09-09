@@ -15,12 +15,11 @@ import '../../utils/style_helper.dart';
 
 class EpubScreen extends StatefulWidget {
   final ReferenceModel? referenceModel;
-  final BookModel? bookModel;
   final CategoryModel? catModel;
   final TreeTocModel? tocModel;
 
   const EpubScreen(
-      {Key? key, this.referenceModel, this.bookModel, this.catModel, this.tocModel})
+      {Key? key, this.referenceModel, this.catModel, this.tocModel})
       : super(key: key);
 
   @override
