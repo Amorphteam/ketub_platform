@@ -23,7 +23,7 @@ class ReferenceListWidget extends StatelessWidget {
             icon: Icon(Icons.delete),
             onPressed: () {
               _delete(context,
-                  item.id); // Call the _delete method with the item's id
+                  item.id!); // Call the _delete method with the item's id
             },
           ),
           onTap: () {

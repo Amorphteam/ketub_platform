@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:math';
+import 'package:epub_parser/epub_parser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ketub_platform/models/book_model.dart';
@@ -28,6 +30,7 @@ class EpubScreen extends StatefulWidget {
 
 class _EpubScreenState extends State<EpubScreen> {
   late PageController _pageController;
+  String _bookName = '';
   bool _webViewIsScrolling = true;
   WebViewController? _webViewController;
   StyleHelper styleHelper = StyleHelper();
@@ -36,6 +39,7 @@ class _EpubScreenState extends State<EpubScreen> {
   void initState() {
     super.initState();
     _pageController = PageController();
+    print('book is ${widget.catModel!.bookName!}');
     _parseEpub(widget.catModel!.bookPath!);
 
   }
@@ -68,7 +72,8 @@ class _EpubScreenState extends State<EpubScreen> {
         title: BlocBuilder<EpubCubit, EpubState>(
           builder: (context, state) {
             if (state is BookTitleLoadedState) {
-              return Text(state.bookTitle);
+              _bookName = state.bookTitle;
+              return Text(_bookName);
             } else {
               return Text('');
             }
@@ -128,12 +133,15 @@ class _EpubScreenState extends State<EpubScreen> {
                       if (state is EpubErrorState) {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(SnackBar(content: Text(state.error)));
+                      } else if (state is BookmarkAddedState){
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(SnackBar(content: Text('bookmark added successfully ${state.addStatus.toString()}')));
                       }
                     },
                     builder: (context, state) {
                       if (state is EpubLoadingState) {
                         return CircularProgressIndicator();
-                      } else if (state is SpineEpubLoadedState) {
+                      } else if (state is SpineAndEpubLoadedState) {
                         return PageView.builder(
                           controller: _pageController,
                           scrollDirection: Axis.vertical,
@@ -143,8 +151,7 @@ class _EpubScreenState extends State<EpubScreen> {
                               : const AlwaysScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
                             var htmlWithCssJs = injectCssJs(state.spine[index]);
-                            print(htmlWithCssJs);
-                            return buildWebView(htmlWithCssJs);
+                            return buildWebView(htmlWithCssJs, index);
                           },
                           onPageChanged: (index) {
                             setState(() {
@@ -157,7 +164,7 @@ class _EpubScreenState extends State<EpubScreen> {
                       }
                     },
                     buildWhen: (previousState, state) {
-                      return state is SpineEpubLoadedState ||
+                      return state is SpineAndEpubLoadedState ||
                           state is EpubLoadingState;
                     },
                   ),
@@ -175,7 +182,7 @@ class _EpubScreenState extends State<EpubScreen> {
     );
   }
 
-  Widget buildWebView(String htmlContent) {
+  Widget buildWebView(String htmlContent, int currentPageNumber) {
     return BlocConsumer<EpubCubit, EpubState>(
       listener: (context, state) {
         if (state is FontSizeChangedState) {
@@ -189,11 +196,15 @@ class _EpubScreenState extends State<EpubScreen> {
       builder: (context, state) {
         return GestureDetector(
             onDoubleTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Double-click detected'),
-                ),
+              print('cat model is ${widget.catModel!.bookName!}');
+              final reference = ReferenceModel(
+                title: 'sample title',
+                bookName: _bookName,
+                bookPath: widget.catModel!.bookPath!,
+                navIndex: currentPageNumber.toString(),
               );
+
+              BlocProvider.of<EpubCubit>(context).addBookmark(reference);
             },
         child: WebView(
           initialUrl: '',

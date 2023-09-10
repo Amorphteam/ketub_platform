@@ -3,9 +3,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqlite_api.dart';
 import 'package:path/path.dart';
 
-
-class ReferencesDatabase{
-
+class ReferencesDatabase {
   static final ReferencesDatabase instance = ReferencesDatabase._init();
   static Database? _database;
 
@@ -26,17 +24,14 @@ class ReferencesDatabase{
   Future<void> _createDB(Database db, int version) async {
     await db.execute('''
       CREATE TABLE reference_database(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id INTEGER PRIMARY KEY,
         title TEXT,
         bookName TEXT,
         bookPath TEXT,
-        navIndex TEXT,
-        navUri TEXT,
-        scrollPercent DOUBLE
+        navIndex TEXT
       )
     ''');
   }
-
 
   Future<int> addReference(ReferenceModel referenceModel) async {
     final db = await instance.database;
@@ -53,8 +48,6 @@ class ReferencesDatabase{
         bookName: maps[i]['bookName'],
         bookPath: maps[i]['bookPath'],
         navIndex: maps[i]['navIndex'],
-        navUri: maps[i]['navUri'],
-        scrollPercent: maps[i]['scrollPercent']
       );
     });
   }
@@ -69,19 +62,36 @@ class ReferencesDatabase{
     );
   }
 
+  Future<List<ReferenceModel>> getReferenceByBookTitleAndPage(String bookPath, String pageNumber) async {
+    final db = await instance.database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'reference_database',
+      where: 'bookPath = ? AND navIndex = ?',
+      whereArgs: [bookPath, pageNumber],
+    );
+
+    return List.generate(maps.length, (i) {
+      return ReferenceModel(
+        id: maps[i]['id'],
+        title: maps[i]['title'],
+        bookName: maps[i]['bookName'],
+        bookPath: maps[i]['bookPath'],
+        navIndex: maps[i]['navIndex'],
+      );
+    });
+  }
+
   Future<List<ReferenceModel>> getFilterReference(String query) async {
     final db = await instance.database;
     final List<Map<String, dynamic>> maps = await db.query('reference_database');
 
     List<ReferenceModel> filteredList = List.generate(maps.length, (i) {
       return ReferenceModel(
-          id: maps[i]['id'],
-          title: maps[i]['title'],
-          bookName: maps[i]['bookName'],
-          bookPath: maps[i]['bookPath'],
-          navIndex: maps[i]['navIndex'],
-          navUri: maps[i]['navUri'],
-          scrollPercent: maps[i]['scrollPercent']
+        id: maps[i]['id'],
+        title: maps[i]['title'],
+        bookName: maps[i]['bookName'],
+        bookPath: maps[i]['bookPath'],
+        navIndex: maps[i]['navIndex'],
       );
     });
 
@@ -93,6 +103,7 @@ class ReferencesDatabase{
 
     return filteredList;
   }
+
   Future<int> deleteReference(int id) async {
     final db = await instance.database;
     return await db.delete(

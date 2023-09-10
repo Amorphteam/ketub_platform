@@ -7,7 +7,6 @@ class AllBookmarksLoadedState extends BookmarkState {
   AllBookmarksLoadedState(this.bookmarks);
 }
 
-class BookmarkAddedState extends BookmarkState {}
 
 class BookmarkDeletedState extends BookmarkState {}
 

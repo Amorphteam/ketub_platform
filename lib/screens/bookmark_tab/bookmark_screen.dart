@@ -43,13 +43,6 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
             ),
           ),
         ),
-        FloatingActionButton(
-          onPressed: () {
-            _add(); // Assuming _add is defined somewhere
-          },
-          tooltip: 'Add',
-          child: const Icon(Icons.add),
-        ),
         BlocConsumer<BookmarkCubit, BookmarkState>(
           listener: (context, state) {
             if (state is BookmarkAddedState) {
@@ -87,19 +80,6 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
     );
   }
 
-  void _add() {
-    final bookmark = ReferenceModel(
-      id: Random().nextInt(100),
-      title: "Reference${Random().nextInt(100)}",
-      bookName: "Book2",
-      bookPath: "path/to/book2.pdf",
-      navIndex: "2",
-      navUri: "nav2",
-      scrollPercent: 0.8,
-    );
-
-    BlocProvider.of<BookmarkCubit>(context).addBookmark(bookmark);
-  }
 
   void _loadAllBookmarks() {
     BlocProvider.of<BookmarkCubit>(context).loadAllBookmarks();

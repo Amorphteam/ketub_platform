@@ -9,10 +9,11 @@ class EpubErrorState extends EpubState{
   EpubErrorState(this.error);
 }
 
-class SpineEpubLoadedState extends EpubState{
+class SpineAndEpubLoadedState extends EpubState{
   final List<String> spine;
+  final EpubBook epubBook;
 
-  SpineEpubLoadedState(this.spine);
+  SpineAndEpubLoadedState(this.spine, this.epubBook);
 }
 
 class BookTitleLoadedState extends EpubState{
@@ -34,4 +35,9 @@ class LineSpaceChangedState extends EpubState {
 class FontFamilyChangedState extends EpubState {
   final FontFamily fontFamily;
   FontFamilyChangedState({required this.fontFamily});
+}
+
+class BookmarkAddedState extends EpubState {
+  final int addStatus;
+  BookmarkAddedState(this.addStatus);
 }

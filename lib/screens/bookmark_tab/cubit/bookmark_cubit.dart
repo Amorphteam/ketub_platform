@@ -21,20 +21,6 @@ class BookmarkCubit extends Cubit<BookmarkState> {
     }
   }
 
-  Future<void> addBookmark(ReferenceModel bookmark) async {
-    emit(BookmarkLoadingState());
-    try {
-      await referencesDatabase.addReference(bookmark);
-      emit(BookmarkAddedState());
-      loadAllBookmarks();
-    } catch (error) {
-      if (error is Exception){
-        emit(BookmarkErrorState(error));
-      }
-    }
-
-  }
-
   Future<void> deleteBookmark(int id) async {
     emit(BookmarkLoadingState());
     try {

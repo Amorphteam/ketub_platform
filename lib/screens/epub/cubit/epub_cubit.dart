@@ -7,7 +7,9 @@ import 'package:ketub_platform/models/style_model.dart';
 import 'package:ketub_platform/utils/epub_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../models/reference_model.dart';
 import '../../../models/tree_toc_model.dart';
+import '../../../repositories/reference_database.dart';
 import '../../../utils/style_helper.dart';
 
 part 'epub_state.dart';
@@ -16,6 +18,7 @@ class EpubCubit extends Cubit<EpubState> {
   EpubCubit() : super(EpubInitState());
 
   StyleHelper styleHelper = StyleHelper(); // Initialize StyleHelper
+  final ReferencesDatabase referencesDatabase = ReferencesDatabase.instance;
 
   void changeFontSize(FontSize fontSize) {
     styleHelper.changeFontSize(fontSize);
@@ -40,7 +43,7 @@ class EpubCubit extends Cubit<EpubState> {
     try {
       final epubBook = await parseEpubFromAsset(assetPath);
       final spine = await getSpineFromEpub(epubBook);
-      emit(SpineEpubLoadedState(spine));
+      emit(SpineAndEpubLoadedState(spine, epubBook));
       emit(BookTitleLoadedState(epubBook.Title!));
       _loadStyleHelperFromPreferences(); // Load StyleHelper when parsing is done
     } catch (error) {
@@ -56,6 +59,29 @@ class EpubCubit extends Cubit<EpubState> {
     final styleJson = styleHelper.toJson();
     prefs.setString('styleHelper', jsonEncode(styleJson));
   }
+
+  Future<void> addBookmark(ReferenceModel bookmark) async {
+    try {
+      final referencesDatabase = ReferencesDatabase.instance;
+
+      // Check if the reference already exists in the database based on book title and page number
+      final existingReferences = await referencesDatabase.getReferenceByBookTitleAndPage(
+          bookmark.bookPath, bookmark.navIndex);
+      if (existingReferences.isEmpty) {
+        // The reference doesn't exist, so add it to the database
+        final int addStatus = await referencesDatabase.addReference(bookmark);
+        emit(BookmarkAddedState(addStatus));
+      } else {
+        // The reference already exists, handle this case (e.g., show an error message)
+        emit(EpubErrorState('Duplicate reference found'));
+      }
+    } catch (error) {
+      if (error is Exception) {
+        emit(EpubErrorState(error.toString()));
+      }
+    }
+  }
+
 
   // Load StyleHelper from SharedPreferences
   void _loadStyleHelperFromPreferences() async {
