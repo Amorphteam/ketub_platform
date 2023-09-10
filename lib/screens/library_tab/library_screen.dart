@@ -58,7 +58,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                   SnackBar(content: Text(state.error.toString())));
             } else if (state is BookClickedState){
                if (state.cats.length == 1){
-                 openEpub(context, state.cats.first, null, null);
+                 openEpub(context: context, cat: state.cats.first);
                }else {
                  //TODO: MUST HANDLE DETAIL SCREEN
                }

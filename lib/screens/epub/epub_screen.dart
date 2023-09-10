@@ -38,10 +38,18 @@ class _EpubScreenState extends State<EpubScreen> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
-    print('book is ${widget.catModel!.bookName!}');
-    _parseEpub(widget.catModel!.bookPath!);
+    chackSourceOpenedFrom();
+  }
 
+  void chackSourceOpenedFrom() {
+    if (widget.referenceModel !=null) { // Its from bookmark screen
+      final int? bookMarkPageNumber = int.tryParse(widget.referenceModel?.navIndex ?? '');;
+      _pageController = PageController(initialPage: bookMarkPageNumber ?? 0);
+      _parseEpub(widget.referenceModel!.bookPath);
+    }else { // its from library screen
+      _pageController = PageController();
+      _parseEpub(widget.catModel!.bookPath!);
+    }
   }
 
   @override

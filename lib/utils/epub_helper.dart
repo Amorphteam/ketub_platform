@@ -14,8 +14,12 @@ import '../models/book_model.dart';
 import '../screens/epub/cubit/epub_cubit.dart';
 import '../screens/epub/epub_screen.dart';
 
-//TODO: Change it
-void openEpub(BuildContext context, CategoryModel? cat, ReferenceModel? reference, TreeTocModel? toc) {
+void openEpub({
+  required BuildContext context,
+  CategoryModel? cat,
+  ReferenceModel? reference,
+  TreeTocModel? toc,
+}) {
   Navigator.push(
     context,
     MaterialPageRoute(

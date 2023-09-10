@@ -22,25 +22,15 @@ class ReferenceListWidget extends StatelessWidget {
           trailing: IconButton(
             icon: Icon(Icons.delete),
             onPressed: () {
-              _delete(context,
-                  item.id!); // Call the _delete method with the item's id
+              BlocProvider.of<BookmarkCubit>(context).deleteBookmark(item.id!);
             },
           ),
           onTap: () {
-            _openEpub(context, item);
-          },
+            BlocProvider.of<BookmarkCubit>(context).openEpub(item);
+            },
         );
       },
     );
-  }
-
-
-  void _delete(BuildContext context, int id) {
-    BlocProvider.of<BookmarkCubit>(context).deleteBookmark(id);
-  }
-
-  void _openEpub(BuildContext context, ReferenceModel item){
-    BlocProvider.of<BookmarkCubit>(context).openEpub(item);
   }
 
 
