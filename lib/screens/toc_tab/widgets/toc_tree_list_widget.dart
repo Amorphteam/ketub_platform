@@ -1,5 +1,7 @@
 import 'package:epub_parser/epub_parser.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ketub_platform/screens/toc_tab/cubit/toc_cubit.dart';
 
 class EpubChapterListWidget extends StatefulWidget {
   final List<EpubChapter> tocTreeList;
@@ -47,6 +49,7 @@ class _EpubChapterListWidgetState extends State<EpubChapterListWidget> {
                 : null,
             // Add more content or actions for each chapter here
             onTap: () {
+                BlocProvider.of<TocCubit>(context).openEpub(chapter);
               setState(() {
                 _isExpanded[parentIndex] = !_isExpanded[parentIndex];
               });

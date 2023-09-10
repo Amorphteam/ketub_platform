@@ -16,7 +16,7 @@ class TocLoadedState extends TocState{
 }
 
 class TocItemTappedState extends TocState{
-  final TreeTocModel toc;
+  final EpubChapter toc;
   TocItemTappedState(this.toc);
 }
 

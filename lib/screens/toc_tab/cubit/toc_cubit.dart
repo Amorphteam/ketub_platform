@@ -10,14 +10,15 @@ part 'toc_state.dart';
 class TocCubit extends Cubit<TocState> {
   TocCubit() : super(TocInitialState());
 
-  Future<void> loadToc({String query = '', String assetPath = ''}) async {
+  Future<void> loadToc({String? query, String? bookPath}) async {
     emit(TocLoadingState());
     try {
+      final assetPath = 'assets/epubs/$bookPath';
       final epubBook = await parseEpubFromAsset(assetPath);
 
       final List<EpubChapter> tocTreeList = epubBook.Chapters!;
       final List<EpubChapter> filteredList = tocTreeList.where((item) {
-        return item.Title!.toLowerCase().contains(query.toLowerCase());
+        return item.Title!.toLowerCase().contains(query!.toLowerCase());
       }).toList();
       emit(TocLoadedState(filteredList));
     } catch (error) {
@@ -27,7 +28,7 @@ class TocCubit extends Cubit<TocState> {
     }
   }
 
-  void openEpub(TreeTocModel item){
+  void openEpub(EpubChapter item){
     emit(TocItemTappedState(item));
   }
 }

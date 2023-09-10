@@ -18,7 +18,7 @@ import '../../utils/style_helper.dart';
 class EpubScreen extends StatefulWidget {
   final ReferenceModel? referenceModel;
   final CategoryModel? catModel;
-  final TreeTocModel? tocModel;
+  final EpubChaptersWithBookPath? tocModel;
 
   const EpubScreen(
       {Key? key, this.referenceModel, this.catModel, this.tocModel})
@@ -45,10 +45,13 @@ class _EpubScreenState extends State<EpubScreen> {
     if (widget.referenceModel !=null) { // Its from bookmark screen
       final int? bookMarkPageNumber = int.tryParse(widget.referenceModel?.navIndex ?? '');;
       _pageController = PageController(initialPage: bookMarkPageNumber ?? 0);
-      _parseEpub(widget.referenceModel!.bookPath);
+      _parseEpub(bookPath: widget.referenceModel!.bookPath);
+    }else if (widget.tocModel != null){ // Its from toc
+      _pageController = PageController();
+      _parseEpub(bookPath: widget.tocModel!.bookPath, chapterFileName: widget.tocModel!.epubChapter.ContentFileName);
     }else { // its from library screen
       _pageController = PageController();
-      _parseEpub(widget.catModel!.bookPath!);
+      _parseEpub(bookPath: widget.catModel!.bookPath!);
     }
   }
 
@@ -81,7 +84,7 @@ class _EpubScreenState extends State<EpubScreen> {
           builder: (context, state) {
             if (state is BookTitleLoadedState) {
               _bookName = state.bookTitle;
-              return Text(_bookName);
+              return Text(_bookName.replaceAll('نصوص معاصرة', ''));
             } else {
               return Text('');
             }
@@ -149,7 +152,10 @@ class _EpubScreenState extends State<EpubScreen> {
                     builder: (context, state) {
                       if (state is EpubLoadingState) {
                         return CircularProgressIndicator();
-                      } else if (state is SpineAndEpubLoadedState) {
+                      } else if (state is SpineLoadedState) {
+                        if (state.spineNumber != null){
+                          _pageController = PageController(initialPage: state.spineNumber!);
+                        }
                         return PageView.builder(
                           controller: _pageController,
                           scrollDirection: Axis.vertical,
@@ -172,7 +178,7 @@ class _EpubScreenState extends State<EpubScreen> {
                       }
                     },
                     buildWhen: (previousState, state) {
-                      return state is SpineAndEpubLoadedState ||
+                      return state is SpineLoadedState ||
                           state is EpubLoadingState;
                     },
                   ),
@@ -261,8 +267,8 @@ class _EpubScreenState extends State<EpubScreen> {
     );
   }
 
-  void _parseEpub(String bookPath) {
-    BlocProvider.of<EpubCubit>(context).parseEpub('assets/epubs/$bookPath');
+  void _parseEpub({required String bookPath, String? chapterFileName}) {
+    BlocProvider.of<EpubCubit>(context).parseEpub('assets/epubs/$bookPath', chapterFileName);
   }
 
 
@@ -275,6 +281,7 @@ class _EpubScreenState extends State<EpubScreen> {
     }
     return spine;
   }
+
 }
 
 class VerticalSeekBar extends StatefulWidget {

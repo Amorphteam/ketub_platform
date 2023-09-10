@@ -9,11 +9,11 @@ class EpubErrorState extends EpubState{
   EpubErrorState(this.error);
 }
 
-class SpineAndEpubLoadedState extends EpubState{
+class SpineLoadedState extends EpubState {
   final List<String> spine;
-  final EpubBook epubBook;
+  final int? spineNumber;
 
-  SpineAndEpubLoadedState(this.spine, this.epubBook);
+  SpineLoadedState({required this.spine, this.spineNumber});
 }
 
 class BookTitleLoadedState extends EpubState{

@@ -38,12 +38,17 @@ class EpubCubit extends Cubit<EpubState> {
     _saveStyleHelperToPreferences(); // Save StyleHelper when it changes
   }
 
-  Future<void> parseEpub(String assetPath) async {
+  Future<void> parseEpub(String assetPath, String? chapterFileName) async {
     emit(EpubLoadingState());
     try {
       final epubBook = await parseEpubFromAsset(assetPath);
       final spine = await getSpineFromEpub(epubBook);
-      emit(SpineAndEpubLoadedState(spine, epubBook));
+      if (chapterFileName != null){ // Its from toc
+        final int spineNumber = await getSpineNumber(epubBook, chapterFileName);
+        emit(SpineLoadedState(spine: spine, spineNumber: spineNumber));
+      }else {
+        emit(SpineLoadedState(spine: spine));
+      }
       emit(BookTitleLoadedState(epubBook.Title!));
       _loadStyleHelperFromPreferences(); // Load StyleHelper when parsing is done
     } catch (error) {
@@ -96,4 +101,5 @@ class EpubCubit extends Cubit<EpubState> {
       emit(FontFamilyChangedState(fontFamily: styleHelper.fontFamily));
     }
   }
+
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ketub_platform/models/tree_toc_model.dart';
 import 'package:ketub_platform/screens/toc_tab/cubit/toc_cubit.dart';
 import 'package:ketub_platform/screens/toc_tab/widgets/toc_tree_list_widget.dart';
 import '../../utils/epub_helper.dart';
@@ -12,7 +13,7 @@ class TocScreen extends StatefulWidget {
 }
 
 class _TocScreenState extends State<TocScreen> {
-
+  final String bookPath = '57.epub';
   @override
   void initState() {
     super.initState();
@@ -44,7 +45,8 @@ class _TocScreenState extends State<TocScreen> {
               ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(state.error.toString())));
             } else if (state is TocItemTappedState){
-              openEpub(context: context, toc: state.toc);
+              final EpubChaptersWithBookPath chapterWithBookPath = EpubChaptersWithBookPath(state.toc, bookPath);
+              openEpub(context: context, toc: chapterWithBookPath);
             }
           },
           builder: (context, state) {
@@ -67,7 +69,7 @@ class _TocScreenState extends State<TocScreen> {
   }
 
   _loadToc(BuildContext context, String? query) {
-    BlocProvider.of<TocCubit>(context).loadToc(query: query ?? '', assetPath: 'assets/epubs/57.epub');
+    BlocProvider.of<TocCubit>(context).loadToc(query: query ?? '', bookPath: bookPath);
   }
 
 }

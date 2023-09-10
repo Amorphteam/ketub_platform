@@ -18,7 +18,7 @@ void openEpub({
   required BuildContext context,
   CategoryModel? cat,
   ReferenceModel? reference,
-  TreeTocModel? toc,
+  EpubChaptersWithBookPath? toc,
 }) {
   Navigator.push(
     context,
@@ -62,6 +62,25 @@ Future<List<String>> getSpineFromEpub(EpubBook epubBook) async {
   }
 
   return spine;
+}
+
+Future<int> getSpineNumber(EpubBook epubBook, String chapterFileName) async {
+  EpubContent? bookContent = epubBook.Content;
+  Map<String, EpubTextContentFile>? htmlFiles = bookContent?.Html;
+
+  if (htmlFiles != null) {
+    int index = 0;
+    for (String key in htmlFiles.keys) {
+      if (key == chapterFileName) {
+        // Found the chapterFileName in the map, so return its position (item number)
+        return index;
+      }
+      index++;
+    }
+  }
+
+  // If chapterFileName is not found in the map, return -1 or handle it as needed.
+  return -1;
 }
 
 String getImageName(String htmlContent) {
