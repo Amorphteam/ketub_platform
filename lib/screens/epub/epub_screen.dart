@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:epub_parser/epub_parser.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ketub_platform/models/book_model.dart';
 import 'package:ketub_platform/models/category_model.dart';
@@ -36,6 +37,13 @@ class _EpubScreenState extends State<EpubScreen> {
   StyleHelper styleHelper = StyleHelper();
   double currentPage = 0;
   bool isSliderVisible = false;
+  bool isBookmarked = false;
+
+  void toggleBookmark() {
+    setState(() {
+      isBookmarked = !isBookmarked;
+    });
+  }
 
   @override
   void initState() {
@@ -93,6 +101,12 @@ class _EpubScreenState extends State<EpubScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (!isSliderVisible) {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+    } else {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+    }
+
     return Scaffold(
       body: Stack(
         children: [
@@ -129,13 +143,25 @@ class _EpubScreenState extends State<EpubScreen> {
                   },
                 ),
                 IconButton(
-                  icon: const Icon(Icons.bookmark_border),
+                  icon: Icon(
+                    isBookmarked ? Icons.bookmark : Icons.bookmark_border,
+                  ),
                   onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Button bookmark was pressed!'),
-                      ),
-                    );
+                    // Toggle the bookmark state when the button is clicked
+                    toggleBookmark();
+                    if (isBookmarked) {
+                      // Add bookmark logic
+                      final reference = ReferenceModel(
+                        title: 'sample title',
+                        bookName: _bookName,
+                        bookPath: widget.catModel!.bookPath!,
+                        navIndex: currentPage.toString(),
+                      );
+
+                      BlocProvider.of<EpubCubit>(context).addBookmark(reference);
+                    } else {
+                      // Remove bookmark logic (if needed)
+                    }
                   },
                 ),
                 IconButton(
@@ -153,8 +179,7 @@ class _EpubScreenState extends State<EpubScreen> {
           Align(
             alignment: Alignment.topCenter,
             child: Container(
-
-              margin: EdgeInsets.only(top: !isSliderVisible ? MediaQuery.of(context).padding.top : kToolbarHeight+MediaQuery.of(context).padding.top), // Adjust top margin based on visibility
+              margin: EdgeInsets.only(top: !isSliderVisible ? 0 : kToolbarHeight+MediaQuery.of(context).padding.top), // Adjust top margin based on visibility
               child: BlocConsumer<EpubCubit, EpubState>(
                 listener: (context, state) {
                   if (state is EpubErrorState) {
@@ -197,6 +222,7 @@ class _EpubScreenState extends State<EpubScreen> {
                                     return buildWebView(state.spine[index], index);
                                   },
                                   onPageChanged: (index) {
+                                    isBookmarked = false;
 
                                   },
                                 ),
@@ -254,20 +280,11 @@ class _EpubScreenState extends State<EpubScreen> {
         return GestureDetector(
 
           onDoubleTap: () {
-            final reference = ReferenceModel(
-              title: 'sample title',
-              bookName: _bookName,
-              bookPath: widget.catModel!.bookPath!,
-              navIndex: currentPageNumber.toString(),
-            );
-
-            BlocProvider.of<EpubCubit>(context).addBookmark(reference);
-          },
-          onTapDown: (TapDownDetails tapDownDetails){
             setState(() {
               isSliderVisible = !isSliderVisible;
             });
-            },
+          },
+
           child: WebView(
             initialUrl: '',
             javascriptMode: JavascriptMode.unrestricted,
