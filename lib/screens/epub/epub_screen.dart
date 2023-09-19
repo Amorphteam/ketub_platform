@@ -197,9 +197,7 @@ class _EpubScreenState extends State<EpubScreen> {
                                     return buildWebView(state.spine[index], index);
                                   },
                                   onPageChanged: (index) {
-                                      setState(() {
-                                        _webViewIsScrolling = true;
-                                      });
+
                                   },
                                 ),
                               ),
@@ -288,7 +286,10 @@ class _EpubScreenState extends State<EpubScreen> {
               _changeFontFamily(styleHelper.fontFamily);
               _changeFontSize(styleHelper.fontSize);
               _changeLineSpace(styleHelper.lineSpace);
+              // Call checkIfNoScroll with a delay after WebView content has loaded
+              Future.delayed(Duration(milliseconds: 900), () {
                 checkIfNoScroll();
+              });
 
             },
             javascriptChannels: {

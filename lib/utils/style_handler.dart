@@ -259,8 +259,7 @@ html.SPACE4 { line-height: 2.7 !important; }
 
 
 img{
-max-width: 1400px;
-min-width: 800px;
+min-width: 100% !important;
 display: block !important;
 margin-left: auto !important;
 margin-right: auto !important;
