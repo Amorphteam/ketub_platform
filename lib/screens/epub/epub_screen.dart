@@ -35,6 +35,7 @@ class _EpubScreenState extends State<EpubScreen> {
   WebViewController? _webViewController;
   StyleHelper styleHelper = StyleHelper();
   double currentPage = 0;
+  bool isSliderVisible = false;
 
   @override
   void initState() {
@@ -44,20 +45,19 @@ class _EpubScreenState extends State<EpubScreen> {
 
   void chackSourceOpenedFrom() {
     if (widget.referenceModel != null) {
-      // Its from bookmark screen
+      // It's from the bookmark screen
       final int? bookMarkPageNumber =
-          int.tryParse(widget.referenceModel?.navIndex ?? '');
-      ;
+      int.tryParse(widget.referenceModel?.navIndex ?? '');
       _pageController = PageController(initialPage: bookMarkPageNumber ?? 0);
       _parseEpub(bookPath: widget.referenceModel!.bookPath);
     } else if (widget.tocModel != null) {
-      // Its from toc
+      // It's from the table of contents (TOC)
       _pageController = PageController();
       _parseEpub(
           bookPath: widget.tocModel!.bookPath,
           chapterFileName: widget.tocModel!.epubChapter.ContentFileName);
     } else {
-      // its from library screen
+      // It's from the library screen
       _pageController = PageController();
       _parseEpub(bookPath: widget.catModel!.bookPath!);
     }
@@ -87,135 +87,148 @@ class _EpubScreenState extends State<EpubScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: BlocBuilder<EpubCubit, EpubState>(
-          builder: (context, state) {
-            if (state is BookTitleLoadedState) {
-              _bookName = state.bookTitle;
-              return Text(_bookName.replaceAll('نصوص معاصرة', ''));
-            } else {
-              return Text('');
-            }
-          },
-          buildWhen: (previousState, state) {
-            return state is BookTitleLoadedState;
-          },
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Button search was pressed!'),
+      body: Stack(
+        children: [
+          if (isSliderVisible)
+            AppBar(
+              title: BlocBuilder<EpubCubit, EpubState>(
+                builder: (context, state) {
+                  if (state is BookTitleLoadedState) {
+                    _bookName = state.bookTitle;
+                    return Text(_bookName.replaceAll('نصوص معاصرة', ''));
+                  } else {
+                    return Text('');
+                  }
+                },
+                buildWhen: (previousState, state) {
+                  return state is BookTitleLoadedState;
+                },
+              ),
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.search),
+                  onPressed: () {
+                    // Toggle the visibility of the slider
+                    setState(() {
+                      isSliderVisible = !isSliderVisible;
+                    });
+                  },
                 ),
-              );
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.tune_rounded),
-            onPressed: () {
-              final epubCubit = BlocProvider.of<EpubCubit>(context);
-              _showBottomSheet(context, epubCubit);
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.bookmark_border),
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Button bookmark was pressed!'),
+                IconButton(
+                  icon: const Icon(Icons.tune_rounded),
+                  onPressed: () {
+                    final epubCubit = BlocProvider.of<EpubCubit>(context);
+                    _showBottomSheet(context, epubCubit);
+                  },
                 ),
-              );
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.description_outlined),
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Button toc was pressed!'),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-      body: BlocConsumer<EpubCubit, EpubState>(
-        listener: (context, state) {
-          if (state is EpubErrorState) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text(state.error)));
-          } else if (state is BookmarkAddedState) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(
-                    'bookmark added successfully ${state.addStatus.toString()}')));
-          } else if (state is PageChangedState) {
-            currentPage = state.newPage.toDouble();
-            _pageController.jumpToPage(state.newPage);
-          }
-        },
-        builder: (context, state) {
-          if (state is EpubLoadingState) {
-            return CircularProgressIndicator();
-          } else if (state is SpineLoadedState){
-            var allPagesCount = state.spine.length.toDouble();
-            if (state.spineNumber != null) {
-              _pageController = PageController(
-                  initialPage: state.spineNumber!);
-            }
-            _pageController = PageController(
-                initialPage: currentPage.toInt());
-            return Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: PageView.builder(
-                          controller: _pageController,
-                          scrollDirection: Axis.vertical,
-                          itemCount: state.spine.length,
-                          physics: _webViewIsScrolling
-                              ? const NeverScrollableScrollPhysics()
-                              : const AlwaysScrollableScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            currentPage = index.toDouble();
-                            return buildWebView(state.spine[index], index);
-                          },
-                          onPageChanged: (index) {
-                            setState(() {
-                              _webViewIsScrolling = true;
-                            });
-                          },
-                        ),
-
+                IconButton(
+                  icon: const Icon(Icons.bookmark_border),
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Button bookmark was pressed!'),
                       ),
-
-                      Padding(
-                        padding: EdgeInsets.all(20),
-                        child: Text(
-                            '${currentPage.toInt()}/${allPagesCount.toInt()}'),
-                      )
-                    ],
-                  ),
+                    );
+                  },
                 ),
-                VerticalSeekBar(
-                  currentPage: currentPage,
-                  allPagesCount: allPagesCount,
-                  epubCubit: BlocProvider.of<EpubCubit>(context),
+                IconButton(
+                  icon: const Icon(Icons.description_outlined),
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Button toc was pressed!'),
+                      ),
+                    );
+                  },
                 ),
               ],
-            );
+            ),
+          Align(
+            alignment: Alignment.topCenter,
+            child: Container(
 
-          } else {
-            return Placeholder();
-          }
-        },
-        buildWhen: (previousState, state) {
-          return state is SpineLoadedState ||
-              state is EpubLoadingState;
-        },
+              margin: EdgeInsets.only(top: !isSliderVisible ? MediaQuery.of(context).padding.top : kToolbarHeight+MediaQuery.of(context).padding.top), // Adjust top margin based on visibility
+              child: BlocConsumer<EpubCubit, EpubState>(
+                listener: (context, state) {
+                  if (state is EpubErrorState) {
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text(state.error)));
+                  } else if (state is BookmarkAddedState) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                            'bookmark added successfully ${state.addStatus.toString()}')));
+                  } else if (state is PageChangedState) {
+                    currentPage = state.newPage.toDouble();
+                    _pageController.jumpToPage(state.newPage);
+                  }
+                },
+                builder: (context, state) {
+                  if (state is EpubLoadingState) {
+                    return CircularProgressIndicator();
+                  } else if (state is SpineLoadedState) {
+                    var allPagesCount = state.spine.length.toDouble();
+                    if (state.spineNumber != null) {
+                      _pageController = PageController(initialPage: state.spineNumber!);
+                    }
+                    _pageController = PageController(initialPage: currentPage.toInt());
+                    return Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Expanded(
+                                child: PageView.builder(
+                                  controller: _pageController,
+                                  scrollDirection: Axis.vertical,
+                                  itemCount: state.spine.length,
+                                  physics: _webViewIsScrolling
+                                      ? const NeverScrollableScrollPhysics()
+                                      : const AlwaysScrollableScrollPhysics(),
+                                  itemBuilder: (context, index) {
+                                    currentPage = index.toDouble();
+                                    return buildWebView(state.spine[index], index);
+                                  },
+                                  onPageChanged: (index) {
+                                    setState(() {
+                                      _webViewIsScrolling = true;
+                                    });
+                                  },
+                                ),
+                              ),
+                              if (isSliderVisible)
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(20.0),
+                                      child: Text(
+                                          '${currentPage.toInt()}/${allPagesCount.toInt()}'),
+                                    ),
+                                    Expanded(
+                                      child: VerticalSeekBar(
+                                        currentPage: currentPage,
+                                        allPagesCount: allPagesCount,
+                                        epubCubit: BlocProvider.of<EpubCubit>(context),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
+                  } else {
+                    return Placeholder();
+                  }
+                },
+                buildWhen: (previousState, state) {
+                  return state is SpineLoadedState || state is EpubLoadingState;
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -233,8 +246,8 @@ class _EpubScreenState extends State<EpubScreen> {
       },
       builder: (context, state) {
         return GestureDetector(
+
           onDoubleTap: () {
-            print('cat model is ${widget.catModel!.bookName!}');
             final reference = ReferenceModel(
               title: 'sample title',
               bookName: _bookName,
@@ -244,6 +257,11 @@ class _EpubScreenState extends State<EpubScreen> {
 
             BlocProvider.of<EpubCubit>(context).addBookmark(reference);
           },
+          onTapDown: (TapDownDetails tapDownDetails){
+            setState(() {
+              isSliderVisible = !isSliderVisible;
+            });
+            },
           child: WebView(
             initialUrl: '',
             javascriptMode: JavascriptMode.unrestricted,
@@ -317,9 +335,9 @@ class VerticalSeekBar extends StatefulWidget {
 
   VerticalSeekBar(
       {required this.currentPage,
-      required this.allPagesCount,
-      required this.epubCubit,
-      Key? key})
+        required this.allPagesCount,
+        required this.epubCubit,
+        Key? key})
       : super(key: key);
 
   @override
@@ -338,15 +356,16 @@ class _VerticalSeekBarState extends State<VerticalSeekBar> {
   @override
   Widget build(BuildContext context) {
     return RotatedBox(
-      quarterTurns: 1,
+      quarterTurns: 2,
       child: Slider(
         value: _currentValue,
+        onChangeEnd: (newValue) {
+          widget.epubCubit.changePage(newValue.toInt());
+        },
         onChanged: (newValue) {
           setState(() {
             _currentValue = newValue;
           });
-          // Call the changePage method to update the page in the cubit
-          widget.epubCubit.changePage(newValue.toInt());
         },
         max: widget.allPagesCount,
         min: 0,
