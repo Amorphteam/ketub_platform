@@ -84,6 +84,13 @@ class _EpubScreenState extends State<EpubScreen> {
         ?.evaluateJavascript('changeFontFamily("${fontFamily.name}")');
   }
 
+
+  // Check if WebView has no scroll
+  void checkIfNoScroll() {
+    _webViewController?.evaluateJavascript('checkIfNoScroll()');
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -171,6 +178,7 @@ class _EpubScreenState extends State<EpubScreen> {
                       _pageController = PageController(initialPage: state.spineNumber!);
                     }
                     _pageController = PageController(initialPage: currentPage.toInt());
+                    print(' wwebView is $_webViewIsScrolling');
                     return Row(
                       children: [
                         Expanded(
@@ -189,9 +197,9 @@ class _EpubScreenState extends State<EpubScreen> {
                                     return buildWebView(state.spine[index], index);
                                   },
                                   onPageChanged: (index) {
-                                    setState(() {
-                                      _webViewIsScrolling = true;
-                                    });
+                                      setState(() {
+                                        _webViewIsScrolling = true;
+                                      });
                                   },
                                 ),
                               ),
@@ -280,16 +288,24 @@ class _EpubScreenState extends State<EpubScreen> {
               _changeFontFamily(styleHelper.fontFamily);
               _changeFontSize(styleHelper.fontSize);
               _changeLineSpace(styleHelper.lineSpace);
+                checkIfNoScroll();
+
             },
             javascriptChannels: {
               JavascriptChannel(
                 name: 'FLUTTER_CHANNEL',
                 onMessageReceived: (message) {
-                  if (message.message.toString() == 'end of scroll') {
+                  print('message is ${message.message}');
+                  if (message.message.toString() == 'end of scroll' || message.message.toString() == 'no scroll') {
                     setState(() {
                       _webViewIsScrolling = false;
                     });
+                  }else {
+                    setState(() {
+                      _webViewIsScrolling = true;
+                    });
                   }
+
                 },
               )
             },

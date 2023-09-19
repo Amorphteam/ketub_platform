@@ -39,6 +39,18 @@ window.onscroll = function(ev) {
 
         document.body.classList.add(className);
          }
+         
+         // Check if WebView has no scroll
+function checkIfNoScroll() {
+    var webView = document.documentElement;
+    if (webView.scrollHeight <= webView.offsetHeight) {
+    window.FLUTTER_CHANNEL.postMessage('has scroll');
+        console.log('WebView has no scroll');
+    } else {
+    window.FLUTTER_CHANNEL.postMessage('no scroll');
+        console.log('WebView has scroll');
+    }
+}
 </script>
 <style>
 
