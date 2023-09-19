@@ -35,7 +35,6 @@ class _EpubScreenState extends State<EpubScreen> {
   WebViewController? _webViewController;
   StyleHelper styleHelper = StyleHelper();
   double currentPage = 0;
-  double allPagesCount = 0;
 
   @override
   void initState() {
@@ -44,14 +43,21 @@ class _EpubScreenState extends State<EpubScreen> {
   }
 
   void chackSourceOpenedFrom() {
-    if (widget.referenceModel !=null) { // Its from bookmark screen
-      final int? bookMarkPageNumber = int.tryParse(widget.referenceModel?.navIndex ?? '');;
+    if (widget.referenceModel != null) {
+      // Its from bookmark screen
+      final int? bookMarkPageNumber =
+          int.tryParse(widget.referenceModel?.navIndex ?? '');
+      ;
       _pageController = PageController(initialPage: bookMarkPageNumber ?? 0);
       _parseEpub(bookPath: widget.referenceModel!.bookPath);
-    }else if (widget.tocModel != null){ // Its from toc
+    } else if (widget.tocModel != null) {
+      // Its from toc
       _pageController = PageController();
-      _parseEpub(bookPath: widget.tocModel!.bookPath, chapterFileName: widget.tocModel!.epubChapter.ContentFileName);
-    }else { // its from library screen
+      _parseEpub(
+          bookPath: widget.tocModel!.bookPath,
+          chapterFileName: widget.tocModel!.epubChapter.ContentFileName);
+    } else {
+      // its from library screen
       _pageController = PageController();
       _parseEpub(bookPath: widget.catModel!.bookPath!);
     }
@@ -135,34 +141,38 @@ class _EpubScreenState extends State<EpubScreen> {
           ),
         ],
       ),
-      body: Row(
-        children: [
-          Expanded(
-            child: Column(
+      body: BlocConsumer<EpubCubit, EpubState>(
+        listener: (context, state) {
+          if (state is EpubErrorState) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(state.error)));
+          } else if (state is BookmarkAddedState) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(
+                    'bookmark added successfully ${state.addStatus.toString()}')));
+          } else if (state is PageChangedState) {
+            currentPage = state.newPage.toDouble();
+            _pageController.jumpToPage(state.newPage);
+          }
+        },
+        builder: (context, state) {
+          if (state is EpubLoadingState) {
+            return CircularProgressIndicator();
+          } else if (state is SpineLoadedState){
+            var allPagesCount = state.spine.length.toDouble();
+            if (state.spineNumber != null) {
+              _pageController = PageController(
+                  initialPage: state.spineNumber!);
+            }
+            _pageController = PageController(
+                initialPage: currentPage.toInt());
+            return Row(
               children: [
                 Expanded(
-                  child: BlocConsumer<EpubCubit, EpubState>(
-                    listener: (context, state) {
-                      if (state is EpubErrorState) {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(SnackBar(content: Text(state.error)));
-                      } else if (state is BookmarkAddedState){
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(SnackBar(content: Text('bookmark added successfully ${state.addStatus.toString()}')));
-                      } else if (state is PageChangedState) {
-                        _pageController.jumpToPage(state.newPage);
-                      }
-                    },
-                    builder: (context, state) {
-                      if (state is EpubLoadingState) {
-                        return CircularProgressIndicator();
-                      } else if (state is SpineLoadedState) {
-                          allPagesCount = state.spine.length.toDouble();
-                        if (state.spineNumber != null){
-                          _pageController = PageController(initialPage: state.spineNumber!);
-                        }
-                        _pageController = PageController(initialPage: currentPage.toInt());
-                        return PageView.builder(
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: PageView.builder(
                           controller: _pageController,
                           scrollDirection: Axis.vertical,
                           itemCount: state.spine.length,
@@ -178,26 +188,34 @@ class _EpubScreenState extends State<EpubScreen> {
                               _webViewIsScrolling = true;
                             });
                           },
-                        );
-                      } else {
-                        return Placeholder();
-                      }
-                    },
-                    buildWhen: (previousState, state) {
-                      return state is SpineLoadedState ||
-                          state is EpubLoadingState;
-                    },
+                        ),
+
+                      ),
+
+                      Padding(
+                        padding: EdgeInsets.all(20),
+                        child: Text(
+                            '${currentPage.toInt()}/${allPagesCount.toInt()}'),
+                      )
+                    ],
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.all(20),
-                  child: Text('${currentPage.toInt()}/${allPagesCount.toInt()}'),
-                )
+                VerticalSeekBar(
+                  currentPage: currentPage,
+                  allPagesCount: allPagesCount,
+                  epubCubit: BlocProvider.of<EpubCubit>(context),
+                ),
               ],
-            ),
-          ),
-          VerticalSeekBar(currentPage: currentPage, allPagesCount: allPagesCount, epubCubit: BlocProvider.of<EpubCubit>(context),),
-        ],
+            );
+
+          } else {
+            return Placeholder();
+          }
+        },
+        buildWhen: (previousState, state) {
+          return state is SpineLoadedState ||
+              state is EpubLoadingState;
+        },
       ),
     );
   }
@@ -215,51 +233,52 @@ class _EpubScreenState extends State<EpubScreen> {
       },
       builder: (context, state) {
         return GestureDetector(
-            onDoubleTap: () {
-              print('cat model is ${widget.catModel!.bookName!}');
-              final reference = ReferenceModel(
-                title: 'sample title',
-                bookName: _bookName,
-                bookPath: widget.catModel!.bookPath!,
-                navIndex: currentPageNumber.toString(),
-              );
+          onDoubleTap: () {
+            print('cat model is ${widget.catModel!.bookName!}');
+            final reference = ReferenceModel(
+              title: 'sample title',
+              bookName: _bookName,
+              bookPath: widget.catModel!.bookPath!,
+              navIndex: currentPageNumber.toString(),
+            );
 
-              BlocProvider.of<EpubCubit>(context).addBookmark(reference);
+            BlocProvider.of<EpubCubit>(context).addBookmark(reference);
+          },
+          child: WebView(
+            initialUrl: '',
+            javascriptMode: JavascriptMode.unrestricted,
+            onWebViewCreated: (WebViewController webViewController) async {
+              _webViewController = webViewController;
+
+              htmlContent = await injectCssJs(htmlContent);
+
+              webViewController.loadUrl(Uri.dataFromString(
+                htmlContent,
+                mimeType: 'text/html',
+                encoding: Encoding.getByName('utf-8'),
+              ).toString());
             },
-        child: WebView(
-          initialUrl: '',
-          javascriptMode: JavascriptMode.unrestricted,
-          onWebViewCreated: (WebViewController webViewController) async {
-            _webViewController = webViewController;
-
-            htmlContent = await injectCssJs(htmlContent);
-
-            webViewController.loadUrl(Uri.dataFromString(
-              htmlContent,
-              mimeType: 'text/html',
-              encoding: Encoding.getByName('utf-8'),
-            ).toString());
-          },
-          onPageFinished: (String url) {
-            _changeFontFamily(styleHelper.fontFamily);
-            _changeFontSize(styleHelper.fontSize);
-            _changeLineSpace(styleHelper.lineSpace);
-          },
-          javascriptChannels: {
-            JavascriptChannel(
-              name: 'FLUTTER_CHANNEL',
-              onMessageReceived: (message) {
-                if (message.message.toString() == 'end of scroll') {
-                  setState(() {
-                    _webViewIsScrolling = false;
-                  });
-                }
-              },
-            )
-          },
-          gestureNavigationEnabled: true,
-          debuggingEnabled: true,
-        ),);
+            onPageFinished: (String url) {
+              _changeFontFamily(styleHelper.fontFamily);
+              _changeFontSize(styleHelper.fontSize);
+              _changeLineSpace(styleHelper.lineSpace);
+            },
+            javascriptChannels: {
+              JavascriptChannel(
+                name: 'FLUTTER_CHANNEL',
+                onMessageReceived: (message) {
+                  if (message.message.toString() == 'end of scroll') {
+                    setState(() {
+                      _webViewIsScrolling = false;
+                    });
+                  }
+                },
+              )
+            },
+            gestureNavigationEnabled: true,
+            debuggingEnabled: true,
+          ),
+        );
       },
     );
   }
@@ -274,9 +293,9 @@ class _EpubScreenState extends State<EpubScreen> {
   }
 
   void _parseEpub({required String bookPath, String? chapterFileName}) {
-    BlocProvider.of<EpubCubit>(context).parseEpub('assets/epubs/$bookPath', chapterFileName);
+    BlocProvider.of<EpubCubit>(context)
+        .parseEpub('assets/epubs/$bookPath', chapterFileName);
   }
-
 
   Future<String> injectCssJs(String spine) async {
     // Find the index of '</head>' in the HTML
@@ -289,14 +308,19 @@ class _EpubScreenState extends State<EpubScreen> {
     }
     return spine;
   }
-
 }
 
 class VerticalSeekBar extends StatefulWidget {
   double currentPage;
   double allPagesCount;
   EpubCubit epubCubit;
-  VerticalSeekBar({required this.currentPage, required this.allPagesCount, required this.epubCubit, Key? key}) : super(key: key);
+
+  VerticalSeekBar(
+      {required this.currentPage,
+      required this.allPagesCount,
+      required this.epubCubit,
+      Key? key})
+      : super(key: key);
 
   @override
   _VerticalSeekBarState createState() => _VerticalSeekBarState();
@@ -311,7 +335,6 @@ class _VerticalSeekBarState extends State<VerticalSeekBar> {
     _currentValue = widget.currentPage;
   }
 
-
   @override
   Widget build(BuildContext context) {
     return RotatedBox(
@@ -325,7 +348,7 @@ class _VerticalSeekBarState extends State<VerticalSeekBar> {
           // Call the changePage method to update the page in the cubit
           widget.epubCubit.changePage(newValue.toInt());
         },
-        max: 289,
+        max: widget.allPagesCount,
         min: 0,
       ),
     );
