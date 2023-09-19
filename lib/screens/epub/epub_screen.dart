@@ -149,6 +149,8 @@ class _EpubScreenState extends State<EpubScreen> {
                       } else if (state is BookmarkAddedState){
                         ScaffoldMessenger.of(context)
                             .showSnackBar(SnackBar(content: Text('bookmark added successfully ${state.addStatus.toString()}')));
+                      } else if (state is PageChangedState) {
+                        _pageController.jumpToPage(state.newPage);
                       }
                     },
                     builder: (context, state) {
@@ -194,7 +196,7 @@ class _EpubScreenState extends State<EpubScreen> {
               ],
             ),
           ),
-          VerticalSeekBar(currentPage: currentPage, allPagesCount: allPagesCount),
+          VerticalSeekBar(currentPage: currentPage, allPagesCount: allPagesCount, epubCubit: BlocProvider.of<EpubCubit>(context),),
         ],
       ),
     );
@@ -293,26 +295,37 @@ class _EpubScreenState extends State<EpubScreen> {
 class VerticalSeekBar extends StatefulWidget {
   double currentPage;
   double allPagesCount;
-  VerticalSeekBar({required this.currentPage, required this.allPagesCount, Key? key}) : super(key: key);
+  EpubCubit epubCubit;
+  VerticalSeekBar({required this.currentPage, required this.allPagesCount, required this.epubCubit, Key? key}) : super(key: key);
 
   @override
   _VerticalSeekBarState createState() => _VerticalSeekBarState();
 }
 
 class _VerticalSeekBarState extends State<VerticalSeekBar> {
+  double _currentValue = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentValue = widget.currentPage;
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return RotatedBox(
       quarterTurns: 1,
       child: Slider(
-        value: widget.currentPage,
+        value: _currentValue,
         onChanged: (newValue) {
           setState(() {
-            widget.currentPage = newValue;
+            _currentValue = newValue;
           });
+          // Call the changePage method to update the page in the cubit
+          widget.epubCubit.changePage(newValue.toInt());
         },
-        max: widget.allPagesCount,
+        max: 289,
         min: 0,
       ),
     );

@@ -101,5 +101,9 @@ class EpubCubit extends Cubit<EpubState> {
       emit(FontFamilyChangedState(fontFamily: styleHelper.fontFamily));
     }
   }
-
+  void changePage(int newPage) {
+    emit(PageChangedState(newPage));
+  }
 }
+
+
