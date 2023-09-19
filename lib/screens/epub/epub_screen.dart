@@ -34,6 +34,8 @@ class _EpubScreenState extends State<EpubScreen> {
   bool _webViewIsScrolling = true;
   WebViewController? _webViewController;
   StyleHelper styleHelper = StyleHelper();
+  double currentPage = 0;
+  double allPagesCount = 0;
 
   @override
   void initState() {
@@ -153,9 +155,11 @@ class _EpubScreenState extends State<EpubScreen> {
                       if (state is EpubLoadingState) {
                         return CircularProgressIndicator();
                       } else if (state is SpineLoadedState) {
+                          allPagesCount = state.spine.length.toDouble();
                         if (state.spineNumber != null){
                           _pageController = PageController(initialPage: state.spineNumber!);
                         }
+                        _pageController = PageController(initialPage: currentPage.toInt());
                         return PageView.builder(
                           controller: _pageController,
                           scrollDirection: Axis.vertical,
@@ -164,8 +168,8 @@ class _EpubScreenState extends State<EpubScreen> {
                               ? const NeverScrollableScrollPhysics()
                               : const AlwaysScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
-                            var htmlWithCssJs = injectCssJs(state.spine[index]);
-                            return buildWebView(htmlWithCssJs, index);
+                            currentPage = index.toDouble();
+                            return buildWebView(state.spine[index], index);
                           },
                           onPageChanged: (index) {
                             setState(() {
@@ -185,12 +189,12 @@ class _EpubScreenState extends State<EpubScreen> {
                 ),
                 Padding(
                   padding: EdgeInsets.all(20),
-                  child: Text('12/233'),
+                  child: Text('${currentPage.toInt()}/${allPagesCount.toInt()}'),
                 )
               ],
             ),
           ),
-          VerticalSeekBar(),
+          VerticalSeekBar(currentPage: currentPage, allPagesCount: allPagesCount),
         ],
       ),
     );
@@ -226,10 +230,10 @@ class _EpubScreenState extends State<EpubScreen> {
           onWebViewCreated: (WebViewController webViewController) async {
             _webViewController = webViewController;
 
-            String htmlWithFont = await addFontsToHtml(htmlContent);
+            htmlContent = await injectCssJs(htmlContent);
 
             webViewController.loadUrl(Uri.dataFromString(
-              htmlWithFont,
+              htmlContent,
               mimeType: 'text/html',
               encoding: Encoding.getByName('utf-8'),
             ).toString());
@@ -272,12 +276,14 @@ class _EpubScreenState extends State<EpubScreen> {
   }
 
 
-  String injectCssJs(String spine) {
+  Future<String> injectCssJs(String spine) async {
     // Find the index of '</head>' in the HTML
     final headIndex = spine.indexOf('</head>');
     if (headIndex != -1) {
       // Insert the CSS link before '</head>'
-      return spine.replaceRange(headIndex, headIndex, ketubCssJs);
+      final spineWithCss = spine.replaceRange(headIndex, headIndex, ketubCssJs);
+      final spineWithFont = await addFontsToHtml(spineWithCss);
+      return spineWithFont;
     }
     return spine;
   }
@@ -285,26 +291,29 @@ class _EpubScreenState extends State<EpubScreen> {
 }
 
 class VerticalSeekBar extends StatefulWidget {
-  const VerticalSeekBar({Key? key}) : super(key: key);
+  double currentPage;
+  double allPagesCount;
+  VerticalSeekBar({required this.currentPage, required this.allPagesCount, Key? key}) : super(key: key);
 
   @override
   _VerticalSeekBarState createState() => _VerticalSeekBarState();
 }
 
 class _VerticalSeekBarState extends State<VerticalSeekBar> {
-  double _sliderValue = 0.5;
 
   @override
   Widget build(BuildContext context) {
     return RotatedBox(
       quarterTurns: 1,
       child: Slider(
-        value: _sliderValue,
+        value: widget.currentPage,
         onChanged: (newValue) {
           setState(() {
-            _sliderValue = newValue;
+            widget.currentPage = newValue;
           });
         },
+        max: widget.allPagesCount,
+        min: 0,
       ),
     );
   }
