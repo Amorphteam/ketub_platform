@@ -278,7 +278,11 @@ class _EpubScreenState extends State<EpubScreen> {
       },
       builder: (context, state) {
         return GestureDetector(
-
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            // Handle the single tap action here
+            print('Single tap detected');
+          },
           onDoubleTap: () {
             setState(() {
               isSliderVisible = !isSliderVisible;
@@ -327,8 +331,6 @@ class _EpubScreenState extends State<EpubScreen> {
                 },
               )
             },
-            gestureNavigationEnabled: true,
-            debuggingEnabled: true,
           ),
         );
       },
@@ -338,11 +340,28 @@ class _EpubScreenState extends State<EpubScreen> {
   void _showBottomSheet(BuildContext context, EpubCubit cubit) {
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true, // Set this property to true
       builder: (BuildContext context) {
-        return StyleSheet(epubCubit: cubit);
+        // Calculate the maximum height based on content
+        double maxContentHeight = MediaQuery.of(context).size.height * 0.8;
+
+        return ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: maxContentHeight,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                // Your content goes here
+                StyleSheet(epubCubit: cubit),
+              ],
+            ),
+          ),
+        );
       },
     );
   }
+
 
   void _parseEpub({required String bookPath, String? chapterFileName}) {
     BlocProvider.of<EpubCubit>(context)
