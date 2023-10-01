@@ -1,14 +1,11 @@
 import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:epub_parser/epub_parser.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:ketub_platform/models/style_model.dart';
 import 'package:ketub_platform/utils/epub_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../models/reference_model.dart';
-import '../../../models/tree_toc_model.dart';
 import '../../../repositories/reference_database.dart';
 import '../../../utils/style_helper.dart';
 
@@ -19,6 +16,9 @@ class EpubCubit extends Cubit<EpubState> {
 
   StyleHelper styleHelper = StyleHelper(); // Initialize StyleHelper
   final ReferencesDatabase referencesDatabase = ReferencesDatabase.instance;
+
+  EpubBook? _epubBook;
+  List<String>? _spine;
 
   void changeFontSize(FontSize fontSize) {
     styleHelper.changeFontSize(fontSize);
@@ -38,15 +38,55 @@ class EpubCubit extends Cubit<EpubState> {
     _saveStyleHelperToPreferences(); // Save StyleHelper when it changes
   }
 
+
+  Future<void> loadToc({String? query}) async {
+      emit(TocLoadingState());
+    try {
+      final List<EpubChapter> tocTreeList = _epubBook!.Chapters!;
+
+      final List<EpubChapter> filteredList = tocTreeList.where((item) {
+        return item.Title!.toLowerCase().contains(query!.toLowerCase());
+      }).toList();
+          emit(TocLoadedState(filteredList));
+
+    } catch (error) {
+      if (error is Exception) {
+        emit(TocErrorState(error));
+
+      }
+    }
+  }
+
+
+
+  Future<void> parsPage(String? chapterFileName) async {
+    try {
+      if (chapterFileName != null) { // It's from TOC
+        final int spineNumber = await getSpineNumber(_epubBook!, chapterFileName);
+        print('spineNumber = $spineNumber');
+
+        emit(SpineLoadedState(spine: _spine!, spineNumber: spineNumber));
+      } // Load StyleHelper when parsing is done
+    } catch (error) {
+      if (error is Exception) {
+        emit(EpubErrorState(error.toString()));
+      }
+    }
+  }
+
+
   Future<void> parseEpub(String assetPath, String? chapterFileName) async {
     emit(EpubLoadingState());
     try {
       final epubBook = await parseEpubFromAsset(assetPath);
       final spine = await getSpineFromEpub(epubBook);
-      if (chapterFileName != null){ // Its from toc
+      _epubBook = epubBook;
+      _spine = spine;
+
+      if (chapterFileName != null) { // It's from TOC
         final int spineNumber = await getSpineNumber(epubBook, chapterFileName);
         emit(SpineLoadedState(spine: spine, spineNumber: spineNumber));
-      }else {
+      } else {
         emit(SpineLoadedState(spine: spine));
       }
       emit(BookTitleLoadedState(epubBook.Title!));
@@ -56,6 +96,11 @@ class EpubCubit extends Cubit<EpubState> {
         emit(EpubErrorState(error.toString()));
       }
     }
+  }
+
+
+  void openEpub(EpubChapter item){
+    emit(TocItemTappedState(item));
   }
 
   // Save StyleHelper to SharedPreferences
@@ -68,7 +113,6 @@ class EpubCubit extends Cubit<EpubState> {
   Future<void> addBookmark(ReferenceModel bookmark) async {
     try {
       final referencesDatabase = ReferencesDatabase.instance;
-
       // Check if the reference already exists in the database based on book title and page number
       final existingReferences = await referencesDatabase.getReferenceByBookTitleAndPage(
           bookmark.bookPath, bookmark.navIndex);
@@ -87,7 +131,6 @@ class EpubCubit extends Cubit<EpubState> {
     }
   }
 
-
   // Load StyleHelper from SharedPreferences
   void _loadStyleHelperFromPreferences() async {
     final prefs = await SharedPreferences.getInstance();
@@ -105,5 +148,7 @@ class EpubCubit extends Cubit<EpubState> {
     emit(PageChangedState(newPage));
   }
 }
+
+
 
 

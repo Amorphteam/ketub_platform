@@ -47,3 +47,21 @@ class PageChangedState extends EpubState {
 
   PageChangedState(this.newPage);
 }
+
+class TocLoadingState extends EpubState {}
+
+class TocErrorState extends EpubState {
+  final Exception error;
+  TocErrorState(this.error);
+}
+
+class TocLoadedState extends EpubState{
+  final List<EpubChapter> tocTreeList;
+  TocLoadedState(this.tocTreeList);
+}
+
+class TocItemTappedState extends EpubState{
+  final EpubChapter toc;
+  TocItemTappedState(this.toc);
+}
+
