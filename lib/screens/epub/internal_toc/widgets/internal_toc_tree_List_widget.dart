@@ -2,9 +2,9 @@ import 'package:epub_parser/epub_parser.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../models/tree_toc_model.dart';
-import '../../../utils/epub_helper.dart';
-import '../../epub/epub_screen.dart';
+import '../../epub_screen.dart';
+
+
 
 
 class InternalTocTreeList extends StatefulWidget {
@@ -53,13 +53,15 @@ class _InternalTocTreeListState extends State<InternalTocTreeList> {
                 : null,
             // Add more content or actions for each chapter here
             onTap: () {
-              // Pass data back to Screen1 using the callback function
-              widget.onDataTransfer(chapter);
-              // Navigate back to Screen1
-              Navigator.pop(context);
-              setState(() {
-                _isExpanded[parentIndex] = !_isExpanded[parentIndex];
-              });
+              if (chapter.SubChapters!.isEmpty) {
+                  Navigator.pop(context);
+                  widget.onDataTransfer(chapter);
+              }else{
+                setState(() {
+                  _isExpanded[parentIndex] = !_isExpanded[parentIndex];
+                });
+              }
+              
             },
 
           ),

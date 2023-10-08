@@ -68,13 +68,6 @@ class _TocScreenState extends State<TocScreen> {
     );
   }
 
-
-
-
-
-
-
-
   _loadToc(BuildContext context, String? query) {
     BlocProvider.of<TocCubit>(context).loadToc(query: query ?? '', bookPath: bookPath);
   }

@@ -3,7 +3,9 @@ part of 'epub_cubit.dart';
 abstract class EpubState {}
 
 class EpubInitState extends EpubState{}
+
 class EpubLoadingState extends EpubState{}
+
 class EpubErrorState extends EpubState{
   final String error;
   EpubErrorState(this.error);
@@ -14,6 +16,12 @@ class SpineLoadedState extends EpubState {
   final int? spineNumber;
 
   SpineLoadedState({required this.spine, this.spineNumber});
+}
+
+class LoadedPageState extends EpubState {
+  final int? spineNumber;
+
+  LoadedPageState({ this.spineNumber});
 }
 
 class BookTitleLoadedState extends EpubState{
@@ -50,9 +58,9 @@ class PageChangedState extends EpubState {
 
 class TocLoadingState extends EpubState {}
 
-class TocErrorState extends EpubState {
+class ErrorState extends EpubState {
   final Exception error;
-  TocErrorState(this.error);
+  ErrorState(this.error);
 }
 
 class TocLoadedState extends EpubState{
