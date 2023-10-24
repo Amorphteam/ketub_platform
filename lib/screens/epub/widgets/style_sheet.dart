@@ -60,7 +60,7 @@ class _StyleSheetState extends State<StyleSheet> {
 
   double _lineHeightSliderValue = 0.5; // Initialize with a default value
 
-  void _handlelineHeightSliderChange(double newValue) {
+  void _handleLineHeightSliderChange(double newValue) {
     setState(() {
       _lineHeightSliderValue = newValue;
     });
@@ -163,7 +163,8 @@ class _StyleSheetState extends State<StyleSheet> {
                   IconButton(
                     icon: Icon(Icons.zoom_out_map),
                     onPressed: () {
-
+                      _handleFontSizeSliderChange(0.8);
+                      _handleLineHeightSliderChange(0.8);
                     },
                   ),
                   Text(
@@ -177,7 +178,6 @@ class _StyleSheetState extends State<StyleSheet> {
                   IconButton(
                     icon: Icon(Icons.article),
                     onPressed: () {
-
                     },
                   ),
                   Text(
@@ -249,7 +249,7 @@ class _StyleSheetState extends State<StyleSheet> {
               Expanded(
                 child: Slider(
                   value: _lineHeightSliderValue,
-                  onChanged: _handlelineHeightSliderChange,
+                  onChanged: _handleLineHeightSliderChange,
                 ),
               ),
               Icon(Icons.format_line_spacing, size: 18, color: Colors.grey,),
