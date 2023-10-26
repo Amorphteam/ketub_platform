@@ -9,6 +9,7 @@ import 'package:ketub_platform/models/reference_model.dart';
 import 'package:ketub_platform/models/tree_toc_model.dart';
 import 'package:ketub_platform/screens/epub/cubit/epub_cubit.dart';
 import 'package:ketub_platform/screens/epub/widgets/style_sheet.dart';
+import 'package:ketub_platform/utils/page_helper.dart';
 import 'package:ketub_platform/utils/style_handler.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -43,11 +44,13 @@ class _EpubScreenState extends State<EpubScreen> {
   bool _webViewIsScrolling = true;
   WebViewController? _webViewController;
   StyleHelper styleHelper = StyleHelper();
+  PageHelper pageHelper = PageHelper();
   double currentPage = 0;
   bool isSliderVisible = false;
   bool isBookmarked = false;
   EpubChapter? _chapter;
   List<EpubChapter>? tocList;
+   String? _bookPath;
 
   void toggleBookmark() {
     setState(() {
@@ -60,7 +63,6 @@ class _EpubScreenState extends State<EpubScreen> {
   void initState() {
     super.initState();
     checkSourceOpenedFrom();
-
   }
 
   void checkSourceOpenedFrom() {
@@ -69,22 +71,31 @@ class _EpubScreenState extends State<EpubScreen> {
       final int? bookMarkPageNumber =
           int.tryParse(widget.referenceModel?.navIndex ?? '');
       _pageController = PageController(initialPage: bookMarkPageNumber ?? 0);
-      _parseEpub(bookPath: widget.referenceModel!.bookPath);
+      _bookPath = widget.referenceModel!.bookPath;
+      _parseEpub(bookPath: _bookPath!);
+
     } else if (widget.tocModel != null) {
       // It's from the table of contents (TOC)
       _pageController = PageController();
+      _bookPath = widget.tocModel!.epubChapter.ContentFileName;
+
       _parseEpub(
           bookPath: widget.tocModel!.bookPath,
-          chapterFileName: widget.tocModel!.epubChapter.ContentFileName);
+          chapterFileName: _bookPath!);
+
     } else {
       // It's from the library screen
+      _bookPath = widget.catModel!.bookPath!;
       _pageController = PageController();
-      _parseEpub(bookPath: widget.catModel!.bookPath!);
+      _parseEpub(bookPath: _bookPath!);
+
     }
   }
 
   @override
   void dispose() {
+    final pageHelper = PageHelper();
+    pageHelper.saveBookData(widget.catModel!.bookPath!,currentPage);
     _pageController.dispose();
     super.dispose();
   }
@@ -112,11 +123,9 @@ class _EpubScreenState extends State<EpubScreen> {
   @override
   Widget build(BuildContext context) {
     _loadToc(context);
-
     if (_chapter != null) {
       BlocProvider.of<EpubCubit>(context).jumpToPage(_chapter!.ContentFileName);
     }
-
     if (!isSliderVisible) {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     } else {
@@ -246,6 +255,9 @@ class _EpubScreenState extends State<EpubScreen> {
                     currentPage = state.newPage.toDouble();
                     _pageController.jumpToPage(state.newPage);
                   }
+                  else if (state is LastPageSeenChangedState) {
+                    currentPage = state.page;
+                  }
                   else if (state is LoadedPageState) {
                     _pageController.jumpToPage(state.spineNumber!);
                   }
@@ -305,7 +317,7 @@ class _EpubScreenState extends State<EpubScreen> {
                                         currentPage: currentPage,
                                         allPagesCount: allPagesCount,
                                         epubCubit:
-                                            BlocProvider.of<EpubCubit>(context),
+                                            BlocProvider.of<EpubCubit>(context), bookPath: _bookPath!,
                                       ),
                                     ),
                                   ],
@@ -434,6 +446,7 @@ class _EpubScreenState extends State<EpubScreen> {
     BlocProvider.of<EpubCubit>(context).loadToc();
   }
 
+
   Future<String> injectCssJs(String spine) async {
     // Find the index of '</head>' in the HTML
     final headIndex = spine.indexOf('</head>');
@@ -451,11 +464,13 @@ class VerticalSeekBar extends StatefulWidget {
   double currentPage;
   double allPagesCount;
   EpubCubit epubCubit;
+  String bookPath;
 
   VerticalSeekBar(
       {required this.currentPage,
       required this.allPagesCount,
       required this.epubCubit,
+       required this.bookPath,
       Key? key})
       : super(key: key);
 
@@ -463,8 +478,11 @@ class VerticalSeekBar extends StatefulWidget {
   _VerticalSeekBarState createState() => _VerticalSeekBarState();
 }
 
+
 class _VerticalSeekBarState extends State<VerticalSeekBar> {
   double _currentValue = 0;
+
+
 
   @override
   void initState() {
@@ -478,7 +496,7 @@ class _VerticalSeekBarState extends State<VerticalSeekBar> {
       quarterTurns: 2,
       child: Slider(
         value: _currentValue,
-        onChangeEnd: (newValue) {
+          onChangeEnd: (newValue) {
           widget.epubCubit.changePage(newValue.toInt());
         },
         onChanged: (newValue) {

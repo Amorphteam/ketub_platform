@@ -35,6 +35,7 @@ class FontSizeChangedState extends EpubState {
   FontSizeChangedState({required this.fontSize});
 }
 
+
 class LineSpaceChangedState extends EpubState {
   final LineSpace lineSpace;
   LineSpaceChangedState({required this.lineSpace});
@@ -73,3 +74,7 @@ class TocItemTappedState extends EpubState{
   TocItemTappedState(this.toc);
 }
 
+class LastPageSeenChangedState extends EpubState {
+  final double page;
+  LastPageSeenChangedState({required this.page});
+}
