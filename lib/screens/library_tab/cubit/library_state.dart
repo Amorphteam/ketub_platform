@@ -19,8 +19,9 @@ class LibraryErrorState extends LibraryState{
 
 class AllBooksLoadedState extends LibraryState {
   final List<BookModel> books;
+  final List<CategoryModel> cats;
 
-  AllBooksLoadedState(this.books);
+  AllBooksLoadedState(this.books, this.cats,);
 }
 
 

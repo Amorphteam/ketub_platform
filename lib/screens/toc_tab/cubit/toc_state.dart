@@ -5,6 +5,7 @@ abstract class TocState {}
 class TocInitialState extends TocState {}
 
 class TocLoadingState extends TocState {}
+
 class TocErrorState extends TocState {
   final Exception error;
   TocErrorState(this.error);

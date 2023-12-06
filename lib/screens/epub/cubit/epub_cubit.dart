@@ -22,7 +22,8 @@ class EpubCubit extends Cubit<EpubState> {
   final ReferencesDatabase referencesDatabase = ReferencesDatabase.instance;
 
   EpubBook? _epubBook;
-  List<String>? _spine;
+  List<String>? _spineHtmlContent;
+  List<String>? _spineHtmlFileName;
   String? _assetPath;
   List<EpubChapter>? _tocTreeList;
 
@@ -89,21 +90,23 @@ class EpubCubit extends Cubit<EpubState> {
     }
   }
 
-  Future<void> parseEpub(String assetPath, String? chapterFileName) async {
+  Future<void> parseEpub(String assetPath, String? fileName) async {
     emit(EpubLoadingState());
     try {
       final epubBook = await parseEpubFromAsset(assetPath);
       final spine = await getSpineFromEpub(epubBook);
       _epubBook = epubBook;
-      _spine = spine;
+      _spineHtmlContent = spine.map((info) => info.modifiedHtmlContent).toList();
+      _spineHtmlFileName = spine.map((info) => info.fileName).toList();
       _assetPath = assetPath;
-
-      if (chapterFileName != null) {
-        final int spineNumber = await getSpineNumber(epubBook, chapterFileName);
-        emit(SpineLoadedState(spine: spine, spineNumber: spineNumber));
+      if (fileName != null) {
+        final int spineNumber = await getSpineNumber(epubBook, fileName);
+        emit(SpineLoadedState(spine: _spineHtmlContent!, spineNumber: spineNumber));
       } else {
-        emit(SpineLoadedState(spine: spine));
+        emit(SpineLoadedState(spine: _spineHtmlContent!));
+
       }
+
       emit(BookTitleLoadedState(epubBook.Title!));
       _loadStyleHelperFromPreferences();
       lastPageNumber();
@@ -140,22 +143,19 @@ class EpubCubit extends Cubit<EpubState> {
       } else {
         List<String> parts = _assetPath!.split('/'); // Split the string by '/'
         String bookAddress = parts.last;
-
-        for (var page in _spine!) {
-          page = searchHelper.removeHtmlTags(page);
+        for (int i = 0; i < _spineHtmlContent!.length; i++) {
+          var page = searchHelper.removeHtmlTags(_spineHtmlContent![i]);
           var searchCount = 0;
           var searchIndex = searchHelper.searchInString(page, sw, 0);
-
           while (searchIndex.startIndex >= 0) {
             searchCount++;
             tempResult.add(SearchModel(
               bookAddress: bookAddress,
               bookTitle: _epubBook!.Title,
-              pageId: '',
+              pageId: _spineHtmlFileName![i],
               searchCount: searchCount,
               spanna: searchHelper.getHighlightedSection(searchIndex, page),
             ));
-
             searchIndex = searchHelper.searchInString(
                 page, sw, searchIndex.lastIndex + 1);
           }
@@ -169,6 +169,8 @@ class EpubCubit extends Cubit<EpubState> {
 
     yield tempResult;
   }
+
+
 
   void openEpub(EpubChapter item) {
     emit(TocItemTappedState(item));

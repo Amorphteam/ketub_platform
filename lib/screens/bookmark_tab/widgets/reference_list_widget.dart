@@ -20,7 +20,7 @@ class ReferenceListWidget extends StatelessWidget {
           title: Text(item.title),
           subtitle: Text(item.bookName),
           trailing: IconButton(
-            icon: Icon(Icons.delete),
+            icon: const Icon(Icons.delete),
             onPressed: () {
               BlocProvider.of<BookmarkCubit>(context).deleteBookmark(item.id!);
             },

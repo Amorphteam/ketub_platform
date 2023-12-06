@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-
+import '../../models/book_model.dart';
+import '../../models/category_model.dart';
 import '../../models/search_model.dart';
+import '../../repositories/book_database.dart';
+import '../../utils/epub_helper.dart';
 import '../../utils/search_helper.dart';
 
 class SearchScreen extends StatefulWidget {
+  final List<CategoryModel> allCats;
+
+  SearchScreen({required this.allCats});
+
+
   @override
   _SearchScreenState createState() => _SearchScreenState();
 }
@@ -31,10 +39,11 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   void handleSearch() {
+
     if (shouldStartSearch()) {
       // Start the search only if the search word is longer than 3 letters
       final stream = searchHelper.searchAllBooks(
-        allBooks, // Your list of book file paths
+        allBooks(), // Your list of book file paths
         searchWord,
         bookNameSearchingController,
       );
@@ -66,12 +75,14 @@ class _SearchScreenState extends State<SearchScreen> {
                 searchWord = value;
               });
               handleSearch(); // Call handleSearch when the search word changes
+
             },
             decoration: InputDecoration(
               hintText: 'Enter search keyword',
               contentPadding: EdgeInsets.all(16.0),
             ),
           ),
+
           Expanded(
             child: buildSearchResultsList(searchResults),
           ),
@@ -87,7 +98,7 @@ class _SearchScreenState extends State<SearchScreen> {
         final result = results[index];
         return GestureDetector(
           onTap: () {
-            print('result is ${result.pageId}');
+            openEpub(context: context, search: result);
           },
           child: ListTile(
             title: Text(result.bookTitle!),
@@ -98,11 +109,13 @@ class _SearchScreenState extends State<SearchScreen> {
       },
     );
   }
+
   // Define your list of book file paths
-  List<String> allBooks = [
-    '57.epub',
-    '58.epub',
-    '47.epub',
-    // Add more book file paths as needed
-  ];
+
+  List<String> allBooks() {
+    List<CategoryModel> allCats = widget.allCats;
+    List<String> bookPaths = allCats.map((book) => book.bookPath!).toList();
+    return bookPaths;
+  }
+
 }

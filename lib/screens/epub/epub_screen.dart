@@ -13,6 +13,7 @@ import 'package:ketub_platform/utils/page_helper.dart';
 import 'package:ketub_platform/utils/style_handler.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../../models/search_model.dart';
 import '../../models/style_model.dart';
 import '../../utils/style_helper.dart';
 import 'internal_search/internal_search_screen.dart';
@@ -24,14 +25,18 @@ class EpubScreen extends StatefulWidget {
   final ReferenceModel? referenceModel;
   final CategoryModel? catModel;
   final EpubChaptersWithBookPath? tocModel;
+  final SearchModel? searchModel;
   final DataCallback? onDataReceived;
+
 
   const EpubScreen(
       {Key? key,
       this.referenceModel,
       this.catModel,
       this.tocModel,
-      this.onDataReceived})
+      this.onDataReceived,
+        this.searchModel,
+      })
       : super(key: key);
 
   @override
@@ -70,6 +75,7 @@ class _EpubScreenState extends State<EpubScreen> {
       // It's from the bookmark screen
       final int? bookMarkPageNumber =
           int.tryParse(widget.referenceModel?.navIndex ?? '');
+      print('sssssbookPath$bookMarkPageNumber');
       _pageController = PageController(initialPage: bookMarkPageNumber ?? 0);
       _bookPath = widget.referenceModel!.bookPath;
       _parseEpub(bookPath: _bookPath!);
@@ -78,12 +84,22 @@ class _EpubScreenState extends State<EpubScreen> {
       // It's from the table of contents (TOC)
       _pageController = PageController();
       _bookPath = widget.tocModel!.epubChapter.ContentFileName;
-
       _parseEpub(
           bookPath: widget.tocModel!.bookPath,
-          chapterFileName: _bookPath!);
+          fileName: _bookPath!);
 
-    } else {
+    }
+    else if (widget.searchModel != null) {
+
+      _pageController = PageController();
+      String? pageId = widget.searchModel!.pageId;
+      _bookPath = pageId;
+      _parseEpub(
+          bookPath: widget.searchModel!.bookAddress!,
+          fileName: _bookPath!);
+    }
+
+    else {
       // It's from the library screen
       _bookPath = widget.catModel!.bookPath!;
       _pageController = PageController();
@@ -274,10 +290,14 @@ class _EpubScreenState extends State<EpubScreen> {
                     var allPagesCount = state.spine.length.toDouble();
                     if (state.spineNumber != null) {
                       _pageController =
-                          PageController(initialPage: state.spineNumber!);
+                          PageController(initialPage: state.spineNumber!.toInt());
                     }
-                    _pageController =
-                        PageController(initialPage: currentPage.toInt());
+                    else{
+                      _pageController =
+                          PageController(initialPage: currentPage.toInt());
+                    }
+
+
                     return Row(
                       children: [
                         Expanded(
@@ -437,9 +457,9 @@ class _EpubScreenState extends State<EpubScreen> {
     );
   }
 
-  void _parseEpub({required String bookPath, String? chapterFileName}) {
+  void _parseEpub({required String bookPath, String? fileName}) {
     BlocProvider.of<EpubCubit>(context)
-        .parseEpub('assets/epubs/$bookPath', chapterFileName);
+        .parseEpub('assets/epubs/$bookPath', fileName);
   }
 
   _loadToc(BuildContext context) {
