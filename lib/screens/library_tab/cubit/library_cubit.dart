@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:ketub_platform/models/book_model.dart';
 import 'package:ketub_platform/models/category_model.dart';
 import 'package:ketub_platform/repositories/book_database.dart';
-
 part 'library_state.dart';
 
 class LibraryCubit extends Cubit<LibraryState> {
@@ -14,8 +13,9 @@ class LibraryCubit extends Cubit<LibraryState> {
     emit(LibraryLoadingState());
     try {
       final books = await booksDatabase.getAllBooks();
+      final cats = await booksDatabase.getAllCats();
+      emit(AllBooksLoadedState(books,cats));
 
-      emit(AllBooksLoadedState(books));
     }catch (error){
       if (error is Exception){
         emit(LibraryErrorState(error));
@@ -33,7 +33,5 @@ class LibraryCubit extends Cubit<LibraryState> {
       }
     }
   }
-
-
 
 }

@@ -4,25 +4,39 @@ import 'package:epub_parser/epub_parser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ketub_platform/models/book_model.dart';
 import 'package:ketub_platform/models/category_model.dart';
 import 'package:ketub_platform/models/reference_model.dart';
 import 'package:ketub_platform/models/tree_toc_model.dart';
 import 'package:ketub_platform/screens/epub/cubit/epub_cubit.dart';
 import 'package:ketub_platform/screens/epub/widgets/style_sheet.dart';
+import 'package:ketub_platform/utils/page_helper.dart';
 import 'package:ketub_platform/utils/style_handler.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../../models/search_model.dart';
 import '../../models/style_model.dart';
 import '../../utils/style_helper.dart';
+import 'internal_search/internal_search_screen.dart';
+import 'internal_toc/internal_toc_screen.dart';
+
+typedef DataCallback = void Function(dynamic data);
 
 class EpubScreen extends StatefulWidget {
   final ReferenceModel? referenceModel;
   final CategoryModel? catModel;
   final EpubChaptersWithBookPath? tocModel;
+  final SearchModel? searchModel;
+  final DataCallback? onDataReceived;
+
 
   const EpubScreen(
-      {Key? key, this.referenceModel, this.catModel, this.tocModel})
+      {Key? key,
+      this.referenceModel,
+      this.catModel,
+      this.tocModel,
+      this.onDataReceived,
+        this.searchModel,
+      })
       : super(key: key);
 
   @override
@@ -35,9 +49,13 @@ class _EpubScreenState extends State<EpubScreen> {
   bool _webViewIsScrolling = true;
   WebViewController? _webViewController;
   StyleHelper styleHelper = StyleHelper();
+  PageHelper pageHelper = PageHelper();
   double currentPage = 0;
   bool isSliderVisible = false;
   bool isBookmarked = false;
+  EpubChapter? _chapter;
+  List<EpubChapter>? tocList;
+   String? _bookPath;
 
   void toggleBookmark() {
     setState(() {
@@ -45,34 +63,55 @@ class _EpubScreenState extends State<EpubScreen> {
     });
   }
 
+
   @override
   void initState() {
     super.initState();
-    chackSourceOpenedFrom();
+    checkSourceOpenedFrom();
   }
 
-  void chackSourceOpenedFrom() {
+  void checkSourceOpenedFrom() {
     if (widget.referenceModel != null) {
       // It's from the bookmark screen
       final int? bookMarkPageNumber =
-      int.tryParse(widget.referenceModel?.navIndex ?? '');
+          int.tryParse(widget.referenceModel?.navIndex ?? '');
+      print('sssssbookPath$bookMarkPageNumber');
       _pageController = PageController(initialPage: bookMarkPageNumber ?? 0);
-      _parseEpub(bookPath: widget.referenceModel!.bookPath);
+      _bookPath = widget.referenceModel!.bookPath;
+      _parseEpub(bookPath: _bookPath!);
+
     } else if (widget.tocModel != null) {
       // It's from the table of contents (TOC)
       _pageController = PageController();
+      _bookPath = widget.tocModel!.epubChapter.ContentFileName;
       _parseEpub(
           bookPath: widget.tocModel!.bookPath,
-          chapterFileName: widget.tocModel!.epubChapter.ContentFileName);
-    } else {
-      // It's from the library screen
+          fileName: _bookPath!);
+
+    }
+    else if (widget.searchModel != null) {
+
       _pageController = PageController();
-      _parseEpub(bookPath: widget.catModel!.bookPath!);
+      String? pageId = widget.searchModel!.pageId;
+      _bookPath = pageId;
+      _parseEpub(
+          bookPath: widget.searchModel!.bookAddress!,
+          fileName: _bookPath!);
+    }
+
+    else {
+      // It's from the library screen
+      _bookPath = widget.catModel!.bookPath!;
+      _pageController = PageController();
+      _parseEpub(bookPath: _bookPath!);
+
     }
   }
 
   @override
   void dispose() {
+    final pageHelper = PageHelper();
+    pageHelper.saveBookData(widget.catModel!.bookPath!,currentPage);
     _pageController.dispose();
     super.dispose();
   }
@@ -92,20 +131,24 @@ class _EpubScreenState extends State<EpubScreen> {
         ?.evaluateJavascript('changeFontFamily("${fontFamily.name}")');
   }
 
-
   // Check if WebView has no scroll
   void checkIfNoScroll() {
     _webViewController?.evaluateJavascript('checkIfNoScroll()');
   }
 
-
   @override
   Widget build(BuildContext context) {
+    _loadToc(context);
+    if (_chapter != null) {
+      BlocProvider.of<EpubCubit>(context).jumpToPage(_chapter!.ContentFileName);
+    }
     if (!isSliderVisible) {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     } else {
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+          overlays: SystemUiOverlay.values);
     }
+
 
     return Scaffold(
       body: Stack(
@@ -129,7 +172,15 @@ class _EpubScreenState extends State<EpubScreen> {
                 IconButton(
                   icon: const Icon(Icons.search),
                   onPressed: () {
-                    // Toggle the visibility of the slider
+                    final epubCubit = BlocProvider.of<EpubCubit>(context);
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => InternalSearchScreen(
+                          epubCubit: epubCubit,
+                        ),
+                      ),
+                    );
+
                     setState(() {
                       isSliderVisible = !isSliderVisible;
                     });
@@ -158,19 +209,39 @@ class _EpubScreenState extends State<EpubScreen> {
                         navIndex: currentPage.toString(),
                       );
 
-                      BlocProvider.of<EpubCubit>(context).addBookmark(reference);
+                      BlocProvider.of<EpubCubit>(context)
+                          .addBookmark(reference);
                     } else {
                       // Remove bookmark logic (if needed)
                     }
                   },
                 ),
-                IconButton(
-                  icon: const Icon(Icons.description_outlined),
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Button toc was pressed!'),
-                      ),
+                BlocConsumer<EpubCubit, EpubState>(
+                  listener: (context, state) {
+                    if (state is ErrorState) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(state.error.toString())));
+                    } else if (state is TocItemTappedState) {}
+                  },
+                  builder: (context, state) {
+                    return IconButton(
+                      icon: const Icon(Icons.description_outlined),
+                      onPressed: () {
+                          final epubCubit = BlocProvider.of<EpubCubit>(context);
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => InternalToc(
+                                tocList: tocList!,
+                                onDataTransfer: (value) {
+                                  setState(() {
+                                    _chapter = value;
+                                  });
+                                },
+                                epubCubit: epubCubit,
+                              ),
+                            ),
+                          );
+                      },
                     );
                   },
                 ),
@@ -179,8 +250,15 @@ class _EpubScreenState extends State<EpubScreen> {
           Align(
             alignment: Alignment.topCenter,
             child: Container(
-              margin: EdgeInsets.only(top: !isSliderVisible ? 0 : kToolbarHeight+MediaQuery.of(context).padding.top), // Adjust top margin based on visibility
+              margin: EdgeInsets.only(
+                  top: !isSliderVisible
+                      ? 0
+                      : kToolbarHeight +
+                          MediaQuery.of(context)
+                              .padding
+                              .top), // Adjust top margin based on visibility
               child: BlocConsumer<EpubCubit, EpubState>(
+
                 listener: (context, state) {
                   if (state is EpubErrorState) {
                     ScaffoldMessenger.of(context)
@@ -193,17 +271,33 @@ class _EpubScreenState extends State<EpubScreen> {
                     currentPage = state.newPage.toDouble();
                     _pageController.jumpToPage(state.newPage);
                   }
+                  else if (state is LastPageSeenChangedState) {
+                    currentPage = state.page;
+                  }
+                  else if (state is LoadedPageState) {
+                    _pageController.jumpToPage(state.spineNumber!);
+                  }
+                  else if(state is TocLoadedState){
+                    tocList = state.tocTreeList;
+                  }
+
                 },
                 builder: (context, state) {
                   if (state is EpubLoadingState) {
                     return CircularProgressIndicator();
-                  } else if (state is SpineLoadedState) {
+                  }
+                  else if (state is SpineLoadedState) {
                     var allPagesCount = state.spine.length.toDouble();
                     if (state.spineNumber != null) {
-                      _pageController = PageController(initialPage: state.spineNumber!);
+                      _pageController =
+                          PageController(initialPage: state.spineNumber!.toInt());
                     }
-                    _pageController = PageController(initialPage: currentPage.toInt());
-                    print(' wwebView is $_webViewIsScrolling');
+                    else{
+                      _pageController =
+                          PageController(initialPage: currentPage.toInt());
+                    }
+
+
                     return Row(
                       children: [
                         Expanded(
@@ -219,17 +313,19 @@ class _EpubScreenState extends State<EpubScreen> {
                                       : const AlwaysScrollableScrollPhysics(),
                                   itemBuilder: (context, index) {
                                     currentPage = index.toDouble();
-                                    return buildWebView(state.spine[index], index);
+                                    return buildWebView(
+                                        state.spine[index], index);
                                   },
                                   onPageChanged: (index) {
                                     isBookmarked = false;
-
                                   },
                                 ),
                               ),
+
                               if (isSliderVisible)
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.all(20.0),
@@ -240,7 +336,8 @@ class _EpubScreenState extends State<EpubScreen> {
                                       child: VerticalSeekBar(
                                         currentPage: currentPage,
                                         allPagesCount: allPagesCount,
-                                        epubCubit: BlocProvider.of<EpubCubit>(context),
+                                        epubCubit:
+                                            BlocProvider.of<EpubCubit>(context), bookPath: _bookPath!,
                                       ),
                                     ),
                                   ],
@@ -288,7 +385,6 @@ class _EpubScreenState extends State<EpubScreen> {
               isSliderVisible = !isSliderVisible;
             });
           },
-
           child: WebView(
             initialUrl: '',
             javascriptMode: JavascriptMode.unrestricted,
@@ -311,23 +407,22 @@ class _EpubScreenState extends State<EpubScreen> {
               Future.delayed(Duration(milliseconds: 900), () {
                 checkIfNoScroll();
               });
-
             },
             javascriptChannels: {
               JavascriptChannel(
                 name: 'FLUTTER_CHANNEL',
                 onMessageReceived: (message) {
                   print('message is ${message.message}');
-                  if (message.message.toString() == 'end of scroll' || message.message.toString() == 'no scroll') {
+                  if (message.message.toString() == 'end of scroll' ||
+                      message.message.toString() == 'no scroll') {
                     setState(() {
                       _webViewIsScrolling = false;
                     });
-                  }else {
+                  } else {
                     setState(() {
                       _webViewIsScrolling = true;
                     });
                   }
-
                 },
               )
             },
@@ -362,11 +457,15 @@ class _EpubScreenState extends State<EpubScreen> {
     );
   }
 
-
-  void _parseEpub({required String bookPath, String? chapterFileName}) {
+  void _parseEpub({required String bookPath, String? fileName}) {
     BlocProvider.of<EpubCubit>(context)
-        .parseEpub('assets/epubs/$bookPath', chapterFileName);
+        .parseEpub('assets/epubs/$bookPath', fileName);
   }
+
+  _loadToc(BuildContext context) {
+    BlocProvider.of<EpubCubit>(context).loadToc();
+  }
+
 
   Future<String> injectCssJs(String spine) async {
     // Find the index of '</head>' in the HTML
@@ -385,20 +484,25 @@ class VerticalSeekBar extends StatefulWidget {
   double currentPage;
   double allPagesCount;
   EpubCubit epubCubit;
+  String bookPath;
 
   VerticalSeekBar(
       {required this.currentPage,
-        required this.allPagesCount,
-        required this.epubCubit,
-        Key? key})
+      required this.allPagesCount,
+      required this.epubCubit,
+       required this.bookPath,
+      Key? key})
       : super(key: key);
 
   @override
   _VerticalSeekBarState createState() => _VerticalSeekBarState();
 }
 
+
 class _VerticalSeekBarState extends State<VerticalSeekBar> {
   double _currentValue = 0;
+
+
 
   @override
   void initState() {
@@ -412,7 +516,7 @@ class _VerticalSeekBarState extends State<VerticalSeekBar> {
       quarterTurns: 2,
       child: Slider(
         value: _currentValue,
-        onChangeEnd: (newValue) {
+          onChangeEnd: (newValue) {
           widget.epubCubit.changePage(newValue.toInt());
         },
         onChanged: (newValue) {

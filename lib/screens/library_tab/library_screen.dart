@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ketub_platform/models/category_model.dart';
 import 'package:ketub_platform/screens/library_tab/widgets/book_list_widget.dart';
 import 'package:ketub_platform/screens/search/search_screen.dart';
 import 'package:ketub_platform/utils/epub_helper.dart';
+import '../../models/book_model.dart';
 import 'cubit/library_cubit.dart';
 
 class LibraryScreen extends StatefulWidget {
@@ -13,6 +15,9 @@ class LibraryScreen extends StatefulWidget {
 }
 
 class _LibraryScreenState extends State<LibraryScreen> {
+
+   List<CategoryModel> cats = [];
+
   @override
   void initState() {
     super.initState();
@@ -30,7 +35,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => SearchScreen(),
+                  builder: (context) => SearchScreen(allCats: cats),
                 ),
               );
             },
@@ -59,15 +64,20 @@ class _LibraryScreenState extends State<LibraryScreen> {
             } else if (state is BookClickedState){
                if (state.cats.length == 1){
                  openEpub(context: context, cat: state.cats.first);
-               }else {
-                 //TODO: MUST HANDLE DETAIL SCREEN
+
+               }
+
+               else {
+
                }
             }
           },
           builder: (context, state) {
             if (state is AllBooksLoadedState ) {
+              cats = state.cats;
+
               return Flexible(
-                child:
+                  child:
                 BookListWidget(bookList: state.books),
               );
             } else if (state is LibraryLoadingState) {

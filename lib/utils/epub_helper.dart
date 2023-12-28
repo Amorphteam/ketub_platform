@@ -11,6 +11,7 @@ import 'package:ketub_platform/models/reference_model.dart';
 import 'package:ketub_platform/models/tree_toc_model.dart';
 
 import '../models/book_model.dart';
+import '../models/search_model.dart';
 import '../screens/epub/cubit/epub_cubit.dart';
 import '../screens/epub/epub_screen.dart';
 
@@ -19,6 +20,7 @@ void openEpub({
   CategoryModel? cat,
   ReferenceModel? reference,
   EpubChaptersWithBookPath? toc,
+  SearchModel? search
 }) {
   Navigator.push(
     context,
@@ -26,20 +28,21 @@ void openEpub({
       builder: (context) =>
           BlocProvider(
             create: (context) => EpubCubit(),
-            child: EpubScreen(catModel: cat, referenceModel: reference, tocModel: toc),
+            child: EpubScreen(catModel: cat, referenceModel: reference, tocModel: toc, searchModel: search),
           ),
     ),
   );
 }
 
-
-Future<List<String>> getSpineFromEpub(EpubBook epubBook) async {
+Future<List<HtmlFileInfo>> getSpineFromEpub(EpubBook epubBook) async {
   EpubContent? bookContent = epubBook.Content;
   Map<String, EpubByteContentFile>? images = bookContent?.Images;
   Map<String, EpubTextContentFile>? htmlFiles = bookContent?.Html;
-  List<String> spine = [];
+
+  List<HtmlFileInfo> spine = [];
   for (var htmlFile in htmlFiles!.values) {
     String? htmlContent = htmlFile.Content;
+    String? fileName = htmlFile.FileName;
     final imgRegExp = RegExp(r'<img[^>]*>');
     final imgTags = imgRegExp.allMatches(htmlContent!);
 
@@ -58,30 +61,31 @@ Future<List<String>> getSpineFromEpub(EpubBook epubBook) async {
         }
       }
     }
-    spine.add(htmlContent!);
+    spine.add(HtmlFileInfo(fileName!, htmlContent!));
   }
 
   return spine;
 }
 
-Future<int> getSpineNumber(EpubBook epubBook, String chapterFileName) async {
+
+Future<int> getSpineNumber(EpubBook epubBook, String fileName) async {
   EpubContent? bookContent = epubBook.Content;
   Map<String, EpubTextContentFile>? htmlFiles = bookContent?.Html;
-
   if (htmlFiles != null) {
     int index = 0;
     for (String key in htmlFiles.keys) {
-      if (key == chapterFileName) {
+      if (key == fileName) {
         // Found the chapterFileName in the map, so return its position (item number)
         return index;
       }
       index++;
     }
   }
-
   // If chapterFileName is not found in the map, return -1 or handle it as needed.
   return -1;
 }
+
+
 
 String getImageName(String htmlContent) {
   // Define a regular expression to extract the image filename
@@ -110,4 +114,11 @@ Future<EpubBook> parseEpubFromAsset(String assetPath) async {
   EpubBook epubBook = await EpubReader.readBook(Uint8List.fromList(bytes));
 
   return epubBook;
+}
+
+class HtmlFileInfo {
+  final String fileName;
+  final String modifiedHtmlContent;
+
+  HtmlFileInfo(this.fileName, this.modifiedHtmlContent);
 }

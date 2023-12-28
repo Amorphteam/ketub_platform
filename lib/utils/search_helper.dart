@@ -27,38 +27,47 @@ class SearchHelper {
       yield allResults;
     }
   }
-
   Future<List<SearchModel>> searchSingleBook(String bookPath, String sw, StreamController<String> bookNameSearching) async {
-      List<SearchModel> tempResult = [];
-      final assetPath = 'assets/epubs/$bookPath';
+    List<SearchModel> tempResult = [];
+    final assetPath = 'assets/epubs/$bookPath';
 
-      EpubBook? epubBook;
-      try {
-        epubBook = await parseEpubFromAsset(assetPath);
-      }catch (e) {
-        print('error in parse epub: ${e.toString()}');
+    EpubBook? epubBook;
+    try {
+      epubBook = await parseEpubFromAsset(assetPath);
+    } catch (e) {
+      print('error in parse epub: ${e.toString()}');
+    }
+
+    if (epubBook == null) {
+      return List<SearchModel>.empty();
+    }
+
+    final spine = await getSpineFromEpub(epubBook);
+    var spineHtmlContent = spine.map((info) => info.modifiedHtmlContent).toList();
+    var spineHtmlFileName = spine.map((info) => info.fileName).toList();
+
+    for (int i = 0; i < spineHtmlContent.length; i++) {
+      var page = removeHtmlTags(spineHtmlContent[i]);
+      var searchCount = 0;
+      var searchIndex = searchInString(page, sw, 0);
+      while (searchIndex.startIndex >= 0) {
+        tempResult.add(
+          SearchModel(
+            bookAddress: bookPath,
+            bookTitle: epubBook.Title,
+            pageId: spineHtmlFileName[i],
+            searchCount: searchCount,
+            spanna: getHighlightedSection(searchIndex, page),
+          ),
+        );
+
+        searchCount++;
+        searchIndex = searchInString(page, sw, searchIndex.lastIndex + 1);
       }
-
-      if (epubBook == null) {
-        return List<SearchModel>.empty();
-      }
-
-      final spine = await getSpineFromEpub(epubBook);
-      for (var page in spine){
-        page = removeHtmlTags(page);
-        var searchCount = 0;
-        var searchIndex = searchInString(page, sw, 0);
-
-        while (searchIndex.startIndex >= 0) {
-          searchCount++;
-          tempResult.add(SearchModel(bookAddress: bookPath, bookTitle: epubBook.Title, pageId: '', searchCount: searchCount, spanna: getHighlightedSection(searchIndex, page),));
-
-          searchIndex = searchInString(page, sw, searchIndex.lastIndex + 1);
-        }
-      }
-      return tempResult;
-
+    }
+    return tempResult;
   }
+
 
   String getHighlightedSection(SearchIndex index, String wholeString) {
     final sw = wholeString.substring(index.startIndex, index.lastIndex);
