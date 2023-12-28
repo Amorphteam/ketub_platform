@@ -3,33 +3,32 @@ part of 'epub_cubit.dart';
 abstract class EpubState {}
 
 class EpubInitState extends EpubState{}
-
 class EpubLoadingState extends EpubState{}
 
 class EpubErrorState extends EpubState{
   final String error;
-  EpubErrorState(this.error);
+  EpubErrorState({required this.error});
 }
 
-class SpineLoadedState extends EpubState {
-  final List<String> spine;
+class EpubContentLoadedState extends EpubState {
+  final List<String> content;
+  final int? pageIndex;
+  EpubContentLoadedState({required this.content, this.pageIndex});
+}
+
+class EpubPageLoadedState extends EpubState {
   final int? spineNumber;
-
-  SpineLoadedState({required this.spine, this.spineNumber});
+  EpubPageLoadedState({ this.spineNumber});
 }
 
-class LoadedPageState extends EpubState {
-  final int? spineNumber;
-
-  LoadedPageState({ this.spineNumber});
-}
-
-class BookTitleLoadedState extends EpubState{
+class EpubTitleLoadedState extends EpubState {
   final String bookTitle;
-
-  BookTitleLoadedState(this.bookTitle);
+  EpubTitleLoadedState({required this.bookTitle});
 }
 
+
+
+//TODO: REFACTOR AND RENAME
 class FontSizeChangedState extends EpubState {
   final FontSize fontSize;
   FontSizeChangedState({required this.fontSize});

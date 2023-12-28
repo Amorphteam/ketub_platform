@@ -34,41 +34,46 @@ void openEpub({
   );
 }
 
-Future<List<HtmlFileInfo>> getSpineFromEpub(EpubBook epubBook) async {
+Future<List<HtmlFileInfo>> extractHtmlContentWithEmbeddedImages(EpubBook epubBook) async {
   EpubContent? bookContent = epubBook.Content;
   Map<String, EpubByteContentFile>? images = bookContent?.Images;
   Map<String, EpubTextContentFile>? htmlFiles = bookContent?.Html;
 
-  List<HtmlFileInfo> spine = [];
+  List<HtmlFileInfo> htmlContentList = [];
   for (var htmlFile in htmlFiles!.values) {
-    String? htmlContent = htmlFile.Content;
-    String? fileName = htmlFile.FileName;
-    final imgRegExp = RegExp(r'<img[^>]*>');
-    final imgTags = imgRegExp.allMatches(htmlContent!);
-
-    if (imgTags.isNotEmpty) {
-      for (var imgMatch in imgTags) {
-        final imgTag = imgMatch.group(0);
-        final imageName = getImageName(imgTag!);
-
-        if (images?['Images/$imageName'] != null) {
-          final imageByte = images?['Images/$imageName']!.Content;
-          final base64Image = base64Encode(imageByte!);
-
-          // Replace the image tag with base64 encoded image
-          final replacement = "<img src=\"data:image/jpg;base64,$base64Image\" alt=\"My Image\" />";
-          htmlContent = htmlContent?.replaceFirst(imgTag, replacement);
-        }
-      }
-    }
-    spine.add(HtmlFileInfo(fileName!, htmlContent!));
+    String htmlContent = embedImagesInHtmlContent(htmlFile, images);
+    htmlContentList.add(HtmlFileInfo(htmlFile.FileName!, htmlContent));
   }
 
-  return spine;
+  return htmlContentList;
+}
+
+String embedImagesInHtmlContent(EpubTextContentFile htmlFile, Map<String, EpubByteContentFile>? images) {
+  String htmlContent = htmlFile.Content!;
+  final imgRegExp = RegExp(r'<img[^>]*>');
+  Iterable<RegExpMatch> imgTags = imgRegExp.allMatches(htmlContent);
+
+  for (var imgMatch in imgTags) {
+    String imgTag = imgMatch.group(0)!;
+    String imageName = extractImageNameFromTag(imgTag);
+    String? base64Image = convertImageToBase64(images?['Images/$imageName']);
+
+    if (base64Image != null) {
+      String replacement = "<img src=\"data:image/jpg;base64,$base64Image\" alt=\"$imageName\" />";
+      htmlContent = htmlContent.replaceFirst(imgTag, replacement);
+    }
+  }
+
+  return htmlContent;
+}
+
+String? convertImageToBase64(EpubByteContentFile? imageFile) {
+  if (imageFile == null) return null;
+  return base64Encode(imageFile.Content!);
 }
 
 
-Future<int> getSpineNumber(EpubBook epubBook, String fileName) async {
+Future<int> findPageIndexInEpub(EpubBook epubBook, String fileName) async {
   EpubContent? bookContent = epubBook.Content;
   Map<String, EpubTextContentFile>? htmlFiles = bookContent?.Html;
   if (htmlFiles != null) {
@@ -87,12 +92,12 @@ Future<int> getSpineNumber(EpubBook epubBook, String fileName) async {
 
 
 
-String getImageName(String htmlContent) {
+String extractImageNameFromTag(String imageTag) {
   // Define a regular expression to extract the image filename
   final RegExp imgSrcRegex = RegExp(r'src="([^"]+)"');
 
   // Find the first match of the regular expression in the HTML content
-  final Match? match = imgSrcRegex.firstMatch(htmlContent);
+  final Match? match = imgSrcRegex.firstMatch(imageTag);
 
   // Extract the image filename if a match is found
   String imageName = '';
@@ -107,7 +112,7 @@ String getImageName(String htmlContent) {
   return imageName;
 }
 
-Future<EpubBook> parseEpubFromAsset(String assetPath) async {
+Future<EpubBook> loadEpubFromAsset(String assetPath) async {
   ByteData data = await rootBundle.load(assetPath);
   List<int> bytes = data.buffer.asUint8List();
 

@@ -67,46 +67,43 @@ class _EpubScreenState extends State<EpubScreen> {
   @override
   void initState() {
     super.initState();
-    checkSourceOpenedFrom();
+    _determineEpubSourceAndLoad();
   }
 
-  void checkSourceOpenedFrom() {
+  void _determineEpubSourceAndLoad() {
     if (widget.referenceModel != null) {
-      // It's from the bookmark screen
-      final int? bookMarkPageNumber =
-          int.tryParse(widget.referenceModel?.navIndex ?? '');
-      print('sssssbookPath$bookMarkPageNumber');
-      _pageController = PageController(initialPage: bookMarkPageNumber ?? 0);
-      _bookPath = widget.referenceModel!.bookPath;
-      _parseEpub(bookPath: _bookPath!);
-
+      _loadEpubFromBookmark();
     } else if (widget.tocModel != null) {
-      // It's from the table of contents (TOC)
-      _pageController = PageController();
-      _bookPath = widget.tocModel!.epubChapter.ContentFileName;
-      _parseEpub(
-          bookPath: widget.tocModel!.bookPath,
-          fileName: _bookPath!);
-
-    }
-    else if (widget.searchModel != null) {
-
-      _pageController = PageController();
-      String? pageId = widget.searchModel!.pageId;
-      _bookPath = pageId;
-      _parseEpub(
-          bookPath: widget.searchModel!.bookAddress!,
-          fileName: _bookPath!);
-    }
-
-    else {
-      // It's from the library screen
-      _bookPath = widget.catModel!.bookPath!;
-      _pageController = PageController();
-      _parseEpub(bookPath: _bookPath!);
-
+      _loadEpubFromTableOfContents();
+    } else if (widget.searchModel != null) {
+      _loadEpubFromSearchResult();
+    } else {
+      _loadEpubFromCategory();
     }
   }
+
+  void _loadEpubFromBookmark() {
+    final int bookmarkPageNumber = int.tryParse(widget.referenceModel?.navIndex ?? '') ?? 0;
+    _pageController.jumpToPage(bookmarkPageNumber);
+    _bookPath = widget.referenceModel!.bookPath;
+    _loadAndParseEpub(bookPath: _bookPath!);
+  }
+
+  void _loadEpubFromTableOfContents() {
+    _bookPath = widget.tocModel!.epubChapter.ContentFileName;
+    _loadAndParseEpub(bookPath: widget.tocModel!.bookPath, fileName: _bookPath!);
+  }
+
+  void _loadEpubFromSearchResult() {
+    _bookPath = widget.searchModel!.pageId;
+    _loadAndParseEpub(bookPath: widget.searchModel!.bookAddress!, fileName: _bookPath!);
+  }
+
+  void _loadEpubFromCategory() {
+    _bookPath = widget.catModel!.bookPath!;
+    _loadAndParseEpub(bookPath: _bookPath!);
+  }
+
 
   @override
   void dispose() {
@@ -157,7 +154,7 @@ class _EpubScreenState extends State<EpubScreen> {
             AppBar(
               title: BlocBuilder<EpubCubit, EpubState>(
                 builder: (context, state) {
-                  if (state is BookTitleLoadedState) {
+                  if (state is EpubTitleLoadedState) {
                     _bookName = state.bookTitle;
                     return Text(_bookName.replaceAll('نصوص معاصرة', ''));
                   } else {
@@ -165,7 +162,7 @@ class _EpubScreenState extends State<EpubScreen> {
                   }
                 },
                 buildWhen: (previousState, state) {
-                  return state is BookTitleLoadedState;
+                  return state is EpubTitleLoadedState;
                 },
               ),
               actions: [
@@ -274,7 +271,7 @@ class _EpubScreenState extends State<EpubScreen> {
                   else if (state is LastPageSeenChangedState) {
                     currentPage = state.page;
                   }
-                  else if (state is LoadedPageState) {
+                  else if (state is EpubPageLoadedState) {
                     _pageController.jumpToPage(state.spineNumber!);
                   }
                   else if(state is TocLoadedState){
@@ -286,7 +283,7 @@ class _EpubScreenState extends State<EpubScreen> {
                   if (state is EpubLoadingState) {
                     return CircularProgressIndicator();
                   }
-                  else if (state is SpineLoadedState) {
+                  else if (state is EpubContentLoadedState) {
                     var allPagesCount = state.spine.length.toDouble();
                     if (state.spineNumber != null) {
                       _pageController =
@@ -352,7 +349,7 @@ class _EpubScreenState extends State<EpubScreen> {
                   }
                 },
                 buildWhen: (previousState, state) {
-                  return state is SpineLoadedState || state is EpubLoadingState;
+                  return state is EpubContentLoadedState || state is EpubLoadingState;
                 },
               ),
             ),
@@ -457,9 +454,9 @@ class _EpubScreenState extends State<EpubScreen> {
     );
   }
 
-  void _parseEpub({required String bookPath, String? fileName}) {
+  void _loadAndParseEpub({required String bookPath, String? fileName}) {
     BlocProvider.of<EpubCubit>(context)
-        .parseEpub('assets/epubs/$bookPath', fileName);
+        .loadAndParseEpub('assets/epubs/$bookPath', fileName);
   }
 
   _loadToc(BuildContext context) {

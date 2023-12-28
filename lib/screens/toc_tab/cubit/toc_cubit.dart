@@ -14,7 +14,7 @@ class TocCubit extends Cubit<TocState> {
     emit(TocLoadingState());
     try {
       final assetPath = 'assets/epubs/$bookPath';
-      final epubBook = await parseEpubFromAsset(assetPath);
+      final epubBook = await loadEpubFromAsset(assetPath);
 
       final List<EpubChapter> tocTreeList = epubBook.Chapters!;
       final List<EpubChapter> filteredList = tocTreeList.where((item) {

@@ -80,42 +80,52 @@ class EpubCubit extends Cubit<EpubState> {
     try {
       if (chapterFileName != null) {
         final int spineNumber =
-            await getSpineNumber(_epubBook!, chapterFileName);
-        emit(LoadedPageState(spineNumber: spineNumber));
+            await findPageIndexInEpub(_epubBook!, chapterFileName);
+        emit(EpubPageLoadedState(spineNumber: spineNumber));
       }
     } catch (error) {
       if (error is Exception) {
-        emit(EpubErrorState(error.toString()));
+        emit(EpubErrorState(error: error.toString()));
       }
     }
   }
 
-  Future<void> parseEpub(String assetPath, String? fileName) async {
+  Future<void> loadAndParseEpub(
+      String assetPath, String? specificFileName) async {
     emit(EpubLoadingState());
     try {
-      final epubBook = await parseEpubFromAsset(assetPath);
-      final spine = await getSpineFromEpub(epubBook);
-      _epubBook = epubBook;
-      _spineHtmlContent = spine.map((info) => info.modifiedHtmlContent).toList();
-      _spineHtmlFileName = spine.map((info) => info.fileName).toList();
-      _assetPath = assetPath;
-      if (fileName != null) {
-        final int spineNumber = await getSpineNumber(epubBook, fileName);
-        emit(SpineLoadedState(spine: _spineHtmlContent!, spineNumber: spineNumber));
-      } else {
-        emit(SpineLoadedState(spine: _spineHtmlContent!));
+      final EpubBook epubBook = await loadEpubFromAsset(assetPath);
+      final List<HtmlFileInfo> epubContent =
+          await extractHtmlContentWithEmbeddedImages(epubBook);
 
+      _storeEpubDetails(epubBook, epubContent, assetPath);
+
+      if (specificFileName != null) {
+        final int pageIndex =
+            await findPageIndexInEpub(epubBook, specificFileName);
+        emit(EpubContentLoadedState(
+            content: _spineHtmlContent!, pageIndex: pageIndex));
+      } else {
+        emit(EpubContentLoadedState(content: _spineHtmlContent!));
       }
 
-      emit(BookTitleLoadedState(epubBook.Title!));
-      _loadStyleHelperFromPreferences();
-      lastPageNumber();
-
+      emit(EpubTitleLoadedState(bookTitle: epubBook.Title!));
+      _loadUserPreferences();
+      _emitLastPageSeen();
     } catch (error) {
       if (error is Exception) {
-        emit(EpubErrorState(error.toString()));
+        emit(EpubErrorState(error: error.toString()));
       }
     }
+  }
+
+  void _storeEpubDetails(
+      EpubBook epubBook, List<HtmlFileInfo> epubContent, String assetPath) {
+    _epubBook = epubBook;
+    _spineHtmlContent =
+        epubContent.map((info) => info.modifiedHtmlContent).toList();
+    _spineHtmlFileName = epubContent.map((info) => info.fileName).toList();
+    _assetPath = assetPath;
   }
 
   Future<double?> getLastPageNumberForBook() async {
@@ -127,7 +137,7 @@ class EpubCubit extends Cubit<EpubState> {
     return lastPageNumber;
   }
 
-  Future<void> lastPageNumber() async {
+  Future<void> _emitLastPageSeen() async {
     final lastPageNumber = await getLastPageNumberForBook();
     if (lastPageNumber != null) {
       emit(LastPageSeenChangedState(page: lastPageNumber));
@@ -170,8 +180,6 @@ class EpubCubit extends Cubit<EpubState> {
     yield tempResult;
   }
 
-
-
   void openEpub(EpubChapter item) {
     emit(TocItemTappedState(item));
   }
@@ -184,7 +192,7 @@ class EpubCubit extends Cubit<EpubState> {
   }
 
   // Load StyleHelper from SharedPreferences
-  void _loadStyleHelperFromPreferences() async {
+  void _loadUserPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     final styleJson = prefs.getString('styleHelper');
     if (styleJson != null) {
@@ -209,11 +217,11 @@ class EpubCubit extends Cubit<EpubState> {
         emit(BookmarkAddedState(addStatus));
       } else {
         // The reference already exists, handle this case (e.g., show an error message)
-        emit(EpubErrorState('Duplicate reference found'));
+        emit(EpubErrorState(error: 'Duplicate reference found'));
       }
     } catch (error) {
       if (error is Exception) {
-        emit(EpubErrorState(error.toString()));
+        emit(EpubErrorState(error: error.toString()));
       }
     }
   }

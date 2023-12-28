@@ -33,7 +33,7 @@ class SearchHelper {
 
     EpubBook? epubBook;
     try {
-      epubBook = await parseEpubFromAsset(assetPath);
+      epubBook = await loadEpubFromAsset(assetPath);
     } catch (e) {
       print('error in parse epub: ${e.toString()}');
     }
@@ -42,7 +42,7 @@ class SearchHelper {
       return List<SearchModel>.empty();
     }
 
-    final spine = await getSpineFromEpub(epubBook);
+    final spine = await extractHtmlContentWithEmbeddedImages(epubBook);
     var spineHtmlContent = spine.map((info) => info.modifiedHtmlContent).toList();
     var spineHtmlFileName = spine.map((info) => info.fileName).toList();
 
