@@ -11,6 +11,7 @@ import 'package:ketub_platform/screens/epub/cubit/epub_cubit.dart';
 import 'package:ketub_platform/screens/epub/widgets/style_sheet.dart';
 import 'package:ketub_platform/utils/page_helper.dart';
 import 'package:ketub_platform/utils/style_handler.dart';
+import 'package:ketub_platform/utils/web_view_helper.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../models/search_model.dart';
@@ -56,12 +57,8 @@ class _EpubScreenState extends State<EpubScreen> {
   EpubChapter? _chapter;
   List<EpubChapter>? tocList;
    String? _bookPath;
+   final String _pathUrl = 'assets/epubs/';
 
-  void toggleBookmark() {
-    setState(() {
-      isBookmarked = !isBookmarked;
-    });
-  }
 
 
   @override
@@ -104,6 +101,26 @@ class _EpubScreenState extends State<EpubScreen> {
     _loadAndParseEpub(bookPath: _bookPath!);
   }
 
+  /// FileName for handling toc and search item to get number of section
+  void _loadAndParseEpub({required String bookPath, String? fileName}) {
+    BlocProvider.of<EpubCubit>(context)
+        .loadAndParseEpub('$_pathUrl$bookPath', fileName);
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   @override
   void dispose() {
@@ -113,24 +130,30 @@ class _EpubScreenState extends State<EpubScreen> {
     super.dispose();
   }
 
+
+  void toggleBookmark() {
+    setState(() {
+      isBookmarked = !isBookmarked;
+    });
+  }
   void _changeFontSize(FontSize fontSize) {
-    _webViewController
-        ?.evaluateJavascript('changeFontSize("${fontSize.name}")');
+    // _webViewController
+    //     ?.evaluateJavascript('changeFontSize("${fontSize.name}")');
   }
 
   void _changeLineSpace(LineSpace lineSpace) {
-    _webViewController
-        ?.evaluateJavascript('changeLineSpace("${lineSpace.name}")');
+    // _webViewController
+    //     ?.evaluateJavascript('changeLineSpace("${lineSpace.name}")');
   }
 
   void _changeFontFamily(FontFamily fontFamily) {
-    _webViewController
-        ?.evaluateJavascript('changeFontFamily("${fontFamily.name}")');
+    // _webViewController
+    //     ?.evaluateJavascript('changeFontFamily("${fontFamily.name}")');
   }
 
   // Check if WebView has no scroll
   void checkIfNoScroll() {
-    _webViewController?.evaluateJavascript('checkIfNoScroll()');
+    // _webViewController?.evaluateJavascript('checkIfNoScroll()');
   }
 
   @override
@@ -255,7 +278,6 @@ class _EpubScreenState extends State<EpubScreen> {
                               .padding
                               .top), // Adjust top margin based on visibility
               child: BlocConsumer<EpubCubit, EpubState>(
-
                 listener: (context, state) {
                   if (state is EpubErrorState) {
                     ScaffoldMessenger.of(context)
@@ -281,19 +303,18 @@ class _EpubScreenState extends State<EpubScreen> {
                 },
                 builder: (context, state) {
                   if (state is EpubLoadingState) {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   }
                   else if (state is EpubContentLoadedState) {
-                    var allPagesCount = state.spine.length.toDouble();
-                    if (state.spineNumber != null) {
+                    var allPagesCount = state.content.length.toDouble();
+                    if (state.pageIndex != null) {
                       _pageController =
-                          PageController(initialPage: state.spineNumber!.toInt());
+                          PageController(initialPage: state.pageIndex!.toInt());
                     }
                     else{
                       _pageController =
                           PageController(initialPage: currentPage.toInt());
                     }
-
 
                     return Row(
                       children: [
@@ -304,21 +325,19 @@ class _EpubScreenState extends State<EpubScreen> {
                                 child: PageView.builder(
                                   controller: _pageController,
                                   scrollDirection: Axis.vertical,
-                                  itemCount: state.spine.length,
-                                  physics: _webViewIsScrolling
-                                      ? const NeverScrollableScrollPhysics()
-                                      : const AlwaysScrollableScrollPhysics(),
+                                  itemCount: state.content.length,
+                                  // physics: _webViewIsScrolling
+                                  //     ? const NeverScrollableScrollPhysics()
+                                  //     : const AlwaysScrollableScrollPhysics(),
                                   itemBuilder: (context, index) {
                                     currentPage = index.toDouble();
-                                    return buildWebView(
-                                        state.spine[index], index);
+                                    return WebViewHelper(content: state.content[index]);
                                   },
                                   onPageChanged: (index) {
                                     isBookmarked = false;
                                   },
                                 ),
                               ),
-
                               if (isSliderVisible)
                                 Row(
                                   mainAxisAlignment:
@@ -359,7 +378,7 @@ class _EpubScreenState extends State<EpubScreen> {
     );
   }
 
-  Widget buildWebView(String htmlContent, int currentPageNumber) {
+  Widget buildWebView(String htmlContent) {
     return BlocConsumer<EpubCubit, EpubState>(
       listener: (context, state) {
         if (state is FontSizeChangedState) {
@@ -382,48 +401,48 @@ class _EpubScreenState extends State<EpubScreen> {
               isSliderVisible = !isSliderVisible;
             });
           },
-          child: WebView(
-            initialUrl: '',
-            javascriptMode: JavascriptMode.unrestricted,
-            onWebViewCreated: (WebViewController webViewController) async {
-              _webViewController = webViewController;
-
-              htmlContent = await injectCssJs(htmlContent);
-
-              webViewController.loadUrl(Uri.dataFromString(
-                htmlContent,
-                mimeType: 'text/html',
-                encoding: Encoding.getByName('utf-8'),
-              ).toString());
-            },
-            onPageFinished: (String url) {
-              _changeFontFamily(styleHelper.fontFamily);
-              _changeFontSize(styleHelper.fontSize);
-              _changeLineSpace(styleHelper.lineSpace);
-              // Call checkIfNoScroll with a delay after WebView content has loaded
-              Future.delayed(Duration(milliseconds: 900), () {
-                checkIfNoScroll();
-              });
-            },
-            javascriptChannels: {
-              JavascriptChannel(
-                name: 'FLUTTER_CHANNEL',
-                onMessageReceived: (message) {
-                  print('message is ${message.message}');
-                  if (message.message.toString() == 'end of scroll' ||
-                      message.message.toString() == 'no scroll') {
-                    setState(() {
-                      _webViewIsScrolling = false;
-                    });
-                  } else {
-                    setState(() {
-                      _webViewIsScrolling = true;
-                    });
-                  }
-                },
-              )
-            },
-          ),
+          // child: WebView(
+          //   initialUrl: '',
+          //   javascriptMode: JavascriptMode.unrestricted,
+          //   onWebViewCreated: (WebViewController webViewController) async {
+          //     _webViewController = webViewController;
+          //
+          //     htmlContent = await injectCssJs(htmlContent);
+          //
+          //     webViewController.loadUrl(Uri.dataFromString(
+          //       htmlContent,
+          //       mimeType: 'text/html',
+          //       encoding: Encoding.getByName('utf-8'),
+          //     ).toString());
+          //   },
+          //   onPageFinished: (String url) {
+          //     _changeFontFamily(styleHelper.fontFamily);
+          //     _changeFontSize(styleHelper.fontSize);
+          //     _changeLineSpace(styleHelper.lineSpace);
+          //     // Call checkIfNoScroll with a delay after WebView content has loaded
+          //     Future.delayed(Duration(milliseconds: 900), () {
+          //       checkIfNoScroll();
+          //     });
+          //   },
+          //   javascriptChannels: {
+          //     JavascriptChannel(
+          //       name: 'FLUTTER_CHANNEL',
+          //       onMessageReceived: (message) {
+          //         print('message is ${message.message}');
+          //         if (message.message.toString() == 'end of scroll' ||
+          //             message.message.toString() == 'no scroll') {
+          //           setState(() {
+          //             _webViewIsScrolling = false;
+          //           });
+          //         } else {
+          //           setState(() {
+          //             _webViewIsScrolling = true;
+          //           });
+          //         }
+          //       },
+          //     )
+          //   },
+          // ),
         );
       },
     );
@@ -454,10 +473,7 @@ class _EpubScreenState extends State<EpubScreen> {
     );
   }
 
-  void _loadAndParseEpub({required String bookPath, String? fileName}) {
-    BlocProvider.of<EpubCubit>(context)
-        .loadAndParseEpub('assets/epubs/$bookPath', fileName);
-  }
+
 
   _loadToc(BuildContext context) {
     BlocProvider.of<EpubCubit>(context).loadToc();

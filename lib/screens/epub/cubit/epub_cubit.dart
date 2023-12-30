@@ -29,6 +29,64 @@ class EpubCubit extends Cubit<EpubState> {
 
   final searchHelper = SearchHelper();
 
+
+
+  Future<void> loadAndParseEpub(
+      String assetPath, String? specificFileName) async {
+    emit(EpubLoadingState());
+    try {
+      final EpubBook epubBook = await loadEpubFromAsset(assetPath);
+      final List<HtmlFileInfo> epubContent =
+      await extractHtmlContentWithEmbeddedImages(epubBook);
+
+      _storeEpubDetails(epubBook, epubContent, assetPath);
+
+      if (specificFileName != null) {
+        final int pageIndex =
+        await findPageIndexInEpub(epubBook, specificFileName);
+        emit(EpubContentLoadedState(
+            content: _spineHtmlContent!, pageIndex: pageIndex));
+      } else {
+        emit(EpubContentLoadedState(content: _spineHtmlContent!));
+      }
+
+      emit(EpubTitleLoadedState(bookTitle: epubBook.Title!));
+      _loadUserPreferences();
+      _emitLastPageSeen();
+    } catch (error) {
+      if (error is Exception) {
+        emit(EpubErrorState(error: error.toString()));
+      }
+    }
+  }
+
+  void _storeEpubDetails(
+      EpubBook epubBook, List<HtmlFileInfo> epubContent, String assetPath) {
+    _epubBook = epubBook;
+    _spineHtmlContent =
+        epubContent.map((info) => info.modifiedHtmlContent).toList();
+    _spineHtmlFileName = epubContent.map((info) => info.fileName).toList();
+    _assetPath = assetPath;
+  }
+
+  Future<double?> getLastPageNumberForBook() async {
+    final pageHelper = PageHelper();
+    final parts = _assetPath!.split('/'); // Split the string by '/'
+    final bookAddress = parts.last;
+    final lastPageNumber =
+    await pageHelper.getLastPageNumberForBook(bookAddress);
+    return lastPageNumber;
+  }
+
+  Future<void> _emitLastPageSeen() async {
+    final lastPageNumber = await getLastPageNumberForBook();
+    if (lastPageNumber != null) {
+      emit(LastPageSeenChangedState(page: lastPageNumber));
+    }
+  }
+
+
+  //TODO: REFACTOR AND RENAME
   void changeFontSize(FontSize fontSize) {
     styleHelper.changeFontSize(fontSize);
     emit(FontSizeChangedState(fontSize: fontSize));
@@ -90,59 +148,6 @@ class EpubCubit extends Cubit<EpubState> {
     }
   }
 
-  Future<void> loadAndParseEpub(
-      String assetPath, String? specificFileName) async {
-    emit(EpubLoadingState());
-    try {
-      final EpubBook epubBook = await loadEpubFromAsset(assetPath);
-      final List<HtmlFileInfo> epubContent =
-          await extractHtmlContentWithEmbeddedImages(epubBook);
-
-      _storeEpubDetails(epubBook, epubContent, assetPath);
-
-      if (specificFileName != null) {
-        final int pageIndex =
-            await findPageIndexInEpub(epubBook, specificFileName);
-        emit(EpubContentLoadedState(
-            content: _spineHtmlContent!, pageIndex: pageIndex));
-      } else {
-        emit(EpubContentLoadedState(content: _spineHtmlContent!));
-      }
-
-      emit(EpubTitleLoadedState(bookTitle: epubBook.Title!));
-      _loadUserPreferences();
-      _emitLastPageSeen();
-    } catch (error) {
-      if (error is Exception) {
-        emit(EpubErrorState(error: error.toString()));
-      }
-    }
-  }
-
-  void _storeEpubDetails(
-      EpubBook epubBook, List<HtmlFileInfo> epubContent, String assetPath) {
-    _epubBook = epubBook;
-    _spineHtmlContent =
-        epubContent.map((info) => info.modifiedHtmlContent).toList();
-    _spineHtmlFileName = epubContent.map((info) => info.fileName).toList();
-    _assetPath = assetPath;
-  }
-
-  Future<double?> getLastPageNumberForBook() async {
-    final pageHelper = PageHelper();
-    final parts = _assetPath!.split('/'); // Split the string by '/'
-    final bookAddress = parts.last;
-    final lastPageNumber =
-        await pageHelper.getLastPageNumberForBook(bookAddress);
-    return lastPageNumber;
-  }
-
-  Future<void> _emitLastPageSeen() async {
-    final lastPageNumber = await getLastPageNumberForBook();
-    if (lastPageNumber != null) {
-      emit(LastPageSeenChangedState(page: lastPageNumber));
-    }
-  }
 
   Stream<List<SearchModel>> searchSingleBook(
       String sw, StreamController<String> bookNameSearching) async* {
