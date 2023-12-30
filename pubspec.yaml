@@ -38,6 +38,13 @@ dependencies:
   flutter_html: ^2.2.1
   shared_preferences: ^2.0.6
   http: ^1.1.0
+  audioplayers: ^5.2.1
+  audio_service: ^0.18.12
+  just_audio_mpv: ^0.1.7
+  rxdart: ^0.27.7
+  just_audio: ^0.9.36
+  just_audio_background: any
+  audio_session: ^0.1.14
 
 dev_dependencies:
   flutter_test:

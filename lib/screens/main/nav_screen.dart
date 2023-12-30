@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ketub_platform/screens/audio_screen/audio_screen.dart';
-import 'package:ketub_platform/screens/audio_screen/cubit/audio_cubit.dart';
 import 'package:ketub_platform/screens/bookmark_tab/bookmark_screen.dart';
 import 'package:ketub_platform/screens/bookmark_tab/cubit/bookmark_cubit.dart';
 import 'package:ketub_platform/screens/library_tab/cubit/library_cubit.dart';
 import 'package:ketub_platform/screens/library_tab/library_screen.dart';
 import 'package:ketub_platform/screens/toc_tab/cubit/toc_cubit.dart';
 import 'package:ketub_platform/screens/toc_tab/toc_screen.dart';
+
+import '../audio/audio_screen.dart';
+import '../audio/cubit/audio_cubit.dart';
 
 
 class NavScreen extends StatefulWidget {
