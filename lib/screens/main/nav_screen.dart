@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ketub_platform/repositories/book_database.dart';
-import 'package:ketub_platform/repositories/reference_database.dart';
+import 'package:ketub_platform/screens/audio_screen/audio_screen.dart';
+import 'package:ketub_platform/screens/audio_screen/cubit/audio_cubit.dart';
 import 'package:ketub_platform/screens/bookmark_tab/bookmark_screen.dart';
 import 'package:ketub_platform/screens/bookmark_tab/cubit/bookmark_cubit.dart';
 import 'package:ketub_platform/screens/library_tab/cubit/library_cubit.dart';
 import 'package:ketub_platform/screens/library_tab/library_screen.dart';
 import 'package:ketub_platform/screens/toc_tab/cubit/toc_cubit.dart';
 import 'package:ketub_platform/screens/toc_tab/toc_screen.dart';
-import 'package:ketub_platform/utils/style_handler.dart';
 
 
 class NavScreen extends StatefulWidget {
@@ -31,6 +30,10 @@ class _NavScreenState extends State<NavScreen> {
     BlocProvider(
       create: (context) => BookmarkCubit(),
       child: const BookmarkScreen(),
+    ),
+    BlocProvider(
+      create: (context) => AudioCubit(),
+      child: const AudioScreen(),
     )
   ];
 
@@ -59,6 +62,10 @@ class _NavScreenState extends State<NavScreen> {
           NavigationDestination(
             icon: Icon(Icons.bookmark),
             label: 'bookmark',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.play_arrow),
+            label: 'audio',
           ),
         ],
       ),
