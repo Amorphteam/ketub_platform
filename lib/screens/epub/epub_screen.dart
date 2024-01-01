@@ -9,9 +9,9 @@ import 'package:ketub_platform/models/reference_model.dart';
 import 'package:ketub_platform/models/tree_toc_model.dart';
 import 'package:ketub_platform/screens/epub/cubit/epub_cubit.dart';
 import 'package:ketub_platform/screens/epub/widgets/style_sheet.dart';
+import 'package:ketub_platform/screens/epub/widgets/webview.dart';
 import 'package:ketub_platform/utils/page_helper.dart';
 import 'package:ketub_platform/utils/style_handler.dart';
-import 'package:ketub_platform/utils/web_view_helper.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../models/search_model.dart';
@@ -331,7 +331,7 @@ class _EpubScreenState extends State<EpubScreen> {
                                   //     : const AlwaysScrollableScrollPhysics(),
                                   itemBuilder: (context, index) {
                                     currentPage = index.toDouble();
-                                    return WebViewHelper(content: state.content[index]);
+                                    return WebViewCustom(content: state.content[index]);
                                   },
                                   onPageChanged: (index) {
                                     isBookmarked = false;
@@ -480,17 +480,6 @@ class _EpubScreenState extends State<EpubScreen> {
   }
 
 
-  Future<String> injectCssJs(String spine) async {
-    // Find the index of '</head>' in the HTML
-    final headIndex = spine.indexOf('</head>');
-    if (headIndex != -1) {
-      // Insert the CSS link before '</head>'
-      final spineWithCss = spine.replaceRange(headIndex, headIndex, ketubCssJs);
-      final spineWithFont = await addFontsToHtml(spineWithCss);
-      return spineWithFont;
-    }
-    return spine;
-  }
 }
 
 class VerticalSeekBar extends StatefulWidget {

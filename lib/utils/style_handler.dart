@@ -332,6 +332,18 @@ String getFontUri(ByteData data, String mime) {
       .toString();
 }
 
+Future<String> injectCssJs(String spine) async {
+  // Find the index of '</head>' in the HTML
+  final headIndex = spine.indexOf('</head>');
+  if (headIndex != -1) {
+    // Insert the CSS link before '</head>'
+    final spineWithCss = spine.replaceRange(headIndex, headIndex, ketubCssJs);
+    final spineWithFont = await addFontsToHtml(spineWithCss);
+    return spineWithFont;
+  }
+  return spine;
+}
+
 Future<String> addFontsToHtml(String htmlContent) async {
   const fontMime = "font/opentype";
   Map<String, String> fontsAssets = {
