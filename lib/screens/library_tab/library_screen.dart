@@ -5,6 +5,8 @@ import 'package:ketub_platform/screens/library_tab/widgets/book_list_widget.dart
 import 'package:ketub_platform/screens/search/search_screen.dart';
 import 'package:ketub_platform/utils/epub_helper.dart';
 import '../../models/book_model.dart';
+import '../../repositories/articles_online_repository.dart';
+import '../../utils/web_view_helper.dart';
 import 'cubit/library_cubit.dart';
 
 class LibraryScreen extends StatefulWidget {
@@ -97,4 +99,6 @@ class _LibraryScreenState extends State<LibraryScreen> {
   void _loadAllBooks() {
     BlocProvider.of<LibraryCubit>(context).loadAllBooks();
   }
+
+
 }
