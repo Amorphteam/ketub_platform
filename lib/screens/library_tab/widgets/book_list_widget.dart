@@ -3,10 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ketub_platform/models/book_model.dart';
 import 'package:ketub_platform/models/category_model.dart';
 import 'package:ketub_platform/screens/library_tab/cubit/library_cubit.dart';
+import 'package:ketub_platform/screens/web_view/cubit/webview_cubit.dart';
+import 'package:ketub_platform/screens/web_view/webview.dart';
 
 import '../../../repositories/articles_online_repository.dart';
 import '../../../utils/epub_helper.dart';
-import '../../../utils/web_view_helper.dart';
 
 class BookListWidget extends StatefulWidget {
   final List<BookModel> bookList;
@@ -78,7 +79,11 @@ class _BookListWidgetState extends State<BookListWidget> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => WebViewHelper(content: article.description!),
+
+          builder: (context) => BlocProvider<WebviewCubit>(
+            create: (context) => WebviewCubit(),
+            child: WebViewCustom(content: article.description!),
+          ),
         ),
       );
     } catch (error) {
