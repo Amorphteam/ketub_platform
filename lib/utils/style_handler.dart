@@ -62,6 +62,8 @@ html {
 }
 
 body {
+font-family: font1 !important;
+font-size: 1.9em !important;
   text-indent: 0px !important;
     padding: 40px 40px !important;
     overflow: !important;
@@ -167,7 +169,7 @@ html.LIGHT {
 }
 
 .FONT0, .FONT0 p, .FONT0 span, .FONT0 div {
-    font-family: 'font0', arial;
+    font-family: font0, arial;
 }
 
 .FONT1, .FONT1 p, .FONT1 h1, .FONT1 h2, .FONT1 h3, .FONT1 h4, .FONT1 h5, .FONT1 h6, .FONT1 span, .FONT1 div {

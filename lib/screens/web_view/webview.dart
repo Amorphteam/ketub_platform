@@ -47,6 +47,7 @@ class _WebViewCustomState extends State<WebViewCustom> {
     return BlocBuilder<WebviewCubit, WebviewState>(
       builder: (context, state) {
         if (state is WebviewLoaded) {
+          print(state.content);
           return WebViewWidget(
             controller: _webViewController
               ..setJavaScriptMode(JavaScriptMode.unrestricted)

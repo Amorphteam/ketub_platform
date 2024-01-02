@@ -76,13 +76,14 @@ class _BookListWidgetState extends State<BookListWidget> {
       // Check if the widget is still in the widget tree
       if (!mounted) return;
 
+
       Navigator.push(
         context,
         MaterialPageRoute(
 
           builder: (context) => BlocProvider<WebviewCubit>(
             create: (context) => WebviewCubit(),
-            child: WebViewCustom(content: article.description!),
+            child: WebViewCustom(content: "<html><head></head><body> ${article.description} </body></html>"),
           ),
         ),
       );
