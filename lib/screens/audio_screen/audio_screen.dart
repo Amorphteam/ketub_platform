@@ -2,6 +2,8 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ketub_platform/screens/audio_screen/widgets/stream_widget.dart';
+import 'widgets/player_widget.dart';
 import 'cubit/audio_cubit.dart';
 
 class AudioScreen extends StatefulWidget {
@@ -12,14 +14,15 @@ class AudioScreen extends StatefulWidget {
 }
 
 class _AudioScreenState extends State<AudioScreen> {
-  late AudioPlayer player;
-  bool isPlaying = false; // Added a variable to track audio playing state
+  late AudioPlayer player = AudioPlayer();
 
   @override
   void initState() {
     super.initState();
     player = AudioPlayer();
     _loadAudio();
+    player.setReleaseMode(ReleaseMode.stop);
+
   }
 
   @override
@@ -33,32 +36,25 @@ class _AudioScreenState extends State<AudioScreen> {
     return BlocConsumer<AudioCubit, AudioState>(
       listener: (context, state) {
         if (state is AudioLoadedState) {
-          // You can handle audio loaded state here if needed
         }
       },
       builder: (context, state) {
         if (state is AudioLoadedState) {
           final mediaDownloadLink = state.audioModel.mediaDownloadLink;
-
-          return Column(
+          WidgetsBinding.instance.addPostFrameCallback((_) async {
+            await player.play(UrlSource(mediaDownloadLink!));
+            await player.resume();
+          });
+          return SingleChildScrollView(
+            child: Column(
             children: [
-              ElevatedButton(
-                onPressed: () {
-                  // Toggle the audio playback when the button is pressed
-                  if (isPlaying) {
-                    player.pause();
-                  } else {
-                    player.play(UrlSource(mediaDownloadLink!));
-                  }
-                  setState(() {
-                    isPlaying = !isPlaying; // Toggle the state
-                  });
-                },
-                child: Text(isPlaying ? 'Pause Audio' : 'Play Audio'),
-              ),
-              Text('$mediaDownloadLink'),
+              const Divider(),
+              PlayerWidget(player: player),
+              const Divider(),
+              StreamWidget(player: player),
             ],
-          );
+
+          ));
         } else if (state is AudioErrorState) {
           return const Text('Error loading audio data');
         } else {
