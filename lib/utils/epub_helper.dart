@@ -9,11 +9,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ketub_platform/models/category_model.dart';
 import 'package:ketub_platform/models/reference_model.dart';
 import 'package:ketub_platform/models/tree_toc_model.dart';
+import 'package:ketub_platform/screens/text_content/epub/cubit/epub_cubit.dart';
+import 'package:ketub_platform/screens/text_content/epub/epub_screen.dart';
 
 import '../models/book_model.dart';
 import '../models/search_model.dart';
-import '../screens/epub/cubit/epub_cubit.dart';
-import '../screens/epub/epub_screen.dart';
+
 
 void openEpub({
   required BuildContext context,

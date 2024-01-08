@@ -3,9 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ketub_platform/models/book_model.dart';
 import 'package:ketub_platform/models/category_model.dart';
 import 'package:ketub_platform/screens/library_tab/cubit/library_cubit.dart';
-import 'package:ketub_platform/screens/web_view/cubit/webview_cubit.dart';
-import 'package:ketub_platform/screens/web_view/webview.dart';
-
+import 'package:ketub_platform/screens/text_content/widgets/custom_webview.dart';
 import '../../../repositories/articles_online_repository.dart';
 import '../../../utils/epub_helper.dart';
 
@@ -79,14 +77,8 @@ class _BookListWidgetState extends State<BookListWidget> {
 
       Navigator.push(
         context,
-        MaterialPageRoute(
-
-          builder: (context) => BlocProvider<WebviewCubit>(
-            create: (context) => WebviewCubit(),
-            child: WebViewCustom(content: "<html><head></head><body> ${article.description} </body></html>"),
-          ),
-        ),
-      );
+          MaterialPageRoute(
+            builder: (context) => CustomWebView(content: "<html><head></head><body> ${article.description} </body></html>")));
     } catch (error) {
       // Handle error
       if (!mounted) return;

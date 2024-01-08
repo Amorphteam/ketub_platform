@@ -2,31 +2,27 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ketub_platform/screens/web_view/cubit/webview_cubit.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
 import 'package:flutter/material.dart';
 
-class WebViewCustom extends StatefulWidget {
+class CustomWebView extends StatefulWidget {
   final String content;
 
-  const WebViewCustom({Key? key, required this.content}) : super(key: key);
+  const CustomWebView({Key? key, required this.content}) : super(key: key);
 
   @override
-  State<WebViewCustom> createState() => _WebViewCustomState();
+  State<CustomWebView> createState() => _CustomWebViewState();
 }
 
-class _WebViewCustomState extends State<WebViewCustom> {
+class _CustomWebViewState extends State<CustomWebView> {
   late WebViewController _webViewController;
-  late WebviewCubit webViewCubit;
 
   @override
   void initState() {
     super.initState();
-    webViewCubit = WebviewCubit();
-    _initContent(content: widget.content);
     _initializeWebViewController();
   }
 
@@ -44,26 +40,11 @@ class _WebViewCustomState extends State<WebViewCustom> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<WebviewCubit, WebviewState>(
-      builder: (context, state) {
-        if (state is WebviewLoaded) {
-          print(state.content);
-          return WebViewWidget(
-            controller: _webViewController
-              ..setJavaScriptMode(JavaScriptMode.unrestricted)
-              ..setNavigationDelegate(_buildNavigationDelegate())
-              ..loadRequest(_buildInitialUrl(content: state.content)),
-          );
-        } else {
-          return const Center(
-            child: SizedBox(
-              width: 20.0,
-              height: 20.0,
-              child: CircularProgressIndicator(),
-            ),
-          );
-        }
-      },
+    return  WebViewWidget(
+      controller: _webViewController
+        ..setJavaScriptMode(JavaScriptMode.unrestricted)
+        ..setNavigationDelegate(_buildNavigationDelegate())
+        ..loadRequest(_buildInitialUrl(content: widget.content)),
     );
   }
 
@@ -105,10 +86,6 @@ class _WebViewCustomState extends State<WebViewCustom> {
     );
   }
 
-  void _initContent({required String content}) {
-    BlocProvider.of<WebviewCubit>(context)
-        .loadModifiedContent(content);
-  }
 }
 
 

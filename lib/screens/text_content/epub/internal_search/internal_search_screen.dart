@@ -1,10 +1,8 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../../../models/search_model.dart';
-import '../../../utils/epub_helper.dart';
+import 'package:ketub_platform/models/search_model.dart';
+import 'package:ketub_platform/utils/epub_helper.dart';
 import '../cubit/epub_cubit.dart';
 
 class InternalSearchScreen extends StatefulWidget {

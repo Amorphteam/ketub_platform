@@ -1,8 +1,9 @@
 import 'package:epub_parser/epub_parser.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ketub_platform/screens/epub/cubit/epub_cubit.dart';
-import 'package:ketub_platform/screens/epub/epub_screen.dart';
+
+import 'package:ketub_platform/screens/text_content/epub/cubit/epub_cubit.dart';
+import 'package:ketub_platform/screens/text_content/epub/epub_screen.dart';
 
 import 'widgets/internal_toc_tree_List_widget.dart';
 

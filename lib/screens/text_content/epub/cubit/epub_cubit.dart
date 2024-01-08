@@ -2,16 +2,17 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:epub_parser/epub_parser.dart';
+import 'package:ketub_platform/models/reference_model.dart';
+import 'package:ketub_platform/models/search_model.dart';
 import 'package:ketub_platform/models/style_model.dart';
+import 'package:ketub_platform/repositories/reference_database.dart';
 import 'package:ketub_platform/utils/epub_helper.dart';
 import 'package:ketub_platform/utils/page_helper.dart';
+import 'package:ketub_platform/utils/search_helper.dart';
+import 'package:ketub_platform/utils/style_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../models/reference_model.dart';
-import '../../../models/search_model.dart';
-import '../../../repositories/reference_database.dart';
-import '../../../utils/search_helper.dart';
-import '../../../utils/style_helper.dart';
+
 
 part 'epub_state.dart';
 
