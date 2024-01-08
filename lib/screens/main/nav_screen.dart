@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ketub_platform/repositories/book_database.dart';
-import 'package:ketub_platform/repositories/reference_database.dart';
-import 'package:ketub_platform/screens/bookmark_tab/bookmark_screen.dart';
-import 'package:ketub_platform/screens/bookmark_tab/cubit/bookmark_cubit.dart';
-import 'package:ketub_platform/screens/library_tab/cubit/library_cubit.dart';
-import 'package:ketub_platform/screens/library_tab/library_screen.dart';
-import 'package:ketub_platform/screens/toc_tab/cubit/toc_cubit.dart';
-import 'package:ketub_platform/screens/toc_tab/toc_screen.dart';
-import 'package:ketub_platform/utils/style_handler.dart';
+import 'package:ketub_platform/screens/main/toc_tab/cubit/toc_cubit.dart';
+import 'package:ketub_platform/screens/main/toc_tab/toc_screen.dart';
+
+import 'bookmark_tab/bookmark_screen.dart';
+import 'bookmark_tab/cubit/bookmark_cubit.dart';
+import 'library_tab/cubit/library_cubit.dart';
+import 'library_tab/library_screen.dart';
+
 
 
 class NavScreen extends StatefulWidget {

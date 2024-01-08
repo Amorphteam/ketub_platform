@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ketub_platform/models/category_model.dart';
-import 'package:ketub_platform/screens/library_tab/widgets/book_list_widget.dart';
+import 'package:ketub_platform/screens/main/library_tab/widgets/book_list_widget.dart';
 import 'package:ketub_platform/screens/search/search_screen.dart';
 import 'package:ketub_platform/utils/epub_helper.dart';
-import '../../models/book_model.dart';
-import '../../repositories/articles_online_repository.dart';
 import 'cubit/library_cubit.dart';
 
 class LibraryScreen extends StatefulWidget {
@@ -82,7 +80,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                 BookListWidget(bookList: state.books),
               );
             } else if (state is LibraryLoadingState) {
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             } else {
               return const SizedBox.shrink();
             }

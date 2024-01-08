@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ketub_platform/models/book_model.dart';
 import 'package:ketub_platform/models/category_model.dart';
-import 'package:ketub_platform/screens/library_tab/cubit/library_cubit.dart';
 import 'package:ketub_platform/screens/text_content/widgets/custom_webview.dart';
-import '../../../repositories/articles_online_repository.dart';
-import '../../../utils/epub_helper.dart';
+import '../../../../repositories/articles_online_repository.dart';
+import '../cubit/library_cubit.dart';
 
 class BookListWidget extends StatefulWidget {
   final List<BookModel> bookList;

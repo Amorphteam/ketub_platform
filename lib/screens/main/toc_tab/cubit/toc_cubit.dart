@@ -1,9 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:epub_parser/epub_parser.dart';
 import 'package:ketub_platform/models/tree_toc_model.dart';
+import 'package:ketub_platform/utils/epub_helper.dart';
 import 'package:ketub_platform/utils/style_handler.dart';
-
-import '../../../utils/epub_helper.dart';
 
 part 'toc_state.dart';
 

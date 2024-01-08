@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ketub_platform/models/tree_toc_model.dart';
-import 'package:ketub_platform/screens/toc_tab/cubit/toc_cubit.dart';
-import 'package:ketub_platform/screens/toc_tab/widgets/toc_tree_list_widget.dart';
-import '../../utils/epub_helper.dart';
+import 'package:ketub_platform/screens/main/toc_tab/widgets/toc_tree_list_widget.dart';
+
+import '../../../utils/epub_helper.dart';
+import 'cubit/toc_cubit.dart';
+
 
 class TocScreen extends StatefulWidget {
   const TocScreen({super.key});

@@ -1,7 +1,8 @@
 import 'package:epub_parser/epub_parser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ketub_platform/screens/toc_tab/cubit/toc_cubit.dart';
+
+import '../cubit/toc_cubit.dart';
 
 class EpubChapterListWidget extends StatefulWidget {
   final List<EpubChapter> tocTreeList;

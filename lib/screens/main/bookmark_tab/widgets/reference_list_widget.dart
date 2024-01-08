@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ketub_platform/screens/bookmark_tab/cubit/bookmark_cubit.dart';
 import 'package:ketub_platform/models/reference_model.dart';
+
+import '../cubit/bookmark_cubit.dart';
 
 class ReferenceListWidget extends StatelessWidget {
   final List<ReferenceModel> referenceList;

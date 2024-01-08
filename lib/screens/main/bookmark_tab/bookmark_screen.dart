@@ -2,12 +2,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ketub_platform/screens/bookmark_tab/cubit/bookmark_cubit.dart';
-import 'package:ketub_platform/models/reference_model.dart';
-import 'package:ketub_platform/screens/bookmark_tab/widgets/reference_list_widget.dart';
 import 'package:ketub_platform/utils/epub_helper.dart';
 
-import '../text_content/epub/cubit/epub_cubit.dart';
+import '../../text_content/epub/cubit/epub_cubit.dart';
+import 'cubit/bookmark_cubit.dart';
+import 'widgets/reference_list_widget.dart';
 
 
 class BookmarkScreen extends StatefulWidget {
