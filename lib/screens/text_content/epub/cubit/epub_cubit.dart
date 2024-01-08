@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:epub_parser/epub_parser.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:ketub_platform/models/reference_model.dart';
 import 'package:ketub_platform/models/search_model.dart';
 import 'package:ketub_platform/models/style_model.dart';
@@ -11,6 +12,8 @@ import 'package:ketub_platform/utils/page_helper.dart';
 import 'package:ketub_platform/utils/search_helper.dart';
 import 'package:ketub_platform/utils/style_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../../utils/style_handler.dart';
 
 
 
@@ -234,5 +237,17 @@ class EpubCubit extends Cubit<EpubState> {
 
   void changePage(int newPage) {
     emit(PageChangedState(newPage));
+  }
+
+  Future<void> loadModifiedContent(String content) async {
+    emit(EpubLoadingState());
+    try {
+      final String contentWithStyle = await injectCssJs(content);
+      emit(EpubContentWithCssLoadedState(content: contentWithStyle));
+    }catch(error){
+      if (error is Exception){
+        emit(EpubErrorState(error: error.toString()));
+      }
+    }
   }
 }

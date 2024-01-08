@@ -6,7 +6,7 @@ import 'package:ketub_platform/screens/text_content/epub/cubit/epub_cubit.dart';
 
 class StyleSheet extends StatefulWidget {
   final EpubCubit epubCubit;
-  const StyleSheet({required this.epubCubit});
+  const StyleSheet({super.key, required this.epubCubit});
 
   @override
   State<StyleSheet> createState() => _StyleSheetState();

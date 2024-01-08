@@ -46,10 +46,9 @@ class _EpubScreenState extends State<EpubScreen> {
   String _bookName = '';
   bool _webViewIsScrolling = true;
   WebViewController? _webViewController;
-  StyleHelper styleHelper = StyleHelper();
   PageHelper pageHelper = PageHelper();
   double currentPage = 0;
-  bool isSliderVisible = false;
+  bool isSliderVisible = true;
   bool isBookmarked = false;
   EpubChapter? _chapter;
   List<EpubChapter>? tocList;
@@ -283,9 +282,7 @@ class _EpubScreenState extends State<EpubScreen> {
                   }
                 },
                 builder: (context, state) {
-                  if (state is EpubLoadingState) {
-                    return const CircularProgressIndicator();
-                  } else if (state is EpubContentLoadedState) {
+                  if (state is EpubContentLoadedState) {
                     var allPagesCount = state.content.length.toDouble();
                     if (state.pageIndex != null) {
                       _pageController =
@@ -310,8 +307,9 @@ class _EpubScreenState extends State<EpubScreen> {
                                   //     : const AlwaysScrollableScrollPhysics(),
                                   itemBuilder: (context, index) {
                                     currentPage = index.toDouble();
+                                    final epubCubit = BlocProvider.of<EpubCubit>(context);
                                     return CustomWebView(
-                                        content: state.content[index]);
+                                        content: state.content[index], epubCubit: epubCubit);
                                   },
                                   onPageChanged: (index) {
                                     isBookmarked = false;
@@ -345,88 +343,17 @@ class _EpubScreenState extends State<EpubScreen> {
                       ],
                     );
                   } else {
-                    return const Placeholder();
+                    return const CircularProgressIndicator();
                   }
                 },
                 buildWhen: (previousState, state) {
-                  return state is EpubContentLoadedState ||
-                      state is EpubLoadingState;
+                  return state is EpubContentLoadedState;
                 },
               ),
             ),
           ),
         ],
       ),
-    );
-  }
-
-  Widget buildWebView(String htmlContent) {
-    return BlocConsumer<EpubCubit, EpubState>(
-      listener: (context, state) {
-        if (state is FontSizeChangedState) {
-          _changeFontSize(state.fontSize);
-        } else if (state is LineSpaceChangedState) {
-          _changeLineSpace(state.lineSpace);
-        } else if (state is FontFamilyChangedState) {
-          _changeFontFamily(state.fontFamily);
-        }
-      },
-      builder: (context, state) {
-        return GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () {
-            // Handle the single tap action here
-            print('Single tap detected');
-          },
-          onDoubleTap: () {
-            setState(() {
-              isSliderVisible = !isSliderVisible;
-            });
-          },
-          // child: WebView(
-          //   initialUrl: '',
-          //   javascriptMode: JavascriptMode.unrestricted,
-          //   onWebViewCreated: (WebViewController webViewController) async {
-          //     _webViewController = webViewController;
-          //
-          //     htmlContent = await injectCssJs(htmlContent);
-          //
-          //     webViewController.loadUrl(Uri.dataFromString(
-          //       htmlContent,
-          //       mimeType: 'text/html',
-          //       encoding: Encoding.getByName('utf-8'),
-          //     ).toString());
-          //   },
-          //   onPageFinished: (String url) {
-          //     _changeFontFamily(styleHelper.fontFamily);
-          //     _changeFontSize(styleHelper.fontSize);
-          //     _changeLineSpace(styleHelper.lineSpace);
-          //     // Call checkIfNoScroll with a delay after WebView content has loaded
-          //     Future.delayed(Duration(milliseconds: 900), () {
-          //       checkIfNoScroll();
-          //     });
-          //   },
-          //   javascriptChannels: {
-          //     JavascriptChannel(
-          //       name: 'FLUTTER_CHANNEL',
-          //       onMessageReceived: (message) {
-          //         print('message is ${message.message}');
-          //         if (message.message.toString() == 'end of scroll' ||
-          //             message.message.toString() == 'no scroll') {
-          //           setState(() {
-          //             _webViewIsScrolling = false;
-          //           });
-          //         } else {
-          //           setState(() {
-          //             _webViewIsScrolling = true;
-          //           });
-          //         }
-          //       },
-          //     )
-          //   },
-          // ),
-        );
-      },
     );
   }
 

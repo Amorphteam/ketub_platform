@@ -10,6 +10,11 @@ class EpubErrorState extends EpubState{
   EpubErrorState({required this.error});
 }
 
+
+class EpubContentWithCssLoadedState extends EpubState{
+  final String content;
+  EpubContentWithCssLoadedState({required this.content});
+}
 class EpubContentLoadedState extends EpubState {
   final List<String> content;
   final int? pageIndex;

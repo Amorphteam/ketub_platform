@@ -62,7 +62,6 @@ html {
 }
 
 body {
-font-family: font1 !important;
 font-size: 1.9em !important;
   text-indent: 0px !important;
     padding: 40px 40px !important;
