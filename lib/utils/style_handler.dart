@@ -62,7 +62,7 @@ html {
 }
 
 body {
-font-size: 1.9em !important;
+font-family: font1 !important;
   text-indent: 0px !important;
     padding: 40px 40px !important;
     overflow: !important;
@@ -304,23 +304,23 @@ margin-right: auto !important;
           }
           
           .normalFontSize {
-          font-size: 40px !important;
+          font-size: 10px !important;
           }
           
           .smallFontSize {
-          font-size: 30px !important;
+          font-size: 20px !important;
           }
           
           .largeFontSize {
-          font-size: 50px !important;
+          font-size: 30px !important;
           }
           
           .xlargeFontSize {
-          font-size: 60px !important;
+          font-size: 40px !important;
           }
           
           .xxlargeFontSize {
-          font-size: 70px !important;
+          font-size: 50px !important;
           }
 
 </style>''';

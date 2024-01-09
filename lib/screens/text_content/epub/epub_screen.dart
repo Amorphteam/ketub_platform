@@ -4,6 +4,7 @@ import 'package:epub_parser/epub_parser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:ketub_platform/models/category_model.dart';
 import 'package:ketub_platform/models/reference_model.dart';
 import 'package:ketub_platform/models/search_model.dart';
@@ -14,7 +15,7 @@ import 'package:ketub_platform/screens/text_content/widgets/custom_webview.dart'
 import 'package:ketub_platform/utils/page_helper.dart';
 import 'package:ketub_platform/utils/style_handler.dart';
 import 'package:ketub_platform/utils/style_helper.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'internal_search/internal_search_screen.dart';
 import 'internal_toc/internal_toc_screen.dart';
 import 'widgets/style_sheet.dart';
@@ -42,10 +43,16 @@ class EpubScreen extends StatefulWidget {
 }
 
 class _EpubScreenState extends State<EpubScreen> {
-  late PageController _pageController;
+  final ItemScrollController itemScrollController = ItemScrollController();
+  final ScrollOffsetController scrollOffsetController =
+      ScrollOffsetController();
+  final ItemPositionsListener itemPositionsListener =
+      ItemPositionsListener.create();
+  final ScrollOffsetListener scrollOffsetListener =
+      ScrollOffsetListener.create();
+
   String _bookName = '';
   bool _webViewIsScrolling = true;
-  WebViewController? _webViewController;
   PageHelper pageHelper = PageHelper();
   double currentPage = 0;
   bool isSliderVisible = true;
@@ -76,7 +83,7 @@ class _EpubScreenState extends State<EpubScreen> {
   void _loadEpubFromBookmark() {
     final int bookmarkPageNumber =
         int.tryParse(widget.referenceModel?.navIndex ?? '') ?? 0;
-    _pageController.jumpToPage(bookmarkPageNumber);
+    // _pageController.jumpToPage(bookmarkPageNumber);
     _bookPath = widget.referenceModel!.bookPath;
     _loadAndParseEpub(bookPath: _bookPath!);
   }
@@ -108,7 +115,7 @@ class _EpubScreenState extends State<EpubScreen> {
   void dispose() {
     final pageHelper = PageHelper();
     pageHelper.saveBookData(widget.catModel!.bookPath!, currentPage);
-    _pageController.dispose();
+    // _pageController.dispose();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: SystemUiOverlay.values);
     super.dispose();
@@ -120,7 +127,7 @@ class _EpubScreenState extends State<EpubScreen> {
     });
   }
 
-  void _changeFontSize(FontSize fontSize) {
+  void _changeFontSize(FontSizeCustom fontSize) {
     // _webViewController
     //     ?.evaluateJavascript('changeFontSize("${fontSize.name}")');
   }
@@ -139,7 +146,6 @@ class _EpubScreenState extends State<EpubScreen> {
   void checkIfNoScroll() {
     // _webViewController?.evaluateJavascript('checkIfNoScroll()');
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -272,11 +278,17 @@ class _EpubScreenState extends State<EpubScreen> {
                             'bookmark added successfully ${state.addStatus.toString()}')));
                   } else if (state is PageChangedState) {
                     currentPage = state.newPage.toDouble();
-                    _pageController.jumpToPage(state.newPage);
+                    itemScrollController.scrollTo(
+                        index: state.newPage,
+                        duration: Duration(milliseconds: 400),
+                        curve: Curves.easeInOutCubicEmphasized);
                   } else if (state is LastPageSeenChangedState) {
                     currentPage = state.page;
                   } else if (state is EpubPageLoadedState) {
-                    _pageController.jumpToPage(state.spineNumber!);
+                    // itemScrollController.scrollTo(
+                    //     index: state.spineNumber!,
+                    //     duration: Duration(seconds: 2),
+                    //     curve: Curves.easeInOutCubic);
                   } else if (state is TocLoadedState) {
                     tocList = state.tocTreeList;
                   }
@@ -285,11 +297,15 @@ class _EpubScreenState extends State<EpubScreen> {
                   if (state is EpubContentLoadedState) {
                     var allPagesCount = state.content.length.toDouble();
                     if (state.pageIndex != null) {
-                      _pageController =
-                          PageController(initialPage: state.pageIndex!.toInt());
+                      // itemScrollController.scrollTo(
+                      //     index: state.pageIndex!.toInt(),
+                      //     duration: Duration(seconds: 2),
+                      //     curve: Curves.easeInOutCubic);
                     } else {
-                      _pageController =
-                          PageController(initialPage: currentPage.toInt());
+                      // itemScrollController.scrollTo(
+                      //     index: currentPage.toInt(),
+                      //     duration: Duration(seconds: 2),
+                      //     curve: Curves.easeInOutCubic);
                     }
 
                     return Row(
@@ -298,23 +314,47 @@ class _EpubScreenState extends State<EpubScreen> {
                           child: Column(
                             children: [
                               Expanded(
-                                child: PageView.builder(
-                                  controller: _pageController,
-                                  scrollDirection: Axis.vertical,
-                                  itemCount: state.content.length,
-                                  // physics: _webViewIsScrolling
-                                  //     ? const NeverScrollableScrollPhysics()
-                                  //     : const AlwaysScrollableScrollPhysics(),
-                                  itemBuilder: (context, index) {
-                                    currentPage = index.toDouble();
-                                    final epubCubit = BlocProvider.of<EpubCubit>(context);
-                                    return CustomWebView(
-                                        content: state.content[index], epubCubit: epubCubit);
-                                  },
-                                  onPageChanged: (index) {
-                                    isBookmarked = false;
-                                  },
-                                ),
+                                child: ScrollablePositionedList.builder(
+                                    itemCount: state.content.length,
+                                    itemScrollController: itemScrollController,
+                                    scrollOffsetController:
+                                        scrollOffsetController,
+                                    itemPositionsListener:
+                                        itemPositionsListener,
+                                    scrollOffsetListener: scrollOffsetListener,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      // return Text(state.content[index]);
+                                      return Padding(
+                                        padding: const EdgeInsets.all(20.0),
+                                        child: Container(
+                                          color: Colors.white,
+                                          child: SingleChildScrollView(
+                                            child: Html(
+                                              data: state.content[index],
+                                              style: {
+                                                "body": Style(
+                                                    textAlign:
+                                                        TextAlign.justify,
+                                                    direction:
+                                                        TextDirection.rtl,
+                                                    fontSize: FontSize.larger, fontFamily: 'font1'),
+                                                "h1,h2,h3": Style(
+                                                    textAlign:
+                                                    TextAlign.justify,
+                                                    direction:
+                                                    TextDirection.rtl,
+                                                    padding: HtmlPaddings.only(top: 30),
+                                                    fontSize: FontSize.xLarge,
+                                                    fontWeight: FontWeight.bold, 
+                                                    fontFamily: 'font3'),
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                      ;
+                                    }),
                               ),
                               if (isSliderVisible)
                                 Row(

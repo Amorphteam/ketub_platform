@@ -91,7 +91,7 @@ class EpubCubit extends Cubit<EpubState> {
 
 
   //TODO: REFACTOR AND RENAME
-  void changeFontSize(FontSize fontSize) {
+  void changeFontSize(FontSizeCustom fontSize) {
     styleHelper.changeFontSize(fontSize);
     emit(FontSizeChangedState(fontSize: fontSize));
     _saveStyleHelperToPreferences(); // Save StyleHelper when it changes

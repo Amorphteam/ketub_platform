@@ -1,4 +1,4 @@
-enum FontSize{
+enum FontSizeCustom{
   smallFontSize,
   normalFontSize,
   largeFontSize,

@@ -35,7 +35,7 @@ class EpubTitleLoadedState extends EpubState {
 
 //TODO: REFACTOR AND RENAME
 class FontSizeChangedState extends EpubState {
-  final FontSize fontSize;
+  final FontSizeCustom fontSize;
   FontSizeChangedState({required this.fontSize});
 }
 

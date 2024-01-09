@@ -42,18 +42,18 @@ class _StyleSheetState extends State<StyleSheet> {
       _fontSizeSliderValue = newValue;
     });
 
-    FontSize fontSize;
+    FontSizeCustom fontSize;
 
     if (newValue <= 0.2) {
-      fontSize = FontSize.smallFontSize;
+      fontSize = FontSizeCustom.smallFontSize;
     } else if (newValue <= 0.3) {
-      fontSize = FontSize.normalFontSize;
+      fontSize = FontSizeCustom.normalFontSize;
     } else if (newValue <= 0.5) {
-      fontSize = FontSize.largeFontSize;
+      fontSize = FontSizeCustom.largeFontSize;
     } else if (newValue <= 0.8) {
-      fontSize = FontSize.xlargeFontSize;
+      fontSize = FontSizeCustom.xlargeFontSize;
     } else {
-      fontSize = FontSize.xxlargeFontSize;
+      fontSize = FontSizeCustom.xxlargeFontSize;
     }
     widget.epubCubit.changeFontSize(fontSize);
   }
