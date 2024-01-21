@@ -6,12 +6,12 @@ import 'package:ketub_platform/utils/audio_manager.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await AudioManager.init();
   await JustAudioBackground.init(
     androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
     androidNotificationChannelName: 'Audio playback',
     androidNotificationOngoing: true,
   );
+  await AudioManager.init();
   runApp(const MyApp());
 }
 

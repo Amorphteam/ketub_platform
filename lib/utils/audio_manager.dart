@@ -1,8 +1,9 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:rxdart/rxdart.dart';
-
 import 'common.dart';
 
 
@@ -12,7 +13,9 @@ class AudioManager {
 
   static Future<void> init() async {
     final session = await AudioSession.instance;
-    await session.configure(const AudioSessionConfiguration.music());
+    await session.configure(const AudioSessionConfiguration.speech());
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor: Colors.black));
+
     try {
       await player.setAudioSource(_playlist);
     } catch (e) {
