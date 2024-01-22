@@ -2,13 +2,14 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ketub_platform/models/search_model.dart';
+import 'package:ketub_platform/screens/epub_viewer/cubit/epub_viewer_cubit.dart';
 import 'package:ketub_platform/utils/epub_helper.dart';
 import '../cubit/epub_cubit.dart';
 
 class InternalSearchScreen extends StatefulWidget {
-  final EpubCubit epubCubit;
+  final EpubViewerCubit epubViewerCubit;
 
-  const InternalSearchScreen({Key? key, required this.epubCubit}) : super(key: key);
+  const InternalSearchScreen({Key? key, required this.epubViewerCubit}) : super(key: key);
 
   @override
   State<InternalSearchScreen> createState() => _InternalSearchScreenState();
@@ -83,17 +84,17 @@ class _InternalSearchScreenState extends State<InternalSearchScreen> {
 _handleSearch(String sw, StreamController<String> bookNameSearching){
     if (shouldStartSearch()) {
       // Start the search only if the search word is longer than 3 letters
-      final stream = widget.epubCubit.searchSingleBook(sw, bookNameSearching);
+      // final stream = widget.epubCubit.searchSingleBook(sw, bookNameSearching);
       setState(() {
         searchResults = []; // Clear previous search results
       });
 
-      stream.listen((List<SearchModel> results) {
-        setState(() {
-          searchResults = results;
-          // Update the search results
-        });
-      });
+      // stream.listen((List<SearchModel> results) {
+      //   setState(() {
+      //     searchResults = results;
+      //     // Update the search results
+      //   });
+      // });
 
     }
 

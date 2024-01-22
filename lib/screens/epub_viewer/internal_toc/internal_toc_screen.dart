@@ -1,6 +1,7 @@
 import 'package:epub_parser/epub_parser.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ketub_platform/screens/epub_viewer/cubit/epub_viewer_cubit.dart';
 import '../cubit/epub_cubit.dart';
 import '../epub_screen.dart';
 import 'widgets/internal_toc_tree_List_widget.dart';
@@ -9,9 +10,9 @@ import 'widgets/internal_toc_tree_List_widget.dart';
 class InternalToc extends StatefulWidget {
   final List<EpubChapter> tocList;
   final DataCallback onDataTransfer;
-  final EpubCubit epubCubit;
+  final EpubViewerCubit epubViewerCubit;
 
-  const InternalToc({Key? key, required this.tocList, required this.onDataTransfer, required this.epubCubit}) : super(key: key);
+  const InternalToc({Key? key, required this.tocList, required this.onDataTransfer, required this.epubViewerCubit}) : super(key: key);
 
   @override
   State<InternalToc> createState() => _InternalTocState();
@@ -60,10 +61,10 @@ class _InternalTocState extends State<InternalToc> {
   }
 
   _loadToc(String? query) {
-    final filteredList = widget.epubCubit.filterToc(query: query);
-    setState(() {
-      _filteredToc = filteredList;
-    });
+    // final filteredList = widget.epubCubit.filterToc(query: query);
+    // setState(() {
+    //   _filteredToc = filteredList;
+    // });
 
   }
 }

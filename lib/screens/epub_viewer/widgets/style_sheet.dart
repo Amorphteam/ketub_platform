@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:ketub_platform/models/style_model.dart';
+import 'package:ketub_platform/screens/epub_viewer/cubit/epub_viewer_cubit.dart';
 import '../cubit/epub_cubit.dart';
 
 class StyleSheet extends StatefulWidget {
-  final EpubCubit epubCubit;
-  const StyleSheet({super.key, required this.epubCubit});
+  final EpubViewerCubit epubViewerCubit;
+  const StyleSheet({super.key, required this.epubViewerCubit});
 
   @override
   State<StyleSheet> createState() => _StyleSheetState();
@@ -29,7 +30,7 @@ class _StyleSheetState extends State<StyleSheet> {
       fontFamily = FontFamily.font4;
     }
 
-    widget.epubCubit.changeFontFamily(fontFamily);
+    widget.epubViewerCubit.changeStyle(fontFamily: fontFamily);
 
   }
 
@@ -54,7 +55,7 @@ class _StyleSheetState extends State<StyleSheet> {
     } else {
       fontSize = FontSizeCustom.xxlargeFontSize;
     }
-    widget.epubCubit.changeFontSize(fontSize);
+    widget.epubViewerCubit.changeStyle(fontSize: fontSize);
   }
 
   double _lineHeightSliderValue = 0.5; // Initialize with a default value
@@ -75,7 +76,7 @@ class _StyleSheetState extends State<StyleSheet> {
     } else {
       lineSpace = LineSpace.xxlargeLineSpace;
     }
-    widget.epubCubit.changeLineSpace(lineSpace);
+    widget.epubViewerCubit.changeStyle(lineSpace: lineSpace);
 
   }
 

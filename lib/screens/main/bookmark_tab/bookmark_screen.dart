@@ -8,7 +8,6 @@ import '../../epub_viewer/cubit/epub_cubit.dart';
 import 'cubit/bookmark_cubit.dart';
 import 'widgets/reference_list_widget.dart';
 
-
 class BookmarkScreen extends StatefulWidget {
   const BookmarkScreen();
 
@@ -44,26 +43,17 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
         ),
         BlocConsumer<BookmarkCubit, BookmarkState>(
           listener: (context, state) {
-            if (state is BookmarkAddedState) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Bookmark Added')),
-              );
-            } else if (state is BookmarkDeletedState) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Bookmark Deleted')),
-              );
-            } else if (state is BookmarkErrorState) {
+            if (state is BookmarkErrorState) {
               ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(state.error.toString())));
-            } else if (state is BookmarkTappedState){
+            } else if (state is BookmarkTappedState) {
               openEpub(context: context, reference: state.item);
             }
           },
           builder: (context, state) {
             if (state is AllBookmarksLoadedState) {
               return Flexible(
-                child:
-                    ReferenceListWidget(referenceList: state.bookmarks),
+                child: ReferenceListWidget(referenceList: state.bookmarks),
               );
             } else if (state is BookmarkLoadingState) {
               return CircularProgressIndicator();
@@ -72,13 +62,13 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
             }
           },
           buildWhen: (previousState, state) {
-            return state is AllBookmarksLoadedState || state is BookmarkLoadingState;
+            return state is AllBookmarksLoadedState ||
+                state is BookmarkLoadingState;
           },
         )
       ],
     );
   }
-
 
   void _loadAllBookmarks() {
     BlocProvider.of<BookmarkCubit>(context).loadAllBookmarks();
@@ -87,6 +77,4 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
   void _filterList(String query) {
     BlocProvider.of<BookmarkCubit>(context).filterBookmarks(query);
   }
-
-
 }

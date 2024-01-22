@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 import '../models/style_model.dart';
 
 class StyleHelper {
@@ -15,6 +17,7 @@ class StyleHelper {
   factory StyleHelper() {
     return _instance;
   }
+
 
   // Methods to change properties
   void changeFontSize(FontSizeCustom newSize) {

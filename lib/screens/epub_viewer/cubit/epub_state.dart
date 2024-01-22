@@ -1,79 +1,29 @@
 part of 'epub_cubit.dart';
 
 abstract class EpubState {}
+class EpubInitState extends EpubState {}
 
-class EpubInitState extends EpubState{}
-class EpubLoadingState extends EpubState{}
+//
+//
+//
+//
+//
+//
+// class BookmarkAddedState extends EpubState {
+//   final int addStatus;
+//   BookmarkAddedState(this.addStatus);
+// }
+//
+//
+// class TocLoadingState extends EpubState {}
+//
+// class TocLoadedState extends EpubState{
+//   final List<EpubChapter> tocTreeList;
+//   TocLoadedState(this.tocTreeList);
+// }
+//
+// class TocItemTappedState extends EpubState{
+//   final EpubChapter toc;
+//   TocItemTappedState(this.toc);
+// }
 
-class EpubErrorState extends EpubState{
-  final String error;
-  EpubErrorState({required this.error});
-}
-
-
-class EpubContentWithCssLoadedState extends EpubState{
-  final String content;
-  EpubContentWithCssLoadedState({required this.content});
-}
-class EpubContentLoadedState extends EpubState {
-  final List<String> content;
-  final int? pageIndex;
-  EpubContentLoadedState({required this.content, this.pageIndex});
-}
-
-class EpubPageLoadedState extends EpubState {
-  final int? spineNumber;
-  EpubPageLoadedState({ this.spineNumber});
-}
-
-class EpubTitleLoadedState extends EpubState {
-  final String bookTitle;
-  EpubTitleLoadedState({required this.bookTitle});
-}
-
-
-
-//TODO: REFACTOR AND RENAME
-class FontSizeChangedState extends EpubState {
-  final FontSizeCustom fontSize;
-  FontSizeChangedState({required this.fontSize});
-}
-
-
-class LineSpaceChangedState extends EpubState {
-  final LineSpace lineSpace;
-  LineSpaceChangedState({required this.lineSpace});
-}
-
-class FontFamilyChangedState extends EpubState {
-  final FontFamily fontFamily;
-  FontFamilyChangedState({required this.fontFamily});
-}
-
-class BookmarkAddedState extends EpubState {
-  final int addStatus;
-  BookmarkAddedState(this.addStatus);
-}
-
-
-class TocLoadingState extends EpubState {}
-
-class ErrorState extends EpubState {
-  final Exception error;
-  ErrorState(this.error);
-}
-
-class TocLoadedState extends EpubState{
-  final List<EpubChapter> tocTreeList;
-  TocLoadedState(this.tocTreeList);
-}
-
-class TocItemTappedState extends EpubState{
-  final EpubChapter toc;
-  TocItemTappedState(this.toc);
-}
-
-class LastPageSeenChangedState extends EpubState {
-  final double page;
-  LastPageSeenChangedState({required this.page});
-}

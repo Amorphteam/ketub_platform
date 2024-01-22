@@ -1,18 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ketub_platform/screens/epub_viewer/cubit/epub_viewer_cubit.dart';
 
 import '../cubit/epub_cubit.dart';
 
 class VerticalSeekBar extends StatefulWidget {
   double currentPage;
   double allPagesCount;
-  EpubCubit epubCubit;
+  EpubViewerCubit epubViewerCubit;
   String bookPath;
 
   VerticalSeekBar(
       {required this.currentPage,
         required this.allPagesCount,
-        required this.epubCubit,
+        required this.epubViewerCubit,
         required this.bookPath,
         Key? key})
       : super(key: key);
@@ -37,7 +38,7 @@ class _VerticalSeekBarState extends State<VerticalSeekBar> {
       child: Slider(
         value: _currentValue,
         onChangeEnd: (newValue) {
-          widget.epubCubit.changePage(newValue.toInt());
+          widget.epubViewerCubit.jumpToPage(newPage: newValue.toInt());
         },
         onChanged: (newValue) {
           setState(() {

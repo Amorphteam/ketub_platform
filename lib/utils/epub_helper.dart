@@ -8,8 +8,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ketub_platform/models/category_model.dart';
 import 'package:ketub_platform/models/reference_model.dart';
 import 'package:ketub_platform/models/tree_toc_model.dart';
+import 'package:ketub_platform/screens/epub_viewer/cubit/epub_viewer_cubit.dart';
+import 'package:ketub_platform/screens/epub_viewer/epub_screen.dart';
 import 'package:ketub_platform/screens/html_viewer/cubit/html_viewer_cubit.dart';
 import 'package:ketub_platform/screens/html_viewer/html_viewer_screen.dart';
+import 'package:ketub_platform/utils/page_helper.dart';
 
 
 import '../models/book_model.dart';
@@ -28,8 +31,8 @@ void openEpub({
     MaterialPageRoute(
       builder: (context) =>
           BlocProvider(
-            create: (context) => HtmlViewerCubit(),
-            child: const HtmlViewerScreen(),
+            create: (context) => EpubViewerCubit(),
+            child: EpubScreen(catModel: cat,referenceModel: reference, searchModel: search, tocModel: toc),
           ),
     ),
   );
@@ -66,6 +69,15 @@ String embedImagesInHtmlContent(EpubTextContentFile htmlFile, Map<String, EpubBy
   }
 
   return htmlContent;
+}
+
+Future<double?> getLastPageNumberForBook({required String assetPath}) async {
+  final pageHelper = PageHelper();
+  final parts = assetPath.split('/'); // Split the string by '/'
+  final bookAddress = parts.last;
+  final lastPageNumber =
+  await pageHelper.getLastPageNumberForBook(bookAddress);
+  return lastPageNumber;
 }
 
 String? convertImageToBase64(EpubByteContentFile? imageFile) {
