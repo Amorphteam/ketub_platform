@@ -226,35 +226,25 @@ class _EpubScreenState extends State<EpubScreen> {
                     }
                   },
                 ),
-                BlocConsumer<EpubCubit, EpubState>(
-                  listener: (context, state) {
-                    if (state is ErrorState) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(state.error.toString())));
-                    } else if (state is TocItemTappedState) {}
-                  },
-                  builder: (context, state) {
-                    return IconButton(
-                      icon: const Icon(Icons.description_outlined),
-                      onPressed: () {
-                        final epubCubit = BlocProvider.of<EpubCubit>(context);
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => InternalToc(
-                              tocList: tocList!,
-                              onDataTransfer: (value) {
-                                setState(() {
-                                  _chapter = value;
-                                });
-                              },
-                              epubCubit: epubCubit,
-                            ),
-                          ),
-                        );
-                      },
+                IconButton(
+                  icon: const Icon(Icons.description_outlined),
+                  onPressed: () {
+                    final epubCubit = BlocProvider.of<EpubCubit>(context);
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => InternalToc(
+                          tocList: tocList!,
+                          onDataTransfer: (value) {
+                            setState(() {
+                              _chapter = value;
+                            });
+                          },
+                          epubCubit: epubCubit,
+                        ),
+                      ),
                     );
                   },
-                ),
+                )
               ],
             ),
           Align(
@@ -276,21 +266,20 @@ class _EpubScreenState extends State<EpubScreen> {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
                             'bookmark added successfully ${state.addStatus.toString()}')));
-                  } else if (state is PageChangedState) {
-                    currentPage = state.newPage.toDouble();
+                  } else if (state is EpubPageLoadedState) {
+                    currentPage = state.spineNumber!.toDouble();
                     itemScrollController.scrollTo(
-                        index: state.newPage,
-                        duration: Duration(milliseconds: 400),
+                        index: state.spineNumber!,
+                        duration: const Duration(milliseconds: 400),
                         curve: Curves.easeInOutCubicEmphasized);
                   } else if (state is LastPageSeenChangedState) {
+                    debugPrint('last page is ${state.page}');
+                    itemScrollController.scrollTo(index: state.page.toInt(), duration: const Duration(microseconds: 400));
                     currentPage = state.page;
-                  } else if (state is EpubPageLoadedState) {
-                    // itemScrollController.scrollTo(
-                    //     index: state.spineNumber!,
-                    //     duration: Duration(seconds: 2),
-                    //     curve: Curves.easeInOutCubic);
                   } else if (state is TocLoadedState) {
                     tocList = state.tocTreeList;
+                  } else if (state is TocItemTappedState) {
+
                   }
                 },
                 builder: (context, state) {
@@ -326,27 +315,29 @@ class _EpubScreenState extends State<EpubScreen> {
                                         (BuildContext context, int index) {
                                       // return Text(state.content[index]);
                                       return Padding(
-                                        padding: const EdgeInsets.all(20.0),
+                                        padding: const EdgeInsets.only(top: 20.0),
                                         child: Container(
                                           color: Colors.white,
                                           child: SingleChildScrollView(
                                             child: Html(
                                               data: state.content[index],
                                               style: {
-                                                "body": Style(
+                                                "html": Style(
                                                     textAlign:
                                                         TextAlign.justify,
                                                     direction:
                                                         TextDirection.rtl,
-                                                    fontSize: FontSize.larger, fontFamily: 'font1'),
+                                                    fontSize: FontSize.large,
+                                                    fontFamily: 'font1'),
                                                 "h1,h2,h3": Style(
                                                     textAlign:
-                                                    TextAlign.justify,
+                                                        TextAlign.justify,
                                                     direction:
-                                                    TextDirection.rtl,
-                                                    padding: HtmlPaddings.only(top: 30),
+                                                        TextDirection.rtl,
+                                                    padding: HtmlPaddings.only(
+                                                        top: 30),
                                                     fontSize: FontSize.xLarge,
-                                                    fontWeight: FontWeight.bold, 
+                                                    fontWeight: FontWeight.bold,
                                                     fontFamily: 'font3'),
                                               },
                                             ),

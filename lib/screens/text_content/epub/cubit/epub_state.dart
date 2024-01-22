@@ -55,11 +55,6 @@ class BookmarkAddedState extends EpubState {
   BookmarkAddedState(this.addStatus);
 }
 
-class PageChangedState extends EpubState {
-  final int newPage;
-
-  PageChangedState(this.newPage);
-}
 
 class TocLoadingState extends EpubState {}
 

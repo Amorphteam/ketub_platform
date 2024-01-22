@@ -236,7 +236,7 @@ class EpubCubit extends Cubit<EpubState> {
   }
 
   void changePage(int newPage) {
-    emit(PageChangedState(newPage));
+    emit(EpubPageLoadedState(spineNumber: newPage));
   }
 
   Future<void> loadModifiedContent(String content) async {
