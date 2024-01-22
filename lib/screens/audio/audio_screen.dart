@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:ketub_platform/screens/audio/cubit/audio_state.dart';
 import 'package:ketub_platform/screens/audio/widgets/audio_player_screen.dart';
 import 'package:ketub_platform/utils/audio_manager.dart';
 import 'package:ketub_platform/utils/common.dart';
@@ -18,7 +19,9 @@ class AudioScreen extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: BlocProvider(
-        create: (context) => AudioCubit()..loadAudio(49581),
+        create: (context) =>
+        AudioCubit()
+          ..loadAudio(49581),
         child: AudioView(),
       ),
     );
@@ -33,27 +36,28 @@ class AudioView extends StatefulWidget {
 class _AudioViewState extends State<AudioView> {
 
 
-
   @override
   Widget build(BuildContext context) {
     return BlocListener<AudioCubit, AudioState>(
       listener: (context, state) {
-        if (state is AudioErrorState) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error: ${state.message}')),
-          );
-        }
+        state.maybeWhen(
+            error: (message) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Error: $message')),
+              );
+            },
+            orElse: () {});
       },
       child: Scaffold(
         body: SafeArea(
           child: BlocBuilder<AudioCubit, AudioState>(
             builder: (context, state) {
-              if (state is AudioLoadingState) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (state is AudioLoadedState) {
-                return _buildAudioPlayerUI();
-              }
-              return const Center(child: Text('Something went wrong!'));
+              return state.when(
+                  initial: () => const Center(child: Text('Initial State')),
+                  loading: () => const Center(child: CircularProgressIndicator()),
+                  loaded: (audioModel) => _buildAudioPlayerUI(),
+                  error: (message) => Center(child: Text('Error: $message'))
+              );
             },
           ),
         ),
@@ -83,15 +87,20 @@ class _AudioViewState extends State<AudioView> {
                       padding: const EdgeInsets.all(8.0),
                       child: Center(
                           child: Image.network(metadata.artUri.toString(),
-                            errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace){
-                              return Image.asset('assets/images/book_sample.png');
+                            errorBuilder: (BuildContext context,
+                                Object exception, StackTrace? stackTrace) {
+                              return Image.asset(
+                                  'assets/images/book_sample.png');
                             },
                           )
 
                       ),
                     ),
                   ),
-                  Text(metadata.album!, style: Theme.of(context).textTheme.titleLarge),
+                  Text(metadata.album!, style: Theme
+                      .of(context)
+                      .textTheme
+                      .titleLarge),
                   Text(metadata.title),
                 ],
               );
@@ -135,8 +144,8 @@ class _AudioViewState extends State<AudioView> {
                   icon: icons[index],
                   onPressed: () {
                     AudioManager.player.setLoopMode(cycleModes[
-                        (cycleModes.indexOf(loopMode) + 1) %
-                            cycleModes.length]);
+                    (cycleModes.indexOf(loopMode) + 1) %
+                        cycleModes.length]);
                   },
                 );
               },
@@ -144,7 +153,10 @@ class _AudioViewState extends State<AudioView> {
             Expanded(
               child: Text(
                 "Playlist",
-                style: Theme.of(context).textTheme.titleLarge,
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .titleLarge,
                 textAlign: TextAlign.center,
               ),
             ),

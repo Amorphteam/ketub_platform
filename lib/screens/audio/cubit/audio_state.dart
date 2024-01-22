@@ -1,20 +1,15 @@
-part of 'audio_cubit.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:ketub_platform/models/audio_model.dart';
 
+part 'audio_state.freezed.dart';
 
-abstract class AudioState {}
+@freezed
+abstract class AudioState with _$AudioState {
+  const factory AudioState.initial() = AudioInitialState;
 
-class AudioInitialState extends AudioState {}
+  const factory AudioState.loading() = AudioLoadingState;
 
-class AudioLoadingState extends AudioState {}
+  const factory AudioState.loaded(AudioModel audioModel) = AudioLoadedState;
 
-class AudioLoadedState extends AudioState {
-  final AudioModel audioModel;
-  AudioLoadedState({required this.audioModel});
+  const factory AudioState.error(String message) = AudioErrorState;
 }
-
-class AudioErrorState extends AudioState {
-  final String message;
-  AudioErrorState({required this.message});
-}
-
-

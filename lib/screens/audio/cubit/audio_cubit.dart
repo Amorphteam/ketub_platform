@@ -1,19 +1,19 @@
 
+import 'dart:math';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
-import 'package:ketub_platform/models/audio_model.dart';
 import 'package:ketub_platform/repositories/audio_online_repository.dart';
 import 'package:ketub_platform/utils/audio_manager.dart';
 
-part 'audio_state.dart';
+import 'audio_state.dart';
 
 class AudioCubit extends Cubit<AudioState> {
   static final AudioCubit _singleton = AudioCubit._internal();
 
   factory AudioCubit() => _singleton;
 
-  AudioCubit._internal() : super(AudioInitialState());
+  AudioCubit._internal() : super(const AudioState.initial());
 
   bool _isLoaded = false;
   void loadAudio(int tag) async {
@@ -21,8 +21,13 @@ class AudioCubit extends Cubit<AudioState> {
     _isLoaded = true;
 
     try {
-      emit(AudioLoadingState());
+      emit(const AudioState.loading());
       final audioModel = await AudioOnlineRepository().getArticles(tag);
+      print("Parsed AudioModel: $audioModel");
+      if (audioModel.mediaDownloadLink == null || audioModel.coverImage == null || audioModel.category?.name == null) {
+        emit(AudioState.error(e.toString()));
+        return;
+      }
       AudioSource source = AudioSource.uri(
         Uri.parse(audioModel.mediaDownloadLink!),
         tag: MediaItem(
@@ -34,9 +39,9 @@ class AudioCubit extends Cubit<AudioState> {
       );
 
       AudioManager.updatePlaylist([source]);
-      emit(AudioLoadedState(audioModel: audioModel));
+      emit(AudioState.loaded(audioModel));
     } catch (e) {
-      emit(AudioErrorState(message: e.toString()));
+      emit(AudioState.error(e.toString()));
     }
   }
 

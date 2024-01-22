@@ -12,9 +12,12 @@ class AudioOnlineRepository{
 
     if (response.statusCode == 200) {
       final jsonMap = json.decode(response.body);
+      print("API Response: $jsonMap");
       return AudioModel.fromJson(jsonMap);
     } else {
       throw Exception('Failed to fetch data');
     }
+
+
   }
 }
