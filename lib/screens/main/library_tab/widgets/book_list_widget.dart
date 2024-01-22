@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ketub_platform/models/book_model.dart';
-import 'package:ketub_platform/models/category_model.dart';
-import 'package:ketub_platform/screens/text_content/widgets/custom_webview.dart';
-import '../../../../repositories/articles_online_repository.dart';
 import '../cubit/library_cubit.dart';
 
 class BookListWidget extends StatefulWidget {
@@ -30,8 +27,8 @@ class _BookListWidgetState extends State<BookListWidget> {
         BookModel bookItem = widget.bookList[index];
         return GestureDetector(
           onTap: () {
-            BlocProvider.of<LibraryCubit>(context).openEpub(widget.bookList[index].id!);
-
+            BlocProvider.of<LibraryCubit>(context).openEpub(
+                widget.bookList[index].id!);
           },
           onDoubleTap: _handleDoubleTap,
           child: Column(
@@ -43,7 +40,8 @@ class _BookListWidgetState extends State<BookListWidget> {
                     borderRadius: BorderRadius.circular(10),
                     image: DecorationImage(
                       image: AssetImage(
-                        'assets/images/${bookItem.bookCover ?? 'book_sample.png'}',
+                        'assets/images/${bookItem.bookCover ??
+                            'book_sample.png'}',
                       ),
                       fit: BoxFit.contain,
                     ),
@@ -63,28 +61,28 @@ class _BookListWidgetState extends State<BookListWidget> {
         );
       },
     );
-
   }
 
   Future<void> _handleDoubleTap() async {
-    try {
-      final article = await ArticleOnlineRepository().getArticles(44621);
+    //   try {
+    //     final article = await ArticleOnlineRepository().getArticles(44621);
+    //
+    //     // Check if the widget is still in the widget tree
+    //     if (!mounted) return;
+    //
+    //
+    //     Navigator.push(
+    //       context,
+    //         MaterialPageRoute(
+    //           // builder: (context) => CustomWebView(content: "<html><head></head><body> ${article.description} </body></html>")));
+    //   } catch (error) {
+    //     // Handle error
+    //     if (!mounted) return;
+    //     ScaffoldMessenger.of(context).showSnackBar(
+    //         SnackBar(content: Text(error.toString()))
+    //     );
+    //   }
+    // }
 
-      // Check if the widget is still in the widget tree
-      if (!mounted) return;
-
-
-      Navigator.push(
-        context,
-          MaterialPageRoute(
-            builder: (context) => CustomWebView(content: "<html><head></head><body> ${article.description} </body></html>")));
-    } catch (error) {
-      // Handle error
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(error.toString()))
-      );
-    }
   }
-
 }

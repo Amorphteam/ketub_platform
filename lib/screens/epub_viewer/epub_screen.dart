@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:math';
 import 'package:epub_parser/epub_parser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,12 +8,10 @@ import 'package:ketub_platform/models/reference_model.dart';
 import 'package:ketub_platform/models/search_model.dart';
 import 'package:ketub_platform/models/style_model.dart';
 import 'package:ketub_platform/models/tree_toc_model.dart';
-import 'package:ketub_platform/screens/text_content/epub/cubit/epub_cubit.dart';
-import 'package:ketub_platform/screens/text_content/widgets/custom_webview.dart';
+import 'package:ketub_platform/screens/epub_viewer/widgets/vertical_seekbar.dart';
 import 'package:ketub_platform/utils/page_helper.dart';
-import 'package:ketub_platform/utils/style_handler.dart';
-import 'package:ketub_platform/utils/style_helper.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'cubit/epub_cubit.dart';
 import 'internal_search/internal_search_screen.dart';
 import 'internal_toc/internal_toc_screen.dart';
 import 'widgets/style_sheet.dart';
@@ -418,50 +414,3 @@ class _EpubScreenState extends State<EpubScreen> {
   }
 }
 
-class VerticalSeekBar extends StatefulWidget {
-  double currentPage;
-  double allPagesCount;
-  EpubCubit epubCubit;
-  String bookPath;
-
-  VerticalSeekBar(
-      {required this.currentPage,
-      required this.allPagesCount,
-      required this.epubCubit,
-      required this.bookPath,
-      Key? key})
-      : super(key: key);
-
-  @override
-  _VerticalSeekBarState createState() => _VerticalSeekBarState();
-}
-
-class _VerticalSeekBarState extends State<VerticalSeekBar> {
-  double _currentValue = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _currentValue = widget.currentPage;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return RotatedBox(
-      quarterTurns: 2,
-      child: Slider(
-        value: _currentValue,
-        onChangeEnd: (newValue) {
-          widget.epubCubit.changePage(newValue.toInt());
-        },
-        onChanged: (newValue) {
-          setState(() {
-            _currentValue = newValue;
-          });
-        },
-        max: widget.allPagesCount,
-        min: 0,
-      ),
-    );
-  }
-}
