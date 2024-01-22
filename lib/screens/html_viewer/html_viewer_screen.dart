@@ -26,7 +26,7 @@ class _HtmlViewerScreenState extends State<HtmlViewerScreen> {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            title: Text(_getAppBarTitle(state), style: const TextStyle(fontFamily: 'font4'),),
+            title: Text(_getAppBarTitle(state)),
           ),
           body: Center(
             child: _buildBodyContent(state),
