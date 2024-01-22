@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/parser.dart';
 import 'package:ketub_platform/screens/html_viewer/cubit/html_viewer_cubit.dart';
 
 import 'cubit/html_viewer_state.dart';
@@ -20,25 +22,87 @@ class _HtmlViewerScreenState extends State<HtmlViewerScreen> {
     super.initState();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HtmlViewerCubit, HtmlViewerState>(
-      builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(_getAppBarTitle(state)),
+  builder: (context, state) {
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+            expandedHeight: 200.0,
+            floating: false,
+            pinned: true,
+            flexibleSpace: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                var top = constraints.biggest.height;
+                double opacity = (top - kToolbarHeight) / (200.0 - kToolbarHeight);
+                opacity = opacity < 0.17 ? 0 : opacity > 1 ? 1 : opacity;
+
+                debugPrint(opacity.toString());
+                return Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    FlexibleSpaceBar(
+                      background: Image.asset(
+                        'assets/images/banner.png', // Replace with your image asset
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 16,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Opacity(
+                              opacity: opacity, // Apply opacity only to date and icon
+                              child: Row(
+                                children: [
+                                  Text(_getAppBarDate(state), style: Theme.of(context).textTheme.labelLarge,),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: SvgPicture.asset('assets/icons/calendar.svg'),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Text(_getAppBarTitle(state), style: Theme.of(context).textTheme.titleLarge,), // Title remains always visible
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
-          body: Center(
-            child: _buildBodyContent(state),
+          SliverToBoxAdapter(
+            child: Center(
+              child: _buildBodyContent(state),
+            ),
           ),
-        );
-      },
+        ],
+      ),
     );
+  },
+);
   }
 
+  String _getAppBarDate(HtmlViewerState state) {
+    return state.maybeWhen(
+      loaded: (_, __, date) => date.split('T')[0],
+      orElse: () => '',
+    );
+  }
   String _getAppBarTitle(HtmlViewerState state) {
     return state.maybeWhen(
-      loaded: (_, title) => title,
+      loaded: (_, title, __) => title,
       orElse: () => '',
     );
   }
@@ -47,7 +111,7 @@ class _HtmlViewerScreenState extends State<HtmlViewerScreen> {
     return state.when(
       initial: () => const Text('Initial State'),
       loading: () => const CircularProgressIndicator(),
-      loaded: (data, _) => loadHtml(data),
+      loaded: (data, _, __) => loadHtml(data),
       error: (error) => Text(error ?? 'Error'),
     );
   }
@@ -61,15 +125,16 @@ Widget loadHtml(String data) {
         "html": Style(
             textAlign: TextAlign.justify,
             direction: TextDirection.rtl,
+            lineHeight: LineHeight.number(1.5),
             fontSize: FontSize.large,
-            fontFamily: 'font1'),
+            fontFamily: 'tajwal'),
         "h1,h2,h3": Style(
-            textAlign: TextAlign.justify,
+            textAlign: TextAlign.right,
             direction: TextDirection.rtl,
             padding: HtmlPaddings.only(top: 30),
             fontSize: FontSize.xLarge,
             fontWeight: FontWeight.bold,
-            fontFamily: 'font3'),
+            fontFamily: 'tajwal'),
       },
     ),
   );

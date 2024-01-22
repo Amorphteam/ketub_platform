@@ -20,7 +20,8 @@ mixin _$HtmlViewerState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(String htmlContent, String htmlTitle) loaded,
+    required TResult Function(String htmlContent, String htmlTitle, String date)
+        loaded,
     required TResult Function(String? error) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -28,7 +29,8 @@ mixin _$HtmlViewerState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(String htmlContent, String htmlTitle)? loaded,
+    TResult? Function(String htmlContent, String htmlTitle, String date)?
+        loaded,
     TResult? Function(String? error)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -36,7 +38,7 @@ mixin _$HtmlViewerState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(String htmlContent, String htmlTitle)? loaded,
+    TResult Function(String htmlContent, String htmlTitle, String date)? loaded,
     TResult Function(String? error)? error,
     required TResult orElse(),
   }) =>
@@ -126,7 +128,8 @@ class _$InitialImpl implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(String htmlContent, String htmlTitle) loaded,
+    required TResult Function(String htmlContent, String htmlTitle, String date)
+        loaded,
     required TResult Function(String? error) error,
   }) {
     return initial();
@@ -137,7 +140,8 @@ class _$InitialImpl implements _Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(String htmlContent, String htmlTitle)? loaded,
+    TResult? Function(String htmlContent, String htmlTitle, String date)?
+        loaded,
     TResult? Function(String? error)? error,
   }) {
     return initial?.call();
@@ -148,7 +152,7 @@ class _$InitialImpl implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(String htmlContent, String htmlTitle)? loaded,
+    TResult Function(String htmlContent, String htmlTitle, String date)? loaded,
     TResult Function(String? error)? error,
     required TResult orElse(),
   }) {
@@ -240,7 +244,8 @@ class _$LoadingImpl implements _Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(String htmlContent, String htmlTitle) loaded,
+    required TResult Function(String htmlContent, String htmlTitle, String date)
+        loaded,
     required TResult Function(String? error) error,
   }) {
     return loading();
@@ -251,7 +256,8 @@ class _$LoadingImpl implements _Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(String htmlContent, String htmlTitle)? loaded,
+    TResult? Function(String htmlContent, String htmlTitle, String date)?
+        loaded,
     TResult? Function(String? error)? error,
   }) {
     return loading?.call();
@@ -262,7 +268,7 @@ class _$LoadingImpl implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(String htmlContent, String htmlTitle)? loaded,
+    TResult Function(String htmlContent, String htmlTitle, String date)? loaded,
     TResult Function(String? error)? error,
     required TResult orElse(),
   }) {
@@ -320,7 +326,7 @@ abstract class _$$LoadedImplCopyWith<$Res> {
           _$LoadedImpl value, $Res Function(_$LoadedImpl) then) =
       __$$LoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String htmlContent, String htmlTitle});
+  $Res call({String htmlContent, String htmlTitle, String date});
 }
 
 /// @nodoc
@@ -336,6 +342,7 @@ class __$$LoadedImplCopyWithImpl<$Res>
   $Res call({
     Object? htmlContent = null,
     Object? htmlTitle = null,
+    Object? date = null,
   }) {
     return _then(_$LoadedImpl(
       htmlContent: null == htmlContent
@@ -346,6 +353,10 @@ class __$$LoadedImplCopyWithImpl<$Res>
           ? _value.htmlTitle
           : htmlTitle // ignore: cast_nullable_to_non_nullable
               as String,
+      date: null == date
+          ? _value.date
+          : date // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -353,16 +364,19 @@ class __$$LoadedImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$LoadedImpl implements _Loaded {
-  const _$LoadedImpl({required this.htmlContent, required this.htmlTitle});
+  const _$LoadedImpl(
+      {required this.htmlContent, required this.htmlTitle, required this.date});
 
   @override
   final String htmlContent;
   @override
   final String htmlTitle;
+  @override
+  final String date;
 
   @override
   String toString() {
-    return 'HtmlViewerState.loaded(htmlContent: $htmlContent, htmlTitle: $htmlTitle)';
+    return 'HtmlViewerState.loaded(htmlContent: $htmlContent, htmlTitle: $htmlTitle, date: $date)';
   }
 
   @override
@@ -373,11 +387,12 @@ class _$LoadedImpl implements _Loaded {
             (identical(other.htmlContent, htmlContent) ||
                 other.htmlContent == htmlContent) &&
             (identical(other.htmlTitle, htmlTitle) ||
-                other.htmlTitle == htmlTitle));
+                other.htmlTitle == htmlTitle) &&
+            (identical(other.date, date) || other.date == date));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, htmlContent, htmlTitle);
+  int get hashCode => Object.hash(runtimeType, htmlContent, htmlTitle, date);
 
   @JsonKey(ignore: true)
   @override
@@ -390,10 +405,11 @@ class _$LoadedImpl implements _Loaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(String htmlContent, String htmlTitle) loaded,
+    required TResult Function(String htmlContent, String htmlTitle, String date)
+        loaded,
     required TResult Function(String? error) error,
   }) {
-    return loaded(htmlContent, htmlTitle);
+    return loaded(htmlContent, htmlTitle, date);
   }
 
   @override
@@ -401,10 +417,11 @@ class _$LoadedImpl implements _Loaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(String htmlContent, String htmlTitle)? loaded,
+    TResult? Function(String htmlContent, String htmlTitle, String date)?
+        loaded,
     TResult? Function(String? error)? error,
   }) {
-    return loaded?.call(htmlContent, htmlTitle);
+    return loaded?.call(htmlContent, htmlTitle, date);
   }
 
   @override
@@ -412,12 +429,12 @@ class _$LoadedImpl implements _Loaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(String htmlContent, String htmlTitle)? loaded,
+    TResult Function(String htmlContent, String htmlTitle, String date)? loaded,
     TResult Function(String? error)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(htmlContent, htmlTitle);
+      return loaded(htmlContent, htmlTitle, date);
     }
     return orElse();
   }
@@ -463,10 +480,12 @@ class _$LoadedImpl implements _Loaded {
 abstract class _Loaded implements HtmlViewerState {
   const factory _Loaded(
       {required final String htmlContent,
-      required final String htmlTitle}) = _$LoadedImpl;
+      required final String htmlTitle,
+      required final String date}) = _$LoadedImpl;
 
   String get htmlContent;
   String get htmlTitle;
+  String get date;
   @JsonKey(ignore: true)
   _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
@@ -538,7 +557,8 @@ class _$ErrorImpl implements _Error {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(String htmlContent, String htmlTitle) loaded,
+    required TResult Function(String htmlContent, String htmlTitle, String date)
+        loaded,
     required TResult Function(String? error) error,
   }) {
     return error(this.error);
@@ -549,7 +569,8 @@ class _$ErrorImpl implements _Error {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(String htmlContent, String htmlTitle)? loaded,
+    TResult? Function(String htmlContent, String htmlTitle, String date)?
+        loaded,
     TResult? Function(String? error)? error,
   }) {
     return error?.call(this.error);
@@ -560,7 +581,7 @@ class _$ErrorImpl implements _Error {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(String htmlContent, String htmlTitle)? loaded,
+    TResult Function(String htmlContent, String htmlTitle, String date)? loaded,
     TResult Function(String? error)? error,
     required TResult orElse(),
   }) {

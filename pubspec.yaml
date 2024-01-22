@@ -32,6 +32,7 @@ dependencies:
   flutter_colorpicker: ^1.0.3
   flutter_bloc: ^8.1.3
   epub_parser: ^3.0.1
+  flutter_svg: ^1.0.3
   xml: ^5.0.2
   scrollable_positioned_list: ^0.3.8
   flutter_html: ^3.0.0-beta.2
@@ -51,6 +52,7 @@ flutter:
     - assets/css/ketubStyle.css
     - assets/images/
     - assets/epubs/
+    - assets/icons/
     - assets/databases/book_list.db
   fonts:
     - family: font1
