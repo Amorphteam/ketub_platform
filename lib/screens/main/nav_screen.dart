@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ketub_platform/screens/main/toc_tab/cubit/toc_cubit.dart';
 import 'package:ketub_platform/screens/main/toc_tab/toc_screen.dart';
 
@@ -46,18 +47,18 @@ class _NavScreenState extends State<NavScreen> {
             _currentIndex = index;
           });
         },
-        destinations: const [
+        destinations: [
           NavigationDestination(
-            icon: Icon(Icons.home),
-            label: 'home',
+            icon: SvgPicture.asset('assets/icons/home.svg'),
+            label: 'الرئيسية',
           ),
           NavigationDestination(
-            icon: Icon(Icons.toc),
-            label: 'toc',
+            icon: SvgPicture.asset('assets/icons/books.svg'),
+            label: 'الفهرس',
           ),
           NavigationDestination(
-            icon: Icon(Icons.bookmark),
-            label: 'bookmark',
+            icon: SvgPicture.asset('assets/icons/toc.svg'),
+            label: 'الكتب المفضلة'
           ),
         ],
       ),

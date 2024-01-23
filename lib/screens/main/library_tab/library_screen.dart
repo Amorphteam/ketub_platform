@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ketub_platform/models/category_model.dart';
 import 'package:ketub_platform/screens/main/library_tab/widgets/book_list_widget.dart';
 import 'package:ketub_platform/screens/search/search_screen.dart';
@@ -38,19 +39,33 @@ class _LibraryScreenState extends State<LibraryScreen> {
                 ),
               );
             },
-            child: InputDecorator(
+            child: TextField(
               decoration: InputDecoration(
-                contentPadding: EdgeInsets.zero,
-                prefixIcon: const Icon(Icons.search),
+                filled: true,
+                fillColor: Colors.grey[200], // Adjust the color to match your UI design
+                hintText: 'أدخل كلمة لبدء البحث', hintStyle: TextStyle(fontSize: 12, color: Colors.grey[500]), // Your hint text in Arabic
+                prefixIcon: IconButton(
+                  icon: SvgPicture.asset(
+                    'assets/icons/search.svg',
+                    color: Colors.grey[600], // Adjust the color as needed
+                    width: 20, // Adjust the size as needed
+                    height: 20, // Adjust the size as needed
+                  ),
+                  onPressed: () {
+                    // Add the search logic here if necessary
+                  },
+                ),
+                suffixIcon: IconButton(
+                  icon: Icon(Icons.mic, color: Colors.grey), // Use your SVG asset if needed
+                  onPressed: () {
+                    // Implement your voice search logic
+                  },
+                ),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(30.0),
+                  borderSide: BorderSide.none, // No border
                 ),
-              ),
-              child: const Text(
-                'Search',
-                style: TextStyle(
-                  fontSize: 16,
-                ),
+                contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 20), // Adjust padding
               ),
             ),
           ),

@@ -40,7 +40,7 @@ Future<void> loadAndParseEpub(
     _storeEpubDetails(epubBook, epubContent, assetPath);
     emit(EpubViewerState.loaded(content: _spineHtmlContent!, epubTitle: _bookTitle ?? ''));
     _loadUserPreferences();
-    _emitLastPageSeen();
+    // _emitLastPageSeen();
   } catch (error) {
       emit(EpubViewerState.error(error: error.toString()));
   }
