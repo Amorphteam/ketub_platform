@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ketub_platform/models/category_model.dart';
 import 'package:ketub_platform/models/reference_model.dart';
 import 'package:ketub_platform/models/search_model.dart';
@@ -18,14 +19,14 @@ import 'widgets/style_sheet.dart';
 
 typedef DataCallback = void Function(dynamic data);
 
-class EpubScreen extends StatefulWidget {
+class EpubViewerScreen extends StatefulWidget {
   final ReferenceModel? referenceModel;
   final CategoryModel? catModel;
   final EpubChaptersWithBookPath? tocModel;
   final SearchModel? searchModel;
   final DataCallback? onDataReceived;
 
-  const EpubScreen({
+  const EpubViewerScreen({
     Key? key,
     this.referenceModel,
     this.catModel,
@@ -35,10 +36,10 @@ class EpubScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _EpubScreenState createState() => _EpubScreenState();
+  _EpubViewerScreenState createState() => _EpubViewerScreenState();
 }
 
-class _EpubScreenState extends State<EpubScreen> {
+class _EpubViewerScreenState extends State<EpubViewerScreen> {
   final ItemScrollController itemScrollController = ItemScrollController();
   final ScrollOffsetController scrollOffsetController =
   ScrollOffsetController();
@@ -81,24 +82,23 @@ class _EpubScreenState extends State<EpubScreen> {
             children: [
               if (isSliderVisible)
                 AppBar(
-                  title: Text(_getAppBarTitle(state)),
                   actions: [
                     IconButton(
-                      icon: const Icon(Icons.search),
+                      icon: SvgPicture.asset('assets/icons/search.svg'),
                       onPressed: () {
                         _openInternalSearch(context);
                       },
                     ),
                     IconButton(
-                      icon: const Icon(Icons.tune_rounded),
+                      icon: SvgPicture.asset('assets/icons/style.svg'),
                       onPressed: () {
                         _showBottomSheet(
                             context, context.read<EpubViewerCubit>());
                       },
                     ),
                     IconButton(
-                      icon: Icon(
-                        isBookmarked ? Icons.bookmark : Icons.bookmark_border,
+                      icon: SvgPicture.asset(
+                        isBookmarked ? 'assets/icons/bookmarked.svg' : 'assets/icons/bookmark.svg',
                       ),
                       onPressed: () {
                         _toggleBookmark();
@@ -110,7 +110,7 @@ class _EpubScreenState extends State<EpubScreen> {
                       },
                     ),
                     IconButton(
-                      icon: const Icon(Icons.description_outlined),
+                      icon: SvgPicture.asset('assets/icons/toc.svg'),
                       onPressed: () {
                         _openIternalToc(context);
                       },
@@ -128,7 +128,7 @@ class _EpubScreenState extends State<EpubScreen> {
                               .of(context)
                               .padding
                               .top), // Adjust top margin based on visibility
-                  child: state.maybeWhen(loaded: (content, _) => _buildContentLoaded(content, context), orElse: () => const CircularProgressIndicator())
+                  child: state.maybeWhen(loaded: (content, _) => _buildContentLoaded(content, context, state), orElse: () => const CircularProgressIndicator())
 
 
                 ),
@@ -140,7 +140,7 @@ class _EpubScreenState extends State<EpubScreen> {
     );
   }
 
-  Widget _buildContentLoaded(List<String> content, BuildContext context) {
+  Widget _buildContentLoaded(List<String> content, BuildContext context, EpubViewerState state) {
     var allPagesCount = content.length.toDouble();
     return Row(
       children: [
@@ -159,67 +159,74 @@ class _EpubScreenState extends State<EpubScreen> {
                     itemBuilder:
                         (BuildContext context, int index) {
                       // return Text(state.content[index]);
-                      return Padding(
-                        padding: const EdgeInsets.only(
-                            top: 20.0),
-                        child: Container(
-                          color: Colors.white,
-                          child: SingleChildScrollView(
-                            child: Html(
-                              data: content[index],
-                              style: {
-                                "html": Style(
-                                    textAlign:
-                                    TextAlign.justify,
-                                    direction:
-                                    TextDirection.rtl,
-                                    fontSize: FontSize
-                                        .large,
-                                    fontFamily: 'font1'),
-                                "h1,h2,h3": Style(
-                                    textAlign:
-                                    TextAlign.justify,
-                                    direction:
-                                    TextDirection.rtl,
-                                    padding: HtmlPaddings
-                                        .only(
-                                        top: 30),
-                                    fontSize: FontSize
-                                        .xLarge,
-                                    fontWeight: FontWeight
-                                        .bold,
-                                    fontFamily: 'font3'),
-                              },
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 20.0),
+                            child: GestureDetector(
+                              onDoubleTap: () {
+                                setState(() {
+                                  isSliderVisible = !isSliderVisible;
+                                });
+                              },onLongPress: (){
+                              setState(() {
+                                isSliderVisible = !isSliderVisible;
+                              });
+                            },
+                              child: Container(
+                                color: Colors.white,
+                                child: SingleChildScrollView(
+                                  child: Html(
+                                    data: content[index],
+                                    style: {
+                                      "html": Style(
+                                          textAlign: TextAlign.justify,
+                                          direction: TextDirection.rtl,
+                                          fontSize: FontSize.large,
+                                          padding: HtmlPaddings.only(right: 10, left: 10),
+                                          fontFamily: 'tajwal'
+                                      ),
+                                      "h1,h2,h3": Style(
+                                          textAlign: TextAlign.right,
+                                          direction: TextDirection.rtl,
+                                          padding: HtmlPaddings.only(top: 30),
+                                          fontSize: FontSize.xLarge,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'tajwal'
+                                      ),
+                                      "p": Style(
+                                        lineHeight: LineHeight(1.7),
+                                      )
+                                    },
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      );
+                          );
                       ;
                     }),
               ),
               if (isSliderVisible)
-                Row(
-                  mainAxisAlignment:
-                  MainAxisAlignment.spaceBetween,
+                Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Text(
-                          '${currentPage
-                              .toInt()}/${allPagesCount
-                              .toInt()}'),
+                    VerticalSeekBar(
+                      currentPage: currentPage,
+                      allPagesCount: allPagesCount,
+                      epubViewerCubit: context.read<EpubViewerCubit>(),
+                      bookPath: _bookPath!,
                     ),
-                    Expanded(
-                      child: VerticalSeekBar(
-                        currentPage: currentPage,
-                        allPagesCount: allPagesCount,
-                        epubViewerCubit:
-                        context.read<EpubViewerCubit>(),
-                        bookPath: _bookPath!,
+                    Padding(
+                      padding: const EdgeInsets.only(right: 16.0, left: 16.0, bottom: 8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(child: Text(_getAppBarTitle(state), style: Theme.of(context).textTheme.labelMedium,)),
+                          Text('${currentPage.toInt()}/${allPagesCount.toInt()}', style: Theme.of(context).textTheme.labelMedium,),
+
+                        ],
                       ),
                     ),
                   ],
                 )
+
             ],
           ),
         ),

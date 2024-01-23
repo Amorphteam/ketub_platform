@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ketub_platform/screens/epub_viewer/cubit/epub_viewer_cubit.dart';
 import '../cubit/epub_cubit.dart';
-import '../epub_screen.dart';
+import '../epub_viewer_screen.dart';
 import 'widgets/internal_toc_tree_List_widget.dart';
 
 

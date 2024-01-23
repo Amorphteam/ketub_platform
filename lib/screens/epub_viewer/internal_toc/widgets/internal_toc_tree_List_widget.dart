@@ -1,8 +1,7 @@
 import 'package:epub_parser/epub_parser.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../../epub_screen.dart';
+import '../../epub_viewer_screen.dart';
 
 
 

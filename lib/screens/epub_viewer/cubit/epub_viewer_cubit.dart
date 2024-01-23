@@ -30,7 +30,7 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
 
 Future<void> loadAndParseEpub(
     String assetPath) async {
-  print('AJCACJ $_assetPath');
+  print('AJCACJ $assetPath');
   emit(const EpubViewerState.loading());
   try {
     final EpubBook epubBook = await loadEpubFromAsset(assetPath);

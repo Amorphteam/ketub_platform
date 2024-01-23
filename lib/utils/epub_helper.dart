@@ -9,14 +9,9 @@ import 'package:ketub_platform/models/category_model.dart';
 import 'package:ketub_platform/models/reference_model.dart';
 import 'package:ketub_platform/models/tree_toc_model.dart';
 import 'package:ketub_platform/screens/epub_viewer/cubit/epub_viewer_cubit.dart';
-import 'package:ketub_platform/screens/epub_viewer/epub_screen.dart';
-import 'package:ketub_platform/screens/html_viewer/cubit/html_viewer_cubit.dart';
-import 'package:ketub_platform/screens/html_viewer/html_viewer_screen.dart';
 import 'package:ketub_platform/utils/page_helper.dart';
-
-
-import '../models/book_model.dart';
 import '../models/search_model.dart';
+import '../screens/epub_viewer/epub_viewer_screen.dart';
 
 
 void openEpub({
@@ -32,7 +27,7 @@ void openEpub({
       builder: (context) =>
           BlocProvider(
             create: (context) => EpubViewerCubit(),
-            child: EpubScreen(catModel: cat,referenceModel: reference, searchModel: search, tocModel: toc),
+            child: EpubViewerScreen(catModel: cat,referenceModel: reference, searchModel: search, tocModel: toc),
           ),
     ),
   );
