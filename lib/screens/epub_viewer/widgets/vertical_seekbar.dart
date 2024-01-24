@@ -8,13 +8,11 @@ class VerticalSeekBar extends StatefulWidget {
   double currentPage;
   double allPagesCount;
   EpubViewerCubit epubViewerCubit;
-  String bookPath;
 
   VerticalSeekBar(
       {required this.currentPage,
         required this.allPagesCount,
         required this.epubViewerCubit,
-        required this.bookPath,
         Key? key})
       : super(key: key);
 

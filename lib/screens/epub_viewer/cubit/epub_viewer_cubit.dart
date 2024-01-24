@@ -40,13 +40,12 @@ Future<void> loadAndParseEpub(
     _storeEpubDetails(epubBook, epubContent, assetPath);
     emit(EpubViewerState.loaded(content: _spineHtmlContent!, epubTitle: _bookTitle ?? ''));
     _loadUserPreferences();
-    // _emitLastPageSeen();
   } catch (error) {
       emit(EpubViewerState.error(error: error.toString()));
   }
 }
 
-  Future<void> _emitLastPageSeen() async {
+  Future<void> emitLastPageSeen() async {
     final lastPageNumber = await getLastPageNumberForBook(assetPath: _assetPath!);
     if (lastPageNumber != null) {
       emit(EpubViewerState.pageChanged(pageNumber: lastPageNumber.toInt()));
@@ -75,16 +74,16 @@ Future<void> loadAndParseEpub(
 
   Future<void> jumpToPage({String? chapterFileName, int? newPage}) async {
     if (newPage != null) {
-      emit(const EpubViewerState.pageChanged());
+      emit(EpubViewerState.pageChanged(pageNumber: newPage));
     }
-    try {
-      if (chapterFileName != null) {
+    if (chapterFileName != null) {
+      try {
         final int spineNumber =
         await findPageIndexInEpub(_epubBook!, chapterFileName);
         emit(EpubViewerState.pageChanged(pageNumber: spineNumber));
-      }
-    } catch (error) {
+      } catch (error) {
         emit(EpubViewerState.error(error: error.toString()));
+      }
     }
   }
 
