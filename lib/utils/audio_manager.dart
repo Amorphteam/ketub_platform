@@ -14,8 +14,6 @@ class AudioManager {
   static Future<void> init() async {
     final session = await AudioSession.instance;
     await session.configure(const AudioSessionConfiguration.speech());
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor: Colors.black));
-
     try {
       await player.setAudioSource(_playlist);
     } catch (e) {

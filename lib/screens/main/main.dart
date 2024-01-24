@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:ketub_platform/screens/main/nav_screen.dart';
 import 'package:ketub_platform/utils/audio_manager.dart';
@@ -12,6 +13,13 @@ Future<void> main() async {
     androidNotificationOngoing: true,
   );
   await AudioManager.init();
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+      systemNavigationBarIconBrightness: Brightness.dark,
+    ),
+  );
   runApp(const MyApp());
 }
 
@@ -21,6 +29,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

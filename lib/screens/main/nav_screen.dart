@@ -44,6 +44,7 @@ class _NavScreenState extends State<NavScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: SafeArea(
         child: _pages[_currentIndex],
@@ -58,15 +59,15 @@ class _NavScreenState extends State<NavScreen> {
         destinations: [
           NavigationDestination(
             icon: SvgPicture.asset('assets/icons/home.svg'),
-            label: '',
+            label: 'الرئيسية',
           ),
           NavigationDestination(
             icon: SvgPicture.asset('assets/icons/books.svg'),
-            label: '',
+            label: 'الفهرس',
           ),
           NavigationDestination(
-            icon: SvgPicture.asset('assets/icons/toc.svg'),
-            label: ' '
+              icon: SvgPicture.asset('assets/icons/toc.svg'),
+              label: 'الكتب المفضلة'
           ),
           NavigationDestination(
             icon: Icon(Icons.play_arrow),
