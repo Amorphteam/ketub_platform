@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ketub_platform/screens/bookmark_tab/bookmark_screen.dart';
-import 'package:ketub_platform/screens/bookmark_tab/cubit/bookmark_cubit.dart';
-import 'package:ketub_platform/screens/library_tab/cubit/library_cubit.dart';
-import 'package:ketub_platform/screens/library_tab/library_screen.dart';
-import 'package:ketub_platform/screens/toc_tab/cubit/toc_cubit.dart';
-import 'package:ketub_platform/screens/toc_tab/toc_screen.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ketub_platform/screens/main/toc_tab/cubit/toc_cubit.dart';
+import 'package:ketub_platform/repositories/book_database.dart';
+import 'package:ketub_platform/repositories/reference_database.dart';
+import 'package:ketub_platform/screens/main/toc_tab/toc_screen.dart';
+
+import 'bookmark_tab/bookmark_screen.dart';
+import 'bookmark_tab/cubit/bookmark_cubit.dart';
+import 'library_tab/cubit/library_cubit.dart';
+import 'library_tab/library_screen.dart';
 
 import '../audio/audio_screen.dart';
 import '../audio/cubit/audio_cubit.dart';
@@ -51,18 +55,18 @@ class _NavScreenState extends State<NavScreen> {
             _currentIndex = index;
           });
         },
-        destinations: const [
+        destinations: [
           NavigationDestination(
-            icon: Icon(Icons.home),
-            label: 'home',
+            icon: SvgPicture.asset('assets/icons/home.svg'),
+            label: '',
           ),
           NavigationDestination(
-            icon: Icon(Icons.toc),
-            label: 'toc',
+            icon: SvgPicture.asset('assets/icons/books.svg'),
+            label: '',
           ),
           NavigationDestination(
-            icon: Icon(Icons.bookmark),
-            label: 'bookmark',
+            icon: SvgPicture.asset('assets/icons/toc.svg'),
+            label: ' '
           ),
           NavigationDestination(
             icon: Icon(Icons.play_arrow),

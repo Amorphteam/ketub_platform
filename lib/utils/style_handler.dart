@@ -62,6 +62,7 @@ html {
 }
 
 body {
+font-family: font1 !important;
   text-indent: 0px !important;
     padding: 40px 40px !important;
     overflow: !important;
@@ -167,7 +168,7 @@ html.LIGHT {
 }
 
 .FONT0, .FONT0 p, .FONT0 span, .FONT0 div {
-    font-family: 'font0', arial;
+    font-family: font0, arial;
 }
 
 .FONT1, .FONT1 p, .FONT1 h1, .FONT1 h2, .FONT1 h3, .FONT1 h4, .FONT1 h5, .FONT1 h6, .FONT1 span, .FONT1 div {
@@ -303,23 +304,23 @@ margin-right: auto !important;
           }
           
           .normalFontSize {
-          font-size: 40px !important;
+          font-size: 10px !important;
           }
           
           .smallFontSize {
-          font-size: 30px !important;
+          font-size: 20px !important;
           }
           
           .largeFontSize {
-          font-size: 50px !important;
+          font-size: 30px !important;
           }
           
           .xlargeFontSize {
-          font-size: 60px !important;
+          font-size: 40px !important;
           }
           
           .xxlargeFontSize {
-          font-size: 70px !important;
+          font-size: 50px !important;
           }
 
 </style>''';
@@ -330,6 +331,18 @@ String getFontUri(ByteData data, String mime) {
           buffer.asUint8List(data.offsetInBytes, data.lengthInBytes),
           mimeType: mime)
       .toString();
+}
+
+Future<String> injectCssJs(String spine) async {
+  // Find the index of '</head>' in the HTML
+  final headIndex = spine.indexOf('</head>');
+  if (headIndex != -1) {
+    // Insert the CSS link before '</head>'
+    final spineWithCss = spine.replaceRange(headIndex, headIndex, ketubCssJs);
+    final spineWithFont = await addFontsToHtml(spineWithCss);
+    return spineWithFont;
+  }
+  return spine;
 }
 
 Future<String> addFontsToHtml(String htmlContent) async {
