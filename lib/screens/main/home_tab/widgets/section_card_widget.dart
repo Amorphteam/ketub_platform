@@ -21,6 +21,9 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
   var childRatio = 0.3;
   var itemHeight = 80.0;
   var itemWidth = 80.0;
+  var insideTitlePosition = true;
+  var withTitle = true;
+  var maxCrossAxisExtent = 120.0;
 
   @override
   void initState() {
@@ -63,9 +66,9 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
           Expanded(
             child: GridView.builder(
               scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(8.0),
               gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 120,
+                maxCrossAxisExtent: maxCrossAxisExtent,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
                 childAspectRatio: childRatio,
@@ -78,6 +81,8 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
                   imagePath: widget.featureImageUrl,
                   height: itemHeight,
                   width: itemWidth,
+                  insideTitlePosition: insideTitlePosition,
+                  withTitle: withTitle,
                 );
               },
             ),
@@ -96,14 +101,16 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
         itemWidth = 80.0;
         break;
       case CardType.oneList:
-        containerHeight = 200;
-        childRatio = 0.3;
+        containerHeight = 270;
+        childRatio = 1.5;
+        maxCrossAxisExtent = 200;
         itemHeight = 80.0;
         itemWidth = 80.0;
+        insideTitlePosition = false;
         break;
       case CardType.gridSmall:
-        containerHeight = 420;
-        childRatio = 0.3;
+        containerHeight = 320;
+        childRatio = 0.4;
         itemHeight = 30.0;
         itemWidth = 30.0;
         break;
