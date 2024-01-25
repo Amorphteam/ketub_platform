@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 class GridItemWidget extends StatefulWidget {
   final String title;
   final String imagePath;
+  final double width;
+  final double height;
 
 
-  const GridItemWidget({Key? key, required this.title, required this.imagePath}) : super(key: key);
+  const GridItemWidget({Key? key, required this.title, required this.imagePath, required this.width, required this.height}) : super(key: key);
 
   @override
   State<GridItemWidget> createState() => _GridItemWidgetState();
@@ -18,8 +20,8 @@ class _GridItemWidgetState extends State<GridItemWidget> {
     return Row(
       children: [
         Container(
-          width: 80,
-          height: 80,
+          width: widget.width,
+          height: widget.height,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16), // Adjust the radius as needed
             image: DecorationImage(

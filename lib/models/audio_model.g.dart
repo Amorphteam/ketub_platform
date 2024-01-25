@@ -8,58 +8,58 @@ part of 'audio_model.dart';
 
 _$AudioModelImpl _$$AudioModelImplFromJson(Map<String, dynamic> json) =>
     _$AudioModelImpl(
-          id: json['id'] as num?,
-          name: json['name'] as String?,
-          slug: json['slug'] as String?,
-          lang: json['lang'] as String?,
-          description: json['description'] as String?,
-          categoryId: json['category_id'] as num?,
-          pdfDownloadLink: json['pdf_download_link'] as String?,
-          docDownloadLink: json['doc_download_link'] as String?,
-          mediaDownloadLink: json['media_download_link'] as String?,
-          fileDownloadLink: json['file_download_link'] as String?,
-          coverImage: json['cover_image'] as String?,
-          visits: json['visits'] as num?,
-          todayVisits: json['today_visits'] as num?,
-          originalPostId: json['original_post_id'] as num?,
-          status: json['status'] as num?,
-          createdAt: json['created_at'] as String?,
-          modifiedAt: json['modified_at'] as String?,
-          edaadDate: json['edaad_date'] as String?,
-          category: json['category'] == null
-              ? null
-              : Category.fromJson(json['category'] as Map<String, dynamic>),
-          comments: (json['comments'] as List<dynamic>?)
-              ?.map((e) => Comments.fromJson(e as Map<String, dynamic>))
-              .toList(),
-          attachments: (json['attachments'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList(),
+      id: json['id'] as num?,
+      name: json['name'] as String?,
+      slug: json['slug'] as String?,
+      lang: json['lang'] as String?,
+      description: json['description'] as String?,
+      categoryId: json['categoryId'] as num?,
+      pdfDownloadLink: json['pdfDownloadLink'] as String?,
+      docDownloadLink: json['docDownloadLink'] as String?,
+      mediaDownloadLink: json['mediaDownloadLink'] as String?,
+      fileDownloadLink: json['fileDownloadLink'] as String?,
+      coverImage: json['coverImage'] as String?,
+      visits: json['visits'] as num?,
+      todayVisits: json['todayVisits'] as num?,
+      originalPostId: json['originalPostId'] as num?,
+      status: json['status'] as num?,
+      createdAt: json['createdAt'] as String?,
+      modifiedAt: json['modifiedAt'] as String?,
+      edaadDate: json['edaadDate'] as String?,
+      category: json['category'] == null
+          ? null
+          : Category.fromJson(json['category'] as Map<String, dynamic>),
+      comments: (json['comments'] as List<dynamic>?)
+          ?.map((e) => Comments.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      attachments: (json['attachments'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
     );
 
 Map<String, dynamic> _$$AudioModelImplToJson(_$AudioModelImpl instance) =>
     <String, dynamic>{
-          'id': instance.id,
-          'name': instance.name,
-          'slug': instance.slug,
-          'lang': instance.lang,
-          'description': instance.description,
-          'category_id': instance.categoryId,
-          'pdf_download_link': instance.pdfDownloadLink,
-          'doc_download_link': instance.docDownloadLink,
-          'media_download_link': instance.mediaDownloadLink,
-          'file_download_link': instance.fileDownloadLink,
-          'cover_image': instance.coverImage,
-          'visits': instance.visits,
-          'today_visits': instance.todayVisits,
-          'original_post_id': instance.originalPostId,
-          'status': instance.status,
-          'created_at': instance.createdAt,
-          'modified_at': instance.modifiedAt,
-          'edaad_date': instance.edaadDate,
-          'category': instance.category,
-          'comments': instance.comments,
-          'attachments': instance.attachments,
+      'id': instance.id,
+      'name': instance.name,
+      'slug': instance.slug,
+      'lang': instance.lang,
+      'description': instance.description,
+      'categoryId': instance.categoryId,
+      'pdfDownloadLink': instance.pdfDownloadLink,
+      'docDownloadLink': instance.docDownloadLink,
+      'mediaDownloadLink': instance.mediaDownloadLink,
+      'fileDownloadLink': instance.fileDownloadLink,
+      'coverImage': instance.coverImage,
+      'visits': instance.visits,
+      'todayVisits': instance.todayVisits,
+      'originalPostId': instance.originalPostId,
+      'status': instance.status,
+      'createdAt': instance.createdAt,
+      'modifiedAt': instance.modifiedAt,
+      'edaadDate': instance.edaadDate,
+      'category': instance.category,
+      'comments': instance.comments,
+      'attachments': instance.attachments,
     };
 
 _$CategoryImpl _$$CategoryImplFromJson(Map<String, dynamic> json) =>

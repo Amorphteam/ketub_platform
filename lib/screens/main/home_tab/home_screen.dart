@@ -1,12 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:ketub_platform/models/card_type_model.dart';
 import 'package:ketub_platform/screens/main/home_tab/widgets/section_card_widget.dart';
+import 'package:ketub_platform/utils/home_helper.dart';
 
 import '../../search/search_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  List<CardTypeModel>? cards;
+  @override
+  void initState() {
+    cards = HomeHelper.cards;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,16 +62,16 @@ class HomeScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(30.0),
                     borderSide: BorderSide.none, // No border
                   ),
-                  contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 20), // Adjust padding
+                  contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
                 ),
               ),
             ),
           ),
           Expanded(
             child: ListView.builder(
-                itemCount: 6,
+                itemCount: cards?.length,
                 itemBuilder: (context, index) {
-                  return const SectionCardWidget();
+                  return SectionCardWidget(cardType: cards?[index].cardType ?? CardType.gridLarge, title: cards?[index].title ?? '', hasLoadMore: cards?[index].hasLoadMore ?? false, featureImageUrl: cards?[index].featureImageUrl ?? 'assets/images/bk1.jpg',);
                 }),
           ),
         ],
