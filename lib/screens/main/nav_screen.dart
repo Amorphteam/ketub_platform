@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ketub_platform/screens/main/home_tab/home_screen.dart';
 import 'package:ketub_platform/screens/main/toc_tab/cubit/toc_cubit.dart';
 import 'package:ketub_platform/repositories/book_database.dart';
 import 'package:ketub_platform/repositories/reference_database.dart';
@@ -26,7 +27,7 @@ class _NavScreenState extends State<NavScreen> {
   final List<Widget> _pages = [
     BlocProvider(
       create: (context) => LibraryCubit(),
-      child: const LibraryScreen(),
+      child: const HomeScreen(),
     ),
     BlocProvider(
       create: (context) => TocCubit(),

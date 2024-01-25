@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:ketub_platform/screens/main/nav_screen.dart';
 import 'package:ketub_platform/utils/audio_manager.dart';
@@ -37,6 +38,16 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home:  NavScreen(),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('ar', ''), // Arabic, no country code
+        // Add other supported locales here
+      ],
+      locale: Locale('ar', ''),
     );
   }
 }
