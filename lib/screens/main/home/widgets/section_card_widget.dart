@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ketub_platform/models/card_type_model.dart';
-import 'package:ketub_platform/screens/main/home_tab/widgets/grid_item_widget.dart';
+
+import 'grid_item_widget.dart';
 
 class SectionCardWidget extends StatefulWidget {
   final CardType cardType;
@@ -38,12 +39,10 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 46, right: 16, left: 16),
+            padding: const EdgeInsets.only(top: 20, right: 16, left: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-
-
                 Text(
                   widget.title,
                   style: Theme
@@ -77,7 +76,6 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
               itemBuilder: (context, index) {
                 return GridItemWidget(
                   title: 'قاعدة اللطف في التفكير المعتزلي وأتباعه ـ قراءة تحليلية وكشف لمكامن الضعف التطبيقي $index',
-                  // Replace with actual title
                   imagePath: widget.featureImageUrl,
                   height: itemHeight,
                   width: itemWidth,
@@ -95,21 +93,21 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
   void handleCardType(CardType cardType) {
     switch (cardType) {
       case CardType.gridLarge:
-        containerHeight = 420;
+        containerHeight = 400;
         childRatio = 0.3;
         itemHeight = 80.0;
         itemWidth = 80.0;
         break;
       case CardType.oneList:
-        containerHeight = 270;
-        childRatio = 1.5;
+        containerHeight = 260;
+        childRatio = 1.6;
         maxCrossAxisExtent = 200;
         itemHeight = 80.0;
         itemWidth = 80.0;
         insideTitlePosition = false;
         break;
       case CardType.gridSmall:
-        containerHeight = 320;
+        containerHeight = 300;
         childRatio = 0.4;
         itemHeight = 30.0;
         itemWidth = 30.0;

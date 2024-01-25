@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:ketub_platform/screens/main/home_tab/home_screen.dart';
 import 'package:ketub_platform/screens/main/toc_tab/cubit/toc_cubit.dart';
 import 'package:ketub_platform/repositories/book_database.dart';
 import 'package:ketub_platform/repositories/reference_database.dart';
@@ -9,6 +8,8 @@ import 'package:ketub_platform/screens/main/toc_tab/toc_screen.dart';
 
 import 'bookmark_tab/bookmark_screen.dart';
 import 'bookmark_tab/cubit/bookmark_cubit.dart';
+import 'home/home_all_cat_screen.dart';
+import 'home/home_tab_screen.dart';
 import 'library_tab/cubit/library_cubit.dart';
 import 'library_tab/library_screen.dart';
 
@@ -27,7 +28,7 @@ class _NavScreenState extends State<NavScreen> {
   final List<Widget> _pages = [
     BlocProvider(
       create: (context) => LibraryCubit(),
-      child: const HomeScreen(),
+      child: homeTabScreen(),
     ),
     BlocProvider(
       create: (context) => TocCubit(),
