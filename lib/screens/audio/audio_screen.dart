@@ -76,7 +76,7 @@ class _AudioViewState extends State<AudioView> {
                   metadata.artUri.toString(),
                   fit: BoxFit.cover,
                   width: double.infinity,
-                  height: 300, // Adjust height as needed
+                  height: 500,
                   errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
                     return Image.asset('assets/images/banner.png');
                   },
@@ -107,7 +107,9 @@ class _AudioViewState extends State<AudioView> {
             );
           },
         ),
+        const SizedBox(height: 8.0),
         AudioPlayerScreen(AudioManager.player),
+        const SizedBox(height: 8.0),
         StreamBuilder<PositionData>(
           stream: AudioManager.positionDataStream,
           builder: (context, snapshot) {
@@ -181,60 +183,62 @@ class _AudioViewState extends State<AudioView> {
           ],
         ),
         const SizedBox(height: 8.0),
-        StreamBuilder<SequenceState?>(
-          stream: AudioManager.player.sequenceStateStream,
-          builder: (context, snapshot) {
-            final state = snapshot.data;
-            final sequence = state?.sequence ?? [];
-            return ReorderableListView(
-              onReorder: (int oldIndex, int newIndex) {
-                if (oldIndex < newIndex) newIndex--;
-                AudioManager.movePlaylistItem(oldIndex, newIndex);
-              },
-              children: [
-                for (var i = 0; i < sequence.length; i++)
-                  Dismissible(
-                    key: ValueKey(sequence[i]),
-                    background: Container(
-                      color: Colors.redAccent,
-                      alignment: Alignment.centerRight,
-                      child: const Padding(
-                        padding: EdgeInsets.only(right: 8.0),
-                        child: Icon(Icons.delete, color: Colors.white),
+        Flexible(
+          child: StreamBuilder<SequenceState?>(
+            stream: AudioManager.player.sequenceStateStream,
+            builder: (context, snapshot) {
+              final state = snapshot.data;
+              final sequence = state?.sequence ?? [];
+              return ReorderableListView(
+                onReorder: (int oldIndex, int newIndex) {
+                  if (oldIndex < newIndex) newIndex--;
+                  AudioManager.movePlaylistItem(oldIndex, newIndex);
+                },
+                children: [
+                  for (var i = 0; i < sequence.length; i++)
+                    Dismissible(
+                      key: ValueKey(sequence[i]),
+                      background: Container(
+                        color: Colors.redAccent,
+                        alignment: Alignment.centerRight,
+                        child: const Padding(
+                          padding: EdgeInsets.only(right: 8.0),
+                          child: Icon(Icons.delete, color: Colors.white),
+                        ),
                       ),
-                    ),
-                    onDismissed: (dismissDirection) {
-                      AudioManager.removePlaylistItemAt(i);
-                    },
-                    child: Container(
-                      color: i == state!.currentIndex ? Colors.grey.shade300 : null,
-                      padding: EdgeInsets.all(8.0), // Add padding
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: ListTile(
-                              title: Text(sequence[i].tag.title as String,
-                              textAlign: TextAlign.end),
-                              subtitle: Text(sequence[i].tag.title as String,
-                              textAlign: TextAlign.end),
-                              onTap: () {
-                                AudioManager.player.seek(Duration.zero, index: i);
-                              },
+                      onDismissed: (dismissDirection) {
+                        AudioManager.removePlaylistItemAt(i);
+                      },
+                      child: Container(
+                        color: i == state!.currentIndex ? Colors.grey.shade300 : null,
+                        padding: EdgeInsets.all(8.0), // Add padding
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: ListTile(
+                                title: Text(sequence[i].tag.title as String,
+                                textAlign: TextAlign.end),
+                                subtitle: Text(sequence[i].tag.title as String,
+                                textAlign: TextAlign.end),
+                                onTap: () {
+                                  AudioManager.player.seek(Duration.zero, index: i);
+                                },
+                              ),
                             ),
-                          ),
 
-                          Image.asset(
-                            'assets/images/audio_bk.jpg',
-                            width: 64.0, // Adjust the width as needed
-                            height: 64.0, // Adjust the height as needed
-                          ),
-                        ],
+                            Image.asset(
+                              'assets/images/audio_bk.jpg',
+                              width: 64.0, // Adjust the width as needed
+                              height: 64.0, // Adjust the height as needed
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-              ],
-            );
-          },
+                ],
+              );
+            },
+          ),
         )
       ],
     );
