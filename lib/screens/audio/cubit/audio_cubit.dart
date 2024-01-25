@@ -28,7 +28,9 @@ class AudioCubit extends Cubit<AudioState> {
         emit(AudioState.error(e.toString()));
         return;
       }
-      AudioSource source = AudioSource.uri(
+
+      List<AudioSource> source = [
+        AudioSource.uri(
         Uri.parse(audioModel.mediaDownloadLink!),
         tag: MediaItem(
           id: audioModel.id.toString(),
@@ -36,9 +38,61 @@ class AudioCubit extends Cubit<AudioState> {
           title: audioModel.name!,
           artUri: Uri.parse(audioModel.coverImage!),
         ),
-      );
+      ),
+        AudioSource.uri(
+          Uri.parse(audioModel.mediaDownloadLink!),
+          tag: MediaItem(
+            id: audioModel.id.toString(),
+            album: audioModel.category!.name!,
+            title: audioModel.name!,
+            artUri: Uri.parse(audioModel.coverImage!),
+          ),
+        ), AudioSource.uri(
+          Uri.parse(audioModel.mediaDownloadLink!),
+          tag: MediaItem(
+            id: audioModel.id.toString(),
+            album: audioModel.category!.name!,
+            title: audioModel.name!,
+            artUri: Uri.parse(audioModel.coverImage!),
+          ),
+        ), AudioSource.uri(
+          Uri.parse(audioModel.mediaDownloadLink!),
+          tag: MediaItem(
+            id: audioModel.id.toString(),
+            album: audioModel.category!.name!,
+            title: audioModel.name!,
+            artUri: Uri.parse(audioModel.coverImage!),
+          ),
+        ), AudioSource.uri(
+          Uri.parse(audioModel.mediaDownloadLink!),
+          tag: MediaItem(
+            id: audioModel.id.toString(),
+            album: audioModel.category!.name!,
+            title: audioModel.name!,
+            artUri: Uri.parse(audioModel.coverImage!),
+          ),
+        ),
+        AudioSource.uri(
+          Uri.parse(audioModel.mediaDownloadLink!),
+          tag: MediaItem(
+            id: audioModel.id.toString(),
+            album: audioModel.category!.name!,
+            title: audioModel.name!,
+            artUri: Uri.parse(audioModel.coverImage!),
+          ),
+        ),
+        AudioSource.uri(
+          Uri.parse(audioModel.mediaDownloadLink!),
+          tag: MediaItem(
+            id: audioModel.id.toString(),
+            album: audioModel.category!.name!,
+            title: audioModel.name!,
+            artUri: Uri.parse(audioModel.coverImage!),
+          ),
+        ),
+      ];
 
-      AudioManager.updatePlaylist([source]);
+      AudioManager.updatePlaylist(source);
       emit(AudioState.loaded(audioModel));
     } catch (e) {
       emit(AudioState.error(e.toString()));

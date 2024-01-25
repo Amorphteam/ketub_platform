@@ -90,7 +90,7 @@ class _AudioViewState extends State<AudioView> {
                             errorBuilder: (BuildContext context,
                                 Object exception, StackTrace? stackTrace) {
                               return Image.asset(
-                                  'assets/images/book_sample.png');
+                                  'assets/images/audio_bk.jpg');
                             },
                           )
 
