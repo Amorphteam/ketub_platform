@@ -78,7 +78,7 @@ class _AudioViewState extends State<AudioView> {
                   metadata.artUri.toString(),
                   fit: BoxFit.cover,
                   width: double.infinity,
-                  height: 200, // Adjust height as needed
+                  height: 300, // Adjust height as needed
                   errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
                     return Image.asset('assets/images/banner.png');
                   },
@@ -186,6 +186,9 @@ class _AudioViewState extends State<AudioView> {
                 ),
               ],
             ),
+
+
+
             SizedBox(
               height: 240.0,
               child: StreamBuilder<SequenceState?>(
@@ -213,15 +216,29 @@ class _AudioViewState extends State<AudioView> {
                           onDismissed: (dismissDirection) {
                             AudioManager.removePlaylistItemAt(i);
                           },
-                          child: Material(
-                            color: i == state!.currentIndex
-                                ? Colors.grey.shade300
-                                : null,
-                            child: ListTile(
-                              title: Text(sequence[i].tag.title as String),
-                              onTap: () {
-                                AudioManager.player.seek(Duration.zero, index: i);
-                              },
+                          child: Container(
+                            color: i == state!.currentIndex ? Colors.grey.shade300 : null,
+                            padding: EdgeInsets.all(8.0), // Add padding
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: ListTile(
+                                    title: Text(sequence[i].tag.title as String,
+                                    textAlign: TextAlign.end),
+                                    subtitle: Text(sequence[i].tag.title as String,
+                                    textAlign: TextAlign.end),
+                                    onTap: () {
+                                      AudioManager.player.seek(Duration.zero, index: i);
+                                    },
+                                  ),
+                                ),
+
+                                Image.asset(
+                                  'assets/images/audio_bk.jpg',
+                                  width: 64.0, // Adjust the width as needed
+                                  height: 64.0, // Adjust the height as needed
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -229,7 +246,8 @@ class _AudioViewState extends State<AudioView> {
                   );
                 },
               ),
-            ),
+            )
+
           ],
         ),
 
