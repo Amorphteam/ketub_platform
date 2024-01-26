@@ -56,7 +56,7 @@ class SplashScreen extends StatelessWidget {
                   SizedBox(height: 40),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                           builder: (context) => NavScreen(),
