@@ -20,7 +20,7 @@ class _BookListWidgetState extends State<BookListWidget> {
         crossAxisCount: 3, // Number of columns
         crossAxisSpacing: 10, // Spacing between columns
         mainAxisSpacing: 10, // Spacing between rows
-        childAspectRatio: 0.9,
+        childAspectRatio: 0.6,
       ),
       itemCount: widget.bookList.length,
       itemBuilder: (context, index) {
@@ -34,26 +34,31 @@ class _BookListWidgetState extends State<BookListWidget> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    image: DecorationImage(
-                      image: AssetImage(
-                        'assets/images/${bookItem.bookCover ??
-                            'book_sample.png'}',
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                    return Container(
+                      height: 150,
+                      // Set the width to one third of the screen width minus the horizontal padding
+                      width: (MediaQuery.of(context).size.width - 24) / 3,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        image: DecorationImage(
+                          image: AssetImage(
+                            'assets/images/${bookItem.bookCover ?? 'book_sample.png'}',
+                          ),
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                      fit: BoxFit.contain,
-                    ),
-                  ),
+                    );
+                  },
                 ),
               ),
-              const SizedBox(height: 5),
-              Text(
-                bookItem.bookName ?? 'sample',
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 12,
+              Expanded(
+                child: Text(
+                  bookItem.bookName ?? 'Book Name',
+                  textAlign: TextAlign.center,
                 ),
               ),
             ],

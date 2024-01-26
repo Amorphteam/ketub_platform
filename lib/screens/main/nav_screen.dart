@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ketub_platform/screens/main/library_tab/library_tab_screen.dart';
 import 'package:ketub_platform/screens/main/toc_tab/cubit/toc_cubit.dart';
 import 'package:ketub_platform/repositories/book_database.dart';
 import 'package:ketub_platform/repositories/reference_database.dart';
@@ -11,7 +12,6 @@ import 'bookmark_tab/cubit/bookmark_cubit.dart';
 import 'home/home_all_cat_screen.dart';
 import 'home/home_tab_screen.dart';
 import 'library_tab/cubit/library_cubit.dart';
-import 'library_tab/library_screen.dart';
 
 import '../audio/audio_screen.dart';
 import '../audio/cubit/audio_cubit.dart';
@@ -31,17 +31,9 @@ class _NavScreenState extends State<NavScreen> {
       child: homeTabScreen(),
     ),
     BlocProvider(
-      create: (context) => TocCubit(),
-      child: const TocScreen(),
+      create: (context) => LibraryCubit(),
+      child: const LibraryTabScreen(),
     ),
-    BlocProvider(
-      create: (context) => BookmarkCubit(),
-      child: const BookmarkScreen(),
-    ),
-    BlocProvider(
-      create: (context) => AudioCubit(),
-      child: const AudioScreen(),
-    )
   ];
 
   @override
@@ -66,14 +58,6 @@ class _NavScreenState extends State<NavScreen> {
           NavigationDestination(
             icon: SvgPicture.asset('assets/icons/books.svg'),
             label: 'الفهرس',
-          ),
-          NavigationDestination(
-              icon: SvgPicture.asset('assets/icons/toc.svg'),
-              label: 'الكتب المفضلة'
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.play_arrow),
-            label: 'audio',
           ),
         ],
       ),
