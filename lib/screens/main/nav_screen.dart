@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ketub_platform/screens/main/library_tab/library_tab_screen.dart';
+import 'package:ketub_platform/screens/main/no_internet_tab/no_internet_screen.dart';
 import 'package:ketub_platform/screens/main/toc_tab/cubit/toc_cubit.dart';
 import 'package:ketub_platform/repositories/book_database.dart';
 import 'package:ketub_platform/repositories/reference_database.dart';
@@ -32,7 +33,7 @@ class _NavScreenState extends State<NavScreen> {
     ),
     BlocProvider(
       create: (context) => LibraryCubit(),
-      child: const LibraryTabScreen(),
+      child: LibraryTabScreen(),
     ),
   ];
 
