@@ -36,7 +36,37 @@ class _homeTabScreenState extends State<homeTabScreen> with SingleTickerProvider
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: SearchBarWiget(),
+        title: Row(
+          children: [
+            Expanded(child: SearchBarWiget()),
+            PopupMenuButton<String>(
+              onSelected: (String result) {
+                // Handle the menu item action here
+                switch (result) {
+                  case 'option1':
+                  // Do something for option 1
+                    break;
+                  case 'option2':
+                  // Do something for option 2
+                    break;
+                // Add more cases for each menu option
+                }
+              },
+              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                const PopupMenuItem<String>(
+                  value: 'option1',
+                  child: Text('السيرة الذاتية'),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'option2',
+                  child: Text('حول التطبيق'),
+                ),
+                // Add more PopupMenuItem widgets for each menu option
+              ],
+              icon: const Icon(Icons.more_vert_rounded),
+            ),
+          ],
+        ),
 
         bottom: TabBar(
           controller: _tabController,
@@ -52,7 +82,7 @@ class _homeTabScreenState extends State<homeTabScreen> with SingleTickerProvider
         children: [
           _buildTabContent(),
           _buildRecentContent(),
-           _buildTreeContent(),
+          _buildTreeContent(),
         ],
       ),
     );
