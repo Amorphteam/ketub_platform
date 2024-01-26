@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ketub_platform/models/card_type_model.dart';
 
 import 'grid_item_widget.dart';
+import 'image_slider_widget.dart';
 
 class SectionCardWidget extends StatefulWidget {
   final CardType cardType;
@@ -11,7 +12,12 @@ class SectionCardWidget extends StatefulWidget {
   final bool hasLoadMore;
   final String featureImageUrl;
 
-  const SectionCardWidget({super.key, required this.cardType, required this.title, required this.hasLoadMore, required this.featureImageUrl});
+  const SectionCardWidget(
+      {super.key,
+      required this.cardType,
+      required this.title,
+      required this.hasLoadMore,
+      required this.featureImageUrl});
 
   @override
   State<SectionCardWidget> createState() => _SectionCardWidgetState();
@@ -34,6 +40,18 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
 
   @override
   Widget build(BuildContext context) {
+    switch (widget.cardType) {
+      case CardType.staticBanner:
+        return buildImageBanner(context);
+      case CardType.dynamicBanner:
+        return buildDynamicBanner(context);
+      default:
+        return buildGridView(context);
+    }
+
+  }
+
+  Widget buildGridView(BuildContext context) {
     return SizedBox(
       height: containerHeight,
       child: Column(
@@ -45,18 +63,15 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
               children: [
                 Text(
                   widget.title,
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .titleLarge,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
                 if (widget.hasLoadMore)
-                IconButton(
-                  icon: SvgPicture.asset('assets/icons/load_more.svg'),
-                  onPressed: () {
-                    // Handle more info action
-                  },
-                ),
+                  IconButton(
+                    icon: SvgPicture.asset('assets/icons/load_more.svg'),
+                    onPressed: () {
+                      // Handle more info action
+                    },
+                  ),
               ],
             ),
           ),
@@ -75,7 +90,8 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
               itemCount: 6,
               itemBuilder: (context, index) {
                 return GridItemWidget(
-                  title: 'قاعدة اللطف في التفكير المعتزلي وأتباعه ـ قراءة تحليلية وكشف لمكامن الضعف التطبيقي $index',
+                  title:
+                      'قاعدة اللطف في التفكير المعتزلي وأتباعه ـ قراءة تحليلية وكشف لمكامن الضعف التطبيقي $index',
                   imagePath: widget.featureImageUrl,
                   height: itemHeight,
                   width: itemWidth,
@@ -117,5 +133,15 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
       case CardType.staticBanner:
         break;
     }
+  }
+
+  Widget buildImageBanner(BuildContext context) {
+    return Image.asset('assets/images/instagram_add.jpg', fit: BoxFit.cover);
+  }
+
+  Widget buildDynamicBanner(BuildContext context) {
+    return Container(
+        height: 200,
+        child: ImageSliderWidget());
   }
 }
