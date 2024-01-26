@@ -26,10 +26,7 @@ class _BookListWidgetState extends State<BookListWidget> {
       itemBuilder: (context, index) {
         BookModel bookItem = widget.bookList[index];
         return GestureDetector(
-          onTap: () {
-            BlocProvider.of<LibraryCubit>(context).openEpub(
-                widget.bookList[index].id!);
-          },
+          onTap: () => _handleOnTap(context, bookItem),
           onDoubleTap: _handleDoubleTap,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -88,6 +85,59 @@ class _BookListWidgetState extends State<BookListWidget> {
     //     );
     //   }
     // }
+  }
 
+  _handleOnTap(BuildContext context, BookModel bookItem) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(bookItem.bookName ?? 'Book Name'),
+          ),
+          content: SizedBox(
+            width: double.maxFinite,
+            // Adjust the height as needed to fit two rows of books
+            height: MediaQuery.of(context).size.height * 0.24,
+
+            child: GridView.builder(
+              scrollDirection: Axis.horizontal,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 1, // Two books per row
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                childAspectRatio: 1.6,
+              ),
+              itemCount: 5, // assuming there are at least 5 books in the list
+              itemBuilder: (BuildContext context, int index) {
+                BookModel book = widget.bookList[index];
+                return Column(
+                  children: [
+                    Container(
+                      height: 150,
+                      width: 110,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        image: DecorationImage(
+                          image: AssetImage(
+                            'assets/images/${bookItem.bookCover ?? 'book_sample.png'}',
+                          ),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Expanded(child: Text('الجزء $index')),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
   }
 }
