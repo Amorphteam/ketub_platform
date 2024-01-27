@@ -5,10 +5,10 @@ import 'html_viewer_state.dart';
 class HtmlViewerCubit extends Cubit<HtmlViewerState> {
   HtmlViewerCubit() : super(const HtmlViewerState.initial());
 
-  Future<void> loadText() async {
+  Future<void> loadText(int? id) async {
     try {
       emit(const HtmlViewerState.loading());
-      final article = await ArticleOnlineRepository().getArticles(44621);
+      final article = await ArticleOnlineRepository().getArticles(id ?? 44621);
       final htmlString  = article.description ?? '';
       final htmlTitle = article.name ?? '';
       final htmlpubDate = article.createdAt ?? '';

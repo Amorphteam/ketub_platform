@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart'; // Import this if you are using SVG images
+import 'package:ketub_platform/screens/html_viewer/cubit/html_viewer_cubit.dart';
+import 'package:ketub_platform/screens/html_viewer/html_viewer_screen.dart';
 import 'package:ketub_platform/screens/main/home/home_tree_cat_screen.dart';
 import 'package:ketub_platform/screens/main/shared_widgets/search_bar_widget.dart';
 
@@ -17,7 +20,8 @@ class homeTabScreen extends StatefulWidget {
   State<homeTabScreen> createState() => _homeTabScreenState();
 }
 
-class _homeTabScreenState extends State<homeTabScreen> with SingleTickerProviderStateMixin {
+class _homeTabScreenState extends State<homeTabScreen>
+    with SingleTickerProviderStateMixin {
   TabController? _tabController;
 
   @override
@@ -43,22 +47,22 @@ class _homeTabScreenState extends State<homeTabScreen> with SingleTickerProvider
               onSelected: (String result) {
                 // Handle the menu item action here
                 switch (result) {
-                  case 'option1':
-                  // Do something for option 1
+                  case 'cv':
+                    _openCvScreen();
                     break;
-                  case 'option2':
-                  // Do something for option 2
+                  case 'about':
+                    // Do something for option 2
                     break;
-                // Add more cases for each menu option
+                  // Add more cases for each menu option
                 }
               },
               itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
                 const PopupMenuItem<String>(
-                  value: 'option1',
+                  value: 'cv',
                   child: Text('السيرة الذاتية'),
                 ),
                 const PopupMenuItem<String>(
-                  value: 'option2',
+                  value: 'about',
                   child: Text('حول التطبيق'),
                 ),
                 // Add more PopupMenuItem widgets for each menu option
@@ -67,7 +71,6 @@ class _homeTabScreenState extends State<homeTabScreen> with SingleTickerProvider
             ),
           ],
         ),
-
         bottom: TabBar(
           controller: _tabController,
           tabs: [
@@ -100,4 +103,13 @@ class _homeTabScreenState extends State<homeTabScreen> with SingleTickerProvider
     return HomeTreeCatScreen();
   }
 
+  _openCvScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BlocProvider(
+            create: (context) => HtmlViewerCubit(), child: HtmlViewerScreen(id: 49482,)),
+      ),
+    );
+  }
 }

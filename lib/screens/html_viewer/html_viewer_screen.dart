@@ -5,11 +5,14 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/parser.dart';
 import 'package:ketub_platform/screens/html_viewer/cubit/html_viewer_cubit.dart';
+import 'package:ketub_platform/utils/html_helper.dart';
 
 import 'cubit/html_viewer_state.dart';
 
 class HtmlViewerScreen extends StatefulWidget {
-  const HtmlViewerScreen({super.key});
+  int? id;
+  String? data;
+  HtmlViewerScreen({super.key, this.id, this.data});
 
   @override
   State<HtmlViewerScreen> createState() => _HtmlViewerScreenState();
@@ -18,7 +21,7 @@ class HtmlViewerScreen extends StatefulWidget {
 class _HtmlViewerScreenState extends State<HtmlViewerScreen> {
   @override
   void initState() {
-    BlocProvider.of<HtmlViewerCubit>(context).loadText();
+    BlocProvider.of<HtmlViewerCubit>(context).loadText(widget.id);
     super.initState();
   }
 
@@ -135,31 +138,10 @@ class _HtmlViewerScreenState extends State<HtmlViewerScreen> {
         padding: EdgeInsets.only(top: 20.0),
         child: Center(child: CircularProgressIndicator()),
       ),
-      loaded: (data, _, __) => loadHtml(data),
+      loaded: (data, _, __) => HtmlHelper.loadHtml(data),
       error: (error) => Text(error ?? 'Error'),
     );
   }
 }
 
-Widget loadHtml(String data) {
-  return SingleChildScrollView(
-    child: Html(
-      data: data,
-      style: {
-        "html": Style(
-            textAlign: TextAlign.justify,
-            direction: TextDirection.rtl,
-            lineHeight: LineHeight.number(1.5),
-            fontSize: FontSize.large,
-            fontFamily: 'tajwal'),
-        "h1,h2,h3": Style(
-            textAlign: TextAlign.right,
-            direction: TextDirection.rtl,
-            padding: HtmlPaddings.only(top: 30),
-            fontSize: FontSize.xLarge,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'tajwal'),
-      },
-    ),
-  );
-}
+
