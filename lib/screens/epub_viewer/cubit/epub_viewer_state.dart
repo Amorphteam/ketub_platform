@@ -8,5 +8,6 @@ class EpubViewerState with _$EpubViewerState {
   const factory EpubViewerState.error({required String error}) = _error;
   const factory EpubViewerState.pageChanged({int? pageNumber}) = _PageChanged;
   const factory EpubViewerState.styleChanged({FontSizeCustom? fontSize, LineSpace? lineHeight, FontFamily? fontFamily}) = _StyleChanged;
+  const factory EpubViewerState.bookmarkAdded({int? status}) = _BookmarkAdded;
 
 }

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ketub_platform/utils/epub_helper.dart';
 
 import '../../epub_viewer/cubit/epub_cubit.dart';
+import '../shared_widgets/search_bar_widget.dart';
 import 'cubit/bookmark_cubit.dart';
 import 'widgets/reference_list_widget.dart';
 
@@ -24,51 +25,20 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-          child: TextField(
-            onChanged: (value) => _filterList(value),
-            // Assuming _filterList is defined somewhere
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.zero,
-              labelText: 'Search',
-              prefixIcon: Icon(Icons.search),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
+    return BlocBuilder<BookmarkCubit, BookmarkState>(
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            title: SearchBarWiget(bookamrkCubit: BlocProvider.of<BookmarkCubit>(context),),
           ),
-        ),
-        BlocConsumer<BookmarkCubit, BookmarkState>(
-          listener: (context, state) {
-            if (state is BookmarkErrorState) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(state.error.toString())));
-            } else if (state is BookmarkTappedState) {
-              openEpub(context: context, reference: state.item);
-            }
-          },
-          builder: (context, state) {
-            if (state is AllBookmarksLoadedState) {
-              return Flexible(
-                child: ReferenceListWidget(referenceList: state.bookmarks),
-              );
-            } else if (state is BookmarkLoadingState) {
-              return CircularProgressIndicator();
-            } else {
-              return const SizedBox.shrink();
-            }
-          },
-          buildWhen: (previousState, state) {
-            return state is AllBookmarksLoadedState ||
-                state is BookmarkLoadingState;
-          },
-        )
-      ],
+          body: _buildBody(state),
+        );
+      },
     );
+
+
   }
+
 
   void _loadAllBookmarks() {
     BlocProvider.of<BookmarkCubit>(context).loadAllBookmarks();
@@ -76,5 +46,26 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
 
   void _filterList(String query) {
     BlocProvider.of<BookmarkCubit>(context).filterBookmarks(query);
+  }
+
+  _buildBody(BookmarkState state) {
+    if (state is BookmarkLoadingState) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    } else if (state is AllBookmarksLoadedState) {
+      return _buildList(state);
+    } else if (state is BookmarkErrorState) {
+      return Center(
+        child: Text(state.error.toString()),
+      );
+    } else {
+      return Container();
+    }
+  }
+
+  Widget _buildList(AllBookmarksLoadedState state) {
+    return ReferenceListWidget(referenceList: state.bookmarks);
+
   }
 }

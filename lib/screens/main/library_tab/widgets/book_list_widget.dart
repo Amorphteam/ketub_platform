@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ketub_platform/models/book_model.dart';
+import 'package:ketub_platform/screens/epub_viewer/cubit/epub_viewer_cubit.dart';
+import 'package:ketub_platform/screens/epub_viewer/epub_viewer_screen.dart';
 import '../cubit/library_cubit.dart';
 
 class BookListWidget extends StatefulWidget {
@@ -114,16 +116,21 @@ class _BookListWidgetState extends State<BookListWidget> {
                 BookModel book = widget.bookList[index];
                 return Column(
                   children: [
-                    Container(
-                      height: 150,
-                      width: 110,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
-                          image: AssetImage(
-                            'assets/images/${bookItem.bookCover ?? 'book_sample.png'}',
+                    GestureDetector(
+                      onTap: () {
+                        _openEpub(widget.bookList[index].id ?? 1);
+                      },
+                      child: Container(
+                        height: 150,
+                        width: 110,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                            image: AssetImage(
+                              'assets/images/${bookItem.bookCover ?? 'book_sample.png'}',
+                            ),
+                            fit: BoxFit.cover,
                           ),
-                          fit: BoxFit.cover,
                         ),
                       ),
                     ),
@@ -140,4 +147,8 @@ class _BookListWidgetState extends State<BookListWidget> {
       },
     );
   }
+
+   _openEpub(int id) {
+     BlocProvider.of<LibraryCubit>(context).openEpub(id);
+   }
 }

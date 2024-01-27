@@ -110,26 +110,7 @@ class EpubCubit extends Cubit<EpubState> {
 //
 //
 //
-//   Future<void> addBookmark(ReferenceModel bookmark) async {
-//     try {
-//       final referencesDatabase = ReferencesDatabase.instance;
-//       // Check if the reference already exists in the database based on book title and page number
-//       final existingReferences = await referencesDatabase
-//           .getReferenceByBookTitleAndPage(bookmark.bookPath, bookmark.navIndex);
-//       if (existingReferences.isEmpty) {
-//         // The reference doesn't exist, so add it to the database
-//         final int addStatus = await referencesDatabase.addReference(bookmark);
-//         emit(BookmarkAddedState(addStatus));
-//       } else {
-//         // The reference already exists, handle this case (e.g., show an error message)
-//         emit(EpubErrorState(error: 'Duplicate reference found'));
-//       }
-//     } catch (error) {
-//       if (error is Exception) {
-//         emit(EpubErrorState(error: error.toString()));
-//       }
-//     }
-//   }
+
 
 
 

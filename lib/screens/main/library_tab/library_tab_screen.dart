@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:ketub_platform/screens/main/bookmark_tab/bookmark_screen.dart';
+import 'package:ketub_platform/screens/main/bookmark_tab/cubit/bookmark_cubit.dart';
+import 'package:ketub_platform/screens/main/library_tab/cubit/library_cubit.dart';
 import 'package:ketub_platform/screens/main/library_tab/library_all_books_screen.dart';
 import 'package:ketub_platform/screens/main/shared_widgets/search_bar_widget.dart';
 
@@ -41,7 +45,7 @@ class _LibraryTabScreenState extends State<LibraryTabScreen> with SingleTickerPr
               children: [
                 IconButton(
                   onPressed: () {
-                    // Handle the button press
+                    _openBookmarkScreen();
                   },
                   icon: SvgPicture.asset('assets/icons/bookmark.svg'),
                 ),
@@ -107,5 +111,18 @@ class _LibraryTabScreenState extends State<LibraryTabScreen> with SingleTickerPr
 
   Widget _buildTreeContent() {
     return LibraryAllBooksScreen();
+  }
+
+
+ _openBookmarkScreen (){
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BlocProvider(
+          create: (context) => BookmarkCubit(),
+          child: BookmarkScreen(),
+        ),
+      ),
+    );
   }
 }

@@ -150,6 +150,9 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                           LineSpace? lineHeight, FontFamily? fontFamily) {
                         _changeStyle(fontSize, lineHeight, fontFamily);
                         return _buildCurrentUi(context, state);
+                      },
+                      bookmarkAdded: (int? status) {
+                        return _buildCurrentUi(context, state);
                       }),
                 ),
               ),
@@ -227,7 +230,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                     }),
               ),
               if (isSliderVisible)
-              Column(
+                Column(
                   children: [
                     VerticalSeekBar(
                       currentPage: _currentPage,
@@ -277,14 +280,13 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
 
   _addBookmark(BuildContext context) {
     final reference = ReferenceModel(
-      title: 'sample title',
+      title: ' علامة مرجعية على كتاب $_bookName',
       bookName: _bookName,
       bookPath: widget.catModel!.bookPath!,
       navIndex: _currentPage.toString(),
     );
 
-    // BlocProvider.of<EpubCubit>(context)
-    //     .addBookmark(reference);
+    BlocProvider.of<EpubViewerCubit>(context).addBookmark(reference);
   }
 
   _openIternalToc(BuildContext context) {

@@ -11,7 +11,7 @@ _$CardTypeModelImpl _$$CardTypeModelImplFromJson(Map<String, dynamic> json) =>
       cardType: $enumDecode(_$CardTypeEnumMap, json['cardType']),
       title: json['title'] as String,
       hasLoadMore: json['hasLoadMore'] as bool? ?? false,
-      featureImageUrl: json['featureImageUrl'] as String?,
+      featureImageUrl: json['featureImageUrl'] as String,
     );
 
 Map<String, dynamic> _$$CardTypeModelImplToJson(_$CardTypeModelImpl instance) =>

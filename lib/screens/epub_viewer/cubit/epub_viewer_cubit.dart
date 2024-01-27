@@ -4,8 +4,10 @@ import 'package:bloc/bloc.dart';
 import 'package:epub_parser/epub_parser.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:ketub_platform/screens/main/bookmark_tab/cubit/bookmark_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../models/reference_model.dart';
 import '../../../models/style_model.dart';
 import '../../../repositories/reference_database.dart';
 import '../../../utils/epub_helper.dart';
@@ -30,7 +32,6 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
 
 Future<void> loadAndParseEpub(
     String assetPath) async {
-  print('AJCACJ $assetPath');
   emit(const EpubViewerState.loading());
   try {
     final EpubBook epubBook = await loadEpubFromAsset(assetPath);
@@ -102,6 +103,24 @@ Future<void> loadAndParseEpub(
       final loadedStyleHelper = StyleHelper.fromJson(decodedStyle);
       styleHelper = loadedStyleHelper;
       emit(EpubViewerState.styleChanged(fontFamily: styleHelper.fontFamily, fontSize: styleHelper.fontSize, lineHeight: styleHelper.lineSpace));
+    }
+  }
+
+  Future<void> addBookmark(ReferenceModel bookmark) async {
+    try {
+      final referencesDatabase = ReferencesDatabase.instance;
+      final existingReferences = await referencesDatabase
+          .getReferenceByBookTitleAndPage(bookmark.bookPath, bookmark.navIndex);
+      if (existingReferences.isEmpty) {
+        final int addStatus = await referencesDatabase.addReference(bookmark);
+        emit(EpubViewerState.bookmarkAdded(status: addStatus));
+      } else {
+        emit(const EpubViewerState.error(error: 'Duplicate reference found'));
+      }
+    } catch (error) {
+      if (error is Exception) {
+        emit(EpubViewerState.error(error: error.toString()));
+      }
     }
   }
 }

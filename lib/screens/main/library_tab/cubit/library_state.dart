@@ -8,7 +8,8 @@ class LibraryLoadingState extends LibraryState{}
 
 class BookClickedState extends LibraryState{
   final List<CategoryModel> cats;
-  BookClickedState(this.cats);
+  final int id;
+  BookClickedState(this.cats, this.id);
 }
 
 class LibraryErrorState extends LibraryState{

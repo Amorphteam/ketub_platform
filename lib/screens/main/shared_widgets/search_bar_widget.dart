@@ -1,17 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:ketub_platform/screens/main/bookmark_tab/cubit/bookmark_cubit.dart';
 
 import '../../search/search_screen.dart';
 
 class SearchBarWiget extends StatefulWidget {
-  const SearchBarWiget({super.key});
+  final BookmarkCubit? bookamrkCubit;
+
+  const SearchBarWiget({super.key, this.bookamrkCubit});
 
   @override
   State<SearchBarWiget> createState() => _SearchBarWigetState();
 }
 
 class _SearchBarWigetState extends State<SearchBarWiget> {
+  final TextEditingController _searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,6 +31,7 @@ class _SearchBarWigetState extends State<SearchBarWiget> {
           );
         },
         child: TextField(
+          controller: _searchController,
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.grey[200],
@@ -40,24 +46,28 @@ class _SearchBarWigetState extends State<SearchBarWiget> {
                 width: 20, // Adjust the size as needed
                 height: 20, // Adjust the size as needed
               ),
-              onPressed: () {
-                // Add the search logic here if necessary
-              },
+              onPressed: () {},
             ),
             suffixIcon: IconButton(
               icon: Icon(Icons.mic, color: Colors.grey),
               // Use your SVG asset if needed
               onPressed: () {
-                // Implement your voice search logic
+
               },
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(30.0),
               borderSide: BorderSide.none, // No border
             ),
-            contentPadding: const EdgeInsets.symmetric(
-                vertical: 0, horizontal: 20),
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
           ),
+          onChanged: (value) {
+              if (widget.bookamrkCubit != null) {
+                widget.bookamrkCubit!.filterBookmarks(value);
+
+            }
+          },
         ),
       ),
     );
