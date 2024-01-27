@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ketub_platform/screens/main/bookmark_tab/cubit/bookmark_cubit.dart';
 
+import '../../audio/audio_screen.dart';
+import '../../audio/cubit/audio_player_cubit.dart';
 import '../../search/search_screen.dart';
 
 class SearchBarWiget extends StatefulWidget {
@@ -52,7 +55,16 @@ class _SearchBarWigetState extends State<SearchBarWiget> {
               icon: Icon(Icons.mic, color: Colors.grey),
               // Use your SVG asset if needed
               onPressed: () {
-
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        BlocProvider(
+                          create: (context) => AudioPlayerCubit(),
+                          child: AudioScreen(),
+                        ),
+                  ),
+                );
               },
             ),
             border: OutlineInputBorder(

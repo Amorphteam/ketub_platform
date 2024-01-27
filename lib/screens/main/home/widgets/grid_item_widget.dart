@@ -8,6 +8,7 @@ class GridItemWidget extends StatefulWidget {
   final double height;
   final bool withTitle;
   final bool insideTitlePosition;
+  final bool? withBk;
 
   const GridItemWidget({
     Key? key,
@@ -16,7 +17,7 @@ class GridItemWidget extends StatefulWidget {
     required this.title,
     required this.imagePath,
     required this.width,
-    required this.height,
+    required this.height, this.withBk,
   }) : super(key: key);
 
   @override
@@ -43,18 +44,26 @@ class _GridItemWidgetState extends State<GridItemWidget> {
     ) : null;
 
     // Use a ternary operator to decide between Row and Column
-    return widget.insideTitlePosition ?
-    Row(
-      children: [
-        imageContainer,
-        if (widget.withTitle) Expanded(child: titleText!),
-      ],
-    ) :
-    Column(
+    return widget.insideTitlePosition
+        ? Container(
+      decoration: BoxDecoration(
+        color: widget.withBk ?? false ? Colors.grey[200] : null,
+        borderRadius: BorderRadius.circular(16), // Set rounded corners
+      ),
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: [
+          imageContainer,
+          if (widget.withTitle) Expanded(child: titleText!),
+        ],
+      ),
+    )
+        : Column(
       children: [
         imageContainer,
         if (widget.withTitle) Expanded(child: Center(child: titleText!)),
       ],
     );
+
   }
 }

@@ -14,8 +14,6 @@ import 'home/home_all_cat_screen.dart';
 import 'home/home_tab_screen.dart';
 import 'library_tab/cubit/library_cubit.dart';
 
-import '../audio/audio_screen.dart';
-import '../audio/cubit/audio_cubit.dart';
 
 
 class NavScreen extends StatefulWidget {

@@ -4,18 +4,13 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:ketub_platform/screens/main/nav_screen.dart';
 import 'package:ketub_platform/screens/splash/splash_screen.dart';
-import 'package:ketub_platform/utils/audio_manager.dart';
+import 'package:ketub_platform/utils/audio_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await JustAudioBackground.init(
-    androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
-    androidNotificationChannelName: 'Audio playback',
-    androidNotificationOngoing: true,
-  );
-  await AudioManager.init();
+  await AudioHelper.handleBackgroundAudio();
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
@@ -25,6 +20,8 @@ Future<void> main() async {
   );
   runApp(const MyApp());
 }
+
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

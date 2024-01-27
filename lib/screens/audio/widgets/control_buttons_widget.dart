@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:just_audio/just_audio.dart';
+
 import '../../../utils/common.dart';
 
-
-class AudioPlayerScreen extends StatelessWidget {
+class ControlButtonsWidget extends StatelessWidget {
   final AudioPlayer player;
 
-  const AudioPlayerScreen(this.player, {Key? key}) : super(key: key);
+  const ControlButtonsWidget(this.player, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +29,16 @@ class AudioPlayerScreen extends StatelessWidget {
             );
           },
         ),
-        StreamBuilder<SequenceState?>(
-          stream: player.sequenceStateStream,
-          builder: (context, snapshot) => IconButton(
-            icon: const Icon(Icons.skip_previous),
-            onPressed: player.hasPrevious ? player.seekToPrevious : null,
-          ),
+        IconButton(
+          icon: SvgPicture.asset('assets/icons/reply.svg'),
+          onPressed: () async {
+            // Get the current position
+            final currentPosition = await player.position;
+            // Calculate the new position by adding 5 seconds
+            final newPosition = currentPosition + Duration(seconds: 10);
+            // Seek to the new position
+            player.seek(newPosition);
+          },
         ),
         StreamBuilder<PlayerState>(
           stream: player.playerStateStream,
@@ -52,7 +56,7 @@ class AudioPlayerScreen extends StatelessWidget {
               );
             } else if (playing != true) {
               return IconButton(
-                icon: const Icon(Icons.play_arrow),
+                icon: SvgPicture.asset('assets/icons/play.svg'),
                 iconSize: 64.0,
                 onPressed: player.play,
               );
@@ -72,12 +76,16 @@ class AudioPlayerScreen extends StatelessWidget {
             }
           },
         ),
-        StreamBuilder<SequenceState?>(
-          stream: player.sequenceStateStream,
-          builder: (context, snapshot) => IconButton(
-            icon: const Icon(Icons.skip_next),
-            onPressed: player.hasNext ? player.seekToNext : null,
-          ),
+        IconButton(
+          icon: SvgPicture.asset('assets/icons/forword.svg'),
+          onPressed: () async {
+            // Get the current position
+            final currentPosition = await player.position;
+            // Calculate the new position by adding 5 seconds
+            final newPosition = currentPosition - Duration(seconds: 5);
+            // Seek to the new position
+            player.seek(newPosition);
+          },
         ),
         StreamBuilder<double>(
           stream: player.speedStream,

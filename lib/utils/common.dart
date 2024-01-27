@@ -13,6 +13,7 @@ class PositionData {
   PositionData(this.position, this.bufferedPosition, this.duration);
 }
 
+
 class SeekBar extends StatefulWidget {
   final Duration duration;
   final Duration position;
@@ -32,6 +33,10 @@ class SeekBar extends StatefulWidget {
   @override
   SeekBarState createState() => SeekBarState();
 }
+
+
+
+
 
 class SeekBarState extends State<SeekBar> {
   double? _dragValue;
@@ -61,8 +66,9 @@ class SeekBarState extends State<SeekBar> {
         SliderTheme(
           data: _sliderThemeData.copyWith(
             thumbShape: HiddenThumbComponentShape(),
-            activeTrackColor: Colors.blue.shade100,
-            inactiveTrackColor: Colors.grey.shade300,
+            activeTrackColor: Colors.green.shade100,
+            inactiveTrackColor: Colors.green.shade300,
+
           ),
           child: ExcludeSemantics(
             child: Slider(
@@ -473,4 +479,5 @@ void showSliderDialog({
     ),
   );
 }
+
 

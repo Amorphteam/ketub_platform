@@ -8,7 +8,7 @@ import 'package:ketub_platform/screens/main/home/home_tree_cat_screen.dart';
 import 'package:ketub_platform/screens/main/shared_widgets/search_bar_widget.dart';
 
 import '../../../models/card_type_model.dart';
-import '../../../utils/home_helper.dart';
+import '../../../utils/data_helper.dart';
 import '../../search/search_screen.dart';
 import 'home_all_cat_screen.dart';
 import 'home_recent_content_screen.dart';

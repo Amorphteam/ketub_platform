@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ketub_platform/models/card_type_model.dart';
+import 'package:ketub_platform/screens/category_list/category_list_screen.dart';
 
 import 'grid_item_widget.dart';
 import 'image_slider_widget.dart';
@@ -69,7 +70,7 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
                   IconButton(
                     icon: SvgPicture.asset('assets/icons/load_more.svg'),
                     onPressed: () {
-                      // Handle more info action
+                      _openCategoryScreen();
                     },
                   ),
               ],
@@ -143,5 +144,14 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
     return Container(
         height: 200,
         child: ImageSliderWidget());
+  }
+
+  _openCategoryScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CategoryListScreen(),
+      ),
+    );
   }
 }

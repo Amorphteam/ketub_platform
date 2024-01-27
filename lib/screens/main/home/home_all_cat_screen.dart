@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ketub_platform/models/card_type_model.dart';
 import 'package:ketub_platform/screens/main/home/widgets/section_card_widget.dart';
-import 'package:ketub_platform/utils/home_helper.dart';
+import 'package:ketub_platform/utils/data_helper.dart';
 
 import '../../search/search_screen.dart';
 
@@ -17,7 +17,7 @@ class _homeAllCatScreenState extends State<homeAllCatScreen> {
   List<CardTypeModel>? cards;
   @override
   void initState() {
-    cards = HomeHelper.cards;
+    cards = DataHelper.cards;
     super.initState();
   }
   @override
