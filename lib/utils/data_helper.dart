@@ -6,14 +6,14 @@ import '../models/list_type_model.dart';
 
 class DataHelper{
   static List<CardTypeModel> cards = [
-    CardTypeModel(cardType: CardType.gridLarge, title: 'المحاضرات', hasLoadMore: true, featureImageUrl: 'assets/images/bk1.jpg'),
-    CardTypeModel(cardType: CardType.oneList, title: 'الصوتيات', hasLoadMore: true, featureImageUrl: 'assets/images/bk2.jpg'),
-    CardTypeModel(cardType: CardType.gridSmall, title: 'الكتب', hasLoadMore: true, featureImageUrl: 'assets/images/bk3.jpg'),
-    CardTypeModel(cardType: CardType.dynamicBanner, title: 'الكتب', hasLoadMore: true, featureImageUrl: 'assets/images/bk3.jpg'),
-    CardTypeModel(cardType: CardType.gridLarge, title: 'المحاضرات', hasLoadMore: true , featureImageUrl: 'assets/images/bk1.jpg'),
-    CardTypeModel(cardType: CardType.staticBanner, title: 'المحاضرات', hasLoadMore: true, featureImageUrl: 'assets/images/bk4.jpg'),
-    CardTypeModel(cardType: CardType.gridSmall, title: 'الكتب', hasLoadMore: true, featureImageUrl: 'assets/images/bk3.jpg'),
-    CardTypeModel(cardType: CardType.gridLarge, title: 'المحاضرات', hasLoadMore: true, featureImageUrl: 'assets/images/bk1.jpg'),
+    CardTypeModel(cardType: CardType.gridLarge, title: 'المقالات', hasLoadMore: true, featureImageUrl: 'assets/images/bk1.jpg'),
+    CardTypeModel(cardType: CardType.oneList, title: 'المحاضرات', hasLoadMore: true, featureImageUrl: 'assets/images/bk2.jpg'),
+    CardTypeModel(cardType: CardType.gridSmall, title: 'الحوارات', hasLoadMore: true, featureImageUrl: 'assets/images/bk3.jpg'),
+    CardTypeModel(cardType: CardType.dynamicBanner, title: 'آراء', hasLoadMore: true, featureImageUrl: 'assets/images/bk3.jpg'),
+    CardTypeModel(cardType: CardType.gridLarge, title: 'الأسئلة والأجوبة', hasLoadMore: true , featureImageUrl: 'assets/images/bk1.jpg'),
+    CardTypeModel(cardType: CardType.staticBanner, title: 'كلمات ومواقف', hasLoadMore: true, featureImageUrl: 'assets/images/bk4.jpg'),
+    CardTypeModel(cardType: CardType.gridSmall, title: 'متابعات', hasLoadMore: true, featureImageUrl: 'assets/images/bk3.jpg'),
+    CardTypeModel(cardType: CardType.gridLarge, title: 'لغات أخرى', hasLoadMore: true, featureImageUrl: 'assets/images/bk1.jpg'),
   ];
 
   static List<ListTypeModel> list = [
