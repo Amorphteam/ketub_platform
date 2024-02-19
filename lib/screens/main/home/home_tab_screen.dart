@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart'; // Import this if you are using SVG images
 import 'package:ketub_platform/screens/html_viewer/cubit/html_viewer_cubit.dart';
 import 'package:ketub_platform/screens/html_viewer/html_viewer_screen.dart';
+import 'package:ketub_platform/screens/main/home/cubit/home_all_cat_cubit.dart';
 import 'package:ketub_platform/screens/main/home/home_tree_cat_screen.dart';
 import 'package:ketub_platform/screens/main/shared_widgets/search_bar_widget.dart';
 
@@ -92,7 +93,10 @@ class _homeTabScreenState extends State<homeTabScreen>
   }
 
   Widget _buildTabContent() {
-    return homeAllCatScreen();
+    return BlocProvider<HomeAllCatCubit>(
+      create: (context) => HomeAllCatCubit(),
+      child: homeAllCatScreen(),
+    );
   }
 
   Widget _buildRecentContent() {

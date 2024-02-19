@@ -12,6 +12,9 @@ _$CardTypeModelImpl _$$CardTypeModelImplFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String,
       hasLoadMore: json['hasLoadMore'] as bool? ?? false,
       featureImageUrl: json['featureImageUrl'] as String,
+      articles: (json['articles'] as List<dynamic>)
+          .map(ArticleModel.fromJson)
+          .toList(),
     );
 
 Map<String, dynamic> _$$CardTypeModelImplToJson(_$CardTypeModelImpl instance) =>
@@ -20,6 +23,7 @@ Map<String, dynamic> _$$CardTypeModelImplToJson(_$CardTypeModelImpl instance) =>
       'title': instance.title,
       'hasLoadMore': instance.hasLoadMore,
       'featureImageUrl': instance.featureImageUrl,
+      'articles': instance.articles,
     };
 
 const _$CardTypeEnumMap = {

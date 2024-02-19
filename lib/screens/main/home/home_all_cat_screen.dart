@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ketub_platform/models/card_type_model.dart';
+import 'package:ketub_platform/screens/main/home/cubit/home_all_cat_cubit.dart';
 import 'package:ketub_platform/screens/main/home/widgets/section_card_widget.dart';
 import 'package:ketub_platform/utils/data_helper.dart';
 
@@ -14,20 +16,33 @@ class homeAllCatScreen extends StatefulWidget {
 }
 
 class _homeAllCatScreenState extends State<homeAllCatScreen> {
-  List<CardTypeModel>? cards;
   @override
   void initState() {
-    cards = DataHelper.cards;
     super.initState();
+    BlocProvider.of<HomeAllCatCubit>(context).loadCards();
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(
-          itemCount: cards?.length,
-          itemBuilder: (context, index) {
-            return SectionCardWidget(cardType: cards?[index].cardType ?? CardType.gridLarge, title: cards?[index].title ?? '', hasLoadMore: cards?[index].hasLoadMore ?? false, featureImageUrl: cards?[index].featureImageUrl ?? 'assets/images/bk1.jpg',);
-          }),
+      body: BlocBuilder<HomeAllCatCubit, HomeAllCatState>(
+  builder: (context, state) {
+    return state.when(
+      initial: () => const Center(child: Text('Initial State')),
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (message) => Center(child: Text('Error: $message')),
+      loaded: (cards) => _buildCardsList(cards),
     );
+
+  },
+),
+    );
+  }
+
+  _buildCardsList(List<CardTypeModel> cards) {
+    return ListView.builder(
+        itemCount: cards.length,
+        itemBuilder: (context, index) {
+          return SectionCardWidget(posts: cards[index].articles,cardType: cards[index].cardType, title: cards[index].title, hasLoadMore: cards[index].hasLoadMore, featureImageUrl: cards[index].featureImageUrl,);
+        });
   }
 }

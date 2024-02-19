@@ -2,7 +2,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:ketub_platform/models/Article_model.dart';
+import 'package:ketub_platform/models/article_model.dart';
 import '../../../repositories/articles_online_repository.dart';
 import '../../../utils/common.dart';
 

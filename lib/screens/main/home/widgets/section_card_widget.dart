@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ketub_platform/models/card_type_model.dart';
 import 'package:ketub_platform/screens/category_list/category_list_screen.dart';
 
+import '../../../../models/article_model.dart';
 import 'grid_item_widget.dart';
 import 'image_slider_widget.dart';
 
@@ -12,9 +13,11 @@ class SectionCardWidget extends StatefulWidget {
   final String title;
   final bool hasLoadMore;
   final String featureImageUrl;
+  final List<ArticleModel> posts;
 
   const SectionCardWidget(
       {super.key,
+      required this.posts,
       required this.cardType,
       required this.title,
       required this.hasLoadMore,
@@ -49,7 +52,6 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
       default:
         return buildGridView(context);
     }
-
   }
 
   Widget buildGridView(BuildContext context) {
@@ -92,7 +94,7 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
               itemBuilder: (context, index) {
                 return GridItemWidget(
                   title:
-                      'قاعدة اللطف في التفكير المعتزلي وأتباعه ـ قراءة تحليلية وكشف لمكامن الضعف التطبيقي $index',
+                      widget.posts[index].name ?? '',
                   imagePath: widget.featureImageUrl,
                   height: itemHeight,
                   width: itemWidth,
@@ -116,7 +118,7 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
         itemWidth = 80.0;
         break;
       case CardType.oneList:
-        containerHeight = 260;
+        containerHeight = 220;
         childRatio = 1.6;
         maxCrossAxisExtent = 200;
         itemHeight = 80.0;
@@ -124,7 +126,7 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
         insideTitlePosition = false;
         break;
       case CardType.gridSmall:
-        containerHeight = 300;
+        containerHeight = 260;
         childRatio = 0.4;
         itemHeight = 30.0;
         itemWidth = 30.0;
@@ -141,9 +143,7 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
   }
 
   Widget buildDynamicBanner(BuildContext context) {
-    return Container(
-        height: 200,
-        child: ImageSliderWidget());
+    return Container(height: 200, child: ImageSliderWidget());
   }
 
   _openCategoryScreen() {

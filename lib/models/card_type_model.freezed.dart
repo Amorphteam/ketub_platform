@@ -24,6 +24,7 @@ mixin _$CardTypeModel {
   String get title => throw _privateConstructorUsedError;
   bool get hasLoadMore => throw _privateConstructorUsedError;
   String get featureImageUrl => throw _privateConstructorUsedError;
+  List<ArticleModel> get articles => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -41,7 +42,8 @@ abstract class $CardTypeModelCopyWith<$Res> {
       {CardType cardType,
       String title,
       bool hasLoadMore,
-      String featureImageUrl});
+      String featureImageUrl,
+      List<ArticleModel> articles});
 }
 
 /// @nodoc
@@ -61,6 +63,7 @@ class _$CardTypeModelCopyWithImpl<$Res, $Val extends CardTypeModel>
     Object? title = null,
     Object? hasLoadMore = null,
     Object? featureImageUrl = null,
+    Object? articles = null,
   }) {
     return _then(_value.copyWith(
       cardType: null == cardType
@@ -79,6 +82,10 @@ class _$CardTypeModelCopyWithImpl<$Res, $Val extends CardTypeModel>
           ? _value.featureImageUrl
           : featureImageUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      articles: null == articles
+          ? _value.articles
+          : articles // ignore: cast_nullable_to_non_nullable
+              as List<ArticleModel>,
     ) as $Val);
   }
 }
@@ -95,7 +102,8 @@ abstract class _$$CardTypeModelImplCopyWith<$Res>
       {CardType cardType,
       String title,
       bool hasLoadMore,
-      String featureImageUrl});
+      String featureImageUrl,
+      List<ArticleModel> articles});
 }
 
 /// @nodoc
@@ -113,6 +121,7 @@ class __$$CardTypeModelImplCopyWithImpl<$Res>
     Object? title = null,
     Object? hasLoadMore = null,
     Object? featureImageUrl = null,
+    Object? articles = null,
   }) {
     return _then(_$CardTypeModelImpl(
       cardType: null == cardType
@@ -131,6 +140,10 @@ class __$$CardTypeModelImplCopyWithImpl<$Res>
           ? _value.featureImageUrl
           : featureImageUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      articles: null == articles
+          ? _value._articles
+          : articles // ignore: cast_nullable_to_non_nullable
+              as List<ArticleModel>,
     ));
   }
 }
@@ -144,7 +157,9 @@ class _$CardTypeModelImpl
       {required this.cardType,
       required this.title,
       this.hasLoadMore = false,
-      required this.featureImageUrl});
+      required this.featureImageUrl,
+      required final List<ArticleModel> articles})
+      : _articles = articles;
 
   factory _$CardTypeModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$CardTypeModelImplFromJson(json);
@@ -158,10 +173,17 @@ class _$CardTypeModelImpl
   final bool hasLoadMore;
   @override
   final String featureImageUrl;
+  final List<ArticleModel> _articles;
+  @override
+  List<ArticleModel> get articles {
+    if (_articles is EqualUnmodifiableListView) return _articles;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_articles);
+  }
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CardTypeModel(cardType: $cardType, title: $title, hasLoadMore: $hasLoadMore, featureImageUrl: $featureImageUrl)';
+    return 'CardTypeModel(cardType: $cardType, title: $title, hasLoadMore: $hasLoadMore, featureImageUrl: $featureImageUrl, articles: $articles)';
   }
 
   @override
@@ -172,7 +194,8 @@ class _$CardTypeModelImpl
       ..add(DiagnosticsProperty('cardType', cardType))
       ..add(DiagnosticsProperty('title', title))
       ..add(DiagnosticsProperty('hasLoadMore', hasLoadMore))
-      ..add(DiagnosticsProperty('featureImageUrl', featureImageUrl));
+      ..add(DiagnosticsProperty('featureImageUrl', featureImageUrl))
+      ..add(DiagnosticsProperty('articles', articles));
   }
 
   @override
@@ -186,13 +209,14 @@ class _$CardTypeModelImpl
             (identical(other.hasLoadMore, hasLoadMore) ||
                 other.hasLoadMore == hasLoadMore) &&
             (identical(other.featureImageUrl, featureImageUrl) ||
-                other.featureImageUrl == featureImageUrl));
+                other.featureImageUrl == featureImageUrl) &&
+            const DeepCollectionEquality().equals(other._articles, _articles));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, cardType, title, hasLoadMore, featureImageUrl);
+  int get hashCode => Object.hash(runtimeType, cardType, title, hasLoadMore,
+      featureImageUrl, const DeepCollectionEquality().hash(_articles));
 
   @JsonKey(ignore: true)
   @override
@@ -213,7 +237,8 @@ abstract class _CardTypeModel implements CardTypeModel {
       {required final CardType cardType,
       required final String title,
       final bool hasLoadMore,
-      required final String featureImageUrl}) = _$CardTypeModelImpl;
+      required final String featureImageUrl,
+      required final List<ArticleModel> articles}) = _$CardTypeModelImpl;
 
   factory _CardTypeModel.fromJson(Map<String, dynamic> json) =
       _$CardTypeModelImpl.fromJson;
@@ -226,6 +251,8 @@ abstract class _CardTypeModel implements CardTypeModel {
   bool get hasLoadMore;
   @override
   String get featureImageUrl;
+  @override
+  List<ArticleModel> get articles;
   @override
   @JsonKey(ignore: true)
   _$$CardTypeModelImplCopyWith<_$CardTypeModelImpl> get copyWith =>
