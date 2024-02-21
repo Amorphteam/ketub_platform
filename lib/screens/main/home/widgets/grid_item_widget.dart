@@ -31,7 +31,7 @@ class _GridItemWidgetState extends State<GridItemWidget> {
       width: widget.width,
       height: widget.height,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(8),
         image: DecorationImage(
           image: AssetImage(widget.imagePath),
           fit: BoxFit.cover,

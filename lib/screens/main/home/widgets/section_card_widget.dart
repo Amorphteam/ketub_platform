@@ -1,8 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ketub_platform/models/articelType.dart';
 import 'package:ketub_platform/models/card_type_model.dart';
+import 'package:ketub_platform/screens/audio/audio_screen.dart';
+import 'package:ketub_platform/screens/audio/cubit/audio_player_cubit.dart';
 import 'package:ketub_platform/screens/category_list/category_list_screen.dart';
+import 'package:ketub_platform/screens/html_viewer/cubit/html_viewer_cubit.dart';
+import 'package:ketub_platform/screens/html_viewer/html_viewer_screen.dart';
 
 import '../../../../models/article_model.dart';
 import 'grid_item_widget.dart';
@@ -15,13 +21,12 @@ class SectionCardWidget extends StatefulWidget {
   final String featureImageUrl;
   final List<ArticleModel> posts;
 
-  const SectionCardWidget(
-      {super.key,
-      required this.posts,
-      required this.cardType,
-      required this.title,
-      required this.hasLoadMore,
-      required this.featureImageUrl});
+  const SectionCardWidget({super.key,
+    required this.posts,
+    required this.cardType,
+    required this.title,
+    required this.hasLoadMore,
+    required this.featureImageUrl});
 
   @override
   State<SectionCardWidget> createState() => _SectionCardWidgetState();
@@ -66,7 +71,10 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
               children: [
                 Text(
                   widget.title,
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .titleLarge,
                 ),
                 if (widget.hasLoadMore)
                   IconButton(
@@ -92,14 +100,18 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
               ),
               itemCount: 6,
               itemBuilder: (context, index) {
-                return GridItemWidget(
-                  title:
-                      widget.posts[index].name ?? '',
-                  imagePath: widget.featureImageUrl,
-                  height: itemHeight,
-                  width: itemWidth,
-                  insideTitlePosition: insideTitlePosition,
-                  withTitle: withTitle,
+                return GestureDetector(
+                  onTap: () {
+                    openDetailScreen(context, widget.posts[index]);
+                  },
+                  child: GridItemWidget(
+                    title: widget.posts[index].name ?? '',
+                    imagePath: widget.featureImageUrl,
+                    height: itemHeight,
+                    width: itemWidth,
+                    insideTitlePosition: insideTitlePosition,
+                    withTitle: withTitle,
+                  ),
                 );
               },
             ),
@@ -154,4 +166,39 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
       ),
     );
   }
+
+  void openDetailScreen(BuildContext context, ArticleModel post) {
+    if (postType(post) == ArticleType.Audio) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              BlocProvider(
+                create: (context) => AudioPlayerCubit(),
+                child: AudioScreen(),
+              ),
+        ),
+      );
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              BlocProvider(
+                create: (context) => HtmlViewerCubit(),
+                child: HtmlViewerScreen(id: (post.id)?.toInt()),
+              ),
+        ),
+      );
+    }
+  }
+
+  ArticleType postType(ArticleModel post) {
+    if (post.mediaDownloadLink=='' || post.mediaDownloadLink==null) {
+      return ArticleType.Html;
+    } else {
+      return ArticleType.Audio;
+    }
+  }
 }
+
