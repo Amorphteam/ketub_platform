@@ -1,4 +1,4 @@
-enum ArticleType {
+enum PostType {
   Audio,
   Html,
   Epub,

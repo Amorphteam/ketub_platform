@@ -168,7 +168,7 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
   }
 
   void openDetailScreen(BuildContext context, ArticleModel post) {
-    if (postType(post) == ArticleType.Audio) {
+    if (postType(post) == PostType.Audio) {
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -193,11 +193,11 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
     }
   }
 
-  ArticleType postType(ArticleModel post) {
+  PostType postType(ArticleModel post) {
     if (post.mediaDownloadLink=='' || post.mediaDownloadLink==null) {
-      return ArticleType.Html;
+      return PostType.Html;
     } else {
-      return ArticleType.Audio;
+      return PostType.Audio;
     }
   }
 }
