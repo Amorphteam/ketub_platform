@@ -46,8 +46,9 @@ class _HtmlViewerScreenState extends State<HtmlViewerScreen> {
                         : opacity > 1
                             ? 1
                             : opacity;
+                    double scale = 0 + (top - kToolbarHeight) / (200.0 - kToolbarHeight);
+                    scale = scale < 0.5 ? 0.7 : scale > 1 ? 1 : scale;
 
-                    debugPrint(opacity.toString());
                     return Stack(
                       fit: StackFit.expand,
                       children: [
@@ -59,36 +60,38 @@ class _HtmlViewerScreenState extends State<HtmlViewerScreen> {
                           ),
                         ),
                         Positioned(
-                          left: 0,
-                          right: 0,
+                          left: 16,
+                          right: 36,
                           bottom: 16,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Opacity(
+                                Text(
+                                  _getAppBarTitle(state),
+                                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    fontSize: Theme.of(context).textTheme.titleLarge!.fontSize! * scale,
+                                  ),
+                                  maxLines: opacity > 0 ? null : 1,
+                                  overflow: opacity > 0 ? TextOverflow.visible : TextOverflow.ellipsis,
+                                ),
+                                opacity > 0.4 ? Opacity(
                                   opacity: opacity,
-                                  // Apply opacity only to date and icon
                                   child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Text(
                                         _getAppBarDate(state),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelLarge,
+                                        style: Theme.of(context).textTheme.labelLarge,
                                       ),
                                       Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: _getAppBarDateIcon(state)),
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: _getAppBarDateIcon(state),
+                                      ),
                                     ],
                                   ),
-                                ),
-                                Text(
-                                  _getAppBarTitle(state),
-                                  style: Theme.of(context).textTheme.titleLarge,
-                                ),
-                                // Title remains always visible
+                                ) : SizedBox(),
                               ],
                             ),
                           ),

@@ -8,6 +8,7 @@ class HtmlHelper {
         data: data,
         style: {
           "html": Style(
+              padding: HtmlPaddings.all(16),
               textAlign: TextAlign.justify,
               direction: TextDirection.rtl,
               lineHeight: LineHeight.number(1.5),
