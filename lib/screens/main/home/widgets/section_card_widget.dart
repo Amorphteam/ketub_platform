@@ -175,9 +175,10 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
           builder: (context) =>
               BlocProvider(
                 create: (context) => AudioPlayerCubit(),
-                child: AudioScreen(),
+                child: AudioScreen(id: (post.id)?.toInt(),
               ),
         ),
+      ),
       );
     } else {
       Navigator.push(

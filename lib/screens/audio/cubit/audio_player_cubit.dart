@@ -18,7 +18,7 @@ class AudioPlayerCubit extends Cubit<AudioPlayerState> {
       emit(const AudioPlayerState.loading());
       final track = await ArticleOnlineRepository().getArticles(id ?? 49715);
       _setTrack(track, player);
-      emit(AudioPlayerState.playing());
+      emit(AudioPlayerState.playing(title: track.name ?? '', date: track.createdAt ?? ''));
     } catch (e) {
       emit(AudioPlayerState.error(e.toString()));
     }

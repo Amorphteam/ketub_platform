@@ -20,7 +20,7 @@ mixin _$AudioPlayerState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() playing,
+    required TResult Function(String title, String date) playing,
     required TResult Function(String message) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -28,7 +28,7 @@ mixin _$AudioPlayerState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? playing,
+    TResult? Function(String title, String date)? playing,
     TResult? Function(String message)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -36,7 +36,7 @@ mixin _$AudioPlayerState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? playing,
+    TResult Function(String title, String date)? playing,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) =>
@@ -126,7 +126,7 @@ class _$InitialImpl implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() playing,
+    required TResult Function(String title, String date) playing,
     required TResult Function(String message) error,
   }) {
     return initial();
@@ -137,7 +137,7 @@ class _$InitialImpl implements _Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? playing,
+    TResult? Function(String title, String date)? playing,
     TResult? Function(String message)? error,
   }) {
     return initial?.call();
@@ -148,7 +148,7 @@ class _$InitialImpl implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? playing,
+    TResult Function(String title, String date)? playing,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -240,7 +240,7 @@ class _$LoadingImpl implements _Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() playing,
+    required TResult Function(String title, String date) playing,
     required TResult Function(String message) error,
   }) {
     return loading();
@@ -251,7 +251,7 @@ class _$LoadingImpl implements _Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? playing,
+    TResult? Function(String title, String date)? playing,
     TResult? Function(String message)? error,
   }) {
     return loading?.call();
@@ -262,7 +262,7 @@ class _$LoadingImpl implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? playing,
+    TResult Function(String title, String date)? playing,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -319,6 +319,8 @@ abstract class _$$PlayingImplCopyWith<$Res> {
   factory _$$PlayingImplCopyWith(
           _$PlayingImpl value, $Res Function(_$PlayingImpl) then) =
       __$$PlayingImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String title, String date});
 }
 
 /// @nodoc
@@ -328,36 +330,68 @@ class __$$PlayingImplCopyWithImpl<$Res>
   __$$PlayingImplCopyWithImpl(
       _$PlayingImpl _value, $Res Function(_$PlayingImpl) _then)
       : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? title = null,
+    Object? date = null,
+  }) {
+    return _then(_$PlayingImpl(
+      title: null == title
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      date: null == date
+          ? _value.date
+          : date // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
 }
 
 /// @nodoc
 
 class _$PlayingImpl implements _Playing {
-  const _$PlayingImpl();
+  const _$PlayingImpl({required this.title, required this.date});
+
+  @override
+  final String title;
+  @override
+  final String date;
 
   @override
   String toString() {
-    return 'AudioPlayerState.playing()';
+    return 'AudioPlayerState.playing(title: $title, date: $date)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$PlayingImpl);
+        (other.runtimeType == runtimeType &&
+            other is _$PlayingImpl &&
+            (identical(other.title, title) || other.title == title) &&
+            (identical(other.date, date) || other.date == date));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, title, date);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$PlayingImplCopyWith<_$PlayingImpl> get copyWith =>
+      __$$PlayingImplCopyWithImpl<_$PlayingImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() playing,
+    required TResult Function(String title, String date) playing,
     required TResult Function(String message) error,
   }) {
-    return playing();
+    return playing(title, date);
   }
 
   @override
@@ -365,10 +399,10 @@ class _$PlayingImpl implements _Playing {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? playing,
+    TResult? Function(String title, String date)? playing,
     TResult? Function(String message)? error,
   }) {
-    return playing?.call();
+    return playing?.call(title, date);
   }
 
   @override
@@ -376,12 +410,12 @@ class _$PlayingImpl implements _Playing {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? playing,
+    TResult Function(String title, String date)? playing,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (playing != null) {
-      return playing();
+      return playing(title, date);
     }
     return orElse();
   }
@@ -425,7 +459,15 @@ class _$PlayingImpl implements _Playing {
 }
 
 abstract class _Playing implements AudioPlayerState {
-  const factory _Playing() = _$PlayingImpl;
+  const factory _Playing(
+      {required final String title,
+      required final String date}) = _$PlayingImpl;
+
+  String get title;
+  String get date;
+  @JsonKey(ignore: true)
+  _$$PlayingImplCopyWith<_$PlayingImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -494,7 +536,7 @@ class _$ErrorImpl implements _Error {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() playing,
+    required TResult Function(String title, String date) playing,
     required TResult Function(String message) error,
   }) {
     return error(message);
@@ -505,7 +547,7 @@ class _$ErrorImpl implements _Error {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? playing,
+    TResult? Function(String title, String date)? playing,
     TResult? Function(String message)? error,
   }) {
     return error?.call(message);
@@ -516,7 +558,7 @@ class _$ErrorImpl implements _Error {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? playing,
+    TResult Function(String title, String date)? playing,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
