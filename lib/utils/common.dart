@@ -1,9 +1,11 @@
 import 'dart:math';
 
+
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
+import 'dart:math' as math;
 
 class PositionData {
   final Duration position;
@@ -480,4 +482,113 @@ void showSliderDialog({
   );
 }
 
+class StaticWaveformPainter extends CustomPainter {
+  final List<double> peakHeights;
+  final double progress;
+  final double bufferedProgress;
 
+  StaticWaveformPainter({
+    required this.peakHeights,
+    required this.progress,
+    required this.bufferedProgress,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    var backgroundPaint = Paint()
+      ..color = Colors.grey
+      ..strokeWidth = 3.0
+      ..style = PaintingStyle.fill; // Use fill style for the rectangles
+
+    var bufferedPaint = Paint()
+      ..color = Colors.blue
+      ..strokeWidth = 3.0
+      ..style = PaintingStyle.fill;
+
+    var progressPaint = Paint()
+      ..color = Colors.green
+      ..strokeWidth = 3.0
+      ..style = PaintingStyle.fill;
+
+    var gap = 6.0; // Adjust gap as needed
+    var strokeWidth = 3.0; // Adjust stroke width as needed
+    var middle = size.height / 2;
+    var maxPeakHeight = 0.5;
+    int numberOfPeaks = peakHeights.length;
+
+    for (int i = 0; i < numberOfPeaks; i++) {
+      var currentPeakHeight = peakHeights[i]* maxPeakHeight;
+      var xOffset = size.width - (gap * i) - strokeWidth / 2; // Adjust for RTL
+      var paint = (numberOfPeaks - i) / numberOfPeaks <= progress ? progressPaint : ((numberOfPeaks - i) / numberOfPeaks <= bufferedProgress ? bufferedPaint : backgroundPaint);
+
+      // Create a path for a rounded rectangle
+      var rect = RRect.fromLTRBR(
+          xOffset - strokeWidth / 2, // left
+          middle - currentPeakHeight / 2, // top
+          xOffset + strokeWidth / 2, // right
+          middle + currentPeakHeight / 2, // bottom
+          Radius.circular(strokeWidth / 2)); // The radius of the corners
+
+      canvas.drawRRect(rect, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+}
+
+class WaveformSeekBar extends StatefulWidget {
+  final Duration duration;
+  final Duration position;
+  final Duration bufferedPosition;
+  final Function(Duration) onChangeEnd;
+
+  WaveformSeekBar({
+    required this.duration,
+    required this.position,
+    required this.bufferedPosition,
+    required this.onChangeEnd,
+  });
+
+  @override
+  _WaveformSeekBarState createState() => _WaveformSeekBarState();
+}
+
+class _WaveformSeekBarState extends State<WaveformSeekBar> {
+  late List<double> peakHeights; // Store peak heights here
+
+  @override
+  void initState() {
+    super.initState();
+    _generateWaveform(); // Generate waveform on initialization
+  }
+
+  void _generateWaveform() {
+    final randomGenerator = math.Random();
+    final numberOfPeaks = 100; // Adjust based on your requirements
+    final maxPeakHeight = 100.0; // Adjust based on your requirements
+
+    peakHeights = List.generate(numberOfPeaks, (_) => randomGenerator.nextDouble() * maxPeakHeight);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: (details) {
+        final RenderBox box = context.findRenderObject() as RenderBox;
+        final Offset localOffset = box.globalToLocal(details.globalPosition);
+        final double progress = localOffset.dx / box.size.width;
+        final Duration newPosition = Duration(milliseconds: (widget.duration.inMilliseconds * progress).round());
+        widget.onChangeEnd(newPosition);
+      },
+      child: CustomPaint(
+        painter: StaticWaveformPainter(
+          peakHeights: peakHeights,
+          progress: widget.position.inMilliseconds / widget.duration.inMilliseconds,
+          bufferedProgress: widget.bufferedPosition.inMilliseconds / widget.duration.inMilliseconds,
+        ),
+        size: Size.infinite,
+      ),
+    );
+  }
+}

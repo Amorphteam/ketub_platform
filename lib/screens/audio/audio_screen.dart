@@ -148,13 +148,15 @@ class _AudioScreenState extends State<AudioScreen> {
         ControlButtonsWidget(player),
           Container(
               height: 60.0,
-              child: SeekBar(
-                duration: positionData.duration,
-                position: positionData.position,
-                bufferedPosition: positionData.bufferedPosition,
-                onChangeEnd: (newPosition) {
-                  player.seek(newPosition);
-                },
+              child: Center(
+                child: WaveformSeekBar(
+                  duration: positionData.duration,
+                  position: positionData.position,
+                  bufferedPosition: positionData.bufferedPosition,
+                  onChangeEnd: (newPosition) {
+                    player.seek(newPosition);
+                  },
+                ),
               ),
             ),
         const SizedBox(height: 48.0),
