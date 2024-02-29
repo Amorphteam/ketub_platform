@@ -572,7 +572,6 @@ class _WaveformSeekBarState extends State<WaveformSeekBar> {
     final RenderBox box = context.findRenderObject() as RenderBox;
     final double width = box.size.width;
     final double position = localPosition.dx;
-    // Ensure the position is within the widget bounds
     final double relativePosition = position.clamp(0, width) / width;
     final Duration newPosition = Duration(
         milliseconds:
@@ -608,19 +607,25 @@ class _WaveformSeekBarState extends State<WaveformSeekBar> {
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-              RegExp(r'((^0*[1-9]\d*:)?\d{2}:\d{2})\.\d+$')
-                  .firstMatch("${widget.position}")
-                  ?.group(1) ??
-                  '${widget.position}',
-              style: Theme.of(context).textTheme.bodySmall),
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: Text(
+                RegExp(r'((^0*[1-9]\d*:)?\d{2}:\d{2})\.\d+$')
+                    .firstMatch("${widget.position}")
+                    ?.group(1) ??
+                    '${widget.position}',
+                style: Theme.of(context).textTheme.bodySmall),
+          ),
 
-          Text(
-              RegExp(r'((^0*[1-9]\d*:)?\d{2}:\d{2})\.\d+$')
-                      .firstMatch("$_remaining")
-                      ?.group(1) ??
-                  '$_remaining',
-              style: Theme.of(context).textTheme.bodySmall),
+          Padding(
+            padding: const EdgeInsets.only(left: 16.0),
+            child: Text(
+                RegExp(r'((^0*[1-9]\d*:)?\d{2}:\d{2})\.\d+$')
+                        .firstMatch("$_remaining")
+                        ?.group(1) ??
+                    '$_remaining',
+                style: Theme.of(context).textTheme.bodySmall),
+          ),
         ],
       ),
     ]);

@@ -147,7 +147,6 @@ class _AudioScreenState extends State<AudioScreen> {
         SizedBox(height: 20,),
         ControlButtonsWidget(player),
           Container(
-            padding: EdgeInsets.only(right: 16, left: 16),
               height: 100.0,
               child: Center(
                 child: WaveformSeekBar(
