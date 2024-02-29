@@ -21,8 +21,9 @@ class AudioScreen extends StatefulWidget {
   State<AudioScreen> createState() => _AudioScreenState();
 }
 
+
 class _AudioScreenState extends State<AudioScreen> {
-  final player = AudioPlayer();
+  final player = AudioPlayerService().player;
   @override
   void initState() {
     super.initState();
@@ -126,19 +127,19 @@ class _AudioScreenState extends State<AudioScreen> {
         padding: EdgeInsets.only(top: 20.0),
         child: Center(child: CircularProgressIndicator()),
       ),
-      playing: (_, __) => _buildPlayingUI(context),
+      playing: (_, __, positionData) => _buildPlayingUI(context, positionData),
       error: (error) => Text(error ?? 'Error'),
     );
   }
 
   Widget _getAppBarDateIcon(AudioPlayerState state) {
     return state.maybeWhen(
-      playing: (_, __) => SvgPicture.asset('assets/icons/calendar.svg'),
+      playing: (_, __, ___) => SvgPicture.asset('assets/icons/calendar.svg'),
       orElse: () => const Text(''),
     );
   }
 
-  Widget _buildPlayingUI(BuildContext context) {
+  Widget _buildPlayingUI(BuildContext context, PositionData positionData) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -148,8 +149,9 @@ class _AudioScreenState extends State<AudioScreen> {
           Container(
               height: 60.0,
               child: SeekBar(
-                duration: player.duration ?? Duration.zero,
-                position: player.position ?? Duration.zero,
+                duration: positionData.duration,
+                position: positionData.position,
+                bufferedPosition: positionData.bufferedPosition,
                 onChangeEnd: (newPosition) {
                   player.seek(newPosition);
                 },
@@ -194,16 +196,30 @@ class _AudioScreenState extends State<AudioScreen> {
 
   String _getAppBarTitle(AudioPlayerState state) {
     return state.maybeWhen(
-      playing: (title, _) => title,
+      playing: (title, _, __) => title,
       orElse: () => '',
     );
   }
 
   String _getAppBarDate(AudioPlayerState state) {
     return state.maybeWhen(
-      playing: (_, date) => date.split('T')[0],
+      playing: (_, date, __) => date.split('T')[0],
       orElse: () => '',
     );
   }
 
 }
+
+
+class AudioPlayerService {
+  static final AudioPlayerService _instance = AudioPlayerService._internal();
+  final AudioPlayer player = AudioPlayer();
+
+  factory AudioPlayerService() {
+    return _instance;
+  }
+
+  AudioPlayerService._internal();
+
+}
+
