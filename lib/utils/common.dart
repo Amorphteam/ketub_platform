@@ -1,6 +1,5 @@
 import 'dart:math';
 
-
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +13,6 @@ class PositionData {
 
   PositionData(this.position, this.bufferedPosition, this.duration);
 }
-
 
 class SeekBar extends StatefulWidget {
   final Duration duration;
@@ -35,10 +33,6 @@ class SeekBar extends StatefulWidget {
   @override
   SeekBarState createState() => SeekBarState();
 }
-
-
-
-
 
 class SeekBarState extends State<SeekBar> {
   double? _dragValue;
@@ -70,7 +64,6 @@ class SeekBarState extends State<SeekBar> {
             thumbShape: HiddenThumbComponentShape(),
             activeTrackColor: Colors.green.shade100,
             inactiveTrackColor: Colors.green.shade300,
-
           ),
           child: ExcludeSemantics(
             child: Slider(
@@ -114,8 +107,8 @@ class SeekBarState extends State<SeekBar> {
           bottom: 0.0,
           child: Text(
               RegExp(r'((^0*[1-9]\d*:)?\d{2}:\d{2})\.\d+$')
-                  .firstMatch("$_remaining")
-                  ?.group(1) ??
+                      .firstMatch("$_remaining")
+                      ?.group(1) ??
                   '$_remaining',
               style: Theme.of(context).textTheme.bodySmall),
         ),
@@ -132,19 +125,19 @@ class HiddenThumbComponentShape extends SliderComponentShape {
 
   @override
   void paint(
-      PaintingContext context,
-      Offset center, {
-        required Animation<double> activationAnimation,
-        required Animation<double> enableAnimation,
-        required bool isDiscrete,
-        required TextPainter labelPainter,
-        required RenderBox parentBox,
-        required SliderThemeData sliderTheme,
-        required TextDirection textDirection,
-        required double value,
-        required double textScaleFactor,
-        required Size sizeWithOverflow,
-      }) {}
+    PaintingContext context,
+    Offset center, {
+    required Animation<double> activationAnimation,
+    required Animation<double> enableAnimation,
+    required bool isDiscrete,
+    required TextPainter labelPainter,
+    required RenderBox parentBox,
+    required SliderThemeData sliderTheme,
+    required TextDirection textDirection,
+    required double value,
+    required double textScaleFactor,
+    required Size sizeWithOverflow,
+  }) {}
 }
 
 class LoggingAudioHandler extends CompositeAudioHandler {
@@ -496,12 +489,12 @@ class StaticWaveformPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     var backgroundPaint = Paint()
-      ..color = Colors.grey
+      ..color = Colors.black12
       ..strokeWidth = 3.0
       ..style = PaintingStyle.fill; // Use fill style for the rectangles
 
     var bufferedPaint = Paint()
-      ..color = Colors.blue
+      ..color = Colors.black12
       ..strokeWidth = 3.0
       ..style = PaintingStyle.fill;
 
@@ -510,16 +503,20 @@ class StaticWaveformPainter extends CustomPainter {
       ..strokeWidth = 3.0
       ..style = PaintingStyle.fill;
 
-    var gap = 6.0; // Adjust gap as needed
-    var strokeWidth = 3.0; // Adjust stroke width as needed
+    var gap = 8.0; // Adjust gap as needed
+    var strokeWidth = 5.0; // Adjust stroke width as needed
     var middle = size.height / 2;
     var maxPeakHeight = 0.5;
     int numberOfPeaks = peakHeights.length;
 
     for (int i = 0; i < numberOfPeaks; i++) {
-      var currentPeakHeight = peakHeights[i]* maxPeakHeight;
+      var currentPeakHeight = peakHeights[i] * maxPeakHeight;
       var xOffset = size.width - (gap * i) - strokeWidth / 2; // Adjust for RTL
-      var paint = (numberOfPeaks - i) / numberOfPeaks <= progress ? progressPaint : ((numberOfPeaks - i) / numberOfPeaks <= bufferedProgress ? bufferedPaint : backgroundPaint);
+      var paint = (numberOfPeaks - i) / numberOfPeaks <= progress
+          ? progressPaint
+          : ((numberOfPeaks - i) / numberOfPeaks <= bufferedProgress
+              ? bufferedPaint
+              : backgroundPaint);
 
       // Create a path for a rounded rectangle
       var rect = RRect.fromLTRBR(
@@ -555,40 +552,79 @@ class WaveformSeekBar extends StatefulWidget {
 }
 
 class _WaveformSeekBarState extends State<WaveformSeekBar> {
-  late List<double> peakHeights; // Store peak heights here
+  late List<double> peakHeights;
 
   @override
   void initState() {
     super.initState();
-    _generateWaveform(); // Generate waveform on initialization
+    _generateWaveform();
   }
 
   void _generateWaveform() {
     final randomGenerator = math.Random();
-    final numberOfPeaks = 100; // Adjust based on your requirements
-    final maxPeakHeight = 100.0; // Adjust based on your requirements
+    final numberOfPeaks = 100;
+    final maxPeakHeight = 100.0;
+    peakHeights = List.generate(
+        numberOfPeaks, (_) => randomGenerator.nextDouble() * maxPeakHeight);
+  }
 
-    peakHeights = List.generate(numberOfPeaks, (_) => randomGenerator.nextDouble() * maxPeakHeight);
+  void _seekToRelativePosition(Offset localPosition) {
+    final RenderBox box = context.findRenderObject() as RenderBox;
+    final double width = box.size.width;
+    final double position = localPosition.dx;
+    // Ensure the position is within the widget bounds
+    final double relativePosition = position.clamp(0, width) / width;
+    final Duration newPosition = Duration(
+        milliseconds:
+            (widget.duration.inMilliseconds * relativePosition).round());
+    widget.onChangeEnd(newPosition);
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: (details) {
-        final RenderBox box = context.findRenderObject() as RenderBox;
-        final Offset localOffset = box.globalToLocal(details.globalPosition);
-        final double progress = localOffset.dx / box.size.width;
-        final Duration newPosition = Duration(milliseconds: (widget.duration.inMilliseconds * progress).round());
-        widget.onChangeEnd(newPosition);
-      },
-      child: CustomPaint(
-        painter: StaticWaveformPainter(
-          peakHeights: peakHeights,
-          progress: widget.position.inMilliseconds / widget.duration.inMilliseconds,
-          bufferedProgress: widget.bufferedPosition.inMilliseconds / widget.duration.inMilliseconds,
+    return Column(children: [
+      Expanded(
+        child: GestureDetector(
+          onTapDown: (details) =>
+              _seekToRelativePosition(details.localPosition),
+          onPanUpdate: (details) =>
+              _seekToRelativePosition(details.localPosition),
+          onPanEnd: (details) {
+            // You might want to call onChangeEnd again or perform some final action when the pan ends
+          },
+          child: CustomPaint(
+            painter: StaticWaveformPainter(
+              peakHeights: peakHeights,
+              progress: widget.position.inMilliseconds /
+                  widget.duration.inMilliseconds,
+              bufferedProgress: widget.bufferedPosition.inMilliseconds /
+                  widget.duration.inMilliseconds,
+            ),
+            size: Size.infinite,
+          ),
         ),
-        size: Size.infinite,
       ),
-    );
+      SizedBox(height: 20,),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+              RegExp(r'((^0*[1-9]\d*:)?\d{2}:\d{2})\.\d+$')
+                  .firstMatch("${widget.position}")
+                  ?.group(1) ??
+                  '${widget.position}',
+              style: Theme.of(context).textTheme.bodySmall),
+
+          Text(
+              RegExp(r'((^0*[1-9]\d*:)?\d{2}:\d{2})\.\d+$')
+                      .firstMatch("$_remaining")
+                      ?.group(1) ??
+                  '$_remaining',
+              style: Theme.of(context).textTheme.bodySmall),
+        ],
+      ),
+    ]);
   }
+
+  Duration get _remaining => widget.duration - widget.position;
 }
