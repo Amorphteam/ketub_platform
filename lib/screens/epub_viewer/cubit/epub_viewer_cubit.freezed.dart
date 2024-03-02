@@ -23,8 +23,8 @@ mixin _$EpubViewerState {
     required TResult Function(List<String> content, String epubTitle) loaded,
     required TResult Function(String error) error,
     required TResult Function(int? pageNumber) pageChanged,
-    required TResult Function(FontSizeCustom? fontSize, LineSpace? lineHeight,
-            FontFamily? fontFamily)
+    required TResult Function(FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight, FontFamily? fontFamily)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
   }) =>
@@ -36,7 +36,7 @@ mixin _$EpubViewerState {
     TResult? Function(List<String> content, String epubTitle)? loaded,
     TResult? Function(String error)? error,
     TResult? Function(int? pageNumber)? pageChanged,
-    TResult? Function(FontSizeCustom? fontSize, LineSpace? lineHeight,
+    TResult? Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
             FontFamily? fontFamily)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
@@ -49,7 +49,7 @@ mixin _$EpubViewerState {
     TResult Function(List<String> content, String epubTitle)? loaded,
     TResult Function(String error)? error,
     TResult Function(int? pageNumber)? pageChanged,
-    TResult Function(FontSizeCustom? fontSize, LineSpace? lineHeight,
+    TResult Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
             FontFamily? fontFamily)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
@@ -153,8 +153,8 @@ class _$InitialImpl implements _Initial {
     required TResult Function(List<String> content, String epubTitle) loaded,
     required TResult Function(String error) error,
     required TResult Function(int? pageNumber) pageChanged,
-    required TResult Function(FontSizeCustom? fontSize, LineSpace? lineHeight,
-            FontFamily? fontFamily)
+    required TResult Function(FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight, FontFamily? fontFamily)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
   }) {
@@ -169,7 +169,7 @@ class _$InitialImpl implements _Initial {
     TResult? Function(List<String> content, String epubTitle)? loaded,
     TResult? Function(String error)? error,
     TResult? Function(int? pageNumber)? pageChanged,
-    TResult? Function(FontSizeCustom? fontSize, LineSpace? lineHeight,
+    TResult? Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
             FontFamily? fontFamily)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
@@ -185,7 +185,7 @@ class _$InitialImpl implements _Initial {
     TResult Function(List<String> content, String epubTitle)? loaded,
     TResult Function(String error)? error,
     TResult Function(int? pageNumber)? pageChanged,
-    TResult Function(FontSizeCustom? fontSize, LineSpace? lineHeight,
+    TResult Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
             FontFamily? fontFamily)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
@@ -291,8 +291,8 @@ class _$LoadingImpl implements _Loading {
     required TResult Function(List<String> content, String epubTitle) loaded,
     required TResult Function(String error) error,
     required TResult Function(int? pageNumber) pageChanged,
-    required TResult Function(FontSizeCustom? fontSize, LineSpace? lineHeight,
-            FontFamily? fontFamily)
+    required TResult Function(FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight, FontFamily? fontFamily)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
   }) {
@@ -307,7 +307,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function(List<String> content, String epubTitle)? loaded,
     TResult? Function(String error)? error,
     TResult? Function(int? pageNumber)? pageChanged,
-    TResult? Function(FontSizeCustom? fontSize, LineSpace? lineHeight,
+    TResult? Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
             FontFamily? fontFamily)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
@@ -323,7 +323,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function(List<String> content, String epubTitle)? loaded,
     TResult Function(String error)? error,
     TResult Function(int? pageNumber)? pageChanged,
-    TResult Function(FontSizeCustom? fontSize, LineSpace? lineHeight,
+    TResult Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
             FontFamily? fontFamily)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
@@ -473,8 +473,8 @@ class _$LoadedImpl implements _Loaded {
     required TResult Function(List<String> content, String epubTitle) loaded,
     required TResult Function(String error) error,
     required TResult Function(int? pageNumber) pageChanged,
-    required TResult Function(FontSizeCustom? fontSize, LineSpace? lineHeight,
-            FontFamily? fontFamily)
+    required TResult Function(FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight, FontFamily? fontFamily)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
   }) {
@@ -489,7 +489,7 @@ class _$LoadedImpl implements _Loaded {
     TResult? Function(List<String> content, String epubTitle)? loaded,
     TResult? Function(String error)? error,
     TResult? Function(int? pageNumber)? pageChanged,
-    TResult? Function(FontSizeCustom? fontSize, LineSpace? lineHeight,
+    TResult? Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
             FontFamily? fontFamily)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
@@ -505,7 +505,7 @@ class _$LoadedImpl implements _Loaded {
     TResult Function(List<String> content, String epubTitle)? loaded,
     TResult Function(String error)? error,
     TResult Function(int? pageNumber)? pageChanged,
-    TResult Function(FontSizeCustom? fontSize, LineSpace? lineHeight,
+    TResult Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
             FontFamily? fontFamily)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
@@ -645,8 +645,8 @@ class _$errorImpl implements _error {
     required TResult Function(List<String> content, String epubTitle) loaded,
     required TResult Function(String error) error,
     required TResult Function(int? pageNumber) pageChanged,
-    required TResult Function(FontSizeCustom? fontSize, LineSpace? lineHeight,
-            FontFamily? fontFamily)
+    required TResult Function(FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight, FontFamily? fontFamily)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
   }) {
@@ -661,7 +661,7 @@ class _$errorImpl implements _error {
     TResult? Function(List<String> content, String epubTitle)? loaded,
     TResult? Function(String error)? error,
     TResult? Function(int? pageNumber)? pageChanged,
-    TResult? Function(FontSizeCustom? fontSize, LineSpace? lineHeight,
+    TResult? Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
             FontFamily? fontFamily)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
@@ -677,7 +677,7 @@ class _$errorImpl implements _error {
     TResult Function(List<String> content, String epubTitle)? loaded,
     TResult Function(String error)? error,
     TResult Function(int? pageNumber)? pageChanged,
-    TResult Function(FontSizeCustom? fontSize, LineSpace? lineHeight,
+    TResult Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
             FontFamily? fontFamily)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
@@ -815,8 +815,8 @@ class _$PageChangedImpl implements _PageChanged {
     required TResult Function(List<String> content, String epubTitle) loaded,
     required TResult Function(String error) error,
     required TResult Function(int? pageNumber) pageChanged,
-    required TResult Function(FontSizeCustom? fontSize, LineSpace? lineHeight,
-            FontFamily? fontFamily)
+    required TResult Function(FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight, FontFamily? fontFamily)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
   }) {
@@ -831,7 +831,7 @@ class _$PageChangedImpl implements _PageChanged {
     TResult? Function(List<String> content, String epubTitle)? loaded,
     TResult? Function(String error)? error,
     TResult? Function(int? pageNumber)? pageChanged,
-    TResult? Function(FontSizeCustom? fontSize, LineSpace? lineHeight,
+    TResult? Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
             FontFamily? fontFamily)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
@@ -847,7 +847,7 @@ class _$PageChangedImpl implements _PageChanged {
     TResult Function(List<String> content, String epubTitle)? loaded,
     TResult Function(String error)? error,
     TResult Function(int? pageNumber)? pageChanged,
-    TResult Function(FontSizeCustom? fontSize, LineSpace? lineHeight,
+    TResult Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
             FontFamily? fontFamily)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
@@ -923,7 +923,7 @@ abstract class _$$StyleChangedImplCopyWith<$Res> {
   @useResult
   $Res call(
       {FontSizeCustom? fontSize,
-      LineSpace? lineHeight,
+      LineHeightCustom? lineHeight,
       FontFamily? fontFamily});
 }
 
@@ -950,7 +950,7 @@ class __$$StyleChangedImplCopyWithImpl<$Res>
       lineHeight: freezed == lineHeight
           ? _value.lineHeight
           : lineHeight // ignore: cast_nullable_to_non_nullable
-              as LineSpace?,
+              as LineHeightCustom?,
       fontFamily: freezed == fontFamily
           ? _value.fontFamily
           : fontFamily // ignore: cast_nullable_to_non_nullable
@@ -967,7 +967,7 @@ class _$StyleChangedImpl implements _StyleChanged {
   @override
   final FontSizeCustom? fontSize;
   @override
-  final LineSpace? lineHeight;
+  final LineHeightCustom? lineHeight;
   @override
   final FontFamily? fontFamily;
 
@@ -1007,8 +1007,8 @@ class _$StyleChangedImpl implements _StyleChanged {
     required TResult Function(List<String> content, String epubTitle) loaded,
     required TResult Function(String error) error,
     required TResult Function(int? pageNumber) pageChanged,
-    required TResult Function(FontSizeCustom? fontSize, LineSpace? lineHeight,
-            FontFamily? fontFamily)
+    required TResult Function(FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight, FontFamily? fontFamily)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
   }) {
@@ -1023,7 +1023,7 @@ class _$StyleChangedImpl implements _StyleChanged {
     TResult? Function(List<String> content, String epubTitle)? loaded,
     TResult? Function(String error)? error,
     TResult? Function(int? pageNumber)? pageChanged,
-    TResult? Function(FontSizeCustom? fontSize, LineSpace? lineHeight,
+    TResult? Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
             FontFamily? fontFamily)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
@@ -1039,7 +1039,7 @@ class _$StyleChangedImpl implements _StyleChanged {
     TResult Function(List<String> content, String epubTitle)? loaded,
     TResult Function(String error)? error,
     TResult Function(int? pageNumber)? pageChanged,
-    TResult Function(FontSizeCustom? fontSize, LineSpace? lineHeight,
+    TResult Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
             FontFamily? fontFamily)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
@@ -1101,11 +1101,11 @@ class _$StyleChangedImpl implements _StyleChanged {
 abstract class _StyleChanged implements EpubViewerState {
   const factory _StyleChanged(
       {final FontSizeCustom? fontSize,
-      final LineSpace? lineHeight,
+      final LineHeightCustom? lineHeight,
       final FontFamily? fontFamily}) = _$StyleChangedImpl;
 
   FontSizeCustom? get fontSize;
-  LineSpace? get lineHeight;
+  LineHeightCustom? get lineHeight;
   FontFamily? get fontFamily;
   @JsonKey(ignore: true)
   _$$StyleChangedImplCopyWith<_$StyleChangedImpl> get copyWith =>
@@ -1181,8 +1181,8 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
     required TResult Function(List<String> content, String epubTitle) loaded,
     required TResult Function(String error) error,
     required TResult Function(int? pageNumber) pageChanged,
-    required TResult Function(FontSizeCustom? fontSize, LineSpace? lineHeight,
-            FontFamily? fontFamily)
+    required TResult Function(FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight, FontFamily? fontFamily)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
   }) {
@@ -1197,7 +1197,7 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
     TResult? Function(List<String> content, String epubTitle)? loaded,
     TResult? Function(String error)? error,
     TResult? Function(int? pageNumber)? pageChanged,
-    TResult? Function(FontSizeCustom? fontSize, LineSpace? lineHeight,
+    TResult? Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
             FontFamily? fontFamily)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
@@ -1213,7 +1213,7 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
     TResult Function(List<String> content, String epubTitle)? loaded,
     TResult Function(String error)? error,
     TResult Function(int? pageNumber)? pageChanged,
-    TResult Function(FontSizeCustom? fontSize, LineSpace? lineHeight,
+    TResult Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
             FontFamily? fontFamily)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,

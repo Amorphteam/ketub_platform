@@ -8,12 +8,16 @@ class StyleSheet extends StatefulWidget {
   final EpubViewerCubit epubViewerCubit;
   const StyleSheet({super.key, required this.epubViewerCubit});
 
+
   @override
   State<StyleSheet> createState() => _StyleSheetState();
 }
 
 class _StyleSheetState extends State<StyleSheet> {
   int _selectedChipIndex = -1; // Initialize with an invalid index
+  FontSizeCustom fontSizeCustom = FontSizeCustom.medium;
+  FontFamily fontFamily = FontFamily.font1;
+  LineHeightCustom lineSpace = LineHeightCustom.medium;
 
   void _handleChipSelection(int index) {
     setState(() {
@@ -29,33 +33,36 @@ class _StyleSheetState extends State<StyleSheet> {
     } else {
       fontFamily = FontFamily.font4;
     }
-
-    widget.epubViewerCubit.changeStyle(fontFamily: fontFamily);
-
+    this.fontFamily = fontFamily;
+    widget.epubViewerCubit.changeStyle(lineSpace: lineSpace, fontSize: fontSizeCustom, fontFamily: fontFamily);
   }
 
-  double _fontSizeSliderValue = 0.5; // Initialize with a default value
+  double _fontSizeSliderValue = 0.5;
 
   void _handleFontSizeSliderChange(double newValue) {
-    print(newValue);
     setState(() {
       _fontSizeSliderValue = newValue;
     });
 
     FontSizeCustom fontSize;
 
-    if (newValue <= 0.2) {
-      fontSize = FontSizeCustom.smallFontSize;
-    } else if (newValue <= 0.3) {
-      fontSize = FontSizeCustom.normalFontSize;
-    } else if (newValue <= 0.5) {
-      fontSize = FontSizeCustom.largeFontSize;
+    if (newValue <= 0.1) {
+      fontSize = FontSizeCustom.xxSmall;
+    } else if (newValue <= 0.2) {
+      fontSize = FontSizeCustom.xSmall;
+    } else if (newValue <= 0.4) {
+      fontSize = FontSizeCustom.small;
+    } else if (newValue <= 0.6) {
+      fontSize = FontSizeCustom.medium;
     } else if (newValue <= 0.8) {
-      fontSize = FontSizeCustom.xlargeFontSize;
+      fontSize = FontSizeCustom.large;
+    } else if (newValue <= 0.9) {
+      fontSize = FontSizeCustom.xLarge;
     } else {
-      fontSize = FontSizeCustom.xxlargeFontSize;
+      fontSize = FontSizeCustom.xxLarge;
     }
-    widget.epubViewerCubit.changeStyle(fontSize: fontSize);
+    fontSizeCustom = fontSize;
+    widget.epubViewerCubit.changeStyle(lineSpace: lineSpace, fontSize: fontSizeCustom, fontFamily: fontFamily);
   }
 
   double _lineHeightSliderValue = 0.5; // Initialize with a default value
@@ -64,19 +71,25 @@ class _StyleSheetState extends State<StyleSheet> {
     setState(() {
       _lineHeightSliderValue = newValue;
     });
-    LineSpace lineSpace;
-    if (newValue <= 0.2) {
-      lineSpace = LineSpace.smallLineSpace;
-    } else if (newValue <= 0.3) {
-      lineSpace = LineSpace.normalLineSpace;
-    } else if (newValue <= 0.5) {
-      lineSpace = LineSpace.largeLineSpace;
+    LineHeightCustom lineSpace;
+    if (newValue <= 0.1) {
+      lineSpace = LineHeightCustom.xxSmall;
+    } else if (newValue <= 0.2) {
+      lineSpace = LineHeightCustom.xSmall;
+    } else if (newValue <= 0.4) {
+      lineSpace = LineHeightCustom.small;
+    } else if (newValue <= 0.6) {
+      lineSpace = LineHeightCustom.medium;
     } else if (newValue <= 0.8) {
-      lineSpace = LineSpace.xlargeLineSpace;
+      lineSpace = LineHeightCustom.large;
+    } else if (newValue <= 0.9) {
+      lineSpace = LineHeightCustom.xLarge;
     } else {
-      lineSpace = LineSpace.xxlargeLineSpace;
+      lineSpace = LineHeightCustom.xxLarge;
     }
-    widget.epubViewerCubit.changeStyle(lineSpace: lineSpace);
+
+    this.lineSpace = lineSpace;
+    widget.epubViewerCubit.changeStyle(lineSpace: lineSpace, fontSize: fontSizeCustom, fontFamily: fontFamily);
 
   }
 
@@ -236,11 +249,12 @@ class _StyleSheetState extends State<StyleSheet> {
             children: [
               Expanded(
                 child: Slider(
+                  divisions: FontSizeCustom.values.length - 1,
                   value: _fontSizeSliderValue,
                   onChanged: _handleFontSizeSliderChange,
                 ),
               ),
-              Icon(Icons.text_increase, size: 18, color: Colors.grey,),
+              const Icon(Icons.text_increase, size: 18, color: Colors.grey,),
             ],
           ),
           Row(
@@ -248,6 +262,7 @@ class _StyleSheetState extends State<StyleSheet> {
             children: [
               Expanded(
                 child: Slider(
+                  divisions: LineHeightCustom.values.length - 1,
                   value: _lineHeightSliderValue,
                   onChanged: _handleLineHeightSliderChange,
                 ),

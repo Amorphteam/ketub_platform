@@ -3,12 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ketub_platform/models/book_model.dart';
 import 'package:ketub_platform/screens/epub_viewer/cubit/epub_viewer_cubit.dart';
 import 'package:ketub_platform/screens/epub_viewer/epub_viewer_screen.dart';
-import '../cubit/library_cubit.dart';
+import '../cubit/library_all_books_cubit.dart';
 
 class BookListWidget extends StatefulWidget {
   final List<BookModel> bookList;
+  final LibraryAllBooksCubit cubit;
 
-  const BookListWidget({Key? key, required this.bookList}) : super(key: key);
+  const BookListWidget({Key? key, required this.bookList, required this.cubit}) : super(key: key);
 
   @override
   State<BookListWidget> createState() => _BookListWidgetState();
@@ -54,10 +55,15 @@ class _BookListWidgetState extends State<BookListWidget> {
                   },
                 ),
               ),
-              Expanded(
-                child: Text(
-                  bookItem.bookName ?? 'Book Name',
-                  textAlign: TextAlign.center,
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 8.0, left: 8.0),
+                  child: Text(
+                    bookItem.bookName ?? 'Book Name',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(overflow: TextOverflow.ellipsis, fontSize: 12),
+                    maxLines: 2, // Ensure text does not exceed more than 2 lines
+                  ),
                 ),
               ),
             ],
@@ -90,65 +96,10 @@ class _BookListWidgetState extends State<BookListWidget> {
   }
 
   _handleOnTap(BuildContext context, BookModel bookItem) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(bookItem.bookName ?? 'Book Name'),
-          ),
-          content: SizedBox(
-            width: double.maxFinite,
-            // Adjust the height as needed to fit two rows of books
-            height: MediaQuery.of(context).size.height * 0.24,
-
-            child: GridView.builder(
-              scrollDirection: Axis.horizontal,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 1, // Two books per row
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                childAspectRatio: 1.6,
-              ),
-              itemCount: 5, // assuming there are at least 5 books in the list
-              itemBuilder: (BuildContext context, int index) {
-                BookModel book = widget.bookList[index];
-                return Column(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        _openEpub(widget.bookList[index].id ?? 1);
-                      },
-                      child: Container(
-                        height: 150,
-                        width: 110,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          image: DecorationImage(
-                            image: AssetImage(
-                              'assets/images/${bookItem.bookCover ?? 'book_sample.png'}',
-                            ),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Expanded(child: Text('الجزء $index')),
-                    ),
-                  ],
-                );
-              },
-            ),
-          ),
-        );
-      },
-    );
+    _openEpub(bookItem.id?? 1, bookItem.bookName?? ' ');
   }
 
-   _openEpub(int id) {
-     BlocProvider.of<LibraryCubit>(context).openEpub(id);
+   _openEpub(int id, String bookName) {
+     widget.cubit.openEpub(id, bookName);
    }
 }

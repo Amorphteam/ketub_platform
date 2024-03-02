@@ -12,7 +12,7 @@ import 'bookmark_tab/bookmark_screen.dart';
 import 'bookmark_tab/cubit/bookmark_cubit.dart';
 import 'home/home_all_cat_screen.dart';
 import 'home/home_tab_screen.dart';
-import 'library_tab/cubit/library_cubit.dart';
+import 'library_tab/cubit/library_all_books_cubit.dart';
 
 
 
@@ -26,11 +26,11 @@ class _NavScreenState extends State<NavScreen> {
 
   final List<Widget> _pages = [
     BlocProvider(
-      create: (context) => LibraryCubit(),
+      create: (context) => LibraryAllBooksCubit(),
       child: homeTabScreen(),
     ),
     BlocProvider(
-      create: (context) => LibraryCubit(),
+      create: (context) => LibraryAllBooksCubit(),
       child: LibraryTabScreen(),
     ),
   ];
@@ -56,7 +56,7 @@ class _NavScreenState extends State<NavScreen> {
           ),
           NavigationDestination(
             icon: SvgPicture.asset('assets/icons/books.svg'),
-            label: 'الفهرس',
+            label: 'الكتب والمؤلفات',
           ),
         ],
       ),

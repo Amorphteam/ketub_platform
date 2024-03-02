@@ -63,7 +63,7 @@ Future<void> loadAndParseEpub(
     _bookTitle = epubBook.Title;
   }
 
-  void changeStyle({FontSizeCustom? fontSize, LineSpace? lineSpace, FontFamily? fontFamily}) {
+  void changeStyle({FontSizeCustom? fontSize, LineHeightCustom? lineSpace, FontFamily? fontFamily}) {
     fontSize != null ? styleHelper.changeFontSize(fontSize) : null;
     lineSpace != null ? styleHelper.changeLineSpace(lineSpace) : null;
     fontFamily != null ? styleHelper.changeFontFamily(fontFamily) : null;

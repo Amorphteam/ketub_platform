@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ketub_platform/screens/main/bookmark_tab/bookmark_screen.dart';
 import 'package:ketub_platform/screens/main/bookmark_tab/cubit/bookmark_cubit.dart';
-import 'package:ketub_platform/screens/main/library_tab/cubit/library_cubit.dart';
+import 'package:ketub_platform/screens/main/library_tab/cubit/library_all_books_cubit.dart';
 import 'package:ketub_platform/screens/main/library_tab/library_all_books_screen.dart';
 import 'package:ketub_platform/screens/main/shared_widgets/search_bar_widget.dart';
 
@@ -101,8 +101,13 @@ class _LibraryTabScreenState extends State<LibraryTabScreen> with SingleTickerPr
     );
   }
 
+  
+  
   Widget _buildTabContent() {
-    return LibraryAllBooksScreen();
+    return BlocProvider(
+  create: (context) => LibraryAllBooksCubit(),
+  child: const LibraryAllBooksScreen(),
+);
   }
 
   Widget _buildRecentContent() {

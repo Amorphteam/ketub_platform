@@ -4,12 +4,12 @@ import 'package:ketub_platform/screens/epub_viewer/cubit/epub_viewer_cubit.dart'
 
 import '../cubit/epub_cubit.dart';
 
-class VerticalSeekBar extends StatefulWidget {
+class EpubSeekbar extends StatefulWidget {
   double currentPage;
   double allPagesCount;
   EpubViewerCubit epubViewerCubit;
 
-  VerticalSeekBar(
+  EpubSeekbar(
       {required this.currentPage,
         required this.allPagesCount,
         required this.epubViewerCubit,
@@ -17,10 +17,10 @@ class VerticalSeekBar extends StatefulWidget {
       : super(key: key);
 
   @override
-  _VerticalSeekBarState createState() => _VerticalSeekBarState();
+  _EpubSeekbarState createState() => _EpubSeekbarState();
 }
 
-class _VerticalSeekBarState extends State<VerticalSeekBar> {
+class _EpubSeekbarState extends State<EpubSeekbar> {
   double _currentValue = 0;
 
   @override
@@ -31,21 +31,18 @@ class _VerticalSeekBarState extends State<VerticalSeekBar> {
 
   @override
   Widget build(BuildContext context) {
-    return RotatedBox(
-      quarterTurns: 2,
-      child: Slider(
-        value: _currentValue,
-        onChangeEnd: (newValue) {
-          widget.epubViewerCubit.jumpToPage(newPage: newValue.toInt());
-        },
-        onChanged: (newValue) {
-          setState(() {
-            _currentValue = newValue;
-          });
-        },
-        max: widget.allPagesCount,
-        min: 0,
-      ),
+    return Slider(
+      value: _currentValue,
+      onChangeEnd: (newValue) {
+        widget.epubViewerCubit.jumpToPage(newPage: newValue.toInt());
+      },
+      onChanged: (newValue) {
+        setState(() {
+          _currentValue = newValue;
+        });
+      },
+      max: widget.allPagesCount,
+      min: 0,
     );
   }
 }

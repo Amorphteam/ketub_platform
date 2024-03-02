@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ketub_platform/models/book_model.dart';
 import 'package:ketub_platform/models/category_model.dart';
+import 'package:ketub_platform/screens/main/library_tab/cubit/library_all_books_cubit.dart';
+import 'package:ketub_platform/screens/main/library_tab/cubit/library_all_books_state.dart';
 import 'package:ketub_platform/screens/main/library_tab/widgets/book_list_widget.dart';
-import 'package:ketub_platform/screens/search/search_screen.dart';
 import 'package:ketub_platform/utils/epub_helper.dart';
-import 'cubit/library_cubit.dart';
 
 class LibraryAllBooksScreen extends StatefulWidget {
-  const LibraryAllBooksScreen();
+  const LibraryAllBooksScreen({Key? key}) : super(key: key);
 
   @override
   State<LibraryAllBooksScreen> createState() => _LibraryAllBooksScreenState();
 }
 
 class _LibraryAllBooksScreenState extends State<LibraryAllBooksScreen> {
-
-   List<CategoryModel> cats = [];
+  List<CategoryModel> cats = [];
+  List<BookModel> books = [];
 
   @override
   void initState() {
@@ -26,49 +26,67 @@ class _LibraryAllBooksScreenState extends State<LibraryAllBooksScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        BlocConsumer<LibraryCubit, LibraryState>(
-          listener: (context, state) {
-             if (state is LibraryErrorState) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(state.error.toString())));
-            } else if (state is BookClickedState){
-               if (state.cats.length == 1){
-                 openEpub(context: context, cat: state.cats.first);
-
-               }
-
-               else {
-
-               }
-            }
-          },
-          builder: (context, state) {
-            if (state is AllBooksLoadedState ) {
-              cats = state.cats;
-
-              return Flexible(
-                  child:
-                BookListWidget(bookList: state.books),
-              );
-            } else if (state is LibraryLoadingState) {
-              return const CircularProgressIndicator();
-            } else {
-              return const SizedBox.shrink();
-            }
-          },
-          buildWhen: (previousState, state) {
-            return state is AllBooksLoadedState || state is LibraryLoadingState;
-          },
-        )
-      ],
+    return BlocConsumer<LibraryAllBooksCubit, LibraryAllBooksState>(
+      listener: (context, state) {
+        state.maybeWhen(
+          bookClicked: (cats, id, bookName) => _openEpub(cats, id, bookName),
+          orElse: () {},
+        );
+      },
+      builder: (context, state) {
+        return state.when(
+          init: () => const Center(child: CircularProgressIndicator()),
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error) => Center(child: Text('Error: $error')),
+          allBooksLoaded: (books, cats) => _buildAllBooks(books, cats),
+          bookClicked: (cats, id, bookName) => _buildAllBooks(books, this.cats),
+        );
+      },
     );
   }
 
   void _loadAllBooks() {
-    BlocProvider.of<LibraryCubit>(context).loadAllBooks();
+    context.read<LibraryAllBooksCubit>().loadAllBooks();
   }
 
+  _openEpub(List<CategoryModel> cats, int id, String bookName) {
+    if (cats.length == 1) {
+      openEpub(context: context, cat: cats.first);
+    } else {
+      showBooksDialog(bookName, cats);
+    }
+  }
 
+  void showBooksDialog(String bookName, List<CategoryModel> cats) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            bookName,
+            textAlign: TextAlign.center,
+            style: TextStyle(overflow: TextOverflow.ellipsis, fontSize: 16),
+            maxLines: 2, // Ensure text does not exceed more than 2 lines
+          ),          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: cats.map((cat) {
+              return ListTile(
+                title: Text(cat.bookName ?? '', style: TextStyle(fontSize: 14),),
+                onTap: () {
+                  openEpub(context: context, cat: cat);
+                },
+              );
+            }).toList(),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildAllBooks(List<BookModel> books, List<CategoryModel> cats) {
+    this.cats = cats;
+    this.books = books;
+    return BookListWidget(
+        bookList: books, cubit: context.read<LibraryAllBooksCubit>());
+  }
 }

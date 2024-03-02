@@ -5,9 +5,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/style_model.dart';
 
 class StyleHelper {
-  FontSizeCustom fontSize = FontSizeCustom.normalFontSize;
+  FontSizeCustom fontSize = FontSizeCustom.medium;
   FontFamily fontFamily = FontFamily.font1;
-  LineSpace lineSpace = LineSpace.normalLineSpace;
+  LineHeightCustom lineSpace = LineHeightCustom.medium;
 
   // Private constructor to prevent external instantiation
   StyleHelper._();
@@ -28,7 +28,7 @@ class StyleHelper {
     fontFamily = newFontFamily;
   }
 
-  void changeLineSpace(LineSpace newLineSpace) {
+  void changeLineSpace(LineHeightCustom newLineSpace) {
     lineSpace = newLineSpace;
   }
 
@@ -50,15 +50,15 @@ class StyleHelper {
           (e) => e.toString() == 'FontSize.${json["fontSize"]}',
       );
     } else {
-      styleHelper.fontSize = FontSizeCustom.normalFontSize; // Provide a default value
+      styleHelper.fontSize = FontSizeCustom.medium;
     }
 
     if (json.containsKey("lineSpace")) {
-      styleHelper.lineSpace = LineSpace.values.firstWhere(
+      styleHelper.lineSpace = LineHeightCustom.values.firstWhere(
             (e) => e.toString() == 'LineSpace.${json["lineSpace"]}',
       );
     } else {
-      styleHelper.lineSpace = LineSpace.normalLineSpace; // Provide a default value
+      styleHelper.lineSpace = LineHeightCustom.medium;
     }
 
 
