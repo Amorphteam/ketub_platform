@@ -11,6 +11,8 @@ import 'package:ketub_platform/models/style_model.dart';
 import 'package:ketub_platform/models/tree_toc_model.dart';
 import 'package:ketub_platform/screens/epub_viewer/cubit/epub_viewer_cubit.dart';
 import 'package:ketub_platform/screens/epub_viewer/widgets/vertical_seekbar.dart';
+import 'package:ketub_platform/screens/main/toc_tab/cubit/toc_cubit.dart';
+import 'package:ketub_platform/screens/main/toc_tab/toc_screen.dart';
 import 'package:ketub_platform/utils/page_helper.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'cubit/epub_cubit.dart';
@@ -124,7 +126,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                     IconButton(
                       icon: SvgPicture.asset('assets/icons/toc.svg'),
                       onPressed: () {
-                        _openIternalToc(context);
+                        _openInternalToc(context);
                       },
                     )
                   ],
@@ -299,21 +301,18 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     BlocProvider.of<EpubViewerCubit>(context).addBookmark(reference);
   }
 
-  _openIternalToc(BuildContext context) {
-    Navigator.of(context).push(
+  void _openInternalToc(BuildContext context) {
+    Navigator.push(
+      context,
       MaterialPageRoute(
-        builder: (_) => InternalToc(
-          tocList: tocList??[],
-          onDataTransfer: (value) {
-            setState(() {
-              _chapter = value;
-            });
-          },
-          epubViewerCubit: context.read<EpubViewerCubit>(),
+        builder: (context) => BlocProvider(
+          create: (context) => TocCubit(),
+          child: TocScreen(),
         ),
       ),
     );
   }
+
 
   _showBottomSheet(BuildContext context, EpubViewerCubit cubit) {
     showModalBottomSheet(
