@@ -115,7 +115,7 @@ Future<void> loadAndParseEpub(
         final int addStatus = await referencesDatabase.addReference(bookmark);
         emit(EpubViewerState.bookmarkAdded(status: addStatus));
       } else {
-        emit(const EpubViewerState.error(error: 'Duplicate reference found'));
+        emit(EpubViewerState.bookmarkAdded(status: -1));
       }
     } catch (error) {
       if (error is Exception) {

@@ -2,6 +2,7 @@ import 'package:epub_parser/epub_parser.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ketub_platform/screens/epub_viewer/cubit/epub_viewer_cubit.dart';
+import 'package:ketub_platform/screens/main/shared_widgets/search_bar_widget.dart';
 import '../cubit/epub_cubit.dart';
 import '../epub_viewer_screen.dart';
 import 'widgets/internal_toc_tree_List_widget.dart';
@@ -30,31 +31,13 @@ class _InternalTocState extends State<InternalToc> {
 
   @override
   Widget build(BuildContext context) {
-    
-
-    return Material( // Keep the Material widget here
-      child: Column(
+    return Scaffold(
+      appBar: AppBar(
+        title: SearchBarWiget(),
+      ),
+      body: Column(
         children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Padding(
-              padding: EdgeInsets.only(top: 32), // Add top padding to the TextField
-              child: TextField(
-                onChanged: (value) => _loadToc(value),
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.zero,
-                  labelText: 'Search',
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Flexible(
-            child: InternalTocTreeList(tocTreeList: _filteredToc, onDataTransfer: widget.onDataTransfer),
-          ),
+           InternalTocTreeList(tocTreeList: _filteredToc, onDataTransfer: widget.onDataTransfer),
         ],
       ),
     );

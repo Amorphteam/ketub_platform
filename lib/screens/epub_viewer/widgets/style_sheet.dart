@@ -134,78 +134,78 @@ class _StyleSheetState extends State<StyleSheet> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 16),
-          Text(
-            'Text setting wizard',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 26),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.contrast),
-                    onPressed: () {
+          // SizedBox(height: 16),
+          // Text(
+          //   'Text setting wizard',
+          //   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          // ),
+          // SizedBox(height: 26),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     Column(
+          //       children: [
+          //         IconButton(
+          //           icon: Icon(Icons.contrast),
+          //           onPressed: () {
+          //
+          //           },
+          //         ),
+          //         const Text(
+          //           'High Contrast',
+          //           style: TextStyle(fontSize: 10),
+          //         ),
+          //       ],
+          //     ),
+          //     Column(
+          //       children: [
+          //         IconButton(
+          //           icon: Icon(Icons.dark_mode),
+          //           onPressed: () {
+          //
+          //           },
+          //         ),
+          //         Text(
+          //           'Dark Mode',
+          //           style: TextStyle(fontSize: 10),
+          //         ),
+          //       ],
+          //     ),
+          //     Column(
+          //       children: [
+          //         IconButton(
+          //           icon: Icon(Icons.zoom_out_map),
+          //           onPressed: () {
+          //             _handleFontSizeSliderChange(0.8);
+          //             _handleLineHeightSliderChange(0.8);
+          //           },
+          //         ),
+          //         Text(
+          //           'More readability',
+          //           style: TextStyle(fontSize: 10),
+          //         ),
+          //       ],
+          //     ),
+          //     Column(
+          //       children: [
+          //         IconButton(
+          //           icon: Icon(Icons.article),
+          //           onPressed: () {
+          //           },
+          //         ),
+          //         Text(
+          //           'High Contrast',
+          //           style: TextStyle(fontSize: 10),
+          //         ),
+          //       ],
+          //     ),
+          //   ],
+          // ),
+          // SizedBox(height: 18,),
+          // Divider(), // Add a divider here
 
-                    },
-                  ),
-                  const Text(
-                    'High Contrast',
-                    style: TextStyle(fontSize: 10),
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.dark_mode),
-                    onPressed: () {
-
-                    },
-                  ),
-                  Text(
-                    'Dark Mode',
-                    style: TextStyle(fontSize: 10),
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.zoom_out_map),
-                    onPressed: () {
-                      _handleFontSizeSliderChange(0.8);
-                      _handleLineHeightSliderChange(0.8);
-                    },
-                  ),
-                  Text(
-                    'More readability',
-                    style: TextStyle(fontSize: 10),
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.article),
-                    onPressed: () {
-                    },
-                  ),
-                  Text(
-                    'High Contrast',
-                    style: TextStyle(fontSize: 10),
-                  ),
-                ],
-              ),
-            ],
-          ),
           SizedBox(height: 18,),
-          Divider(), // Add a divider here
-
-          SizedBox(height: 18,),
-          Text('Advanced settings', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+          Text('Text Settings', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
           SizedBox(height: 18), // Add spacing before the Chip widgets
 
           Row(
@@ -270,10 +270,10 @@ class _StyleSheetState extends State<StyleSheet> {
               Icon(Icons.format_line_spacing, size: 18, color: Colors.grey,),
             ],
           ),
-          IconButton(
-            icon: Icon(Icons.color_lens),
-            onPressed: _showColorPicker,
-          ),
+          // IconButton(
+          //   icon: Icon(Icons.color_lens),
+          //   onPressed: _showColorPicker,
+          // ),
         ],
       ),
 

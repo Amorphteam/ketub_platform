@@ -280,15 +280,12 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   _openInternalSearch(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => InternalSearchScreen(
-          epubViewerCubit: context.read<EpubViewerCubit>(),
+        builder: (_) => InternalSearchScreen(
+          cubit: context.read<EpubViewerCubit>(),
         ),
       ),
     );
 
-    setState(() {
-      isSliderVisible = !isSliderVisible;
-    });
   }
 
   _addBookmark(BuildContext context) {
@@ -305,8 +302,8 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   _openIternalToc(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => InternalToc(
-          tocList: tocList!,
+        builder: (_) => InternalToc(
+          tocList: tocList??[],
           onDataTransfer: (value) {
             setState(() {
               _chapter = value;

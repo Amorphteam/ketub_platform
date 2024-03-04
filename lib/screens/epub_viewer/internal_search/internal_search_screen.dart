@@ -3,13 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ketub_platform/models/search_model.dart';
 import 'package:ketub_platform/screens/epub_viewer/cubit/epub_viewer_cubit.dart';
+import 'package:ketub_platform/screens/main/shared_widgets/search_bar_widget.dart';
 import 'package:ketub_platform/utils/epub_helper.dart';
 import '../cubit/epub_cubit.dart';
 
 class InternalSearchScreen extends StatefulWidget {
-  final EpubViewerCubit epubViewerCubit;
-
-  const InternalSearchScreen({Key? key, required this.epubViewerCubit}) : super(key: key);
+  final EpubViewerCubit cubit;
+  const InternalSearchScreen({Key? key, required this.cubit}) : super(key: key);
 
   @override
   State<InternalSearchScreen> createState() => _InternalSearchScreenState();
@@ -36,23 +36,10 @@ class _InternalSearchScreenState extends State<InternalSearchScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Book Search'),
+        title: SearchBarWiget(),
       ),
       body: Column(
         children: <Widget>[
-          TextField(
-            onChanged: (value) {
-              setState(() {
-                searchWord = value;
-                print("searchWord$value");
-              });
-              _handleSearch(searchWord, bookNameSearchingController); // Call handleSearch when the search word changes
-            },
-            decoration: InputDecoration(
-              hintText: 'Enter search keyword',
-              contentPadding: EdgeInsets.all(16.0),
-            ),
-          ),
           Expanded(
             child: buildSearchResultsList(searchResults),
           ),

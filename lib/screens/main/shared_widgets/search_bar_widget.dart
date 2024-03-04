@@ -23,7 +23,7 @@ class _SearchBarWigetState extends State<SearchBarWiget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      padding: const EdgeInsets.only(left: 0, right: 0),
       child: GestureDetector(
         onTap: () {
           Navigator.push(
