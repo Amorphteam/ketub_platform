@@ -39,6 +39,7 @@ class EpubViewerScreen extends StatefulWidget {
 }
 
 class _EpubViewerScreenState extends State<EpubViewerScreen> {
+  int _currentIndex = -1;
   final ItemScrollController itemScrollController = ItemScrollController();
   final ScrollOffsetController scrollOffsetController =
       ScrollOffsetController();
@@ -77,7 +78,14 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     }
 
     return BlocConsumer<EpubViewerCubit, EpubViewerState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        state.maybeWhen(
+          pageChanged: (page) {
+            _jumpTo(pageNumber: page);
+          },
+          orElse: () {},
+        );
+      },
       builder: (context, state) {
         return Scaffold(
           body: Stack(
@@ -138,10 +146,9 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                       loading: () => const Center(
                             child: CircularProgressIndicator(),
                           ),
-                      error: (error) => _buildCurrentUi(context, state),
+                      error: (error) => Container(),
                       initial: () => Container(),
                       pageChanged: (int? pageNumber) {
-                        _jumpTo(pageNumber: pageNumber);
                         return _buildCurrentUi(context, state);
                       },
                       styleChanged: (FontSizeCustom? fontSize,
@@ -232,7 +239,6 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                 min: 0,
                 max: allPagesCount - 1,
                 onChanged: (newValue) {
-                  // Indicate that this change is coming from the slider.
                   _isSliderChange = true;
                   setState(() {
                     _currentPage = newValue;
@@ -395,11 +401,16 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     _determineEpubSourceAndLoad();
 
     itemPositionsListener.itemPositions.addListener(() {
-      if (!_isSliderChange) {
-        final positions = itemPositionsListener.itemPositions.value;
-        if (positions.isNotEmpty) {
-          final int currentPageIndex = positions.first.index;
-          _updateCurrentPage(currentPageIndex.toDouble());
+      final positions = itemPositionsListener.itemPositions.value;
+      if (positions.isNotEmpty) {
+        final int firstVisibleItemIndex = positions
+            .where((position) => position.itemLeadingEdge < 1)
+            .reduce((max, position) => position.index > max.index ? position : max)
+            .index;
+
+        if (_currentIndex != firstVisibleItemIndex) {
+          _currentIndex = firstVisibleItemIndex;
+          _updateCurrentPage(firstVisibleItemIndex.toDouble());
         }
       }
     });
@@ -421,6 +432,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     pageHelper.saveBookData(widget.catModel!.bookPath!, _currentPage);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: SystemUiOverlay.values);
+    itemPositionsListener.itemPositions.removeListener(() {});
     super.dispose();
   }
 
@@ -443,6 +455,9 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   }
 
   _storeCurrentPage({int? currentPageNumber}) {
-    _currentPage = currentPageNumber?.toDouble() ?? 0.0;
+    final newPage = currentPageNumber?.toDouble() ?? 0.0;
+    if (_currentPage != newPage) {
+      _currentPage = currentPageNumber?.toDouble() ?? 0.0;
+    }
   }
 }

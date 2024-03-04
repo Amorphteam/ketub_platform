@@ -39,7 +39,6 @@ Future<void> loadAndParseEpub(
     await extractHtmlContentWithEmbeddedImages(epubBook);
 
     _storeEpubDetails(epubBook, epubContent, assetPath);
-    emit(EpubViewerState.loaded(content: _spineHtmlContent!, epubTitle: _bookTitle ?? ''));
     _loadUserPreferences();
   } catch (error) {
       emit(EpubViewerState.error(error: error.toString()));
@@ -49,7 +48,7 @@ Future<void> loadAndParseEpub(
   Future<void> emitLastPageSeen() async {
     final lastPageNumber = await getLastPageNumberForBook(assetPath: _assetPath!);
     if (lastPageNumber != null) {
-      emit(EpubViewerState.pageChanged(pageNumber: lastPageNumber.toInt()));
+      jumpToPage(newPage: lastPageNumber.toInt());
     }
   }
 
@@ -61,6 +60,7 @@ Future<void> loadAndParseEpub(
     _spineHtmlFileName = epubContent.map((info) => info.fileName).toList();
     _assetPath = assetPath;
     _bookTitle = epubBook.Title;
+    emit(EpubViewerState.loaded(content: _spineHtmlContent!, epubTitle: _bookTitle ?? ''));
   }
 
   void changeStyle({FontSizeCustom? fontSize, LineHeightCustom? lineSpace, FontFamily? fontFamily}) {
