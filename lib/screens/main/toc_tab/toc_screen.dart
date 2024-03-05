@@ -9,14 +9,15 @@ import 'cubit/toc_cubit.dart';
 
 
 class TocScreen extends StatefulWidget {
-  const TocScreen({super.key});
+  final String bookPath;
+
+  const TocScreen({super.key, required this.bookPath});
 
   @override
   _TocScreenState createState() => _TocScreenState();
 }
 
 class _TocScreenState extends State<TocScreen> {
-  final String bookPath = 'a1.epub';
   @override
   void initState() {
     super.initState();
@@ -38,15 +39,14 @@ class _TocScreenState extends State<TocScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text(state.error.toString())));
               } else if (state is TocItemTappedState){
-                final EpubChaptersWithBookPath chapterWithBookPath = EpubChaptersWithBookPath(state.toc, bookPath);
+                final EpubChaptersWithBookPath chapterWithBookPath = EpubChaptersWithBookPath(state.toc, widget.bookPath);
                 openEpub(context: context, toc: chapterWithBookPath);
               }
             },
             builder: (context, state) {
               if (state is TocLoadedState) {
-                return Expanded(
-                  child: EpubChapterListWidget(tocTreeList: state.tocTreeList),
-                );
+                return Placeholder();
+                  // EpubChapterListWidget(tocTreeList: state.tocTreeList);
               } else if (state is TocLoadingState) {
                 return CircularProgressIndicator();
               } else {
@@ -63,7 +63,7 @@ class _TocScreenState extends State<TocScreen> {
   }
 
   _loadToc(BuildContext context, String? query) {
-    BlocProvider.of<TocCubit>(context).loadToc(query: query ?? '', bookPath: bookPath);
+    BlocProvider.of<TocCubit>(context).loadToc(query: query ?? '', bookPath: widget.bookPath);
   }
 
 }

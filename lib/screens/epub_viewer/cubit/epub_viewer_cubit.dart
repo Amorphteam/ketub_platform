@@ -30,45 +30,50 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
   final ReferencesDatabase referencesDatabase = ReferencesDatabase.instance;
   final searchHelper = SearchHelper();
 
-Future<void> loadAndParseEpub(
-    String assetPath) async {
-  emit(const EpubViewerState.loading());
-  try {
-    final EpubBook epubBook = await loadEpubFromAsset(assetPath);
-    final List<HtmlFileInfo> epubContent =
-    await extractHtmlContentWithEmbeddedImages(epubBook);
+  Future<void> loadAndParseEpub(String assetPath) async {
+    emit(const EpubViewerState.loading());
+    try {
+      final EpubBook epubBook = await loadEpubFromAsset(assetPath);
+      final List<HtmlFileInfo> epubContent =
+      await extractHtmlContentWithEmbeddedImages(epubBook);
 
-    _storeEpubDetails(epubBook, epubContent, assetPath);
-    _loadUserPreferences();
-  } catch (error) {
+      _storeEpubDetails(epubBook, epubContent, assetPath);
+      _loadUserPreferences();
+    } catch (error) {
       emit(EpubViewerState.error(error: error.toString()));
+    }
   }
-}
 
   Future<void> emitLastPageSeen() async {
-    final lastPageNumber = await getLastPageNumberForBook(assetPath: _assetPath!);
+    final lastPageNumber = await getLastPageNumberForBook(
+        assetPath: _assetPath!);
     if (lastPageNumber != null) {
       jumpToPage(newPage: lastPageNumber.toInt());
     }
   }
 
-  void _storeEpubDetails(
-      EpubBook epubBook, List<HtmlFileInfo> epubContent, String assetPath) {
+  void _storeEpubDetails(EpubBook epubBook, List<HtmlFileInfo> epubContent,
+      String assetPath) {
     _epubBook = epubBook;
     _spineHtmlContent =
         epubContent.map((info) => info.modifiedHtmlContent).toList();
     _spineHtmlFileName = epubContent.map((info) => info.fileName).toList();
     _assetPath = assetPath;
     _bookTitle = epubBook.Title;
-    emit(EpubViewerState.loaded(content: _spineHtmlContent!, epubTitle: _bookTitle ?? ''));
+    _tocTreeList = epubBook.Chapters;
+    emit(EpubViewerState.loaded(content: _spineHtmlContent!,
+        epubTitle: _bookTitle ?? '',
+        tocTreeList: _tocTreeList));
   }
 
-  void changeStyle({FontSizeCustom? fontSize, LineHeightCustom? lineSpace, FontFamily? fontFamily}) {
+  void changeStyle(
+      {FontSizeCustom? fontSize, LineHeightCustom? lineSpace, FontFamily? fontFamily}) {
     fontSize != null ? styleHelper.changeFontSize(fontSize) : null;
     lineSpace != null ? styleHelper.changeLineSpace(lineSpace) : null;
     fontFamily != null ? styleHelper.changeFontFamily(fontFamily) : null;
 
-    emit(EpubViewerState.styleChanged(fontSize: fontSize, lineHeight: lineSpace, fontFamily: fontFamily));
+    emit(EpubViewerState.styleChanged(
+        fontSize: fontSize, lineHeight: lineSpace, fontFamily: fontFamily));
     _saveStyleHelperToPreferences();
   }
 
@@ -89,12 +94,12 @@ Future<void> loadAndParseEpub(
   }
 
 
-
   _saveStyleHelperToPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     final styleJson = styleHelper.toJson();
     prefs.setString('styleHelper', jsonEncode(styleJson));
   }
+
   void _loadUserPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     final styleJson = prefs.getString('styleHelper');
@@ -102,7 +107,9 @@ Future<void> loadAndParseEpub(
       final decodedStyle = jsonDecode(styleJson);
       final loadedStyleHelper = StyleHelper.fromJson(decodedStyle);
       styleHelper = loadedStyleHelper;
-      emit(EpubViewerState.styleChanged(fontFamily: styleHelper.fontFamily, fontSize: styleHelper.fontSize, lineHeight: styleHelper.lineSpace));
+      emit(EpubViewerState.styleChanged(fontFamily: styleHelper.fontFamily,
+          fontSize: styleHelper.fontSize,
+          lineHeight: styleHelper.lineSpace));
     }
   }
 
@@ -120,6 +127,15 @@ Future<void> loadAndParseEpub(
     } catch (error) {
       if (error is Exception) {
         emit(EpubViewerState.error(error: error.toString()));
+      }
+    }
+  }
+
+  Future<void> openEpub(EpubChapter item) async {
+    for (String fileName in _spineHtmlFileName!){
+      if (fileName == item.ContentFileName){
+        final int spineNumber = await findPageIndexInEpub(_epubBook!, fileName);
+        emit(EpubViewerState.pageChanged(pageNumber: spineNumber));
       }
     }
   }

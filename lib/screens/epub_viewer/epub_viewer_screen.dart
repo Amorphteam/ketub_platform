@@ -10,14 +10,10 @@ import 'package:ketub_platform/models/search_model.dart';
 import 'package:ketub_platform/models/style_model.dart';
 import 'package:ketub_platform/models/tree_toc_model.dart';
 import 'package:ketub_platform/screens/epub_viewer/cubit/epub_viewer_cubit.dart';
-import 'package:ketub_platform/screens/epub_viewer/widgets/vertical_seekbar.dart';
-import 'package:ketub_platform/screens/main/toc_tab/cubit/toc_cubit.dart';
-import 'package:ketub_platform/screens/main/toc_tab/toc_screen.dart';
 import 'package:ketub_platform/utils/page_helper.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'cubit/epub_cubit.dart';
+import '../main/toc_tab/widgets/toc_tree_list_widget.dart';
 import 'internal_search/internal_search_screen.dart';
-import 'internal_toc/internal_toc_screen.dart';
 import 'widgets/style_sheet.dart';
 
 typedef DataCallback = void Function(dynamic data);
@@ -55,7 +51,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   bool isSliderVisible = true;
   bool isBookmarked = false;
   EpubChapter? _chapter;
-  List<EpubChapter>? tocList;
+  List<EpubChapter>? _tocList;
   String? _bookPath;
   FontSizeCustom fontSize = FontSizeCustom.medium;
   LineHeightCustom lineHeight = LineHeightCustom.medium;
@@ -66,7 +62,6 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _loadToc(context);
     if (_chapter != null) {
       context
           .read<EpubViewerCubit>()
@@ -140,8 +135,8 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                           : kToolbarHeight +
                               MediaQuery.of(context).padding.top),
                   child: state.when(
-                      loaded: (content, _) {
-                        _storeContentLoaded(content, context, state);
+                      loaded: (content, _, tocList) {
+                        _storeContentLoaded(content, context, state, tocList);
                         context.read<EpubViewerCubit>().emitLastPageSeen();
                         return _buildCurrentUi(context, state);
                       },
@@ -171,9 +166,10 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   }
 
   _storeContentLoaded(
-      List<String> htmlContent, BuildContext context, EpubViewerState state) {
+      List<String> htmlContent, BuildContext context, EpubViewerState state, List<EpubChapter>? tocList) {
     _content = htmlContent;
     _bookName = _getAppBarTitle(state);
+    _tocList = tocList;
   }
 
   Widget _buildCurrentUi(BuildContext context, EpubViewerState state) {
@@ -302,16 +298,37 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   }
 
   void _openInternalToc(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => BlocProvider(
-          create: (context) => TocCubit(),
-          child: TocScreen(),
-        ),
-      ),
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext _) {
+        return DraggableScrollableSheet(
+          expand: false,
+          initialChildSize: 0.5,
+          minChildSize: 0.25,
+          maxChildSize: 1.0,
+          builder: (BuildContext _, ScrollController scrollController) {
+            // Use the scrollController in your widget to enable scrolling
+            return Container(
+              padding: EdgeInsets.all(16),
+              child: EpubChapterListWidget(
+                tocTreeList: _tocList ?? [],
+                scrollController: scrollController,
+                epubViewerCubit: context.read<EpubViewerCubit>(),
+                onClose: () {
+                  Future.delayed(const Duration(milliseconds: 300), () {
+                    Navigator.pop(context);
+                  });
+                  },
+              ),
+            );
+          },
+        );
+      },
     );
+
   }
+
 
 
   _showBottomSheet(BuildContext context, EpubViewerCubit cubit) {
@@ -337,10 +354,6 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
         );
       },
     );
-  }
-
-  _loadToc(BuildContext context) {
-    // BlocProvider.of<EpubCubit>(context).loadToc();
   }
 
   _toggleBookmark() {
@@ -434,7 +447,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
 
   String _getAppBarTitle(EpubViewerState state) {
     return state.maybeWhen(
-      loaded: (_, title) => title,
+      loaded: (_, title, __) => title,
       orElse: () => '',
     );
   }

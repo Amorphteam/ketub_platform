@@ -20,7 +20,9 @@ mixin _$EpubViewerState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<String> content, String epubTitle) loaded,
+    required TResult Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)
+        loaded,
     required TResult Function(String error) error,
     required TResult Function(int? pageNumber) pageChanged,
     required TResult Function(FontSizeCustom? fontSize,
@@ -33,7 +35,9 @@ mixin _$EpubViewerState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<String> content, String epubTitle)? loaded,
+    TResult? Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)?
+        loaded,
     TResult? Function(String error)? error,
     TResult? Function(int? pageNumber)? pageChanged,
     TResult? Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
@@ -46,7 +50,9 @@ mixin _$EpubViewerState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<String> content, String epubTitle)? loaded,
+    TResult Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)?
+        loaded,
     TResult Function(String error)? error,
     TResult Function(int? pageNumber)? pageChanged,
     TResult Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
@@ -150,7 +156,9 @@ class _$InitialImpl implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<String> content, String epubTitle) loaded,
+    required TResult Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)
+        loaded,
     required TResult Function(String error) error,
     required TResult Function(int? pageNumber) pageChanged,
     required TResult Function(FontSizeCustom? fontSize,
@@ -166,7 +174,9 @@ class _$InitialImpl implements _Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<String> content, String epubTitle)? loaded,
+    TResult? Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)?
+        loaded,
     TResult? Function(String error)? error,
     TResult? Function(int? pageNumber)? pageChanged,
     TResult? Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
@@ -182,7 +192,9 @@ class _$InitialImpl implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<String> content, String epubTitle)? loaded,
+    TResult Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)?
+        loaded,
     TResult Function(String error)? error,
     TResult Function(int? pageNumber)? pageChanged,
     TResult Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
@@ -288,7 +300,9 @@ class _$LoadingImpl implements _Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<String> content, String epubTitle) loaded,
+    required TResult Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)
+        loaded,
     required TResult Function(String error) error,
     required TResult Function(int? pageNumber) pageChanged,
     required TResult Function(FontSizeCustom? fontSize,
@@ -304,7 +318,9 @@ class _$LoadingImpl implements _Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<String> content, String epubTitle)? loaded,
+    TResult? Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)?
+        loaded,
     TResult? Function(String error)? error,
     TResult? Function(int? pageNumber)? pageChanged,
     TResult? Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
@@ -320,7 +336,9 @@ class _$LoadingImpl implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<String> content, String epubTitle)? loaded,
+    TResult Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)?
+        loaded,
     TResult Function(String error)? error,
     TResult Function(int? pageNumber)? pageChanged,
     TResult Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
@@ -392,7 +410,8 @@ abstract class _$$LoadedImplCopyWith<$Res> {
           _$LoadedImpl value, $Res Function(_$LoadedImpl) then) =
       __$$LoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<String> content, String epubTitle});
+  $Res call(
+      {List<String> content, String epubTitle, List<EpubChapter>? tocTreeList});
 }
 
 /// @nodoc
@@ -408,6 +427,7 @@ class __$$LoadedImplCopyWithImpl<$Res>
   $Res call({
     Object? content = null,
     Object? epubTitle = null,
+    Object? tocTreeList = freezed,
   }) {
     return _then(_$LoadedImpl(
       content: null == content
@@ -418,6 +438,10 @@ class __$$LoadedImplCopyWithImpl<$Res>
           ? _value.epubTitle
           : epubTitle // ignore: cast_nullable_to_non_nullable
               as String,
+      tocTreeList: freezed == tocTreeList
+          ? _value._tocTreeList
+          : tocTreeList // ignore: cast_nullable_to_non_nullable
+              as List<EpubChapter>?,
     ));
   }
 }
@@ -426,8 +450,11 @@ class __$$LoadedImplCopyWithImpl<$Res>
 
 class _$LoadedImpl implements _Loaded {
   const _$LoadedImpl(
-      {required final List<String> content, required this.epubTitle})
-      : _content = content;
+      {required final List<String> content,
+      required this.epubTitle,
+      final List<EpubChapter>? tocTreeList})
+      : _content = content,
+        _tocTreeList = tocTreeList;
 
   final List<String> _content;
   @override
@@ -439,10 +466,19 @@ class _$LoadedImpl implements _Loaded {
 
   @override
   final String epubTitle;
+  final List<EpubChapter>? _tocTreeList;
+  @override
+  List<EpubChapter>? get tocTreeList {
+    final value = _tocTreeList;
+    if (value == null) return null;
+    if (_tocTreeList is EqualUnmodifiableListView) return _tocTreeList;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   @override
   String toString() {
-    return 'EpubViewerState.loaded(content: $content, epubTitle: $epubTitle)';
+    return 'EpubViewerState.loaded(content: $content, epubTitle: $epubTitle, tocTreeList: $tocTreeList)';
   }
 
   @override
@@ -452,12 +488,17 @@ class _$LoadedImpl implements _Loaded {
             other is _$LoadedImpl &&
             const DeepCollectionEquality().equals(other._content, _content) &&
             (identical(other.epubTitle, epubTitle) ||
-                other.epubTitle == epubTitle));
+                other.epubTitle == epubTitle) &&
+            const DeepCollectionEquality()
+                .equals(other._tocTreeList, _tocTreeList));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_content), epubTitle);
+      runtimeType,
+      const DeepCollectionEquality().hash(_content),
+      epubTitle,
+      const DeepCollectionEquality().hash(_tocTreeList));
 
   @JsonKey(ignore: true)
   @override
@@ -470,7 +511,9 @@ class _$LoadedImpl implements _Loaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<String> content, String epubTitle) loaded,
+    required TResult Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)
+        loaded,
     required TResult Function(String error) error,
     required TResult Function(int? pageNumber) pageChanged,
     required TResult Function(FontSizeCustom? fontSize,
@@ -478,7 +521,7 @@ class _$LoadedImpl implements _Loaded {
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
   }) {
-    return loaded(content, epubTitle);
+    return loaded(content, epubTitle, tocTreeList);
   }
 
   @override
@@ -486,7 +529,9 @@ class _$LoadedImpl implements _Loaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<String> content, String epubTitle)? loaded,
+    TResult? Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)?
+        loaded,
     TResult? Function(String error)? error,
     TResult? Function(int? pageNumber)? pageChanged,
     TResult? Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
@@ -494,7 +539,7 @@ class _$LoadedImpl implements _Loaded {
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
   }) {
-    return loaded?.call(content, epubTitle);
+    return loaded?.call(content, epubTitle, tocTreeList);
   }
 
   @override
@@ -502,7 +547,9 @@ class _$LoadedImpl implements _Loaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<String> content, String epubTitle)? loaded,
+    TResult Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)?
+        loaded,
     TResult Function(String error)? error,
     TResult Function(int? pageNumber)? pageChanged,
     TResult Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
@@ -512,7 +559,7 @@ class _$LoadedImpl implements _Loaded {
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(content, epubTitle);
+      return loaded(content, epubTitle, tocTreeList);
     }
     return orElse();
   }
@@ -567,10 +614,12 @@ class _$LoadedImpl implements _Loaded {
 abstract class _Loaded implements EpubViewerState {
   const factory _Loaded(
       {required final List<String> content,
-      required final String epubTitle}) = _$LoadedImpl;
+      required final String epubTitle,
+      final List<EpubChapter>? tocTreeList}) = _$LoadedImpl;
 
   List<String> get content;
   String get epubTitle;
+  List<EpubChapter>? get tocTreeList;
   @JsonKey(ignore: true)
   _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
@@ -642,7 +691,9 @@ class _$errorImpl implements _error {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<String> content, String epubTitle) loaded,
+    required TResult Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)
+        loaded,
     required TResult Function(String error) error,
     required TResult Function(int? pageNumber) pageChanged,
     required TResult Function(FontSizeCustom? fontSize,
@@ -658,7 +709,9 @@ class _$errorImpl implements _error {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<String> content, String epubTitle)? loaded,
+    TResult? Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)?
+        loaded,
     TResult? Function(String error)? error,
     TResult? Function(int? pageNumber)? pageChanged,
     TResult? Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
@@ -674,7 +727,9 @@ class _$errorImpl implements _error {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<String> content, String epubTitle)? loaded,
+    TResult Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)?
+        loaded,
     TResult Function(String error)? error,
     TResult Function(int? pageNumber)? pageChanged,
     TResult Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
@@ -812,7 +867,9 @@ class _$PageChangedImpl implements _PageChanged {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<String> content, String epubTitle) loaded,
+    required TResult Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)
+        loaded,
     required TResult Function(String error) error,
     required TResult Function(int? pageNumber) pageChanged,
     required TResult Function(FontSizeCustom? fontSize,
@@ -828,7 +885,9 @@ class _$PageChangedImpl implements _PageChanged {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<String> content, String epubTitle)? loaded,
+    TResult? Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)?
+        loaded,
     TResult? Function(String error)? error,
     TResult? Function(int? pageNumber)? pageChanged,
     TResult? Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
@@ -844,7 +903,9 @@ class _$PageChangedImpl implements _PageChanged {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<String> content, String epubTitle)? loaded,
+    TResult Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)?
+        loaded,
     TResult Function(String error)? error,
     TResult Function(int? pageNumber)? pageChanged,
     TResult Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
@@ -1004,7 +1065,9 @@ class _$StyleChangedImpl implements _StyleChanged {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<String> content, String epubTitle) loaded,
+    required TResult Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)
+        loaded,
     required TResult Function(String error) error,
     required TResult Function(int? pageNumber) pageChanged,
     required TResult Function(FontSizeCustom? fontSize,
@@ -1020,7 +1083,9 @@ class _$StyleChangedImpl implements _StyleChanged {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<String> content, String epubTitle)? loaded,
+    TResult? Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)?
+        loaded,
     TResult? Function(String error)? error,
     TResult? Function(int? pageNumber)? pageChanged,
     TResult? Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
@@ -1036,7 +1101,9 @@ class _$StyleChangedImpl implements _StyleChanged {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<String> content, String epubTitle)? loaded,
+    TResult Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)?
+        loaded,
     TResult Function(String error)? error,
     TResult Function(int? pageNumber)? pageChanged,
     TResult Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
@@ -1178,7 +1245,9 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<String> content, String epubTitle) loaded,
+    required TResult Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)
+        loaded,
     required TResult Function(String error) error,
     required TResult Function(int? pageNumber) pageChanged,
     required TResult Function(FontSizeCustom? fontSize,
@@ -1194,7 +1263,9 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<String> content, String epubTitle)? loaded,
+    TResult? Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)?
+        loaded,
     TResult? Function(String error)? error,
     TResult? Function(int? pageNumber)? pageChanged,
     TResult? Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
@@ -1210,7 +1281,9 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<String> content, String epubTitle)? loaded,
+    TResult Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)?
+        loaded,
     TResult Function(String error)? error,
     TResult Function(int? pageNumber)? pageChanged,
     TResult Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
