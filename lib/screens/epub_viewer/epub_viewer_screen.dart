@@ -60,6 +60,10 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   List<String> _content = [];
   bool _isSliderChange = false;
 
+  bool isSearchOpen = false;
+  final focusNode = FocusNode();
+  final textEditingController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     if (_chapter != null) {
@@ -89,12 +93,46 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
             children: [
               if (isSliderVisible)
                 AppBar(
-                  actions: [
+                  leading: IconButton(
+                    icon: isSearchOpen ? Icon(Icons.close, color: Colors.black38) : Icon(Icons.arrow_back),
+                    onPressed: () {
+                      if (isSearchOpen) {
+                        _toggleSearch(false);
+                      } else {
+                        Navigator.of(context).pop();
+                      }
+                    },
+                  ),
+                  title: isSearchOpen
+                      ? TextField(
+                    autofocus: true,
+                    focusNode: focusNode,
+                    controller: textEditingController,
+                    decoration: InputDecoration(
+                      hintText: 'أدخل كلمة لبدء البحث ...',
+                      border: InputBorder.none,
+                      suffixIcon: IconButton(
+                        icon: SvgPicture.asset('assets/icons/search.svg'), // The search icon inside the TextField
+                        onPressed: () {
+                          // Trigger the search logic, similar to what's done in onSubmitted
+                          if (textEditingController.text.isNotEmpty) {
+                            final String searchQuery = textEditingController.text;
+                            _search(searchQuery);
+                          }
+                        },
+                      ),
+                    ),
+                    onSubmitted: (value) {
+                      _search(value);
+                    },
+                  )
+                      : SizedBox.shrink(),
+                  actions: isSearchOpen
+                      ? null // No actions when search is open
+                      : [
                     IconButton(
                       icon: SvgPicture.asset('assets/icons/search.svg'),
-                      onPressed: () {
-                        _openInternalSearch(context);
-                      },
+                      onPressed: () => _toggleSearch(true),
                     ),
                     IconButton(
                       icon: SvgPicture.asset('assets/icons/style.svg'),
@@ -149,7 +187,8 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                         return _buildCurrentUi(context, state);
                       },
                       styleChanged: (FontSizeCustom? fontSize,
-                          LineHeightCustom? lineHeight, FontFamily? fontFamily) {
+                          LineHeightCustom? lineHeight,
+                          FontFamily? fontFamily) {
                         _changeStyle(fontSize, lineHeight, fontFamily);
                         return _buildCurrentUi(context, state);
                       },
@@ -165,12 +204,28 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     );
   }
 
-  _storeContentLoaded(
-      List<String> htmlContent, BuildContext context, EpubViewerState state, List<EpubChapter>? tocList) {
+  _storeContentLoaded(List<String> htmlContent, BuildContext context,
+      EpubViewerState state, List<EpubChapter>? tocList) {
     _content = htmlContent;
     _bookName = _getAppBarTitle(state);
     _tocList = tocList;
   }
+
+  void _toggleSearch(bool open) {
+    setState(() {
+      isSearchOpen = open;
+    });
+
+    if (isSearchOpen) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        FocusScope.of(context).requestFocus(focusNode);
+      });
+    } else {
+      focusNode.unfocus();
+      textEditingController.clear();
+    }
+  }
+
 
   Widget _buildCurrentUi(BuildContext context, EpubViewerState state) {
     var allPagesCount = _content.length.toDouble();
@@ -208,14 +263,13 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                                 textAlign: TextAlign.justify,
                                 direction: TextDirection.rtl,
                                 fontSize: FontSize(fontSize.size),
-                                padding: HtmlPaddings.only(
-                                    right: 10, left: 10),
+                                padding: HtmlPaddings.only(right: 10, left: 10),
                                 fontFamily: fontFamily.name),
                             "h1,h2,h3": Style(
                                 textAlign: TextAlign.right,
                                 direction: TextDirection.rtl,
                                 padding: HtmlPaddings.only(top: 30),
-                                fontSize: FontSize(fontSize.size*1.2),
+                                fontSize: FontSize(fontSize.size * 1.2),
                                 fontWeight: FontWeight.bold,
                                 fontFamily: fontFamily.name),
                             "p": Style(
@@ -248,19 +302,18 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                   _isSliderChange = false;
                 },
               ),
-
               Padding(
-                padding: const EdgeInsets.only(
-                    right: 16.0, left: 16.0, bottom: 8.0),
+                padding:
+                    const EdgeInsets.only(right: 16.0, left: 16.0, bottom: 8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Flexible(
-                        child: Text(
-                      _bookName,
-                      style: Theme.of(context).textTheme.labelMedium,
-                          maxLines: 1,
-                    ),
+                      child: Text(
+                        _bookName,
+                        style: Theme.of(context).textTheme.labelMedium,
+                        maxLines: 1,
+                      ),
                     ),
                     Text(
                       '${_currentPage.toInt() + 1}/${allPagesCount.toInt()}',
@@ -275,6 +328,9 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     );
   }
 
+  void _search(String value){
+    print('Search for: $value');
+  }
   _openInternalSearch(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -283,7 +339,6 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
         ),
       ),
     );
-
   }
 
   _addBookmark(BuildContext context) {
@@ -298,38 +353,76 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   }
 
   void _openInternalToc(BuildContext context) {
+    // This variable holds the state of the AppBar visibility
+    ValueNotifier<bool> showAppBar = ValueNotifier(false);
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      builder: (BuildContext _) {
-        return DraggableScrollableSheet(
-          expand: false,
-          initialChildSize: 0.5,
-          minChildSize: 0.25,
-          maxChildSize: 1.0,
-          builder: (BuildContext _, ScrollController scrollController) {
-            // Use the scrollController in your widget to enable scrolling
-            return Container(
-              padding: EdgeInsets.all(16),
-              child: EpubChapterListWidget(
-                tocTreeList: _tocList ?? [],
-                scrollController: scrollController,
-                epubViewerCubit: context.read<EpubViewerCubit>(),
-                onClose: () {
-                  Future.delayed(const Duration(milliseconds: 300), () {
-                    Navigator.pop(context);
-                  });
-                  },
-              ),
-            );
+      builder: (BuildContext context) {
+        return NotificationListener<DraggableScrollableNotification>(
+          onNotification: (notification) {
+            // When the sheet is fully expanded, show the AppBar
+            showAppBar.value = notification.extent == notification.maxExtent;
+            return true; // Return true to cancel the notification bubbling.
           },
+          child: DraggableScrollableSheet(
+            expand: false,
+            initialChildSize: 0.5,
+            minChildSize: 0.25,
+            maxChildSize: 1.0,
+            builder: (BuildContext context, ScrollController scrollController) {
+              return Stack(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 56),
+                    // Reserve space for the AppBar-like header
+                    child: EpubChapterListWidget(
+                      tocTreeList: _tocList ?? [],
+                      scrollController: scrollController,
+                      epubViewerCubit: this.context.read<EpubViewerCubit>(),
+                      onClose: () {
+                        Future.delayed(const Duration(milliseconds: 300), () {
+                          Navigator.pop(context);
+                        });
+                      },
+                    ),
+                  ),
+                  // Use ValueListenableBuilder to react to changes in showAppBar
+                  ValueListenableBuilder<bool>(
+                    valueListenable: showAppBar,
+                    builder: (context, value, child) {
+                      return value
+                          ? Positioned(
+                              top: 20,
+                              left: 0,
+                              right: 0,
+                              child: SafeArea(
+                                child: Container(
+                                  height: 56,
+                                  // Standard AppBar height
+                                  padding: EdgeInsets.symmetric(horizontal: 16),
+                                  alignment: Alignment.centerRight,
+                                  color: Colors.transparent,
+                                  // Adjust the color as needed
+                                  child: IconButton(
+                                    icon: Icon(Icons.arrow_back),
+                                    onPressed: () => Navigator.pop(context),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : SizedBox.shrink(); // If false, don't show anything
+                    },
+                  ),
+                ],
+              );
+            },
+          ),
         );
       },
     );
-
   }
-
-
 
   _showBottomSheet(BuildContext context, EpubViewerCubit cubit) {
     showModalBottomSheet(
@@ -414,7 +507,8 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
       if (positions.isNotEmpty) {
         final int firstVisibleItemIndex = positions
             .where((position) => position.itemLeadingEdge < 1)
-            .reduce((max, position) => position.index > max.index ? position : max)
+            .reduce(
+                (max, position) => position.index > max.index ? position : max)
             .index;
 
         if (_currentIndex != firstVisibleItemIndex) {
@@ -423,8 +517,6 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
         }
       }
     });
-
-
   }
 
   void _updateCurrentPage(double newPage) {
@@ -442,6 +534,8 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: SystemUiOverlay.values);
     itemPositionsListener.itemPositions.removeListener(() {});
+    focusNode.dispose();
+    textEditingController.dispose();
     super.dispose();
   }
 
@@ -452,8 +546,8 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     );
   }
 
-  _changeStyle(
-      FontSizeCustom? fontSize, LineHeightCustom? lineHeight, FontFamily? fontFamily) {
+  _changeStyle(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
+      FontFamily? fontFamily) {
     this.fontFamily = fontFamily ?? FontFamily.font1;
     this.lineHeight = lineHeight ?? LineHeightCustom.medium;
     this.fontSize = fontSize ?? FontSizeCustom.medium;
