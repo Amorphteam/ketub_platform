@@ -1,74 +1,54 @@
 import 'dart:convert';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/style_model.dart';
+
 
 class StyleHelper {
   FontSizeCustom fontSize = FontSizeCustom.medium;
   FontFamily fontFamily = FontFamily.font1;
   LineHeightCustom lineSpace = LineHeightCustom.medium;
 
-  // Private constructor to prevent external instantiation
   StyleHelper._();
 
   static final StyleHelper _instance = StyleHelper._();
 
-  factory StyleHelper() {
+  factory StyleHelper() => _instance;
+
+  // Methods to change properties
+  void changeFontSize(FontSizeCustom newSize) => fontSize = newSize;
+  void changeFontFamily(FontFamily newFontFamily) => fontFamily = newFontFamily;
+  void changeLineSpace(LineHeightCustom newLineSpace) => lineSpace = newLineSpace;
+
+  // Serialize the object to JSON
+  Map<String, dynamic> toJson() => {
+    'fontSize': fontSize.index,
+    'fontFamily': fontFamily.index,
+    'lineSpace': lineSpace.index,
+  };
+
+  // Initialize StyleHelper from JSON
+  void fromJson(Map<String, dynamic> json) {
+    fontSize = FontSizeCustom.values[json["fontSize"] ?? FontSizeCustom.medium.index];
+    lineSpace = LineHeightCustom.values[json["lineSpace"] ?? LineHeightCustom.medium.index];
+    fontFamily = FontFamily.values[json["fontFamily"] ?? FontFamily.font1.index];
+  }
+
+  // Load StyleHelper settings from SharedPreferences
+  static Future<StyleHelper> loadFromPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    final styleString = prefs.getString('styleHelper');
+    final styleJson = styleString != null ? json.decode(styleString) : null;
+    if (styleJson != null) {
+      _instance.fromJson(styleJson);
+    }
     return _instance;
   }
 
-
-  // Methods to change properties
-  void changeFontSize(FontSizeCustom newSize) {
-    fontSize = newSize;
-  }
-
-  void changeFontFamily(FontFamily newFontFamily) {
-    fontFamily = newFontFamily;
-  }
-
-  void changeLineSpace(LineHeightCustom newLineSpace) {
-    lineSpace = newLineSpace;
-  }
-
-  // Serialize the object to JSON
-  Map<String, dynamic> toJson() {
-    return {
-      'fontSize': fontSize.name.toString(),
-      'fontFamily': fontFamily.name.toString(),
-      'lineSpace': lineSpace.name.toString(),
-    };
-  }
-
-  // Create an object from a JSON representation
-  factory StyleHelper.fromJson(Map<String, dynamic> json) {
-    final styleHelper = StyleHelper();
-
-    if (json.containsKey("fontSize")) {
-      styleHelper.fontSize = FontSizeCustom.values.firstWhere(
-          (e) => e.toString() == 'FontSize.${json["fontSize"]}',
-      );
-    } else {
-      styleHelper.fontSize = FontSizeCustom.medium;
-    }
-
-    if (json.containsKey("lineSpace")) {
-      styleHelper.lineSpace = LineHeightCustom.values.firstWhere(
-            (e) => e.toString() == 'LineSpace.${json["lineSpace"]}',
-      );
-    } else {
-      styleHelper.lineSpace = LineHeightCustom.medium;
-    }
-
-
-    if (json.containsKey("fontFamily")) {
-      styleHelper.fontFamily = FontFamily.values.firstWhere(
-            (e) => e.toString() == 'FontFamily.${json["fontFamily"]}',
-      );
-    } else {
-      styleHelper.fontFamily = FontFamily.font1; // Provide a default value
-    }
-    return styleHelper;
+  // Save StyleHelper settings to SharedPreferences
+  Future<void> saveToPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    final styleJson = jsonEncode(toJson());
+    await prefs.setString('styleHelper', styleJson);
   }
 }

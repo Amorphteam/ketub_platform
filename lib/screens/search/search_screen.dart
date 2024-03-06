@@ -38,28 +38,27 @@ class _SearchScreenState extends State<SearchScreen> {
     return searchWord.length > 3;
   }
 
-  void handleSearch() {
-
-    if (shouldStartSearch()) {
-      // Start the search only if the search word is longer than 3 letters
-      final stream = searchHelper.searchAllBooks(
-        allBooks(), // Your list of book file paths
-        searchWord,
-        bookNameSearchingController,
-      );
-
-
-      setState(() {
-        searchResults = []; // Clear previous search results
-      });
-
-      stream.listen((List<SearchModel> results) {
-        setState(() {
-          searchResults = results; // Update the search results
-        });
-      });
-    }
-  }
+  // void handleSearch() {
+  //
+  //   if (shouldStartSearch()) {
+  //     // Start the search only if the search word is longer than 3 letters
+  //     final stream = searchHelper.searchAllBooks(
+  //       allBooks(), // Your list of book file paths
+  //       searchWord,
+  //     );
+  //
+  //
+  //     setState(() {
+  //       searchResults = []; // Clear previous search results
+  //     });
+  //
+  //     stream.listen((List<SearchModel> results) {
+  //       setState(() {
+  //         searchResults = results; // Update the search results
+  //       });
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +73,7 @@ class _SearchScreenState extends State<SearchScreen> {
               setState(() {
                 searchWord = value;
               });
-              handleSearch(); // Call handleSearch when the search word changes
+              // handleSearch(); // Call handleSearch when the search word changes
 
             },
             decoration: InputDecoration(

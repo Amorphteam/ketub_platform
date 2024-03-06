@@ -5,91 +5,85 @@ import 'package:ketub_platform/screens/epub_viewer/cubit/epub_viewer_cubit.dart'
 
 class StyleSheet extends StatefulWidget {
   final EpubViewerCubit epubViewerCubit;
-  const StyleSheet({super.key, required this.epubViewerCubit});
+  final FontSizeCustom fontSize;
+  final FontFamily fontFamily;
+  final LineHeightCustom lineSpace;
 
+  const StyleSheet({
+    Key? key,
+    required this.epubViewerCubit,
+    required this.fontSize,
+    required this.fontFamily,
+    required this.lineSpace,
+  }) : super(key: key);
 
   @override
   State<StyleSheet> createState() => _StyleSheetState();
 }
 
 class _StyleSheetState extends State<StyleSheet> {
-  int _selectedChipIndex = -1;
-  FontSizeCustom fontSizeCustom = FontSizeCustom.medium;
-  FontFamily fontFamily = FontFamily.font1;
-  LineHeightCustom lineSpace = LineHeightCustom.medium;
+  late int _selectedChipIndex;
+  late FontSizeCustom fontSizeCustom;
+  late FontFamily fontFamily;
+  late LineHeightCustom lineSpace;
+  late double _fontSizeSliderValue;
+  late double _lineHeightSliderValue;
+
+  @override
+  void initState() {
+    super.initState();
+    fontSizeCustom = widget.fontSize;
+    fontFamily = widget.fontFamily;
+    lineSpace = widget.lineSpace;
+    _fontSizeSliderValue = fontSizeToSliderValue(widget.fontSize);
+    _lineHeightSliderValue = lineSpaceToSliderValue(widget.lineSpace);
+    _selectedChipIndex = FontFamily.values.indexOf(widget.fontFamily);
+  }
 
   void _handleChipSelection(int index) {
     setState(() {
       _selectedChipIndex = index;
     });
-    FontFamily fontFamily;
-    if (index == 0){
-      fontFamily = FontFamily.font1;
-    } else if (index == 1){
-      fontFamily = FontFamily.font2;
-    } else if (index == 2){
-      fontFamily = FontFamily.font3;
-    } else {
-      fontFamily = FontFamily.font4;
-    }
-    this.fontFamily = fontFamily;
-    widget.epubViewerCubit.changeStyle(lineSpace: lineSpace, fontSize: fontSizeCustom, fontFamily: fontFamily);
+    fontFamily = FontFamily.values[index];
+    widget.epubViewerCubit.changeStyle(
+      fontSize: fontSizeCustom,
+      lineSpace: lineSpace,
+      fontFamily: fontFamily,
+    );
   }
 
-  double _fontSizeSliderValue = 0.5;
+  double fontSizeToSliderValue(FontSizeCustom fontSize) {
+    // Assuming FontSizeCustom enum values are ordered from smallest to largest
+    return fontSize.index / (FontSizeCustom.values.length - 1);
+  }
+
+  double lineSpaceToSliderValue(LineHeightCustom lineSpace) {
+    // Assuming LineHeightCustom enum values are ordered from smallest to largest
+    return lineSpace.index / (LineHeightCustom.values.length - 1);
+  }
 
   void _handleFontSizeSliderChange(double newValue) {
     setState(() {
       _fontSizeSliderValue = newValue;
     });
-
-    FontSizeCustom fontSize;
-
-    if (newValue <= 0.1) {
-      fontSize = FontSizeCustom.xxSmall;
-    } else if (newValue <= 0.2) {
-      fontSize = FontSizeCustom.xSmall;
-    } else if (newValue <= 0.4) {
-      fontSize = FontSizeCustom.small;
-    } else if (newValue <= 0.6) {
-      fontSize = FontSizeCustom.medium;
-    } else if (newValue <= 0.8) {
-      fontSize = FontSizeCustom.large;
-    } else if (newValue <= 0.9) {
-      fontSize = FontSizeCustom.xLarge;
-    } else {
-      fontSize = FontSizeCustom.xxLarge;
-    }
-    fontSizeCustom = fontSize;
-    widget.epubViewerCubit.changeStyle(lineSpace: lineSpace, fontSize: fontSizeCustom, fontFamily: fontFamily);
+    fontSizeCustom = FontSizeCustom.values[(newValue * (FontSizeCustom.values.length - 1)).round()];
+    widget.epubViewerCubit.changeStyle(
+      fontSize: fontSizeCustom,
+      lineSpace: lineSpace,
+      fontFamily: fontFamily,
+    );
   }
-
-  double _lineHeightSliderValue = 0.5; // Initialize with a default value
 
   void _handleLineHeightSliderChange(double newValue) {
     setState(() {
       _lineHeightSliderValue = newValue;
     });
-    LineHeightCustom lineSpace;
-    if (newValue <= 0.1) {
-      lineSpace = LineHeightCustom.xxSmall;
-    } else if (newValue <= 0.2) {
-      lineSpace = LineHeightCustom.xSmall;
-    } else if (newValue <= 0.4) {
-      lineSpace = LineHeightCustom.small;
-    } else if (newValue <= 0.6) {
-      lineSpace = LineHeightCustom.medium;
-    } else if (newValue <= 0.8) {
-      lineSpace = LineHeightCustom.large;
-    } else if (newValue <= 0.9) {
-      lineSpace = LineHeightCustom.xLarge;
-    } else {
-      lineSpace = LineHeightCustom.xxLarge;
-    }
-
-    this.lineSpace = lineSpace;
-    widget.epubViewerCubit.changeStyle(lineSpace: lineSpace, fontSize: fontSizeCustom, fontFamily: fontFamily);
-
+    lineSpace = LineHeightCustom.values[(newValue * (LineHeightCustom.values.length - 1)).round()];
+    widget.epubViewerCubit.changeStyle(
+      fontSize: fontSizeCustom,
+      lineSpace: lineSpace,
+      fontFamily: fontFamily,
+    );
   }
 
   Color _selectedColor = Colors.black; // Default color
@@ -99,7 +93,7 @@ class _StyleSheetState extends State<StyleSheet> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Pick a color'),
+          title: const Text('Pick a color'),
           content: SingleChildScrollView(
             child: ColorPicker(
               pickerColor: _selectedColor,
@@ -113,7 +107,7 @@ class _StyleSheetState extends State<StyleSheet> {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('OK'),
+              child: const Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -123,6 +117,7 @@ class _StyleSheetState extends State<StyleSheet> {
       },
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(

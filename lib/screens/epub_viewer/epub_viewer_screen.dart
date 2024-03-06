@@ -84,6 +84,9 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
           pageChanged: (page) {
             _jumpTo(pageNumber: page);
           },
+          searchResultsFound: (searchResults) {
+            showSearchResultsDialog(context, searchResults);
+          },
           orElse: () {},
         );
       },
@@ -94,7 +97,9 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
               if (isSliderVisible)
                 AppBar(
                   leading: IconButton(
-                    icon: isSearchOpen ? Icon(Icons.close, color: Colors.black38) : Icon(Icons.arrow_back),
+                    icon: isSearchOpen
+                        ? Icon(Icons.close, color: Colors.black38)
+                        : Icon(Icons.arrow_back),
                     onPressed: () {
                       if (isSearchOpen) {
                         _toggleSearch(false);
@@ -105,64 +110,66 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                   ),
                   title: isSearchOpen
                       ? TextField(
-                    autofocus: true,
-                    focusNode: focusNode,
-                    controller: textEditingController,
-                    decoration: InputDecoration(
-                      hintText: 'أدخل كلمة لبدء البحث ...',
-                      border: InputBorder.none,
-                      suffixIcon: IconButton(
-                        icon: SvgPicture.asset('assets/icons/search.svg'), // The search icon inside the TextField
-                        onPressed: () {
-                          // Trigger the search logic, similar to what's done in onSubmitted
-                          if (textEditingController.text.isNotEmpty) {
-                            final String searchQuery = textEditingController.text;
-                            _search(searchQuery);
-                          }
-                        },
-                      ),
-                    ),
-                    onSubmitted: (value) {
-                      _search(value);
-                    },
-                  )
+                          autofocus: true,
+                          focusNode: focusNode,
+                          controller: textEditingController,
+                          decoration: InputDecoration(
+                            hintText: 'أدخل كلمة لبدء البحث ...',
+                            border: InputBorder.none,
+                            suffixIcon: IconButton(
+                              icon: SvgPicture.asset('assets/icons/search.svg'),
+                              // The search icon inside the TextField
+                              onPressed: () {
+                                // Trigger the search logic, similar to what's done in onSubmitted
+                                if (textEditingController.text.isNotEmpty) {
+                                  final String searchQuery =
+                                      textEditingController.text;
+                                  _search(searchQuery);
+                                }
+                              },
+                            ),
+                          ),
+                          onSubmitted: (value) {
+                            _search(value);
+                          },
+                        )
                       : SizedBox.shrink(),
                   actions: isSearchOpen
                       ? null // No actions when search is open
                       : [
-                    IconButton(
-                      icon: SvgPicture.asset('assets/icons/search.svg'),
-                      onPressed: () => _toggleSearch(true),
-                    ),
-                    IconButton(
-                      icon: SvgPicture.asset('assets/icons/style.svg'),
-                      onPressed: () {
-                        _showBottomSheet(
-                            context, context.read<EpubViewerCubit>());
-                      },
-                    ),
-                    IconButton(
-                      icon: SvgPicture.asset(
-                        isBookmarked
-                            ? 'assets/icons/bookmarked.svg'
-                            : 'assets/icons/bookmark.svg',
-                      ),
-                      onPressed: () {
-                        _toggleBookmark();
-                        if (isBookmarked) {
-                          _addBookmark(context);
-                        } else {
-                          // Remove bookmark logic (if needed)
-                        }
-                      },
-                    ),
-                    IconButton(
-                      icon: SvgPicture.asset('assets/icons/toc.svg'),
-                      onPressed: () {
-                        _openInternalToc(context);
-                      },
-                    )
-                  ],
+                          IconButton(
+                            icon: SvgPicture.asset('assets/icons/search.svg'),
+                            onPressed: () => _toggleSearch(true),
+                          ),
+                          IconButton(
+                            icon: SvgPicture.asset('assets/icons/style.svg'),
+                            onPressed: () {
+                              _showBottomSheet(
+                                  context, context.read<EpubViewerCubit>());
+                            },
+                          ),
+                          IconButton(
+                            icon: SvgPicture.asset(
+                              isBookmarked
+                                  ? 'assets/icons/bookmarked.svg'
+                                  : 'assets/icons/bookmark.svg',
+                            ),
+                            onPressed: () {
+                              _toggleBookmark();
+                              if (isBookmarked) {
+                                _addBookmark(context);
+                              } else {
+                                // Remove bookmark logic (if needed)
+                              }
+                            },
+                          ),
+                          IconButton(
+                            icon: SvgPicture.asset('assets/icons/toc.svg'),
+                            onPressed: () {
+                              _openInternalToc(context);
+                            },
+                          )
+                        ],
                 ),
               Align(
                 alignment: Alignment.topCenter,
@@ -176,13 +183,18 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                       loaded: (content, _, tocList) {
                         _storeContentLoaded(content, context, state, tocList);
                         context.read<EpubViewerCubit>().emitLastPageSeen();
+                        context.read<EpubViewerCubit>().loadUserPreferences();
                         return _buildCurrentUi(context, state);
                       },
                       loading: () => const Center(
                             child: CircularProgressIndicator(),
                           ),
-                      error: (error) => Container(),
-                      initial: () => Container(),
+                      error: (error) {
+                        return _buildCurrentUi(context, state);
+                      },
+                      initial: () => const Center(
+                            child: CircularProgressIndicator(),
+                          ),
                       pageChanged: (int? pageNumber) {
                         return _buildCurrentUi(context, state);
                       },
@@ -193,6 +205,9 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                         return _buildCurrentUi(context, state);
                       },
                       bookmarkAdded: (int? status) {
+                        return _buildCurrentUi(context, state);
+                      },
+                      searchResultsFound: (List<SearchModel> searchResults) {
                         return _buildCurrentUi(context, state);
                       }),
                 ),
@@ -226,6 +241,61 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     }
   }
 
+  void showSearchResultsDialog(
+      BuildContext context, List<SearchModel> searchResults) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('نتائج البحث'),
+              Text(searchResults.last.searchCount.toString())
+            ],
+          ),
+          content: Container(
+            width: double.maxFinite,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: searchResults.length,
+              itemBuilder: (BuildContext context, int index) {
+                final result = searchResults[index];
+                return ListTile(
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(
+                          child: Html(
+                        data: result.spanna.toString(),
+                        style: {
+                          "html": Style(
+                            fontSize: FontSize.small,
+                            textAlign: TextAlign.right,
+                          ),
+                          "mark": Style(
+                            backgroundColor: Colors.yellow,
+                          ),
+                        },
+                      )),
+                      Text(
+                        result.searchCount.toString(),
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    Navigator.of(context)
+                        .pop(); // Close the dialog on selection
+                  },
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   Widget _buildCurrentUi(BuildContext context, EpubViewerState state) {
     var allPagesCount = _content.length.toDouble();
@@ -328,9 +398,10 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     );
   }
 
-  void _search(String value){
-    print('Search for: $value');
+  void _search(String value) {
+    context.read<EpubViewerCubit>().search(value);
   }
+
   _openInternalSearch(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -439,8 +510,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                // Your content goes here
-                StyleSheet(epubViewerCubit: cubit),
+                StyleSheet(epubViewerCubit: cubit, lineSpace: lineHeight, fontFamily: fontFamily, fontSize: fontSize),
               ],
             ),
           ),

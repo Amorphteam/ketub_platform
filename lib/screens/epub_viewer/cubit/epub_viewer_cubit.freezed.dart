@@ -29,6 +29,8 @@ mixin _$EpubViewerState {
             LineHeightCustom? lineHeight, FontFamily? fontFamily)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
+    required TResult Function(List<SearchModel> searchResults)
+        searchResultsFound,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -44,6 +46,7 @@ mixin _$EpubViewerState {
             FontFamily? fontFamily)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
+    TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -59,6 +62,7 @@ mixin _$EpubViewerState {
             FontFamily? fontFamily)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
+    TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -71,6 +75,7 @@ mixin _$EpubViewerState {
     required TResult Function(_PageChanged value) pageChanged,
     required TResult Function(_StyleChanged value) styleChanged,
     required TResult Function(_BookmarkAdded value) bookmarkAdded,
+    required TResult Function(_SearchResultsFound value) searchResultsFound,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -82,6 +87,7 @@ mixin _$EpubViewerState {
     TResult? Function(_PageChanged value)? pageChanged,
     TResult? Function(_StyleChanged value)? styleChanged,
     TResult? Function(_BookmarkAdded value)? bookmarkAdded,
+    TResult? Function(_SearchResultsFound value)? searchResultsFound,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -93,6 +99,7 @@ mixin _$EpubViewerState {
     TResult Function(_PageChanged value)? pageChanged,
     TResult Function(_StyleChanged value)? styleChanged,
     TResult Function(_BookmarkAdded value)? bookmarkAdded,
+    TResult Function(_SearchResultsFound value)? searchResultsFound,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -165,6 +172,8 @@ class _$InitialImpl implements _Initial {
             LineHeightCustom? lineHeight, FontFamily? fontFamily)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
+    required TResult Function(List<SearchModel> searchResults)
+        searchResultsFound,
   }) {
     return initial();
   }
@@ -183,6 +192,7 @@ class _$InitialImpl implements _Initial {
             FontFamily? fontFamily)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
+    TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
   }) {
     return initial?.call();
   }
@@ -201,6 +211,7 @@ class _$InitialImpl implements _Initial {
             FontFamily? fontFamily)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
+    TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -219,6 +230,7 @@ class _$InitialImpl implements _Initial {
     required TResult Function(_PageChanged value) pageChanged,
     required TResult Function(_StyleChanged value) styleChanged,
     required TResult Function(_BookmarkAdded value) bookmarkAdded,
+    required TResult Function(_SearchResultsFound value) searchResultsFound,
   }) {
     return initial(this);
   }
@@ -233,6 +245,7 @@ class _$InitialImpl implements _Initial {
     TResult? Function(_PageChanged value)? pageChanged,
     TResult? Function(_StyleChanged value)? styleChanged,
     TResult? Function(_BookmarkAdded value)? bookmarkAdded,
+    TResult? Function(_SearchResultsFound value)? searchResultsFound,
   }) {
     return initial?.call(this);
   }
@@ -247,6 +260,7 @@ class _$InitialImpl implements _Initial {
     TResult Function(_PageChanged value)? pageChanged,
     TResult Function(_StyleChanged value)? styleChanged,
     TResult Function(_BookmarkAdded value)? bookmarkAdded,
+    TResult Function(_SearchResultsFound value)? searchResultsFound,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -309,6 +323,8 @@ class _$LoadingImpl implements _Loading {
             LineHeightCustom? lineHeight, FontFamily? fontFamily)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
+    required TResult Function(List<SearchModel> searchResults)
+        searchResultsFound,
   }) {
     return loading();
   }
@@ -327,6 +343,7 @@ class _$LoadingImpl implements _Loading {
             FontFamily? fontFamily)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
+    TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
   }) {
     return loading?.call();
   }
@@ -345,6 +362,7 @@ class _$LoadingImpl implements _Loading {
             FontFamily? fontFamily)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
+    TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -363,6 +381,7 @@ class _$LoadingImpl implements _Loading {
     required TResult Function(_PageChanged value) pageChanged,
     required TResult Function(_StyleChanged value) styleChanged,
     required TResult Function(_BookmarkAdded value) bookmarkAdded,
+    required TResult Function(_SearchResultsFound value) searchResultsFound,
   }) {
     return loading(this);
   }
@@ -377,6 +396,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function(_PageChanged value)? pageChanged,
     TResult? Function(_StyleChanged value)? styleChanged,
     TResult? Function(_BookmarkAdded value)? bookmarkAdded,
+    TResult? Function(_SearchResultsFound value)? searchResultsFound,
   }) {
     return loading?.call(this);
   }
@@ -391,6 +411,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function(_PageChanged value)? pageChanged,
     TResult Function(_StyleChanged value)? styleChanged,
     TResult Function(_BookmarkAdded value)? bookmarkAdded,
+    TResult Function(_SearchResultsFound value)? searchResultsFound,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -520,6 +541,8 @@ class _$LoadedImpl implements _Loaded {
             LineHeightCustom? lineHeight, FontFamily? fontFamily)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
+    required TResult Function(List<SearchModel> searchResults)
+        searchResultsFound,
   }) {
     return loaded(content, epubTitle, tocTreeList);
   }
@@ -538,6 +561,7 @@ class _$LoadedImpl implements _Loaded {
             FontFamily? fontFamily)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
+    TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
   }) {
     return loaded?.call(content, epubTitle, tocTreeList);
   }
@@ -556,6 +580,7 @@ class _$LoadedImpl implements _Loaded {
             FontFamily? fontFamily)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
+    TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -574,6 +599,7 @@ class _$LoadedImpl implements _Loaded {
     required TResult Function(_PageChanged value) pageChanged,
     required TResult Function(_StyleChanged value) styleChanged,
     required TResult Function(_BookmarkAdded value) bookmarkAdded,
+    required TResult Function(_SearchResultsFound value) searchResultsFound,
   }) {
     return loaded(this);
   }
@@ -588,6 +614,7 @@ class _$LoadedImpl implements _Loaded {
     TResult? Function(_PageChanged value)? pageChanged,
     TResult? Function(_StyleChanged value)? styleChanged,
     TResult? Function(_BookmarkAdded value)? bookmarkAdded,
+    TResult? Function(_SearchResultsFound value)? searchResultsFound,
   }) {
     return loaded?.call(this);
   }
@@ -602,6 +629,7 @@ class _$LoadedImpl implements _Loaded {
     TResult Function(_PageChanged value)? pageChanged,
     TResult Function(_StyleChanged value)? styleChanged,
     TResult Function(_BookmarkAdded value)? bookmarkAdded,
+    TResult Function(_SearchResultsFound value)? searchResultsFound,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -700,6 +728,8 @@ class _$errorImpl implements _error {
             LineHeightCustom? lineHeight, FontFamily? fontFamily)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
+    required TResult Function(List<SearchModel> searchResults)
+        searchResultsFound,
   }) {
     return error(this.error);
   }
@@ -718,6 +748,7 @@ class _$errorImpl implements _error {
             FontFamily? fontFamily)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
+    TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
   }) {
     return error?.call(this.error);
   }
@@ -736,6 +767,7 @@ class _$errorImpl implements _error {
             FontFamily? fontFamily)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
+    TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -754,6 +786,7 @@ class _$errorImpl implements _error {
     required TResult Function(_PageChanged value) pageChanged,
     required TResult Function(_StyleChanged value) styleChanged,
     required TResult Function(_BookmarkAdded value) bookmarkAdded,
+    required TResult Function(_SearchResultsFound value) searchResultsFound,
   }) {
     return error(this);
   }
@@ -768,6 +801,7 @@ class _$errorImpl implements _error {
     TResult? Function(_PageChanged value)? pageChanged,
     TResult? Function(_StyleChanged value)? styleChanged,
     TResult? Function(_BookmarkAdded value)? bookmarkAdded,
+    TResult? Function(_SearchResultsFound value)? searchResultsFound,
   }) {
     return error?.call(this);
   }
@@ -782,6 +816,7 @@ class _$errorImpl implements _error {
     TResult Function(_PageChanged value)? pageChanged,
     TResult Function(_StyleChanged value)? styleChanged,
     TResult Function(_BookmarkAdded value)? bookmarkAdded,
+    TResult Function(_SearchResultsFound value)? searchResultsFound,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -876,6 +911,8 @@ class _$PageChangedImpl implements _PageChanged {
             LineHeightCustom? lineHeight, FontFamily? fontFamily)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
+    required TResult Function(List<SearchModel> searchResults)
+        searchResultsFound,
   }) {
     return pageChanged(pageNumber);
   }
@@ -894,6 +931,7 @@ class _$PageChangedImpl implements _PageChanged {
             FontFamily? fontFamily)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
+    TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
   }) {
     return pageChanged?.call(pageNumber);
   }
@@ -912,6 +950,7 @@ class _$PageChangedImpl implements _PageChanged {
             FontFamily? fontFamily)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
+    TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     required TResult orElse(),
   }) {
     if (pageChanged != null) {
@@ -930,6 +969,7 @@ class _$PageChangedImpl implements _PageChanged {
     required TResult Function(_PageChanged value) pageChanged,
     required TResult Function(_StyleChanged value) styleChanged,
     required TResult Function(_BookmarkAdded value) bookmarkAdded,
+    required TResult Function(_SearchResultsFound value) searchResultsFound,
   }) {
     return pageChanged(this);
   }
@@ -944,6 +984,7 @@ class _$PageChangedImpl implements _PageChanged {
     TResult? Function(_PageChanged value)? pageChanged,
     TResult? Function(_StyleChanged value)? styleChanged,
     TResult? Function(_BookmarkAdded value)? bookmarkAdded,
+    TResult? Function(_SearchResultsFound value)? searchResultsFound,
   }) {
     return pageChanged?.call(this);
   }
@@ -958,6 +999,7 @@ class _$PageChangedImpl implements _PageChanged {
     TResult Function(_PageChanged value)? pageChanged,
     TResult Function(_StyleChanged value)? styleChanged,
     TResult Function(_BookmarkAdded value)? bookmarkAdded,
+    TResult Function(_SearchResultsFound value)? searchResultsFound,
     required TResult orElse(),
   }) {
     if (pageChanged != null) {
@@ -1074,6 +1116,8 @@ class _$StyleChangedImpl implements _StyleChanged {
             LineHeightCustom? lineHeight, FontFamily? fontFamily)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
+    required TResult Function(List<SearchModel> searchResults)
+        searchResultsFound,
   }) {
     return styleChanged(fontSize, lineHeight, fontFamily);
   }
@@ -1092,6 +1136,7 @@ class _$StyleChangedImpl implements _StyleChanged {
             FontFamily? fontFamily)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
+    TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
   }) {
     return styleChanged?.call(fontSize, lineHeight, fontFamily);
   }
@@ -1110,6 +1155,7 @@ class _$StyleChangedImpl implements _StyleChanged {
             FontFamily? fontFamily)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
+    TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     required TResult orElse(),
   }) {
     if (styleChanged != null) {
@@ -1128,6 +1174,7 @@ class _$StyleChangedImpl implements _StyleChanged {
     required TResult Function(_PageChanged value) pageChanged,
     required TResult Function(_StyleChanged value) styleChanged,
     required TResult Function(_BookmarkAdded value) bookmarkAdded,
+    required TResult Function(_SearchResultsFound value) searchResultsFound,
   }) {
     return styleChanged(this);
   }
@@ -1142,6 +1189,7 @@ class _$StyleChangedImpl implements _StyleChanged {
     TResult? Function(_PageChanged value)? pageChanged,
     TResult? Function(_StyleChanged value)? styleChanged,
     TResult? Function(_BookmarkAdded value)? bookmarkAdded,
+    TResult? Function(_SearchResultsFound value)? searchResultsFound,
   }) {
     return styleChanged?.call(this);
   }
@@ -1156,6 +1204,7 @@ class _$StyleChangedImpl implements _StyleChanged {
     TResult Function(_PageChanged value)? pageChanged,
     TResult Function(_StyleChanged value)? styleChanged,
     TResult Function(_BookmarkAdded value)? bookmarkAdded,
+    TResult Function(_SearchResultsFound value)? searchResultsFound,
     required TResult orElse(),
   }) {
     if (styleChanged != null) {
@@ -1254,6 +1303,8 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
             LineHeightCustom? lineHeight, FontFamily? fontFamily)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
+    required TResult Function(List<SearchModel> searchResults)
+        searchResultsFound,
   }) {
     return bookmarkAdded(status);
   }
@@ -1272,6 +1323,7 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
             FontFamily? fontFamily)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
+    TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
   }) {
     return bookmarkAdded?.call(status);
   }
@@ -1290,6 +1342,7 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
             FontFamily? fontFamily)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
+    TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     required TResult orElse(),
   }) {
     if (bookmarkAdded != null) {
@@ -1308,6 +1361,7 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
     required TResult Function(_PageChanged value) pageChanged,
     required TResult Function(_StyleChanged value) styleChanged,
     required TResult Function(_BookmarkAdded value) bookmarkAdded,
+    required TResult Function(_SearchResultsFound value) searchResultsFound,
   }) {
     return bookmarkAdded(this);
   }
@@ -1322,6 +1376,7 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
     TResult? Function(_PageChanged value)? pageChanged,
     TResult? Function(_StyleChanged value)? styleChanged,
     TResult? Function(_BookmarkAdded value)? bookmarkAdded,
+    TResult? Function(_SearchResultsFound value)? searchResultsFound,
   }) {
     return bookmarkAdded?.call(this);
   }
@@ -1336,6 +1391,7 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
     TResult Function(_PageChanged value)? pageChanged,
     TResult Function(_StyleChanged value)? styleChanged,
     TResult Function(_BookmarkAdded value)? bookmarkAdded,
+    TResult Function(_SearchResultsFound value)? searchResultsFound,
     required TResult orElse(),
   }) {
     if (bookmarkAdded != null) {
@@ -1351,5 +1407,199 @@ abstract class _BookmarkAdded implements EpubViewerState {
   int? get status;
   @JsonKey(ignore: true)
   _$$BookmarkAddedImplCopyWith<_$BookmarkAddedImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$SearchResultsFoundImplCopyWith<$Res> {
+  factory _$$SearchResultsFoundImplCopyWith(_$SearchResultsFoundImpl value,
+          $Res Function(_$SearchResultsFoundImpl) then) =
+      __$$SearchResultsFoundImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({List<SearchModel> searchResults});
+}
+
+/// @nodoc
+class __$$SearchResultsFoundImplCopyWithImpl<$Res>
+    extends _$EpubViewerStateCopyWithImpl<$Res, _$SearchResultsFoundImpl>
+    implements _$$SearchResultsFoundImplCopyWith<$Res> {
+  __$$SearchResultsFoundImplCopyWithImpl(_$SearchResultsFoundImpl _value,
+      $Res Function(_$SearchResultsFoundImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? searchResults = null,
+  }) {
+    return _then(_$SearchResultsFoundImpl(
+      searchResults: null == searchResults
+          ? _value._searchResults
+          : searchResults // ignore: cast_nullable_to_non_nullable
+              as List<SearchModel>,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$SearchResultsFoundImpl implements _SearchResultsFound {
+  const _$SearchResultsFoundImpl(
+      {required final List<SearchModel> searchResults})
+      : _searchResults = searchResults;
+
+  final List<SearchModel> _searchResults;
+  @override
+  List<SearchModel> get searchResults {
+    if (_searchResults is EqualUnmodifiableListView) return _searchResults;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_searchResults);
+  }
+
+  @override
+  String toString() {
+    return 'EpubViewerState.searchResultsFound(searchResults: $searchResults)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SearchResultsFoundImpl &&
+            const DeepCollectionEquality()
+                .equals(other._searchResults, _searchResults));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(_searchResults));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SearchResultsFoundImplCopyWith<_$SearchResultsFoundImpl> get copyWith =>
+      __$$SearchResultsFoundImplCopyWithImpl<_$SearchResultsFoundImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)
+        loaded,
+    required TResult Function(String error) error,
+    required TResult Function(int? pageNumber) pageChanged,
+    required TResult Function(FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight, FontFamily? fontFamily)
+        styleChanged,
+    required TResult Function(int? status) bookmarkAdded,
+    required TResult Function(List<SearchModel> searchResults)
+        searchResultsFound,
+  }) {
+    return searchResultsFound(searchResults);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)?
+        loaded,
+    TResult? Function(String error)? error,
+    TResult? Function(int? pageNumber)? pageChanged,
+    TResult? Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
+            FontFamily? fontFamily)?
+        styleChanged,
+    TResult? Function(int? status)? bookmarkAdded,
+    TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
+  }) {
+    return searchResultsFound?.call(searchResults);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)?
+        loaded,
+    TResult Function(String error)? error,
+    TResult Function(int? pageNumber)? pageChanged,
+    TResult Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
+            FontFamily? fontFamily)?
+        styleChanged,
+    TResult Function(int? status)? bookmarkAdded,
+    TResult Function(List<SearchModel> searchResults)? searchResultsFound,
+    required TResult orElse(),
+  }) {
+    if (searchResultsFound != null) {
+      return searchResultsFound(searchResults);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_error value) error,
+    required TResult Function(_PageChanged value) pageChanged,
+    required TResult Function(_StyleChanged value) styleChanged,
+    required TResult Function(_BookmarkAdded value) bookmarkAdded,
+    required TResult Function(_SearchResultsFound value) searchResultsFound,
+  }) {
+    return searchResultsFound(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_error value)? error,
+    TResult? Function(_PageChanged value)? pageChanged,
+    TResult? Function(_StyleChanged value)? styleChanged,
+    TResult? Function(_BookmarkAdded value)? bookmarkAdded,
+    TResult? Function(_SearchResultsFound value)? searchResultsFound,
+  }) {
+    return searchResultsFound?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_error value)? error,
+    TResult Function(_PageChanged value)? pageChanged,
+    TResult Function(_StyleChanged value)? styleChanged,
+    TResult Function(_BookmarkAdded value)? bookmarkAdded,
+    TResult Function(_SearchResultsFound value)? searchResultsFound,
+    required TResult orElse(),
+  }) {
+    if (searchResultsFound != null) {
+      return searchResultsFound(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _SearchResultsFound implements EpubViewerState {
+  const factory _SearchResultsFound(
+          {required final List<SearchModel> searchResults}) =
+      _$SearchResultsFoundImpl;
+
+  List<SearchModel> get searchResults;
+  @JsonKey(ignore: true)
+  _$$SearchResultsFoundImplCopyWith<_$SearchResultsFoundImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

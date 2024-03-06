@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
@@ -8,6 +9,7 @@ import 'package:ketub_platform/screens/main/bookmark_tab/cubit/bookmark_cubit.da
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../models/reference_model.dart';
+import '../../../models/search_model.dart';
 import '../../../models/style_model.dart';
 import '../../../repositories/reference_database.dart';
 import '../../../utils/epub_helper.dart';
@@ -38,7 +40,6 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
       await extractHtmlContentWithEmbeddedImages(epubBook);
 
       _storeEpubDetails(epubBook, epubContent, assetPath);
-      _loadUserPreferences();
     } catch (error) {
       emit(EpubViewerState.error(error: error.toString()));
     }
@@ -66,15 +67,14 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
         tocTreeList: _tocTreeList));
   }
 
-  void changeStyle(
-      {FontSizeCustom? fontSize, LineHeightCustom? lineSpace, FontFamily? fontFamily}) {
-    fontSize != null ? styleHelper.changeFontSize(fontSize) : null;
-    lineSpace != null ? styleHelper.changeLineSpace(lineSpace) : null;
-    fontFamily != null ? styleHelper.changeFontFamily(fontFamily) : null;
+  void changeStyle({FontSizeCustom? fontSize, LineHeightCustom? lineSpace, FontFamily? fontFamily}) {
+    if (fontSize != null) styleHelper.changeFontSize(fontSize);
+    if (lineSpace != null) styleHelper.changeLineSpace(lineSpace);
+    if (fontFamily != null) styleHelper.changeFontFamily(fontFamily);
 
-    emit(EpubViewerState.styleChanged(
-        fontSize: fontSize, lineHeight: lineSpace, fontFamily: fontFamily));
-    _saveStyleHelperToPreferences();
+    styleHelper.saveToPrefs();
+
+    emit(EpubViewerState.styleChanged(fontSize: fontSize, lineHeight: lineSpace, fontFamily: fontFamily));
   }
 
 
@@ -100,17 +100,14 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
     prefs.setString('styleHelper', jsonEncode(styleJson));
   }
 
-  void _loadUserPreferences() async {
-    final prefs = await SharedPreferences.getInstance();
-    final styleJson = prefs.getString('styleHelper');
-    if (styleJson != null) {
-      final decodedStyle = jsonDecode(styleJson);
-      final loadedStyleHelper = StyleHelper.fromJson(decodedStyle);
-      styleHelper = loadedStyleHelper;
-      emit(EpubViewerState.styleChanged(fontFamily: styleHelper.fontFamily,
+  void loadUserPreferences() async {
+    StyleHelper.loadFromPrefs().then((_) {
+      emit(EpubViewerState.styleChanged(
           fontSize: styleHelper.fontSize,
-          lineHeight: styleHelper.lineSpace));
-    }
+          lineHeight: styleHelper.lineSpace,
+          fontFamily: styleHelper.fontFamily
+      ));
+    });
   }
 
   Future<void> addBookmark(ReferenceModel bookmark) async {
@@ -139,4 +136,22 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
       }
     }
   }
+
+  Future<void> search(String searchTerm) async {
+    if (_assetPath == null || searchTerm.isEmpty) {
+      return;
+    }
+
+    try {
+      List<String> allBooks = [_assetPath!];
+      await searchHelper.searchAllBooks(allBooks, searchTerm, (List<SearchModel> results) {
+        emit(EpubViewerState.searchResultsFound(searchResults: results));
+      });
+    } catch (error) {
+      emit(EpubViewerState.error(error: error.toString()));
+    }
+  }
+
+
+
 }

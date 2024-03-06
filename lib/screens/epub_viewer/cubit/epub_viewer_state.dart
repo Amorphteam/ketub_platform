@@ -9,5 +9,6 @@ class EpubViewerState with _$EpubViewerState {
   const factory EpubViewerState.pageChanged({int? pageNumber}) = _PageChanged;
   const factory EpubViewerState.styleChanged({FontSizeCustom? fontSize, LineHeightCustom? lineHeight, FontFamily? fontFamily}) = _StyleChanged;
   const factory EpubViewerState.bookmarkAdded({int? status}) = _BookmarkAdded;
+  const factory EpubViewerState.searchResultsFound({required List<SearchModel> searchResults}) = _SearchResultsFound;
 
 }
