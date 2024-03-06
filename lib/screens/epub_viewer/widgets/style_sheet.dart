@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:ketub_platform/models/style_model.dart';
 import 'package:ketub_platform/screens/epub_viewer/cubit/epub_viewer_cubit.dart';
-import '../cubit/epub_cubit.dart';
 
 class StyleSheet extends StatefulWidget {
   final EpubViewerCubit epubViewerCubit;
@@ -14,7 +13,7 @@ class StyleSheet extends StatefulWidget {
 }
 
 class _StyleSheetState extends State<StyleSheet> {
-  int _selectedChipIndex = -1; // Initialize with an invalid index
+  int _selectedChipIndex = -1;
   FontSizeCustom fontSizeCustom = FontSizeCustom.medium;
   FontFamily fontFamily = FontFamily.font1;
   LineHeightCustom lineSpace = LineHeightCustom.medium;
@@ -94,8 +93,6 @@ class _StyleSheetState extends State<StyleSheet> {
   }
 
   Color _selectedColor = Colors.black; // Default color
-
-  // ... Other methods ...
 
   void _showColorPicker() {
     showDialog(

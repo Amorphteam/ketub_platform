@@ -31,45 +31,55 @@ class _EpubChapterListWidgetState extends State<EpubChapterListWidget> {
     return ListView.builder(
       shrinkWrap: true,
       controller: widget.scrollController, // Use the provided scrollController
-      physics: ClampingScrollPhysics(),
+      physics: const ClampingScrollPhysics(),
       itemCount: widget.tocTreeList.length,
       itemBuilder: (context, index) {
-        return buildChapterTree(context, widget.tocTreeList[index], index, 0);
+        return buildTreeNode(widget.tocTreeList[index], 0, context);
       },
     );
   }
 
-  Widget buildChapterTree(BuildContext context, EpubChapter chapter, int parentIndex, int level) {
-    final hasSubChapters = chapter.SubChapters != null && chapter.SubChapters!.isNotEmpty;
 
-    return Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.only(left: level * 16.0), // Adjust the left padding as needed
-          child: ListTile(
-            title: Text(chapter.Title ?? 'No Title'),
-            trailing: hasSubChapters
-                ? Icon(_isExpanded[parentIndex] ? Icons.arrow_drop_up : Icons.arrow_drop_down)
-                : null,
-            // Add more content or actions for each chapter here
-            onTap: () {
+  Widget buildTreeNode(EpubChapter chapter, int level, BuildContext context) {
+    const maxLevel = 5;
+    const minFontSize = 10.0;
+    const maxFontSize = 18.0;
+    const minPadding = 0.0;
+    const maxPadding = 40.0;
+    final padding = level == 0 ? 8.0 : maxPadding - ((maxPadding - minPadding) / maxLevel) * level; // Calculate padding
+    final fontSize = maxFontSize - ((maxFontSize - minFontSize) / maxLevel) * level; // Calculate font size
+
+    // Check if the chapter has subitems
+    bool hasSubItems = chapter.SubChapters != null && chapter.SubChapters!.isNotEmpty;
+
+    return Padding(
+      padding: EdgeInsets.only(right: padding), // Adjust the spacing here
+      child: Theme(
+        data: ThemeData(dividerColor: Colors.transparent), // Hide the divider
+        child: ExpansionTile(
+          title: GestureDetector(
+            onLongPress: (){
               widget.epubViewerCubit.openEpub(chapter);
               widget.onClose();
-              _toggleExpansion(parentIndex);
             },
+            child: Text(
+              chapter.Title ?? '',
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: fontSize.toDouble()), // Use the desired text style
+            ),
           ),
+          trailing: hasSubItems ? null : SizedBox.shrink(),
+          children: hasSubItems ? chapter.SubChapters!.map((child) {
+            return buildTreeNode(child, level + 1, context);
+          }).toList() : [],
+          onExpansionChanged: (bool expanded) {
+            if (!hasSubItems) {
+              widget.epubViewerCubit.openEpub(chapter);
+              widget.onClose();
+            }
+          },
         ),
-        if (hasSubChapters && _isExpanded[parentIndex])
-          Column(
-            children: chapter.SubChapters!.map((subChapter) {
-              return buildChapterTree(context, subChapter, parentIndex, level + 1);
-            }).toList(),
-          ),
-      ],
+      ),
     );
   }
-
-  void _toggleExpansion(int index) {
-    _isExpanded[index] = !_isExpanded[index];
-  }
 }
+
