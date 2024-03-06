@@ -197,35 +197,35 @@ class _StyleSheetState extends State<StyleSheet> {
           // Divider(), // Add a divider here
 
           SizedBox(height: 18,),
-          Text('Text Settings', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+          Text('إعدادات النص', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
           SizedBox(height: 18), // Add spacing before the Chip widgets
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               InputChip(
-                label: Text('font 1'),
+                label: Text('خط ١'),
                 selected: _selectedChipIndex == 0,
                 onSelected: (isSelected) {
                   _handleChipSelection(isSelected ? 0 : -1);
                 },
               ),
               InputChip(
-                label: Text('font 2'),
+                label: Text('خط ٢'),
                 selected: _selectedChipIndex == 1,
                 onSelected: (isSelected) {
                   _handleChipSelection(isSelected ? 1 : -1);
                 },
               ),
               InputChip(
-                label: Text('font 3'),
+                label: Text('خط ٣'),
                 selected: _selectedChipIndex == 2,
                 onSelected: (isSelected) {
                   _handleChipSelection(isSelected ? 2 : -1);
                 },
               ),
               InputChip(
-                label: Text('font 4'),
+                label: Text('خط ٤'),
                 selected: _selectedChipIndex == 3,
                 onSelected: (isSelected) {
                   _handleChipSelection(isSelected ? 3 : -1);

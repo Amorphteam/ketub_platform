@@ -165,5 +165,5 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
       emit(EpubViewerState.error(error: error.toString()));
     }
   }
-  
+
 }
