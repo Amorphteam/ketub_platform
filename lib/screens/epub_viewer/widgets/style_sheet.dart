@@ -234,7 +234,7 @@ class _StyleSheetState extends State<StyleSheet> {
             ],
           ),
 
-          SizedBox(height: 26), // Add spacing between the Chip and Slider widgets
+          const SizedBox(height: 26), // Add spacing between the Chip and Slider widgets
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

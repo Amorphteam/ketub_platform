@@ -52,6 +52,14 @@ class ReferencesDatabase {
     });
   }
 
+  Future<int> getCountOfAllReferences() async {
+    final db = await instance.database;
+    final List<Map<String, dynamic>> result = await db.rawQuery('SELECT COUNT(*) as count FROM reference_database');
+    int count = result.first["count"] as int;
+    return count;
+  }
+
+
   Future<int> updateReference(ReferenceModel referenceModel) async {
     final db = await instance.database;
     return await db.update(
