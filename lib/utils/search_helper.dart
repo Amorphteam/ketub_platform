@@ -10,30 +10,41 @@ class SearchHelper {
   bool _isSearchStopped = false;
 
   Future<void> searchAllBooks(
-      List<String> allBooks, String word, Function(List<SearchModel>) onResultsFound) async {
+      List<String> allBooks, String word, Function(List<SearchModel>) onResultsFound, EpubBook? epub, [List<HtmlFileInfo>? spineFile]) async {
+    spineFile ??= [];
     final List<SearchModel> allResults = [];
     for (final book in allBooks) {
       if (_isSearchStopped) break;
-      final result = await _searchSingleBook(book, word);
+      final result = await _searchSingleBook(book, word, epub, spineFile);
       allResults.addAll(result);
       onResultsFound(allResults);
     }
   }
 
-  Future<List<SearchModel>> _searchSingleBook(String bookPath, String sw) async {
-    List<SearchModel> tempResult = [];
+  Future<List<SearchModel>> _searchSingleBook(String bookPath, String sw, EpubBook? epub, [List<HtmlFileInfo>? spineFile]) async {
+    spineFile ??= [];
 
+    List<SearchModel> tempResult = [];
+    EpubBook epubBook;
+    List<HtmlFileInfo> spine;
     try {
-      final epubBook = await loadEpubFromAsset(bookPath);
-      final spine = await extractHtmlContentWithEmbeddedImages(epubBook);
+      if (spineFile.isEmpty || epub == null) {
+         epubBook = await loadEpubFromAsset(bookPath);
+         spine = await extractHtmlContentWithEmbeddedImages(epubBook);
+      } else {
+        spine = spineFile;
+        epubBook = epub;
+      }
       var spineHtmlContent = spine.map((info) => info.modifiedHtmlContent).toList();
       var spineHtmlFileName = spine.map((info) => info.fileName).toList();
+      var spineHtmlIndex = spine.map((info) => info.pageIndex).toList();
 
       for (int i = 0; i < spineHtmlContent.length; i++) {
         var page = _removeHtmlTags(spineHtmlContent[i]);
         var searchIndex = _searchInString(page, sw, 0);
         while (searchIndex.startIndex >= 0) {
           tempResult.add(SearchModel(
+            pageIndex: spineHtmlIndex[i],
             bookAddress: bookPath,
             bookTitle: epubBook.Title,
             pageId: spineHtmlFileName[i],

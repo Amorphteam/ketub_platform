@@ -5,12 +5,14 @@ class SearchModel {
   final String? bookTitle;
   final String? pageId;
   final String? spanna;
+  final int pageIndex;
   final int searchCount;
 
   SearchModel({
     required this.bookAddress,
     required this.bookTitle,
     required this.pageId,
+    required this.pageIndex,
     required this.spanna,
     required this.searchCount,
   });

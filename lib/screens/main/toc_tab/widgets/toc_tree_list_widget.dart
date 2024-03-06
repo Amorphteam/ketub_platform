@@ -59,7 +59,7 @@ class _EpubChapterListWidgetState extends State<EpubChapterListWidget> {
         child: ExpansionTile(
           title: GestureDetector(
             onLongPress: (){
-              widget.epubViewerCubit.openEpub(chapter);
+              widget.epubViewerCubit.openEpubByChapter(chapter);
               widget.onClose();
             },
             child: Text(
@@ -73,7 +73,7 @@ class _EpubChapterListWidgetState extends State<EpubChapterListWidget> {
           }).toList() : [],
           onExpansionChanged: (bool expanded) {
             if (!hasSubItems) {
-              widget.epubViewerCubit.openEpub(chapter);
+              widget.epubViewerCubit.openEpubByChapter(chapter);
               widget.onClose();
             }
           },

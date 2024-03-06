@@ -39,13 +39,19 @@ Future<List<HtmlFileInfo>> extractHtmlContentWithEmbeddedImages(EpubBook epubBoo
   Map<String, EpubTextContentFile>? htmlFiles = bookContent?.Html;
 
   List<HtmlFileInfo> htmlContentList = [];
-  for (var htmlFile in htmlFiles!.values) {
-    String htmlContent = embedImagesInHtmlContent(htmlFile, images);
-    htmlContentList.add(HtmlFileInfo(htmlFile.FileName!, htmlContent));
+  if (htmlFiles != null) {
+    int index = 0; // Initialize a counter to keep track of the file index
+    for (var entry in htmlFiles.entries) {
+      String htmlContent = embedImagesInHtmlContent(entry.value, images);
+      // Assuming HtmlFileInfo can take an additional `fileIndex` parameter
+      htmlContentList.add(HtmlFileInfo(entry.key, htmlContent, index++));
+    }
   }
 
   return htmlContentList;
 }
+
+
 
 String embedImagesInHtmlContent(EpubTextContentFile htmlFile, Map<String, EpubByteContentFile>? images) {
   String htmlContent = htmlFile.Content!;
@@ -88,7 +94,6 @@ Future<int> findPageIndexInEpub(EpubBook epubBook, String fileName) async {
     int index = 0;
     for (String key in htmlFiles.keys) {
       if (key == fileName) {
-        // Found the chapterFileName in the map, so return its position (item number)
         return index;
       }
       index++;
@@ -132,6 +137,7 @@ Future<EpubBook> loadEpubFromAsset(String assetPath) async {
 class HtmlFileInfo {
   final String fileName;
   final String modifiedHtmlContent;
+  final int pageIndex;
 
-  HtmlFileInfo(this.fileName, this.modifiedHtmlContent);
+  HtmlFileInfo(this.fileName, this.modifiedHtmlContent, this.pageIndex);
 }

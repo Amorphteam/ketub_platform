@@ -279,12 +279,13 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                         },
                       )),
                       Text(
-                        result.searchCount.toString(),
+                        result.pageIndex.toString(),
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ],
                   ),
                   onTap: () {
+                    _jumpTo(pageNumber: result.pageIndex);
                     Navigator.of(context)
                         .pop(); // Close the dialog on selection
                   },
@@ -334,17 +335,17 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                                 direction: TextDirection.rtl,
                                 fontSize: FontSize(fontSize.size),
                                 padding: HtmlPaddings.only(right: 10, left: 10),
-                                fontFamily: fontFamily.name),
-                            "h1,h2,h3": Style(
+                                fontFamily: fontFamily.name,
+                              lineHeight: LineHeight(lineHeight.size),
+                            ),
+
+                            "h1,h2,h3,h4,h5,h6": Style(
                                 textAlign: TextAlign.right,
                                 direction: TextDirection.rtl,
                                 padding: HtmlPaddings.only(top: 30),
                                 fontSize: FontSize(fontSize.size * 1.2),
                                 fontWeight: FontWeight.bold,
                                 fontFamily: fontFamily.name),
-                            "p": Style(
-                              lineHeight: LineHeight(lineHeight.size),
-                            )
                           },
                         ),
                       ),

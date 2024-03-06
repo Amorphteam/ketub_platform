@@ -24,6 +24,9 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
   EpubBook? _epubBook;
   List<String>? _spineHtmlContent;
   List<String>? _spineHtmlFileName;
+  List<int>? _spineHtmlFileIndex;
+  List<HtmlFileInfo>? _epubContent;
+
   String? _assetPath;
   String? _bookTitle;
   List<EpubChapter>? _tocTreeList;
@@ -56,9 +59,11 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
   void _storeEpubDetails(EpubBook epubBook, List<HtmlFileInfo> epubContent,
       String assetPath) {
     _epubBook = epubBook;
+    _epubContent = epubContent;
     _spineHtmlContent =
         epubContent.map((info) => info.modifiedHtmlContent).toList();
     _spineHtmlFileName = epubContent.map((info) => info.fileName).toList();
+    _spineHtmlFileIndex = epubContent.map((info) => info.pageIndex).toList();
     _assetPath = assetPath;
     _bookTitle = epubBook.Title;
     _tocTreeList = epubBook.Chapters;
@@ -128,9 +133,18 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
     }
   }
 
-  Future<void> openEpub(EpubChapter item) async {
+  Future<void> openEpubByChapter(EpubChapter item) async {
     for (String fileName in _spineHtmlFileName!){
       if (fileName == item.ContentFileName){
+        final int spineNumber = await findPageIndexInEpub(_epubBook!, fileName);
+        emit(EpubViewerState.pageChanged(pageNumber: spineNumber));
+      }
+    }
+  }
+
+  Future<void> openEpubByName(String chapterName) async {
+    for (String fileName in _spineHtmlFileName!){
+      if (fileName == chapterName){
         final int spineNumber = await findPageIndexInEpub(_epubBook!, fileName);
         emit(EpubViewerState.pageChanged(pageNumber: spineNumber));
       }
@@ -146,12 +160,10 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
       List<String> allBooks = [_assetPath!];
       await searchHelper.searchAllBooks(allBooks, searchTerm, (List<SearchModel> results) {
         emit(EpubViewerState.searchResultsFound(searchResults: results));
-      });
+      }, _epubBook, _epubContent);
     } catch (error) {
       emit(EpubViewerState.error(error: error.toString()));
     }
   }
-
-
-
+  
 }
