@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class NoInternetScreen extends StatelessWidget {
+class NoInternetScreen extends StatefulWidget {
+  final Function retry;
+
+  const NoInternetScreen({super.key, required this.retry});
+
+  @override
+  State<NoInternetScreen> createState() => _NoInternetScreenState();
+}
+
+class _NoInternetScreenState extends State<NoInternetScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +63,7 @@ class NoInternetScreen extends StatelessWidget {
               SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () {
-
+                  widget.retry(); // assuming you want to retry the operation when this button is pressed
                 },
                 child: Text('إعادة المحاولة'),
               ),
@@ -64,6 +73,7 @@ class NoInternetScreen extends StatelessWidget {
                 },
                 child: Text('انتقل إلى قسم الكتب والمؤلفات'),
               ),
+
             ],
           ),
         ),
