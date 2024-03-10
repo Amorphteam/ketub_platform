@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class GridItemWidget extends StatefulWidget {
   final String title;
@@ -9,6 +10,7 @@ class GridItemWidget extends StatefulWidget {
   final bool withTitle;
   final bool insideTitlePosition;
   final bool? withBk;
+  final bool isAudio;
 
   const GridItemWidget({
     Key? key,
@@ -18,6 +20,7 @@ class GridItemWidget extends StatefulWidget {
     required this.imagePath,
     required this.width,
     required this.height, this.withBk,
+    this.isAudio = false,
   }) : super(key: key);
 
   @override
@@ -27,17 +30,25 @@ class GridItemWidget extends StatefulWidget {
 class _GridItemWidgetState extends State<GridItemWidget> {
   @override
   Widget build(BuildContext context) {
-    Widget imageContainer = Container(
-      width: widget.width,
-      height: widget.height,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        image: DecorationImage(
-          image: AssetImage(widget.imagePath),
-          fit: BoxFit.cover,
+    Widget imageContainer = Stack(
+      alignment: Alignment.center,
+      children: [Container(
+        width: widget.width,
+        height: widget.height,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          image: DecorationImage(
+            image: AssetImage(widget.imagePath),
+            fit: BoxFit.cover,
+          ),
         ),
       ),
+        (widget.isAudio) ? SvgPicture.asset(
+          'assets/icons/audio.svg',
+          color: Colors.white,
+        ): Container(),]
     );
+
     Widget? titleText = widget.withTitle ? Padding(
       padding: const EdgeInsets.all(8.0),
       child: Text(widget.title, style: Theme.of(context).textTheme.labelMedium),

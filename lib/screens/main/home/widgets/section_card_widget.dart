@@ -111,6 +111,8 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
                     width: itemWidth,
                     insideTitlePosition: insideTitlePosition,
                     withTitle: withTitle,
+                    isAudio: widget.posts[index].mediaDownloadLink != null &&
+                        widget.posts[index].mediaDownloadLink != '',
                   ),
                 );
               },
