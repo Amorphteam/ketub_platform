@@ -30,4 +30,16 @@ class ArticleOnlineRepository{
       throw Exception('Failed to fetch data');
     }
   }
+
+  Future<ArticleList> getArticlesListFromCatId(int limit, int offset, String catId) async {
+    String pathUrl = 'api/v1/article/list/$catId';
+    final response = await http.get(Uri.parse(apiUrl+pathUrl));
+
+    if (response.statusCode == 200) {
+      final jsonMap = json.decode(response.body);
+      return ArticleList.fromJson(jsonMap);
+    } else {
+      throw Exception('Failed to fetch data');
+    }
+  }
 }

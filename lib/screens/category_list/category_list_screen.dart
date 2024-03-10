@@ -9,8 +9,9 @@ import '../../models/article_list.dart';
 import '../main/home/widgets/grid_item_widget.dart';
 
 class CategoryListScreen extends StatefulWidget {
-  final String catName;
-  CategoryListScreen({super.key, required this.catName});
+  String? catName = '';
+  String? catId = '';
+  CategoryListScreen({super.key, this.catName, this.catId});
 
   @override
   State<CategoryListScreen> createState() => _CategoryListScreenState();
@@ -22,15 +23,19 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
   @override
   void initState() {
     super.initState();
-    String? catNameUrl = getCatNameUrl(widget.catName);
-    context.read<CategoryListCubit>().loadArticlesList(catNameUrl ?? '');
+    if (widget.catId == null) {
+      String? catNameUrl = getCatNameUrl(widget.catName ?? '');
+      context.read<CategoryListCubit>().loadArticlesList(catNameUrl: catNameUrl);
+    }else {
+      context.read<CategoryListCubit>().loadArticlesList(catId: widget.catId);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.catName),
+        title: Text(widget.catName?? ''),
       ),
       body: BlocBuilder<CategoryListCubit, CategoryListState>(
         builder: (context, state) {

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ketub_platform/models/tree_cat.dart'; // Make sure this import is correct
 import 'package:ketub_platform/repositories/cat_online_repository.dart';
 import 'package:ketub_platform/utils/data_helper.dart';
+
+import '../../category_list/category_list_screen.dart';
+import '../../category_list/cubit/category_list_cubit.dart';
 
 class HomeTreeCatScreen extends StatefulWidget {
   @override
@@ -51,6 +55,19 @@ class _HomeTreeCatScreenState extends State<HomeTreeCatScreen> {
     );
   }
 
+  _openCategoryScreen({required String catId, String? catName}) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            BlocProvider(
+              create: (context) => CategoryListCubit(),
+              child: CategoryListScreen(catId: catId, catName: catName),
+            ),
+      ),
+    );
+  }
+
   Widget buildTreeNode(Category node, int level, BuildContext context) {
     // Constants for tree styling
     const maxLevel = 5;
@@ -76,9 +93,7 @@ class _HomeTreeCatScreenState extends State<HomeTreeCatScreen> {
             style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: fontSize),
           ),
           onTap: () {
-            // Handle the tap action here
-            print("Tapped on ${node.id}");
-            // You can navigate to another screen or perform another action
+            _openCategoryScreen(catId: node.id.toString(), catName: node.name);
           },
         ),
       );

@@ -11,13 +11,20 @@ part 'category_list_cubit.freezed.dart';
 class CategoryListCubit extends Cubit<CategoryListState> {
   CategoryListCubit() : super(const CategoryListState.initial());
 
-  Future<void> loadArticlesList(String catName) async {
+  Future<void> loadArticlesList({String? catNameUrl, String? catId}) async {
     try {
       emit(const CategoryListState.loading());
-      final list = await ArticleOnlineRepository().getArticlesList(100, 0, catName);
+      ArticleList list;
+      if (catNameUrl != null){
+        list = await ArticleOnlineRepository().getArticlesList(100, 0, catNameUrl ?? '');
+      }else {
+        list = await ArticleOnlineRepository().getArticlesListFromCatId(100, 0, catId ?? '');
+      }
       emit(CategoryListState.loaded(articles: list));
     } catch (e) {
       emit(CategoryListState.error(error: e.toString()));
     }
   }
+
+
 }
