@@ -1,13 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ketub_platform/models/list_type_model.dart';
+import 'package:ketub_platform/screens/category_list/cubit/category_list_cubit.dart';
 import 'package:ketub_platform/utils/data_helper.dart';
 
+import '../../models/article_list.dart';
 import '../main/home/widgets/grid_item_widget.dart';
 
 class CategoryListScreen extends StatefulWidget {
-
-  CategoryListScreen({super.key});
+  final String catName;
+  CategoryListScreen({super.key, required this.catName});
 
   @override
   State<CategoryListScreen> createState() => _CategoryListScreenState();
@@ -19,79 +22,94 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
   @override
   void initState() {
     super.initState();
-    list = DataHelper.list;
+    String? catNameUrl = getCatNameUrl(widget.catName);
+    context.read<CategoryListCubit>().loadArticlesList(catNameUrl ?? '');
   }
 
   @override
   Widget build(BuildContext context) {
-    return _buildUi(list?[0].listType ?? ListType.simpleList);
-  }
-
-  _buildUi(ListType listType) {
-    switch (listType) {
-      case ListType.gridList:
-        return Scaffold(
-            appBar: AppBar(
-              title: Text(list?[0].title ?? ''),
-            ),
-            body: buildGridView());
-      case ListType.simpleList:
-        return Scaffold(
-            appBar: AppBar(
-              title: Text(list?[0].title ?? ''),
-            ),
-            body: buildListView());
-    }
-  }
-
-  Widget buildListView() {
-    return GridView.builder(
-      scrollDirection: Axis.vertical,
-      padding: EdgeInsets.all(8.0),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 1,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-        childAspectRatio: 5,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.catName),
       ),
-      itemCount: 16,
-      itemBuilder: (context, index) {
-        return GridItemWidget(
-          title:
-          'قاعدة اللطف في التفكير المعتزلي وأتباعه ـ قراءة تحليلية وكشف لمكامن الضعف التطبيقي $index',
-          imagePath: list?[0].featureImageUrl ?? '',
-          height: 60,
-          width: 60,
-          insideTitlePosition: true,
-          withTitle: true,
-          withBk: true,
-        );
-      },
-);
-
+      body: BlocBuilder<CategoryListCubit, CategoryListState>(
+        builder: (context, state) {
+          return state.when(
+            initial: () => Center(child: Text('Select a category')),
+            loading: () => Center(child: CircularProgressIndicator()),
+            loaded: (articles) => _buildUi(context, articles), // Pass the articles to the UI builder
+            error: (error) => Center(child: Text('Error: $error')),
+          );
+        },
+      ),
+    );
   }
 
-  Widget buildGridView() {
-    return GridView.builder(
-      scrollDirection: Axis.vertical,
+  Widget _buildUi(BuildContext context, ArticleList articles) {
+    return articles.posts?[0].mediaDownloadLink != ''  ? buildGridView(articles) : buildListView(articles);
+  }
+
+  Widget buildListView(ArticleList articles) {
+    return ListView.builder(
+      itemCount: articles.posts?.length,
       padding: EdgeInsets.all(8.0),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3, // Set the number of columns to 3
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-        childAspectRatio: 1, // Adjust the aspect ratio if needed
-      ),
-      itemCount: 60,
       itemBuilder: (context, index) {
-        return GridItemWidget(
-          title: 'قاعدة اللطف في التفكير المعتزلي وأتباعه ـ قراءة تحليلية وكشف لمكامن الضعف التطبيقي $index',
-          imagePath: list?[0].featureImageUrl ?? '',
-          height: 80,
-          width: 80,
-          insideTitlePosition: false,
-          withTitle: true,
+        var article = articles.posts?[index];
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: GestureDetector(
+            onTap: (){
+              DataHelper.openDetailScreen(context, articles.posts![index]);
+            },
+            child: GridItemWidget(
+              title: article?.name ?? '',
+              imagePath: 'assets/images/bk2.jpg',
+              height: 60,
+              width: 60,
+              insideTitlePosition: true,
+              withTitle: true,
+              withBk: true,
+            ),
+          ),
         );
       },
     );
+  }
+
+  Widget buildGridView(ArticleList articles) {
+    return GridView.builder(
+      scrollDirection: Axis.vertical,
+      padding: EdgeInsets.all(8.0),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+        childAspectRatio: 1,
+      ),
+      itemCount: articles.posts?.length,
+      itemBuilder: (context, index) {
+        var article = articles.posts?[index];
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: GestureDetector(
+            onTap: (){
+              DataHelper.openDetailScreen(context, articles.posts![index]);
+            },
+            child: GridItemWidget(
+              title: article?.name ?? '',
+              imagePath: 'assets/images/bk2.jpg',
+              height: 80,
+              width: 80,
+              insideTitlePosition: false,
+              withTitle: true,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  String? getCatNameUrl(String catName) {
+    return DataHelper.categories[catName];
   }
 }

@@ -7,8 +7,10 @@ import 'package:ketub_platform/models/card_type_model.dart';
 import 'package:ketub_platform/screens/audio/audio_screen.dart';
 import 'package:ketub_platform/screens/audio/cubit/audio_player_cubit.dart';
 import 'package:ketub_platform/screens/category_list/category_list_screen.dart';
+import 'package:ketub_platform/screens/category_list/cubit/category_list_cubit.dart';
 import 'package:ketub_platform/screens/html_viewer/cubit/html_viewer_cubit.dart';
 import 'package:ketub_platform/screens/html_viewer/html_viewer_screen.dart';
+import 'package:ketub_platform/utils/data_helper.dart';
 
 import '../../../../models/article_model.dart';
 import 'grid_item_widget.dart';
@@ -80,7 +82,7 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
                   IconButton(
                     icon: SvgPicture.asset('assets/icons/load_more.svg'),
                     onPressed: () {
-                      _openCategoryScreen();
+                      _openCategoryScreen(catName: widget.title);
                     },
                   ),
               ],
@@ -102,7 +104,7 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    openDetailScreen(context, widget.posts[index]);
+                    DataHelper.openDetailScreen(context, widget.posts[index]);
                   },
                   child: GridItemWidget(
                     title: widget.posts[index].name ?? '',
@@ -160,48 +162,19 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
     return Container(height: 200, child: ImageSliderWidget());
   }
 
-  _openCategoryScreen() {
+  _openCategoryScreen({required String catName}) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CategoryListScreen(),
+        builder: (context) =>
+            BlocProvider(
+              create: (context) => CategoryListCubit(),
+              child: CategoryListScreen(catName: catName),
+            ),
       ),
     );
   }
 
-  void openDetailScreen(BuildContext context, ArticleModel post) {
-    if (postType(post) == PostType.Audio) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) =>
-              BlocProvider(
-                create: (context) => AudioPlayerCubit(),
-                child: AudioScreen(id: (post.id)?.toInt(),
-              ),
-        ),
-      ),
-      );
-    } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) =>
-              BlocProvider(
-                create: (context) => HtmlViewerCubit(),
-                child: HtmlViewerScreen(id: (post.id)?.toInt()),
-              ),
-        ),
-      );
-    }
-  }
 
-  PostType postType(ArticleModel post) {
-    if (post.mediaDownloadLink=='' || post.mediaDownloadLink==null) {
-      return PostType.Html;
-    } else {
-      return PostType.Audio;
-    }
-  }
 }
 

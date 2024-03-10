@@ -27,6 +27,7 @@ class HomeAllCatCubit extends Cubit<HomeAllCatState> {
             cards.add(CardTypeModel(
               cardType: getCardType(title: value),
               title: key,
+              hasLoadMore: true,
               featureImageUrl: getFeatureImage(title: value),
               articles: articlesList.posts!,
             ));

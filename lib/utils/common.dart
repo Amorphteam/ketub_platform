@@ -633,3 +633,4 @@ class _WaveformSeekBarState extends State<WaveformSeekBar> {
 
   Duration get _remaining => widget.duration - widget.position;
 }
+
