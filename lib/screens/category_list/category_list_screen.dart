@@ -22,17 +22,20 @@ class CategoryListScreen extends StatefulWidget {
 class _CategoryListScreenState extends State<CategoryListScreen> {
   String? selectedCatId;
   TreeCat? treeCat;
+
   @override
   void initState() {
     super.initState();
-    if (widget.catId !=null){
+    if (widget.catId != null) {
       context.read<CategoryListCubit>().loadArticlesList(catId: widget.catId);
-    }else {
+    } else {
       String? catNameUrl = getCatNameUrl(widget.catName ?? '');
-      context.read<CategoryListCubit>().loadTreeCats(
-          sectionName: catNameUrl ?? '');
-      context.read<CategoryListCubit>().loadArticlesList(
-          catNameUrl: catNameUrl);
+      context
+          .read<CategoryListCubit>()
+          .loadTreeCats(sectionName: catNameUrl ?? '');
+      context
+          .read<CategoryListCubit>()
+          .loadArticlesList(catNameUrl: catNameUrl);
     }
   }
 
@@ -105,7 +108,9 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
               selectedCatId = selected ? category.id.toString() : null;
             });
             if (selectedCatId != null) {
-              context.read<CategoryListCubit>().loadArticlesList(catId: selectedCatId);
+              context
+                  .read<CategoryListCubit>()
+                  .loadArticlesList(catId: selectedCatId);
             }
           },
           selectedColor: Colors.green,
@@ -120,9 +125,17 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
   }
 
   Widget _buildUi(BuildContext context, ArticleList? articles) {
-    return articles != null && articles.posts != null && articles.posts!.isNotEmpty
-        ? buildGridView(articles)
-        : Center(child: Text('No articles found'));
+    if (articles != null &&
+        articles.posts != null &&
+        articles.posts!.isNotEmpty) {
+      if (articles.posts?[0].mediaDownloadLink != '') {
+        return buildGridView(articles);
+      } else {
+        return buildListView(articles);
+      }
+    } else {
+      return Center(child: Text('No articles found'));
+    }
   }
 
   Widget buildGridView(ArticleList? articles) {
@@ -146,16 +159,44 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
             },
             child: GridItemWidget(
               title: article?.name ?? '',
-              imagePath: 'assets/images/bk2.jpg',
+              imagePath: 'assets/images/bk4.jpg',
               height: 80,
               width: 80,
               insideTitlePosition: false,
               withTitle: true,
+              isAudio: articles?.posts?[index].mediaDownloadLink != '',
             ),
           ),
         );
       },
     );
+  }
+
+  Widget buildListView(ArticleList articles) {
+    return ListView.builder(
+        itemCount: articles.posts?.length,
+        padding: EdgeInsets.all(8.0),
+        itemBuilder: (context, index) {
+          var article = articles.posts?[index];
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GestureDetector(
+              onTap: () {
+                DataHelper.openDetailScreen(context, articles.posts![index]);
+              },
+              child: GridItemWidget(
+                title: article?.name ?? '',
+                imagePath: 'assets/images/bk3.jpg',
+                height: 60,
+                width: 60,
+                insideTitlePosition: true,
+                withTitle: true,
+                withBk: true,
+                isAudio: articles?.posts?[index].mediaDownloadLink != '',
+              ),
+            ),
+          );
+        });
   }
 
   String? getCatNameUrl(String catName) {

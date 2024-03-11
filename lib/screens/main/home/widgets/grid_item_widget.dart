@@ -32,7 +32,8 @@ class _GridItemWidgetState extends State<GridItemWidget> {
   Widget build(BuildContext context) {
     Widget imageContainer = Stack(
       alignment: Alignment.center,
-      children: [Container(
+      children: [
+        Container(
         width: widget.width,
         height: widget.height,
         decoration: BoxDecoration(

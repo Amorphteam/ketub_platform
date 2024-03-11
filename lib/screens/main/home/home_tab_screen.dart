@@ -8,9 +8,6 @@ import 'package:ketub_platform/screens/main/home/cubit/home_all_cat_cubit.dart';
 import 'package:ketub_platform/screens/main/home/home_tree_cat_screen.dart';
 import 'package:ketub_platform/screens/main/shared_widgets/search_bar_widget.dart';
 
-import '../../../models/card_type_model.dart';
-import '../../../utils/data_helper.dart';
-import '../../search/search_screen.dart';
 import 'home_all_cat_screen.dart';
 import 'home_recent_content_screen.dart';
 
@@ -28,7 +25,7 @@ class _homeTabScreenState extends State<homeTabScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
   }
 
   @override
@@ -76,7 +73,7 @@ class _homeTabScreenState extends State<homeTabScreen>
           controller: _tabController,
           tabs: [
             Tab(text: 'الجميع'),
-            Tab(text: 'الأحدث'),
+            // Tab(text: 'الأحدث'),
             Tab(text: 'حسب التصنيف'),
           ],
         ),
@@ -85,7 +82,7 @@ class _homeTabScreenState extends State<homeTabScreen>
         controller: _tabController,
         children: [
           _buildTabContent(),
-          _buildRecentContent(),
+          // _buildRecentContent(),
           _buildTreeContent(),
         ],
       ),
