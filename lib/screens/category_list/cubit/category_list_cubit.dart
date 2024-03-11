@@ -3,7 +3,9 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../models/article_list.dart';
 import '../../../models/article_model.dart';
+import '../../../models/tree_cat.dart';
 import '../../../repositories/articles_online_repository.dart';
+import '../../../repositories/cat_online_repository.dart';
 
 part 'category_list_state.dart';
 part 'category_list_cubit.freezed.dart';
@@ -26,5 +28,16 @@ class CategoryListCubit extends Cubit<CategoryListState> {
     }
   }
 
+
+  Future<void> loadTreeCats({required String sectionName}) async {
+    try {
+      emit(const CategoryListState.loading());
+      var treeCat = await CatOnlineRepository().getTreeCat(sectionName);
+
+      emit(CategoryListState.treeCat(treeCat: treeCat));
+    } catch (e) {
+      emit(CategoryListState.error(error: e.toString()));
+    }
+  }
 
 }

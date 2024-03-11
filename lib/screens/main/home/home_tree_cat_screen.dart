@@ -76,14 +76,11 @@ class _HomeTreeCatScreenState extends State<HomeTreeCatScreen> {
     const minPadding = 0.0;
     const maxPadding = 40.0;
 
-    // Calculate padding and font size based on tree level
     double padding = minPadding + (maxPadding - minPadding) / maxLevel * level;
     double fontSize = maxFontSize - (maxFontSize - minFontSize) / maxLevel * level;
 
-    // Check if the node has children
     bool hasChildren = node.children != null && node.children!.isNotEmpty;
 
-    // If the node has no children, return a ListTile with an onTap action
     if (!hasChildren) {
       return Padding(
         padding: EdgeInsets.only(right: padding),
@@ -99,7 +96,6 @@ class _HomeTreeCatScreenState extends State<HomeTreeCatScreen> {
       );
     }
 
-    // If the node has children, return an ExpansionTile
     return Padding(
       padding: EdgeInsets.only(right: padding),
       child: Theme(

@@ -94,8 +94,8 @@ class DataHelper {
   };
 
 
-  static void openDetailScreen(BuildContext context, ArticleModel post) {
-    if (postType(post) == PostType.Audio) {
+  static void openDetailScreen(BuildContext context, ArticleModel? post) {
+    if (postType(post!) == PostType.Audio) {
       Navigator.push(
         context,
         MaterialPageRoute(

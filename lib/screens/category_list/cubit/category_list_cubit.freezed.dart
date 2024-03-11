@@ -21,6 +21,7 @@ mixin _$CategoryListState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(ArticleList articles) loaded,
+    required TResult Function(TreeCat treeCat) treeCat,
     required TResult Function(String error) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -29,6 +30,7 @@ mixin _$CategoryListState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(ArticleList articles)? loaded,
+    TResult? Function(TreeCat treeCat)? treeCat,
     TResult? Function(String error)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -37,6 +39,7 @@ mixin _$CategoryListState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(ArticleList articles)? loaded,
+    TResult Function(TreeCat treeCat)? treeCat,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) =>
@@ -46,6 +49,7 @@ mixin _$CategoryListState {
     required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
     required TResult Function(_Loaded value) loaded,
+    required TResult Function(_TreeCatLoaded value) treeCat,
     required TResult Function(_Error value) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -54,6 +58,7 @@ mixin _$CategoryListState {
     TResult? Function(_Initial value)? initial,
     TResult? Function(_Loading value)? loading,
     TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_TreeCatLoaded value)? treeCat,
     TResult? Function(_Error value)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -62,6 +67,7 @@ mixin _$CategoryListState {
     TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
     TResult Function(_Loaded value)? loaded,
+    TResult Function(_TreeCatLoaded value)? treeCat,
     TResult Function(_Error value)? error,
     required TResult orElse(),
   }) =>
@@ -127,6 +133,7 @@ class _$InitialImpl implements _Initial {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(ArticleList articles) loaded,
+    required TResult Function(TreeCat treeCat) treeCat,
     required TResult Function(String error) error,
   }) {
     return initial();
@@ -138,6 +145,7 @@ class _$InitialImpl implements _Initial {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(ArticleList articles)? loaded,
+    TResult? Function(TreeCat treeCat)? treeCat,
     TResult? Function(String error)? error,
   }) {
     return initial?.call();
@@ -149,6 +157,7 @@ class _$InitialImpl implements _Initial {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(ArticleList articles)? loaded,
+    TResult Function(TreeCat treeCat)? treeCat,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -164,6 +173,7 @@ class _$InitialImpl implements _Initial {
     required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
     required TResult Function(_Loaded value) loaded,
+    required TResult Function(_TreeCatLoaded value) treeCat,
     required TResult Function(_Error value) error,
   }) {
     return initial(this);
@@ -175,6 +185,7 @@ class _$InitialImpl implements _Initial {
     TResult? Function(_Initial value)? initial,
     TResult? Function(_Loading value)? loading,
     TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_TreeCatLoaded value)? treeCat,
     TResult? Function(_Error value)? error,
   }) {
     return initial?.call(this);
@@ -186,6 +197,7 @@ class _$InitialImpl implements _Initial {
     TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
     TResult Function(_Loaded value)? loaded,
+    TResult Function(_TreeCatLoaded value)? treeCat,
     TResult Function(_Error value)? error,
     required TResult orElse(),
   }) {
@@ -241,6 +253,7 @@ class _$LoadingImpl implements _Loading {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(ArticleList articles) loaded,
+    required TResult Function(TreeCat treeCat) treeCat,
     required TResult Function(String error) error,
   }) {
     return loading();
@@ -252,6 +265,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(ArticleList articles)? loaded,
+    TResult? Function(TreeCat treeCat)? treeCat,
     TResult? Function(String error)? error,
   }) {
     return loading?.call();
@@ -263,6 +277,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(ArticleList articles)? loaded,
+    TResult Function(TreeCat treeCat)? treeCat,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -278,6 +293,7 @@ class _$LoadingImpl implements _Loading {
     required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
     required TResult Function(_Loaded value) loaded,
+    required TResult Function(_TreeCatLoaded value) treeCat,
     required TResult Function(_Error value) error,
   }) {
     return loading(this);
@@ -289,6 +305,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function(_Initial value)? initial,
     TResult? Function(_Loading value)? loading,
     TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_TreeCatLoaded value)? treeCat,
     TResult? Function(_Error value)? error,
   }) {
     return loading?.call(this);
@@ -300,6 +317,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
     TResult Function(_Loaded value)? loaded,
+    TResult Function(_TreeCatLoaded value)? treeCat,
     TResult Function(_Error value)? error,
     required TResult orElse(),
   }) {
@@ -382,6 +400,7 @@ class _$LoadedImpl implements _Loaded {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(ArticleList articles) loaded,
+    required TResult Function(TreeCat treeCat) treeCat,
     required TResult Function(String error) error,
   }) {
     return loaded(articles);
@@ -393,6 +412,7 @@ class _$LoadedImpl implements _Loaded {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(ArticleList articles)? loaded,
+    TResult? Function(TreeCat treeCat)? treeCat,
     TResult? Function(String error)? error,
   }) {
     return loaded?.call(articles);
@@ -404,6 +424,7 @@ class _$LoadedImpl implements _Loaded {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(ArticleList articles)? loaded,
+    TResult Function(TreeCat treeCat)? treeCat,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -419,6 +440,7 @@ class _$LoadedImpl implements _Loaded {
     required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
     required TResult Function(_Loaded value) loaded,
+    required TResult Function(_TreeCatLoaded value) treeCat,
     required TResult Function(_Error value) error,
   }) {
     return loaded(this);
@@ -430,6 +452,7 @@ class _$LoadedImpl implements _Loaded {
     TResult? Function(_Initial value)? initial,
     TResult? Function(_Loading value)? loading,
     TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_TreeCatLoaded value)? treeCat,
     TResult? Function(_Error value)? error,
   }) {
     return loaded?.call(this);
@@ -441,6 +464,7 @@ class _$LoadedImpl implements _Loaded {
     TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
     TResult Function(_Loaded value)? loaded,
+    TResult Function(_TreeCatLoaded value)? treeCat,
     TResult Function(_Error value)? error,
     required TResult orElse(),
   }) {
@@ -457,6 +481,168 @@ abstract class _Loaded implements CategoryListState {
   ArticleList get articles;
   @JsonKey(ignore: true)
   _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$TreeCatLoadedImplCopyWith<$Res> {
+  factory _$$TreeCatLoadedImplCopyWith(
+          _$TreeCatLoadedImpl value, $Res Function(_$TreeCatLoadedImpl) then) =
+      __$$TreeCatLoadedImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({TreeCat treeCat});
+
+  $TreeCatCopyWith<$Res> get treeCat;
+}
+
+/// @nodoc
+class __$$TreeCatLoadedImplCopyWithImpl<$Res>
+    extends _$CategoryListStateCopyWithImpl<$Res, _$TreeCatLoadedImpl>
+    implements _$$TreeCatLoadedImplCopyWith<$Res> {
+  __$$TreeCatLoadedImplCopyWithImpl(
+      _$TreeCatLoadedImpl _value, $Res Function(_$TreeCatLoadedImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? treeCat = null,
+  }) {
+    return _then(_$TreeCatLoadedImpl(
+      treeCat: null == treeCat
+          ? _value.treeCat
+          : treeCat // ignore: cast_nullable_to_non_nullable
+              as TreeCat,
+    ));
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $TreeCatCopyWith<$Res> get treeCat {
+    return $TreeCatCopyWith<$Res>(_value.treeCat, (value) {
+      return _then(_value.copyWith(treeCat: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$TreeCatLoadedImpl implements _TreeCatLoaded {
+  const _$TreeCatLoadedImpl({required this.treeCat});
+
+  @override
+  final TreeCat treeCat;
+
+  @override
+  String toString() {
+    return 'CategoryListState.treeCat(treeCat: $treeCat)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$TreeCatLoadedImpl &&
+            (identical(other.treeCat, treeCat) || other.treeCat == treeCat));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, treeCat);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$TreeCatLoadedImplCopyWith<_$TreeCatLoadedImpl> get copyWith =>
+      __$$TreeCatLoadedImplCopyWithImpl<_$TreeCatLoadedImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(ArticleList articles) loaded,
+    required TResult Function(TreeCat treeCat) treeCat,
+    required TResult Function(String error) error,
+  }) {
+    return treeCat(this.treeCat);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(ArticleList articles)? loaded,
+    TResult? Function(TreeCat treeCat)? treeCat,
+    TResult? Function(String error)? error,
+  }) {
+    return treeCat?.call(this.treeCat);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(ArticleList articles)? loaded,
+    TResult Function(TreeCat treeCat)? treeCat,
+    TResult Function(String error)? error,
+    required TResult orElse(),
+  }) {
+    if (treeCat != null) {
+      return treeCat(this.treeCat);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_TreeCatLoaded value) treeCat,
+    required TResult Function(_Error value) error,
+  }) {
+    return treeCat(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_TreeCatLoaded value)? treeCat,
+    TResult? Function(_Error value)? error,
+  }) {
+    return treeCat?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_TreeCatLoaded value)? treeCat,
+    TResult Function(_Error value)? error,
+    required TResult orElse(),
+  }) {
+    if (treeCat != null) {
+      return treeCat(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _TreeCatLoaded implements CategoryListState {
+  const factory _TreeCatLoaded({required final TreeCat treeCat}) =
+      _$TreeCatLoadedImpl;
+
+  TreeCat get treeCat;
+  @JsonKey(ignore: true)
+  _$$TreeCatLoadedImplCopyWith<_$TreeCatLoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -527,6 +713,7 @@ class _$ErrorImpl implements _Error {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(ArticleList articles) loaded,
+    required TResult Function(TreeCat treeCat) treeCat,
     required TResult Function(String error) error,
   }) {
     return error(this.error);
@@ -538,6 +725,7 @@ class _$ErrorImpl implements _Error {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(ArticleList articles)? loaded,
+    TResult? Function(TreeCat treeCat)? treeCat,
     TResult? Function(String error)? error,
   }) {
     return error?.call(this.error);
@@ -549,6 +737,7 @@ class _$ErrorImpl implements _Error {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(ArticleList articles)? loaded,
+    TResult Function(TreeCat treeCat)? treeCat,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -564,6 +753,7 @@ class _$ErrorImpl implements _Error {
     required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
     required TResult Function(_Loaded value) loaded,
+    required TResult Function(_TreeCatLoaded value) treeCat,
     required TResult Function(_Error value) error,
   }) {
     return error(this);
@@ -575,6 +765,7 @@ class _$ErrorImpl implements _Error {
     TResult? Function(_Initial value)? initial,
     TResult? Function(_Loading value)? loading,
     TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_TreeCatLoaded value)? treeCat,
     TResult? Function(_Error value)? error,
   }) {
     return error?.call(this);
@@ -586,6 +777,7 @@ class _$ErrorImpl implements _Error {
     TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
     TResult Function(_Loaded value)? loaded,
+    TResult Function(_TreeCatLoaded value)? treeCat,
     TResult Function(_Error value)? error,
     required TResult orElse(),
   }) {
