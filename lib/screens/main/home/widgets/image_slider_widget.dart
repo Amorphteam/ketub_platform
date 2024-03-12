@@ -1,29 +1,33 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
+import '../../../../models/slie_online.dart';
+
 class ImageSliderWidget extends StatefulWidget {
+  final List<SlideOnline>? slides;
+
+  const ImageSliderWidget({super.key, this.slides});
+
   @override
   _ImageSliderWidgetState createState() => _ImageSliderWidgetState();
 }
 
 class _ImageSliderWidgetState extends State<ImageSliderWidget> {
+
   int _currentPage = 0;
   final PageController _controller = PageController();
-  final List<String> _imageUrls = [
-    'assets/images/bk1.jpg',
-    'assets/images/bk2.jpg',
-    'assets/images/bk3.jpg',
-  ];
 
-  final List<String> _titles = [
-    ' الاجتهاد المقاصدي و المناطي',
-    ' الاجتهاد المقاصدي و المناطي',
-    ' الاجتهاد المقاصدي و المناطي',
-  ];
+  final List<String> _imageUrls = [];
+
+  final List<String> _titles = [];
 
   @override
   void initState() {
     super.initState();
+    for (SlideOnline slide in widget.slides??[]){
+      _imageUrls.add(slide.url??'');
+      _titles.add(slide.title??'');
+    }
     Timer.periodic(Duration(seconds: 3), (Timer timer) {
       if (_currentPage < _imageUrls.length - 1) {
         _currentPage++;
@@ -59,7 +63,7 @@ class _ImageSliderWidgetState extends State<ImageSliderWidget> {
               return Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage(_imageUrls[index]),
+                    image: NetworkImage(_imageUrls[index]),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -70,8 +74,8 @@ class _ImageSliderWidgetState extends State<ImageSliderWidget> {
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                          _titles[index],
+                        child: Text('',
+                          // _titles[index],
                           style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Colors.white)
                         ),
                       ),
@@ -87,7 +91,7 @@ class _ImageSliderWidgetState extends State<ImageSliderWidget> {
                           onPrimary: Colors.white, // This is the text color
                           elevation: 0,
                         ),
-                        child: Text('اقرأ الآن'),
+                        child: Text(''),
                       ),
                     )
 

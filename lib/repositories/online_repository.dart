@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:ketub_platform/models/online_search_results.dart';
+import 'package:ketub_platform/models/slie_online.dart';
 import 'package:ketub_platform/models/tree_cat.dart';
 import 'package:http/http.dart' as http;
 
@@ -71,6 +72,19 @@ class OnlineRepository {
       return OnlineSearchResults.fromJson(jsonMap);
     } else {
       throw Exception('Failed to fetch data');
+    }
+  }
+
+
+  Future<List<SlideOnline>> getSlideOnline() async {
+    String pathUrl = 'api/v1/slide';
+    final response = await http.get(Uri.parse(apiUrl + pathUrl));
+
+    if (response.statusCode == 200) {
+      List<dynamic> jsonResponse = json.decode(response.body);
+      return jsonResponse.map((data) => SlideOnline.fromJson(data)).toList();
+    } else {
+      throw Exception('Failed to fetch data with status code ${response.statusCode}');
     }
   }
 }

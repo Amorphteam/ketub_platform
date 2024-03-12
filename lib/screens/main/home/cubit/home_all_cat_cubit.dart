@@ -3,6 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:ketub_platform/utils/data_helper.dart';
 
 import '../../../../models/card_type_model.dart';
+import '../../../../models/slie_online.dart';
 import '../../../../repositories/online_repository.dart';
 
 part 'home_all_cat_state.dart';
@@ -34,10 +35,10 @@ class HomeAllCatCubit extends Cubit<HomeAllCatState> {
           }),
         );
       });
+      futures.add(addBannerToList(cards));
 
       // Wait for all futures to complete
       await Future.wait(futures);
-      addBannerToList(cards);
       reorderTheList(cards);
       emit(HomeAllCatState.loaded(cardList: cards));
     } catch (e) {
@@ -45,10 +46,21 @@ class HomeAllCatCubit extends Cubit<HomeAllCatState> {
     }
   }
 
-  void addBannerToList(List<CardTypeModel> cards) {
-    cards.add(CardTypeModel(cardType: CardType.dynamicBanner, title: 'الإعلانات', featureImageUrl: '', articles: []));
-    cards.add(CardTypeModel(cardType: CardType.staticBanner, title: 'الإعلانات٢', featureImageUrl: '', articles: []));
+
+  Future<void> addBannerToList(List<CardTypeModel> cards) async {
+    cards.add(const CardTypeModel(cardType: CardType.staticBanner, title: 'الإعلانات٢', featureImageUrl: '', articles: []));
+
+    var banners = await OnlineRepository().getSlideOnline();
+    cards.add(CardTypeModel(
+        cardType: CardType.dynamicBanner,
+        title: 'الإعلانات',
+        featureImageUrl: '',
+        articles: [],
+        slideOnline: banners
+    ));
+
   }
+
 
   void reorderTheList(List<CardTypeModel> cards) {
     List<String> orderOfTitles = [

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:ketub_platform/models/slie_online.dart';
 
 import 'article_model.dart';
 
@@ -14,6 +15,7 @@ class CardTypeModel with _$CardTypeModel {
     @Default(false) bool hasLoadMore,
     required String featureImageUrl,
     required List<ArticleModel> articles,
+    List<SlideOnline>? slideOnline,
   }) = _CardTypeModel;
 
   factory CardTypeModel.fromJson(Map<String, dynamic> json) => _$CardTypeModelFromJson(json);

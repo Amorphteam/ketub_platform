@@ -13,6 +13,7 @@ import 'package:ketub_platform/screens/html_viewer/html_viewer_screen.dart';
 import 'package:ketub_platform/utils/data_helper.dart';
 
 import '../../../../models/article_model.dart';
+import '../../../../models/slie_online.dart';
 import 'grid_item_widget.dart';
 import 'image_slider_widget.dart';
 
@@ -22,13 +23,15 @@ class SectionCardWidget extends StatefulWidget {
   final bool hasLoadMore;
   final String featureImageUrl;
   final List<ArticleModel> posts;
+  final List<SlideOnline>? slides;
 
   const SectionCardWidget({super.key,
     required this.posts,
     required this.cardType,
     required this.title,
     required this.hasLoadMore,
-    required this.featureImageUrl});
+    required this.featureImageUrl,
+    this.slides});
 
   @override
   State<SectionCardWidget> createState() => _SectionCardWidgetState();
@@ -159,7 +162,7 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
   }
 
   Widget buildDynamicBanner(BuildContext context) {
-    return Container(height: 200, child: ImageSliderWidget());
+    return Container(height: 170, child: ImageSliderWidget(slides: widget.slides,));
   }
 
   _openCategoryScreen({required String catName}) {

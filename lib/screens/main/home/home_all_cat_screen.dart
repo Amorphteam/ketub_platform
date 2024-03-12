@@ -53,6 +53,7 @@ class _homeAllCatScreenState extends State<homeAllCatScreen> {
             title: cards[index].title,
             hasLoadMore: cards[index].hasLoadMore,
             featureImageUrl: cards[index].featureImageUrl,
+            slides: cards[index].slideOnline,
           );
         });
   }
