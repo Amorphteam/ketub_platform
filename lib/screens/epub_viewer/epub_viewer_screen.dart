@@ -87,6 +87,8 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
           searchResultsFound: (searchResults) {
             showSearchResultsDialog(context, searchResults);
           },
+          bookmarkPresent: () => setState(() => isBookmarked = true),
+          bookmarkAbsent: () => setState(() => isBookmarked = false),
           orElse: () {},
         );
       },
@@ -159,7 +161,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                               if (isBookmarked) {
                                 _addBookmark(context);
                               } else {
-                                // Remove bookmark logic (if needed)
+                                _removeBookmark(context);
                               }
                             },
                           ),
@@ -184,8 +186,11 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                         _storeContentLoaded(content, context, state, tocList);
                         context.read<EpubViewerCubit>().emitLastPageSeen();
                         context.read<EpubViewerCubit>().loadUserPreferences();
+                        context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
                         return _buildCurrentUi(context, state);
                       },
+                      bookmarkAbsent: () => _buildCurrentUi(context, state),
+                      bookmarkPresent: () => _buildCurrentUi(context, state),
                       loading: () => const Center(
                             child: CircularProgressIndicator(),
                           ),
@@ -326,28 +331,26 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                     },
                     child: Container(
                       color: Colors.white,
-                      child: SingleChildScrollView(
-                        child: Html(
-                          data: _content[index],
-                          style: {
-                            "html": Style(
-                                textAlign: TextAlign.justify,
-                                direction: TextDirection.rtl,
-                                fontSize: FontSize(fontSize.size),
-                                padding: HtmlPaddings.only(right: 10, left: 10),
-                                fontFamily: fontFamily.name,
-                              lineHeight: LineHeight(lineHeight.size),
-                            ),
+                      child: Html(
+                        data: _content[index],
+                        style: {
+                          "html": Style(
+                              textAlign: TextAlign.justify,
+                              direction: TextDirection.rtl,
+                              fontSize: FontSize(fontSize.size),
+                              padding: HtmlPaddings.only(right: 10, left: 10),
+                              fontFamily: fontFamily.name,
+                            lineHeight: LineHeight(lineHeight.size),
+                          ),
 
-                            "h1,h2,h3,h4,h5,h6": Style(
-                                textAlign: TextAlign.right,
-                                direction: TextDirection.rtl,
-                                padding: HtmlPaddings.only(top: 30),
-                                fontSize: FontSize(fontSize.size * 1.2),
-                                fontWeight: FontWeight.bold,
-                                fontFamily: fontFamily.name),
-                          },
-                        ),
+                          "h1,h2,h3,h4,h5,h6": Style(
+                              textAlign: TextAlign.right,
+                              direction: TextDirection.rtl,
+                              padding: HtmlPaddings.only(top: 30),
+                              fontSize: FontSize(fontSize.size * 1.2),
+                              fontWeight: FontWeight.bold,
+                              fontFamily: fontFamily.name),
+                        },
                       ),
                     ),
                   ),
@@ -422,6 +425,8 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     );
 
     BlocProvider.of<EpubViewerCubit>(context).addBookmark(reference);
+    context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
+
   }
 
   void _openInternalToc(BuildContext context) {
@@ -596,6 +601,8 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
         _currentPage = newPage;
       });
     }
+    context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
+
   }
 
   @override
@@ -626,6 +633,9 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
 
   _jumpTo({int? pageNumber}) {
     itemScrollController.jumpTo(index: pageNumber ?? 0);
+    _currentPage = pageNumber?.toDouble() ?? _currentPage;
+    context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
+
   }
 
   _storeCurrentPage({int? currentPageNumber}) {
@@ -633,5 +643,10 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     if (_currentPage != newPage) {
       _currentPage = currentPageNumber?.toDouble() ?? 0.0;
     }
+  }
+
+  void _removeBookmark(BuildContext context) {
+    context.read<EpubViewerCubit>().removeBookmark(_bookPath!, _currentPage.toString());
+    context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
   }
 }

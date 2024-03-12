@@ -35,6 +35,26 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
   final ReferencesDatabase referencesDatabase = ReferencesDatabase.instance;
   final searchHelper = SearchHelper();
 
+
+  Future<void> checkBookmark(String bookPath, String pageIndex) async {
+    bool isBookmarked = await referencesDatabase.isBookmarkExist(bookPath, pageIndex);
+    emit(isBookmarked ? const EpubViewerState.bookmarkPresent() : const EpubViewerState.bookmarkAbsent());
+  }
+
+
+  Future<void> removeBookmark(String bookPath, String pageNumber) async {
+    try {
+      final int result = await referencesDatabase.deleteReferenceByBookPathAndPageNumber(bookPath, pageNumber);
+      if (result != 0) {
+        emit(EpubViewerState.bookmarkAbsent());
+      } else {
+      }
+    } catch (error) {
+      emit(EpubViewerState.error(error: error.toString()));
+    }
+  }
+
+
   Future<void> loadAndParseEpub(String assetPath) async {
     emit(const EpubViewerState.loading());
     try {

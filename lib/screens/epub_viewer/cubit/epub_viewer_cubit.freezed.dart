@@ -31,6 +31,8 @@ mixin _$EpubViewerState {
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(List<SearchModel> searchResults)
         searchResultsFound,
+    required TResult Function() bookmarkPresent,
+    required TResult Function() bookmarkAbsent,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -47,6 +49,8 @@ mixin _$EpubViewerState {
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
+    TResult? Function()? bookmarkPresent,
+    TResult? Function()? bookmarkAbsent,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -63,6 +67,8 @@ mixin _$EpubViewerState {
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
+    TResult Function()? bookmarkPresent,
+    TResult Function()? bookmarkAbsent,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -76,6 +82,8 @@ mixin _$EpubViewerState {
     required TResult Function(_StyleChanged value) styleChanged,
     required TResult Function(_BookmarkAdded value) bookmarkAdded,
     required TResult Function(_SearchResultsFound value) searchResultsFound,
+    required TResult Function(_BookmarkPresent value) bookmarkPresent,
+    required TResult Function(_BookmarkAbsent value) bookmarkAbsent,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -88,6 +96,8 @@ mixin _$EpubViewerState {
     TResult? Function(_StyleChanged value)? styleChanged,
     TResult? Function(_BookmarkAdded value)? bookmarkAdded,
     TResult? Function(_SearchResultsFound value)? searchResultsFound,
+    TResult? Function(_BookmarkPresent value)? bookmarkPresent,
+    TResult? Function(_BookmarkAbsent value)? bookmarkAbsent,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -100,6 +110,8 @@ mixin _$EpubViewerState {
     TResult Function(_StyleChanged value)? styleChanged,
     TResult Function(_BookmarkAdded value)? bookmarkAdded,
     TResult Function(_SearchResultsFound value)? searchResultsFound,
+    TResult Function(_BookmarkPresent value)? bookmarkPresent,
+    TResult Function(_BookmarkAbsent value)? bookmarkAbsent,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -174,6 +186,8 @@ class _$InitialImpl implements _Initial {
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(List<SearchModel> searchResults)
         searchResultsFound,
+    required TResult Function() bookmarkPresent,
+    required TResult Function() bookmarkAbsent,
   }) {
     return initial();
   }
@@ -193,6 +207,8 @@ class _$InitialImpl implements _Initial {
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
+    TResult? Function()? bookmarkPresent,
+    TResult? Function()? bookmarkAbsent,
   }) {
     return initial?.call();
   }
@@ -212,6 +228,8 @@ class _$InitialImpl implements _Initial {
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
+    TResult Function()? bookmarkPresent,
+    TResult Function()? bookmarkAbsent,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -231,6 +249,8 @@ class _$InitialImpl implements _Initial {
     required TResult Function(_StyleChanged value) styleChanged,
     required TResult Function(_BookmarkAdded value) bookmarkAdded,
     required TResult Function(_SearchResultsFound value) searchResultsFound,
+    required TResult Function(_BookmarkPresent value) bookmarkPresent,
+    required TResult Function(_BookmarkAbsent value) bookmarkAbsent,
   }) {
     return initial(this);
   }
@@ -246,6 +266,8 @@ class _$InitialImpl implements _Initial {
     TResult? Function(_StyleChanged value)? styleChanged,
     TResult? Function(_BookmarkAdded value)? bookmarkAdded,
     TResult? Function(_SearchResultsFound value)? searchResultsFound,
+    TResult? Function(_BookmarkPresent value)? bookmarkPresent,
+    TResult? Function(_BookmarkAbsent value)? bookmarkAbsent,
   }) {
     return initial?.call(this);
   }
@@ -261,6 +283,8 @@ class _$InitialImpl implements _Initial {
     TResult Function(_StyleChanged value)? styleChanged,
     TResult Function(_BookmarkAdded value)? bookmarkAdded,
     TResult Function(_SearchResultsFound value)? searchResultsFound,
+    TResult Function(_BookmarkPresent value)? bookmarkPresent,
+    TResult Function(_BookmarkAbsent value)? bookmarkAbsent,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -325,6 +349,8 @@ class _$LoadingImpl implements _Loading {
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(List<SearchModel> searchResults)
         searchResultsFound,
+    required TResult Function() bookmarkPresent,
+    required TResult Function() bookmarkAbsent,
   }) {
     return loading();
   }
@@ -344,6 +370,8 @@ class _$LoadingImpl implements _Loading {
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
+    TResult? Function()? bookmarkPresent,
+    TResult? Function()? bookmarkAbsent,
   }) {
     return loading?.call();
   }
@@ -363,6 +391,8 @@ class _$LoadingImpl implements _Loading {
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
+    TResult Function()? bookmarkPresent,
+    TResult Function()? bookmarkAbsent,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -382,6 +412,8 @@ class _$LoadingImpl implements _Loading {
     required TResult Function(_StyleChanged value) styleChanged,
     required TResult Function(_BookmarkAdded value) bookmarkAdded,
     required TResult Function(_SearchResultsFound value) searchResultsFound,
+    required TResult Function(_BookmarkPresent value) bookmarkPresent,
+    required TResult Function(_BookmarkAbsent value) bookmarkAbsent,
   }) {
     return loading(this);
   }
@@ -397,6 +429,8 @@ class _$LoadingImpl implements _Loading {
     TResult? Function(_StyleChanged value)? styleChanged,
     TResult? Function(_BookmarkAdded value)? bookmarkAdded,
     TResult? Function(_SearchResultsFound value)? searchResultsFound,
+    TResult? Function(_BookmarkPresent value)? bookmarkPresent,
+    TResult? Function(_BookmarkAbsent value)? bookmarkAbsent,
   }) {
     return loading?.call(this);
   }
@@ -412,6 +446,8 @@ class _$LoadingImpl implements _Loading {
     TResult Function(_StyleChanged value)? styleChanged,
     TResult Function(_BookmarkAdded value)? bookmarkAdded,
     TResult Function(_SearchResultsFound value)? searchResultsFound,
+    TResult Function(_BookmarkPresent value)? bookmarkPresent,
+    TResult Function(_BookmarkAbsent value)? bookmarkAbsent,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -543,6 +579,8 @@ class _$LoadedImpl implements _Loaded {
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(List<SearchModel> searchResults)
         searchResultsFound,
+    required TResult Function() bookmarkPresent,
+    required TResult Function() bookmarkAbsent,
   }) {
     return loaded(content, epubTitle, tocTreeList);
   }
@@ -562,6 +600,8 @@ class _$LoadedImpl implements _Loaded {
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
+    TResult? Function()? bookmarkPresent,
+    TResult? Function()? bookmarkAbsent,
   }) {
     return loaded?.call(content, epubTitle, tocTreeList);
   }
@@ -581,6 +621,8 @@ class _$LoadedImpl implements _Loaded {
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
+    TResult Function()? bookmarkPresent,
+    TResult Function()? bookmarkAbsent,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -600,6 +642,8 @@ class _$LoadedImpl implements _Loaded {
     required TResult Function(_StyleChanged value) styleChanged,
     required TResult Function(_BookmarkAdded value) bookmarkAdded,
     required TResult Function(_SearchResultsFound value) searchResultsFound,
+    required TResult Function(_BookmarkPresent value) bookmarkPresent,
+    required TResult Function(_BookmarkAbsent value) bookmarkAbsent,
   }) {
     return loaded(this);
   }
@@ -615,6 +659,8 @@ class _$LoadedImpl implements _Loaded {
     TResult? Function(_StyleChanged value)? styleChanged,
     TResult? Function(_BookmarkAdded value)? bookmarkAdded,
     TResult? Function(_SearchResultsFound value)? searchResultsFound,
+    TResult? Function(_BookmarkPresent value)? bookmarkPresent,
+    TResult? Function(_BookmarkAbsent value)? bookmarkAbsent,
   }) {
     return loaded?.call(this);
   }
@@ -630,6 +676,8 @@ class _$LoadedImpl implements _Loaded {
     TResult Function(_StyleChanged value)? styleChanged,
     TResult Function(_BookmarkAdded value)? bookmarkAdded,
     TResult Function(_SearchResultsFound value)? searchResultsFound,
+    TResult Function(_BookmarkPresent value)? bookmarkPresent,
+    TResult Function(_BookmarkAbsent value)? bookmarkAbsent,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -730,6 +778,8 @@ class _$errorImpl implements _error {
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(List<SearchModel> searchResults)
         searchResultsFound,
+    required TResult Function() bookmarkPresent,
+    required TResult Function() bookmarkAbsent,
   }) {
     return error(this.error);
   }
@@ -749,6 +799,8 @@ class _$errorImpl implements _error {
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
+    TResult? Function()? bookmarkPresent,
+    TResult? Function()? bookmarkAbsent,
   }) {
     return error?.call(this.error);
   }
@@ -768,6 +820,8 @@ class _$errorImpl implements _error {
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
+    TResult Function()? bookmarkPresent,
+    TResult Function()? bookmarkAbsent,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -787,6 +841,8 @@ class _$errorImpl implements _error {
     required TResult Function(_StyleChanged value) styleChanged,
     required TResult Function(_BookmarkAdded value) bookmarkAdded,
     required TResult Function(_SearchResultsFound value) searchResultsFound,
+    required TResult Function(_BookmarkPresent value) bookmarkPresent,
+    required TResult Function(_BookmarkAbsent value) bookmarkAbsent,
   }) {
     return error(this);
   }
@@ -802,6 +858,8 @@ class _$errorImpl implements _error {
     TResult? Function(_StyleChanged value)? styleChanged,
     TResult? Function(_BookmarkAdded value)? bookmarkAdded,
     TResult? Function(_SearchResultsFound value)? searchResultsFound,
+    TResult? Function(_BookmarkPresent value)? bookmarkPresent,
+    TResult? Function(_BookmarkAbsent value)? bookmarkAbsent,
   }) {
     return error?.call(this);
   }
@@ -817,6 +875,8 @@ class _$errorImpl implements _error {
     TResult Function(_StyleChanged value)? styleChanged,
     TResult Function(_BookmarkAdded value)? bookmarkAdded,
     TResult Function(_SearchResultsFound value)? searchResultsFound,
+    TResult Function(_BookmarkPresent value)? bookmarkPresent,
+    TResult Function(_BookmarkAbsent value)? bookmarkAbsent,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -913,6 +973,8 @@ class _$PageChangedImpl implements _PageChanged {
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(List<SearchModel> searchResults)
         searchResultsFound,
+    required TResult Function() bookmarkPresent,
+    required TResult Function() bookmarkAbsent,
   }) {
     return pageChanged(pageNumber);
   }
@@ -932,6 +994,8 @@ class _$PageChangedImpl implements _PageChanged {
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
+    TResult? Function()? bookmarkPresent,
+    TResult? Function()? bookmarkAbsent,
   }) {
     return pageChanged?.call(pageNumber);
   }
@@ -951,6 +1015,8 @@ class _$PageChangedImpl implements _PageChanged {
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
+    TResult Function()? bookmarkPresent,
+    TResult Function()? bookmarkAbsent,
     required TResult orElse(),
   }) {
     if (pageChanged != null) {
@@ -970,6 +1036,8 @@ class _$PageChangedImpl implements _PageChanged {
     required TResult Function(_StyleChanged value) styleChanged,
     required TResult Function(_BookmarkAdded value) bookmarkAdded,
     required TResult Function(_SearchResultsFound value) searchResultsFound,
+    required TResult Function(_BookmarkPresent value) bookmarkPresent,
+    required TResult Function(_BookmarkAbsent value) bookmarkAbsent,
   }) {
     return pageChanged(this);
   }
@@ -985,6 +1053,8 @@ class _$PageChangedImpl implements _PageChanged {
     TResult? Function(_StyleChanged value)? styleChanged,
     TResult? Function(_BookmarkAdded value)? bookmarkAdded,
     TResult? Function(_SearchResultsFound value)? searchResultsFound,
+    TResult? Function(_BookmarkPresent value)? bookmarkPresent,
+    TResult? Function(_BookmarkAbsent value)? bookmarkAbsent,
   }) {
     return pageChanged?.call(this);
   }
@@ -1000,6 +1070,8 @@ class _$PageChangedImpl implements _PageChanged {
     TResult Function(_StyleChanged value)? styleChanged,
     TResult Function(_BookmarkAdded value)? bookmarkAdded,
     TResult Function(_SearchResultsFound value)? searchResultsFound,
+    TResult Function(_BookmarkPresent value)? bookmarkPresent,
+    TResult Function(_BookmarkAbsent value)? bookmarkAbsent,
     required TResult orElse(),
   }) {
     if (pageChanged != null) {
@@ -1118,6 +1190,8 @@ class _$StyleChangedImpl implements _StyleChanged {
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(List<SearchModel> searchResults)
         searchResultsFound,
+    required TResult Function() bookmarkPresent,
+    required TResult Function() bookmarkAbsent,
   }) {
     return styleChanged(fontSize, lineHeight, fontFamily);
   }
@@ -1137,6 +1211,8 @@ class _$StyleChangedImpl implements _StyleChanged {
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
+    TResult? Function()? bookmarkPresent,
+    TResult? Function()? bookmarkAbsent,
   }) {
     return styleChanged?.call(fontSize, lineHeight, fontFamily);
   }
@@ -1156,6 +1232,8 @@ class _$StyleChangedImpl implements _StyleChanged {
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
+    TResult Function()? bookmarkPresent,
+    TResult Function()? bookmarkAbsent,
     required TResult orElse(),
   }) {
     if (styleChanged != null) {
@@ -1175,6 +1253,8 @@ class _$StyleChangedImpl implements _StyleChanged {
     required TResult Function(_StyleChanged value) styleChanged,
     required TResult Function(_BookmarkAdded value) bookmarkAdded,
     required TResult Function(_SearchResultsFound value) searchResultsFound,
+    required TResult Function(_BookmarkPresent value) bookmarkPresent,
+    required TResult Function(_BookmarkAbsent value) bookmarkAbsent,
   }) {
     return styleChanged(this);
   }
@@ -1190,6 +1270,8 @@ class _$StyleChangedImpl implements _StyleChanged {
     TResult? Function(_StyleChanged value)? styleChanged,
     TResult? Function(_BookmarkAdded value)? bookmarkAdded,
     TResult? Function(_SearchResultsFound value)? searchResultsFound,
+    TResult? Function(_BookmarkPresent value)? bookmarkPresent,
+    TResult? Function(_BookmarkAbsent value)? bookmarkAbsent,
   }) {
     return styleChanged?.call(this);
   }
@@ -1205,6 +1287,8 @@ class _$StyleChangedImpl implements _StyleChanged {
     TResult Function(_StyleChanged value)? styleChanged,
     TResult Function(_BookmarkAdded value)? bookmarkAdded,
     TResult Function(_SearchResultsFound value)? searchResultsFound,
+    TResult Function(_BookmarkPresent value)? bookmarkPresent,
+    TResult Function(_BookmarkAbsent value)? bookmarkAbsent,
     required TResult orElse(),
   }) {
     if (styleChanged != null) {
@@ -1305,6 +1389,8 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(List<SearchModel> searchResults)
         searchResultsFound,
+    required TResult Function() bookmarkPresent,
+    required TResult Function() bookmarkAbsent,
   }) {
     return bookmarkAdded(status);
   }
@@ -1324,6 +1410,8 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
+    TResult? Function()? bookmarkPresent,
+    TResult? Function()? bookmarkAbsent,
   }) {
     return bookmarkAdded?.call(status);
   }
@@ -1343,6 +1431,8 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
+    TResult Function()? bookmarkPresent,
+    TResult Function()? bookmarkAbsent,
     required TResult orElse(),
   }) {
     if (bookmarkAdded != null) {
@@ -1362,6 +1452,8 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
     required TResult Function(_StyleChanged value) styleChanged,
     required TResult Function(_BookmarkAdded value) bookmarkAdded,
     required TResult Function(_SearchResultsFound value) searchResultsFound,
+    required TResult Function(_BookmarkPresent value) bookmarkPresent,
+    required TResult Function(_BookmarkAbsent value) bookmarkAbsent,
   }) {
     return bookmarkAdded(this);
   }
@@ -1377,6 +1469,8 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
     TResult? Function(_StyleChanged value)? styleChanged,
     TResult? Function(_BookmarkAdded value)? bookmarkAdded,
     TResult? Function(_SearchResultsFound value)? searchResultsFound,
+    TResult? Function(_BookmarkPresent value)? bookmarkPresent,
+    TResult? Function(_BookmarkAbsent value)? bookmarkAbsent,
   }) {
     return bookmarkAdded?.call(this);
   }
@@ -1392,6 +1486,8 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
     TResult Function(_StyleChanged value)? styleChanged,
     TResult Function(_BookmarkAdded value)? bookmarkAdded,
     TResult Function(_SearchResultsFound value)? searchResultsFound,
+    TResult Function(_BookmarkPresent value)? bookmarkPresent,
+    TResult Function(_BookmarkAbsent value)? bookmarkAbsent,
     required TResult orElse(),
   }) {
     if (bookmarkAdded != null) {
@@ -1497,6 +1593,8 @@ class _$SearchResultsFoundImpl implements _SearchResultsFound {
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(List<SearchModel> searchResults)
         searchResultsFound,
+    required TResult Function() bookmarkPresent,
+    required TResult Function() bookmarkAbsent,
   }) {
     return searchResultsFound(searchResults);
   }
@@ -1516,6 +1614,8 @@ class _$SearchResultsFoundImpl implements _SearchResultsFound {
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
+    TResult? Function()? bookmarkPresent,
+    TResult? Function()? bookmarkAbsent,
   }) {
     return searchResultsFound?.call(searchResults);
   }
@@ -1535,6 +1635,8 @@ class _$SearchResultsFoundImpl implements _SearchResultsFound {
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
+    TResult Function()? bookmarkPresent,
+    TResult Function()? bookmarkAbsent,
     required TResult orElse(),
   }) {
     if (searchResultsFound != null) {
@@ -1554,6 +1656,8 @@ class _$SearchResultsFoundImpl implements _SearchResultsFound {
     required TResult Function(_StyleChanged value) styleChanged,
     required TResult Function(_BookmarkAdded value) bookmarkAdded,
     required TResult Function(_SearchResultsFound value) searchResultsFound,
+    required TResult Function(_BookmarkPresent value) bookmarkPresent,
+    required TResult Function(_BookmarkAbsent value) bookmarkAbsent,
   }) {
     return searchResultsFound(this);
   }
@@ -1569,6 +1673,8 @@ class _$SearchResultsFoundImpl implements _SearchResultsFound {
     TResult? Function(_StyleChanged value)? styleChanged,
     TResult? Function(_BookmarkAdded value)? bookmarkAdded,
     TResult? Function(_SearchResultsFound value)? searchResultsFound,
+    TResult? Function(_BookmarkPresent value)? bookmarkPresent,
+    TResult? Function(_BookmarkAbsent value)? bookmarkAbsent,
   }) {
     return searchResultsFound?.call(this);
   }
@@ -1584,6 +1690,8 @@ class _$SearchResultsFoundImpl implements _SearchResultsFound {
     TResult Function(_StyleChanged value)? styleChanged,
     TResult Function(_BookmarkAdded value)? bookmarkAdded,
     TResult Function(_SearchResultsFound value)? searchResultsFound,
+    TResult Function(_BookmarkPresent value)? bookmarkPresent,
+    TResult Function(_BookmarkAbsent value)? bookmarkAbsent,
     required TResult orElse(),
   }) {
     if (searchResultsFound != null) {
@@ -1602,4 +1710,330 @@ abstract class _SearchResultsFound implements EpubViewerState {
   @JsonKey(ignore: true)
   _$$SearchResultsFoundImplCopyWith<_$SearchResultsFoundImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$BookmarkPresentImplCopyWith<$Res> {
+  factory _$$BookmarkPresentImplCopyWith(_$BookmarkPresentImpl value,
+          $Res Function(_$BookmarkPresentImpl) then) =
+      __$$BookmarkPresentImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$BookmarkPresentImplCopyWithImpl<$Res>
+    extends _$EpubViewerStateCopyWithImpl<$Res, _$BookmarkPresentImpl>
+    implements _$$BookmarkPresentImplCopyWith<$Res> {
+  __$$BookmarkPresentImplCopyWithImpl(
+      _$BookmarkPresentImpl _value, $Res Function(_$BookmarkPresentImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$BookmarkPresentImpl implements _BookmarkPresent {
+  const _$BookmarkPresentImpl();
+
+  @override
+  String toString() {
+    return 'EpubViewerState.bookmarkPresent()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$BookmarkPresentImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)
+        loaded,
+    required TResult Function(String error) error,
+    required TResult Function(int? pageNumber) pageChanged,
+    required TResult Function(FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight, FontFamily? fontFamily)
+        styleChanged,
+    required TResult Function(int? status) bookmarkAdded,
+    required TResult Function(List<SearchModel> searchResults)
+        searchResultsFound,
+    required TResult Function() bookmarkPresent,
+    required TResult Function() bookmarkAbsent,
+  }) {
+    return bookmarkPresent();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)?
+        loaded,
+    TResult? Function(String error)? error,
+    TResult? Function(int? pageNumber)? pageChanged,
+    TResult? Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
+            FontFamily? fontFamily)?
+        styleChanged,
+    TResult? Function(int? status)? bookmarkAdded,
+    TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
+    TResult? Function()? bookmarkPresent,
+    TResult? Function()? bookmarkAbsent,
+  }) {
+    return bookmarkPresent?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)?
+        loaded,
+    TResult Function(String error)? error,
+    TResult Function(int? pageNumber)? pageChanged,
+    TResult Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
+            FontFamily? fontFamily)?
+        styleChanged,
+    TResult Function(int? status)? bookmarkAdded,
+    TResult Function(List<SearchModel> searchResults)? searchResultsFound,
+    TResult Function()? bookmarkPresent,
+    TResult Function()? bookmarkAbsent,
+    required TResult orElse(),
+  }) {
+    if (bookmarkPresent != null) {
+      return bookmarkPresent();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_error value) error,
+    required TResult Function(_PageChanged value) pageChanged,
+    required TResult Function(_StyleChanged value) styleChanged,
+    required TResult Function(_BookmarkAdded value) bookmarkAdded,
+    required TResult Function(_SearchResultsFound value) searchResultsFound,
+    required TResult Function(_BookmarkPresent value) bookmarkPresent,
+    required TResult Function(_BookmarkAbsent value) bookmarkAbsent,
+  }) {
+    return bookmarkPresent(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_error value)? error,
+    TResult? Function(_PageChanged value)? pageChanged,
+    TResult? Function(_StyleChanged value)? styleChanged,
+    TResult? Function(_BookmarkAdded value)? bookmarkAdded,
+    TResult? Function(_SearchResultsFound value)? searchResultsFound,
+    TResult? Function(_BookmarkPresent value)? bookmarkPresent,
+    TResult? Function(_BookmarkAbsent value)? bookmarkAbsent,
+  }) {
+    return bookmarkPresent?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_error value)? error,
+    TResult Function(_PageChanged value)? pageChanged,
+    TResult Function(_StyleChanged value)? styleChanged,
+    TResult Function(_BookmarkAdded value)? bookmarkAdded,
+    TResult Function(_SearchResultsFound value)? searchResultsFound,
+    TResult Function(_BookmarkPresent value)? bookmarkPresent,
+    TResult Function(_BookmarkAbsent value)? bookmarkAbsent,
+    required TResult orElse(),
+  }) {
+    if (bookmarkPresent != null) {
+      return bookmarkPresent(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _BookmarkPresent implements EpubViewerState {
+  const factory _BookmarkPresent() = _$BookmarkPresentImpl;
+}
+
+/// @nodoc
+abstract class _$$BookmarkAbsentImplCopyWith<$Res> {
+  factory _$$BookmarkAbsentImplCopyWith(_$BookmarkAbsentImpl value,
+          $Res Function(_$BookmarkAbsentImpl) then) =
+      __$$BookmarkAbsentImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$BookmarkAbsentImplCopyWithImpl<$Res>
+    extends _$EpubViewerStateCopyWithImpl<$Res, _$BookmarkAbsentImpl>
+    implements _$$BookmarkAbsentImplCopyWith<$Res> {
+  __$$BookmarkAbsentImplCopyWithImpl(
+      _$BookmarkAbsentImpl _value, $Res Function(_$BookmarkAbsentImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$BookmarkAbsentImpl implements _BookmarkAbsent {
+  const _$BookmarkAbsentImpl();
+
+  @override
+  String toString() {
+    return 'EpubViewerState.bookmarkAbsent()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$BookmarkAbsentImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)
+        loaded,
+    required TResult Function(String error) error,
+    required TResult Function(int? pageNumber) pageChanged,
+    required TResult Function(FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight, FontFamily? fontFamily)
+        styleChanged,
+    required TResult Function(int? status) bookmarkAdded,
+    required TResult Function(List<SearchModel> searchResults)
+        searchResultsFound,
+    required TResult Function() bookmarkPresent,
+    required TResult Function() bookmarkAbsent,
+  }) {
+    return bookmarkAbsent();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)?
+        loaded,
+    TResult? Function(String error)? error,
+    TResult? Function(int? pageNumber)? pageChanged,
+    TResult? Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
+            FontFamily? fontFamily)?
+        styleChanged,
+    TResult? Function(int? status)? bookmarkAdded,
+    TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
+    TResult? Function()? bookmarkPresent,
+    TResult? Function()? bookmarkAbsent,
+  }) {
+    return bookmarkAbsent?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)?
+        loaded,
+    TResult Function(String error)? error,
+    TResult Function(int? pageNumber)? pageChanged,
+    TResult Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
+            FontFamily? fontFamily)?
+        styleChanged,
+    TResult Function(int? status)? bookmarkAdded,
+    TResult Function(List<SearchModel> searchResults)? searchResultsFound,
+    TResult Function()? bookmarkPresent,
+    TResult Function()? bookmarkAbsent,
+    required TResult orElse(),
+  }) {
+    if (bookmarkAbsent != null) {
+      return bookmarkAbsent();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_error value) error,
+    required TResult Function(_PageChanged value) pageChanged,
+    required TResult Function(_StyleChanged value) styleChanged,
+    required TResult Function(_BookmarkAdded value) bookmarkAdded,
+    required TResult Function(_SearchResultsFound value) searchResultsFound,
+    required TResult Function(_BookmarkPresent value) bookmarkPresent,
+    required TResult Function(_BookmarkAbsent value) bookmarkAbsent,
+  }) {
+    return bookmarkAbsent(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_error value)? error,
+    TResult? Function(_PageChanged value)? pageChanged,
+    TResult? Function(_StyleChanged value)? styleChanged,
+    TResult? Function(_BookmarkAdded value)? bookmarkAdded,
+    TResult? Function(_SearchResultsFound value)? searchResultsFound,
+    TResult? Function(_BookmarkPresent value)? bookmarkPresent,
+    TResult? Function(_BookmarkAbsent value)? bookmarkAbsent,
+  }) {
+    return bookmarkAbsent?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_error value)? error,
+    TResult Function(_PageChanged value)? pageChanged,
+    TResult Function(_StyleChanged value)? styleChanged,
+    TResult Function(_BookmarkAdded value)? bookmarkAdded,
+    TResult Function(_SearchResultsFound value)? searchResultsFound,
+    TResult Function(_BookmarkPresent value)? bookmarkPresent,
+    TResult Function(_BookmarkAbsent value)? bookmarkAbsent,
+    required TResult orElse(),
+  }) {
+    if (bookmarkAbsent != null) {
+      return bookmarkAbsent(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _BookmarkAbsent implements EpubViewerState {
+  const factory _BookmarkAbsent() = _$BookmarkAbsentImpl;
 }

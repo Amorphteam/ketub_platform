@@ -112,6 +112,17 @@ class ReferencesDatabase {
     return filteredList;
   }
 
+
+  Future<bool> isBookmarkExist(String bookPath, String pageNumber) async {
+    final db = await instance.database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'reference_database',
+      where: 'bookPath = ? AND navIndex = ?',
+      whereArgs: [bookPath, pageNumber],
+    );
+    return maps.isNotEmpty;
+  }
+
   Future<int> deleteReference(int id) async {
     final db = await instance.database;
     return await db.delete(
@@ -120,4 +131,16 @@ class ReferencesDatabase {
       whereArgs: [id],
     );
   }
+
+  Future<int> deleteReferenceByBookPathAndPageNumber(String bookPath, String pageNumber) async {
+    final db = await instance.database;
+    return await db.delete(
+      'reference_database',
+      where: 'bookPath = ? AND navIndex = ?',
+      whereArgs: [bookPath, pageNumber],
+    );
+  }
+
+
+
 }

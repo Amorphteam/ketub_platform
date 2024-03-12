@@ -10,5 +10,7 @@ class EpubViewerState with _$EpubViewerState {
   const factory EpubViewerState.styleChanged({FontSizeCustom? fontSize, LineHeightCustom? lineHeight, FontFamily? fontFamily}) = _StyleChanged;
   const factory EpubViewerState.bookmarkAdded({int? status}) = _BookmarkAdded;
   const factory EpubViewerState.searchResultsFound({required List<SearchModel> searchResults}) = _SearchResultsFound;
+  const factory EpubViewerState.bookmarkPresent() = _BookmarkPresent;
+  const factory EpubViewerState.bookmarkAbsent() = _BookmarkAbsent;
 
 }
