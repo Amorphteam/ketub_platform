@@ -134,7 +134,7 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
         itemWidth = 80.0;
         break;
       case CardType.oneList:
-        containerHeight = 220;
+        containerHeight = 250;
         childRatio = 1.6;
         maxCrossAxisExtent = 200;
         itemHeight = 80.0;

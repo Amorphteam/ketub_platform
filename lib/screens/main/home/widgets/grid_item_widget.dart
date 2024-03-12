@@ -52,7 +52,7 @@ class _GridItemWidgetState extends State<GridItemWidget> {
 
     Widget? titleText = widget.withTitle ? Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Text(widget.title, style: Theme.of(context).textTheme.labelMedium),
+      child: Text(widget.title, style: Theme.of(context).textTheme.labelMedium, overflow: TextOverflow.ellipsis, maxLines: 3,),
     ) : null;
 
     // Use a ternary operator to decide between Row and Column

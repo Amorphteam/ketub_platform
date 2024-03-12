@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:ketub_platform/utils/data_helper.dart';
 
 import '../../../../models/card_type_model.dart';
-import '../../../../repositories/articles_online_repository.dart';
+import '../../../../repositories/online_repository.dart';
 
 part 'home_all_cat_state.dart';
 
@@ -21,7 +21,7 @@ class HomeAllCatCubit extends Cubit<HomeAllCatState> {
       DataHelper.categories.forEach((key, value) {
         // Collect futures of async operations
         futures.add(
-          ArticleOnlineRepository()
+          OnlineRepository()
               .getArticlesList(6, 0, value)
               .then((articlesList) {
             cards.add(CardTypeModel(

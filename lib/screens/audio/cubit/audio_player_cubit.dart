@@ -4,7 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:ketub_platform/models/article_model.dart';
 import 'package:rxdart/rxdart.dart';
-import '../../../repositories/articles_online_repository.dart';
+import '../../../repositories/online_repository.dart';
 import '../../../utils/common.dart';
 
 part 'audio_player_state.dart';
@@ -18,7 +18,7 @@ class AudioPlayerCubit extends Cubit<AudioPlayerState> {
     try {
       emit(const AudioPlayerState.loading());
       await player.stop();
-      final track = await ArticleOnlineRepository().getArticles(id ?? 49715);
+      final track = await OnlineRepository().getArticles(id ?? 49715);
       _setTrack(track, player);
       _trackPosition(player, track);
     } catch (e) {

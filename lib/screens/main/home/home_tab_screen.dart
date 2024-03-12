@@ -5,11 +5,12 @@ import 'package:flutter_svg/flutter_svg.dart'; // Import this if you are using S
 import 'package:ketub_platform/screens/html_viewer/cubit/html_viewer_cubit.dart';
 import 'package:ketub_platform/screens/html_viewer/html_viewer_screen.dart';
 import 'package:ketub_platform/screens/main/home/cubit/home_all_cat_cubit.dart';
+import 'package:ketub_platform/screens/main/home/cubit/search_online_cubit.dart';
 import 'package:ketub_platform/screens/main/home/home_tree_cat_screen.dart';
 import 'package:ketub_platform/screens/main/shared_widgets/search_bar_widget.dart';
 
 import 'home_all_cat_screen.dart';
-import 'home_recent_content_screen.dart';
+import 'search_online_screen.dart';
 
 class homeTabScreen extends StatefulWidget {
   const homeTabScreen({super.key});
@@ -40,7 +41,10 @@ class _homeTabScreenState extends State<homeTabScreen>
       appBar: AppBar(
         title: Row(
           children: [
-            Expanded(child: SearchBarWiget()),
+            Expanded(
+                child: SearchBarWiget(
+              onClicked: startOnlineSearch,
+            )),
             PopupMenuButton<String>(
               onSelected: (String result) {
                 // Handle the menu item action here
@@ -96,9 +100,6 @@ class _homeTabScreenState extends State<homeTabScreen>
     );
   }
 
-  Widget _buildRecentContent() {
-    return homeRecentContentScreen();
-  }
 
   Widget _buildTreeContent() {
     return HomeTreeCatScreen();
@@ -109,7 +110,22 @@ class _homeTabScreenState extends State<homeTabScreen>
       context,
       MaterialPageRoute(
         builder: (context) => BlocProvider(
-            create: (context) => HtmlViewerCubit(), child: HtmlViewerScreen(id: 49482,)),
+            create: (context) => HtmlViewerCubit(),
+            child: HtmlViewerScreen(
+              id: 49482,
+            )),
+      ),
+    );
+  }
+
+  void startOnlineSearch(String p1) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BlocProvider(
+          create: (context) => SearchOnlineCubit(),
+          child: SearchOnlineScreen(query: p1),
+        ),
       ),
     );
   }

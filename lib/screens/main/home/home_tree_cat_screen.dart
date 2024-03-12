@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ketub_platform/models/tree_cat.dart'; // Make sure this import is correct
-import 'package:ketub_platform/repositories/cat_online_repository.dart';
+import 'package:ketub_platform/repositories/online_repository.dart';
 import 'package:ketub_platform/utils/data_helper.dart';
 
 import '../../category_list/category_list_screen.dart';
@@ -27,7 +27,7 @@ class _HomeTreeCatScreenState extends State<HomeTreeCatScreen> {
     List<Category> combinedCategories = [];
 
     for (var entry in DataHelper.categories.entries) {
-      var treeCat = await CatOnlineRepository().getTreeCat(entry.value);
+      var treeCat = await OnlineRepository().getTreeCat(entry.value);
       combinedCategories.add(
           Category(name: entry.key, children: treeCat.categories));
     }
