@@ -13,8 +13,9 @@ class SearchBarWiget extends StatefulWidget {
   final Function(String)? onClicked;
   final Function? onClickedMic;
   final String? query;
+  final String? hint;
 
-  const SearchBarWiget({super.key, this.bookamrkCubit, this.onClicked, this.onClickedMic, this.query});
+  const SearchBarWiget({super.key, this.bookamrkCubit, this.onClicked, this.onClickedMic, this.query, this.hint});
 
   @override
   State<SearchBarWiget> createState() => _SearchBarWigetState();
@@ -39,7 +40,7 @@ class _SearchBarWigetState extends State<SearchBarWiget> {
           filled: true,
           fillColor: Colors.grey[200],
           // Adjust the color to match your UI design
-          hintText: 'أدخل كلمة لبدء البحث',
+          hintText: widget.hint??'أدخل كلمة لبدء البحث',
           hintStyle: TextStyle(fontSize: 12, color: Colors.grey[500]),
           // Your hint text in Arabic
           prefixIcon: IconButton(
@@ -57,15 +58,7 @@ class _SearchBarWigetState extends State<SearchBarWiget> {
               }
               },
           ),
-          suffixIcon: IconButton(
-            icon: Icon(Icons.mic, color: Colors.grey),
-            // Use your SVG asset if needed
-            onPressed: () {
-              if (widget.onClickedMic != null){
-                widget.onClickedMic!;
-              }
-            },
-          ),
+
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30.0),
             borderSide: BorderSide.none, // No border

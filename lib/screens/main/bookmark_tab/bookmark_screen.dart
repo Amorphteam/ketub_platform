@@ -29,7 +29,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            title: SearchBarWiget(bookamrkCubit: BlocProvider.of<BookmarkCubit>(context),),
+            title: Text('العلامات المرجيعة'),
           ),
           body: _buildBody(state),
         );
@@ -50,7 +50,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
 
   _buildBody(BookmarkState state) {
     if (state is BookmarkLoadingState) {
-      return Center(
+      return const Center(
         child: CircularProgressIndicator(),
       );
     } else if (state is AllBookmarksLoadedState) {

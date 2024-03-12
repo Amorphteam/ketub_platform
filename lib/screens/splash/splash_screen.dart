@@ -48,7 +48,7 @@ class SplashScreen extends StatelessWidget {
                     child: Center(
                       child: Text(
                         textAlign: TextAlign.center,
-                        'يتضمن هذا التطبيق أحدث وأكمل تعليقات وآراء وكتب ومقالات الشيخ حيدر حب الله.',
+                        'يتضمن هذا التطبيق أحدث وأكمل تأليفات ومحاضرات ومقالات الشيخ حيدر حب الله.',
                         style: Theme.of(context).textTheme.labelLarge,
                       ),
                     ),

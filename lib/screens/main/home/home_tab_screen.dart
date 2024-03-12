@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart'; // Import this if you are using SVG images
 import 'package:ketub_platform/screens/html_viewer/cubit/html_viewer_cubit.dart';
 import 'package:ketub_platform/screens/html_viewer/html_viewer_screen.dart';
+import 'package:ketub_platform/screens/main/about/about_app_screen.dart';
 import 'package:ketub_platform/screens/main/home/cubit/home_all_cat_cubit.dart';
 import 'package:ketub_platform/screens/main/home/cubit/search_online_cubit.dart';
 import 'package:ketub_platform/screens/main/home/home_tree_cat_screen.dart';
@@ -42,7 +43,7 @@ class _homeTabScreenState extends State<homeTabScreen>
         title: Row(
           children: [
             Expanded(
-                child: SearchBarWiget(
+                child: SearchBarWiget(hint: 'ابحث في كل المحتوى',
               onClicked: startOnlineSearch,
             )),
             PopupMenuButton<String>(
@@ -53,7 +54,8 @@ class _homeTabScreenState extends State<homeTabScreen>
                     _openCvScreen();
                     break;
                   case 'about':
-                    // Do something for option 2
+                    _openAboutAppScreen();
+
                     break;
                   // Add more cases for each menu option
                 }
@@ -126,6 +128,15 @@ class _homeTabScreenState extends State<homeTabScreen>
           create: (context) => SearchOnlineCubit(),
           child: SearchOnlineScreen(query: p1),
         ),
+      ),
+    );
+  }
+
+  void _openAboutAppScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AboutAppScreen(),
       ),
     );
   }
