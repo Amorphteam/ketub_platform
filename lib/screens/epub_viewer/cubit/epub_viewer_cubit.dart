@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:collection/collection.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:epub_parser/epub_parser.dart';
@@ -61,11 +62,38 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
       final EpubBook epubBook = await loadEpubFromAsset(assetPath);
       final List<HtmlFileInfo> epubContent =
       await extractHtmlContentWithEmbeddedImages(epubBook);
+     var spineItems = epubBook.Schema?.Package?.Spine?.Items;
+      List<String> idRefs = [];
 
-      _storeEpubDetails(epubBook, epubContent, assetPath);
+      if (spineItems != null) {
+        for (var item in spineItems) {
+          if (item.IdRef != null) {
+            idRefs.add(item.IdRef!);
+          }
+        }
+      }
+
+      _storeEpubDetails(epubBook, reorderHtmlFilesBasedOnSpine(epubContent, idRefs), assetPath);
     } catch (error) {
       emit(EpubViewerState.error(error: error.toString()));
     }
+  }
+
+  List<HtmlFileInfo> reorderHtmlFilesBasedOnSpine(List<HtmlFileInfo> htmlFiles, List<String>? spineItems) {
+    if (spineItems == null || spineItems.isEmpty) return htmlFiles;
+
+    Map<String, HtmlFileInfo> htmlFilesMap = {
+      for (var file in htmlFiles) file.fileName.replaceAll('Text/', ''): file
+    };
+
+    List<HtmlFileInfo> orderedFiles = [];
+    for (var spineItem in spineItems) {
+      HtmlFileInfo? file = htmlFilesMap[spineItem];
+      if (file != null) {
+        orderedFiles.add(file);
+      }
+    }
+    return orderedFiles;
   }
 
   Future<void> emitLastPageSeen() async {

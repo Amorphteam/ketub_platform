@@ -27,13 +27,17 @@ void openEpub({
       builder: (context) =>
           BlocProvider(
             create: (context) => EpubViewerCubit(),
-            child: EpubViewerScreen(catModel: cat,referenceModel: reference, searchModel: search, tocModel: toc),
+            child: EpubViewerScreen(catModel: cat,
+                referenceModel: reference,
+                searchModel: search,
+                tocModel: toc),
           ),
     ),
   );
 }
 
-Future<List<HtmlFileInfo>> extractHtmlContentWithEmbeddedImages(EpubBook epubBook) async {
+Future<List<HtmlFileInfo>> extractHtmlContentWithEmbeddedImages(
+    EpubBook epubBook) async {
   EpubContent? bookContent = epubBook.Content;
   Map<String, EpubByteContentFile>? images = bookContent?.Images;
   Map<String, EpubTextContentFile>? htmlFiles = bookContent?.Html;
@@ -52,8 +56,8 @@ Future<List<HtmlFileInfo>> extractHtmlContentWithEmbeddedImages(EpubBook epubBoo
 }
 
 
-
-String embedImagesInHtmlContent(EpubTextContentFile htmlFile, Map<String, EpubByteContentFile>? images) {
+String embedImagesInHtmlContent(EpubTextContentFile htmlFile,
+    Map<String, EpubByteContentFile>? images) {
   String htmlContent = htmlFile.Content!;
   final imgRegExp = RegExp(r'<img[^>]*>');
   Iterable<RegExpMatch> imgTags = imgRegExp.allMatches(htmlContent);
@@ -104,7 +108,6 @@ Future<int> findPageIndexInEpub(EpubBook epubBook, String fileName) async {
 }
 
 
-
 String extractImageNameFromTag(String imageTag) {
   // Define a regular expression to extract the image filename
   final RegExp imgSrcRegex = RegExp(r'src="([^"]+)"');
@@ -141,3 +144,4 @@ class HtmlFileInfo {
 
   HtmlFileInfo(this.fileName, this.modifiedHtmlContent, this.pageIndex);
 }
+
