@@ -585,19 +585,15 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     itemPositionsListener.itemPositions.addListener(() {
       final positions = itemPositionsListener.itemPositions.value;
       if (positions.isNotEmpty) {
-        // Find the item that occupies the most space on the screen
-        final visibleItems = positions.where((position) =>
-        position.itemTrailingEdge > 0 && position.itemLeadingEdge < 1);
-        if (visibleItems.isNotEmpty) {
-          final mostVisibleItem = visibleItems.reduce((max, position) =>
-          (position.itemTrailingEdge - position.itemLeadingEdge).abs() >
-              (max.itemTrailingEdge - max.itemLeadingEdge).abs() ? position : max);
-          final int mostVisibleItemIndex = mostVisibleItem.index;
+        final int firstVisibleItemIndex = positions
+            .where((position) => position.itemLeadingEdge < 1)
+            .reduce(
+                (max, position) => position.index > max.index ? position : max)
+            .index;
 
-          if (_currentIndex != mostVisibleItemIndex) {
-            _currentIndex = mostVisibleItemIndex;
-            _updateCurrentPage(mostVisibleItemIndex.toDouble());
-          }
+        if (_currentIndex != firstVisibleItemIndex) {
+          _currentIndex = firstVisibleItemIndex;
+          _updateCurrentPage(firstVisibleItemIndex.toDouble());
         }
       }
     });
