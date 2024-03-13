@@ -25,4 +25,10 @@ class LibraryAllBooksState with _$LibraryAllBooksState {
   const factory LibraryAllBooksState.allBookmarksCountLoaded({
     required int count,
   }) = _AllBookmarksCountLoaded;
+
+  const factory LibraryAllBooksState.filteredBooksLoaded({
+    required List<BookModel> filteredBooks,
+    required List<CategoryModel> cats,
+  }) = _FilteredBooksLoaded;
+
 }

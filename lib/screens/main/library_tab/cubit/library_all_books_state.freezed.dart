@@ -26,6 +26,9 @@ mixin _$LibraryAllBooksState {
         bookClicked,
     required TResult Function(Exception error) error,
     required TResult Function(int count) allBookmarksCountLoaded,
+    required TResult Function(
+            List<BookModel> filteredBooks, List<CategoryModel> cats)
+        filteredBooksLoaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -38,6 +41,8 @@ mixin _$LibraryAllBooksState {
         bookClicked,
     TResult? Function(Exception error)? error,
     TResult? Function(int count)? allBookmarksCountLoaded,
+    TResult? Function(List<BookModel> filteredBooks, List<CategoryModel> cats)?
+        filteredBooksLoaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -50,6 +55,8 @@ mixin _$LibraryAllBooksState {
         bookClicked,
     TResult Function(Exception error)? error,
     TResult Function(int count)? allBookmarksCountLoaded,
+    TResult Function(List<BookModel> filteredBooks, List<CategoryModel> cats)?
+        filteredBooksLoaded,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -62,6 +69,7 @@ mixin _$LibraryAllBooksState {
     required TResult Function(_Error value) error,
     required TResult Function(_AllBookmarksCountLoaded value)
         allBookmarksCountLoaded,
+    required TResult Function(_FilteredBooksLoaded value) filteredBooksLoaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -72,6 +80,7 @@ mixin _$LibraryAllBooksState {
     TResult? Function(_OpenEpub value)? bookClicked,
     TResult? Function(_Error value)? error,
     TResult? Function(_AllBookmarksCountLoaded value)? allBookmarksCountLoaded,
+    TResult? Function(_FilteredBooksLoaded value)? filteredBooksLoaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -82,6 +91,7 @@ mixin _$LibraryAllBooksState {
     TResult Function(_OpenEpub value)? bookClicked,
     TResult Function(_Error value)? error,
     TResult Function(_AllBookmarksCountLoaded value)? allBookmarksCountLoaded,
+    TResult Function(_FilteredBooksLoaded value)? filteredBooksLoaded,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -152,6 +162,9 @@ class _$InitialImpl implements _Initial {
         bookClicked,
     required TResult Function(Exception error) error,
     required TResult Function(int count) allBookmarksCountLoaded,
+    required TResult Function(
+            List<BookModel> filteredBooks, List<CategoryModel> cats)
+        filteredBooksLoaded,
   }) {
     return init();
   }
@@ -167,6 +180,8 @@ class _$InitialImpl implements _Initial {
         bookClicked,
     TResult? Function(Exception error)? error,
     TResult? Function(int count)? allBookmarksCountLoaded,
+    TResult? Function(List<BookModel> filteredBooks, List<CategoryModel> cats)?
+        filteredBooksLoaded,
   }) {
     return init?.call();
   }
@@ -182,6 +197,8 @@ class _$InitialImpl implements _Initial {
         bookClicked,
     TResult Function(Exception error)? error,
     TResult Function(int count)? allBookmarksCountLoaded,
+    TResult Function(List<BookModel> filteredBooks, List<CategoryModel> cats)?
+        filteredBooksLoaded,
     required TResult orElse(),
   }) {
     if (init != null) {
@@ -200,6 +217,7 @@ class _$InitialImpl implements _Initial {
     required TResult Function(_Error value) error,
     required TResult Function(_AllBookmarksCountLoaded value)
         allBookmarksCountLoaded,
+    required TResult Function(_FilteredBooksLoaded value) filteredBooksLoaded,
   }) {
     return init(this);
   }
@@ -213,6 +231,7 @@ class _$InitialImpl implements _Initial {
     TResult? Function(_OpenEpub value)? bookClicked,
     TResult? Function(_Error value)? error,
     TResult? Function(_AllBookmarksCountLoaded value)? allBookmarksCountLoaded,
+    TResult? Function(_FilteredBooksLoaded value)? filteredBooksLoaded,
   }) {
     return init?.call(this);
   }
@@ -226,6 +245,7 @@ class _$InitialImpl implements _Initial {
     TResult Function(_OpenEpub value)? bookClicked,
     TResult Function(_Error value)? error,
     TResult Function(_AllBookmarksCountLoaded value)? allBookmarksCountLoaded,
+    TResult Function(_FilteredBooksLoaded value)? filteredBooksLoaded,
     required TResult orElse(),
   }) {
     if (init != null) {
@@ -285,6 +305,9 @@ class _$LoadingImpl implements _Loading {
         bookClicked,
     required TResult Function(Exception error) error,
     required TResult Function(int count) allBookmarksCountLoaded,
+    required TResult Function(
+            List<BookModel> filteredBooks, List<CategoryModel> cats)
+        filteredBooksLoaded,
   }) {
     return loading();
   }
@@ -300,6 +323,8 @@ class _$LoadingImpl implements _Loading {
         bookClicked,
     TResult? Function(Exception error)? error,
     TResult? Function(int count)? allBookmarksCountLoaded,
+    TResult? Function(List<BookModel> filteredBooks, List<CategoryModel> cats)?
+        filteredBooksLoaded,
   }) {
     return loading?.call();
   }
@@ -315,6 +340,8 @@ class _$LoadingImpl implements _Loading {
         bookClicked,
     TResult Function(Exception error)? error,
     TResult Function(int count)? allBookmarksCountLoaded,
+    TResult Function(List<BookModel> filteredBooks, List<CategoryModel> cats)?
+        filteredBooksLoaded,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -333,6 +360,7 @@ class _$LoadingImpl implements _Loading {
     required TResult Function(_Error value) error,
     required TResult Function(_AllBookmarksCountLoaded value)
         allBookmarksCountLoaded,
+    required TResult Function(_FilteredBooksLoaded value) filteredBooksLoaded,
   }) {
     return loading(this);
   }
@@ -346,6 +374,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function(_OpenEpub value)? bookClicked,
     TResult? Function(_Error value)? error,
     TResult? Function(_AllBookmarksCountLoaded value)? allBookmarksCountLoaded,
+    TResult? Function(_FilteredBooksLoaded value)? filteredBooksLoaded,
   }) {
     return loading?.call(this);
   }
@@ -359,6 +388,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function(_OpenEpub value)? bookClicked,
     TResult Function(_Error value)? error,
     TResult Function(_AllBookmarksCountLoaded value)? allBookmarksCountLoaded,
+    TResult Function(_FilteredBooksLoaded value)? filteredBooksLoaded,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -470,6 +500,9 @@ class _$LoadedImpl implements _Loaded {
         bookClicked,
     required TResult Function(Exception error) error,
     required TResult Function(int count) allBookmarksCountLoaded,
+    required TResult Function(
+            List<BookModel> filteredBooks, List<CategoryModel> cats)
+        filteredBooksLoaded,
   }) {
     return allBooksLoaded(books, cats);
   }
@@ -485,6 +518,8 @@ class _$LoadedImpl implements _Loaded {
         bookClicked,
     TResult? Function(Exception error)? error,
     TResult? Function(int count)? allBookmarksCountLoaded,
+    TResult? Function(List<BookModel> filteredBooks, List<CategoryModel> cats)?
+        filteredBooksLoaded,
   }) {
     return allBooksLoaded?.call(books, cats);
   }
@@ -500,6 +535,8 @@ class _$LoadedImpl implements _Loaded {
         bookClicked,
     TResult Function(Exception error)? error,
     TResult Function(int count)? allBookmarksCountLoaded,
+    TResult Function(List<BookModel> filteredBooks, List<CategoryModel> cats)?
+        filteredBooksLoaded,
     required TResult orElse(),
   }) {
     if (allBooksLoaded != null) {
@@ -518,6 +555,7 @@ class _$LoadedImpl implements _Loaded {
     required TResult Function(_Error value) error,
     required TResult Function(_AllBookmarksCountLoaded value)
         allBookmarksCountLoaded,
+    required TResult Function(_FilteredBooksLoaded value) filteredBooksLoaded,
   }) {
     return allBooksLoaded(this);
   }
@@ -531,6 +569,7 @@ class _$LoadedImpl implements _Loaded {
     TResult? Function(_OpenEpub value)? bookClicked,
     TResult? Function(_Error value)? error,
     TResult? Function(_AllBookmarksCountLoaded value)? allBookmarksCountLoaded,
+    TResult? Function(_FilteredBooksLoaded value)? filteredBooksLoaded,
   }) {
     return allBooksLoaded?.call(this);
   }
@@ -544,6 +583,7 @@ class _$LoadedImpl implements _Loaded {
     TResult Function(_OpenEpub value)? bookClicked,
     TResult Function(_Error value)? error,
     TResult Function(_AllBookmarksCountLoaded value)? allBookmarksCountLoaded,
+    TResult Function(_FilteredBooksLoaded value)? filteredBooksLoaded,
     required TResult orElse(),
   }) {
     if (allBooksLoaded != null) {
@@ -665,6 +705,9 @@ class _$OpenEpubImpl implements _OpenEpub {
         bookClicked,
     required TResult Function(Exception error) error,
     required TResult Function(int count) allBookmarksCountLoaded,
+    required TResult Function(
+            List<BookModel> filteredBooks, List<CategoryModel> cats)
+        filteredBooksLoaded,
   }) {
     return bookClicked(cats, id, bookName);
   }
@@ -680,6 +723,8 @@ class _$OpenEpubImpl implements _OpenEpub {
         bookClicked,
     TResult? Function(Exception error)? error,
     TResult? Function(int count)? allBookmarksCountLoaded,
+    TResult? Function(List<BookModel> filteredBooks, List<CategoryModel> cats)?
+        filteredBooksLoaded,
   }) {
     return bookClicked?.call(cats, id, bookName);
   }
@@ -695,6 +740,8 @@ class _$OpenEpubImpl implements _OpenEpub {
         bookClicked,
     TResult Function(Exception error)? error,
     TResult Function(int count)? allBookmarksCountLoaded,
+    TResult Function(List<BookModel> filteredBooks, List<CategoryModel> cats)?
+        filteredBooksLoaded,
     required TResult orElse(),
   }) {
     if (bookClicked != null) {
@@ -713,6 +760,7 @@ class _$OpenEpubImpl implements _OpenEpub {
     required TResult Function(_Error value) error,
     required TResult Function(_AllBookmarksCountLoaded value)
         allBookmarksCountLoaded,
+    required TResult Function(_FilteredBooksLoaded value) filteredBooksLoaded,
   }) {
     return bookClicked(this);
   }
@@ -726,6 +774,7 @@ class _$OpenEpubImpl implements _OpenEpub {
     TResult? Function(_OpenEpub value)? bookClicked,
     TResult? Function(_Error value)? error,
     TResult? Function(_AllBookmarksCountLoaded value)? allBookmarksCountLoaded,
+    TResult? Function(_FilteredBooksLoaded value)? filteredBooksLoaded,
   }) {
     return bookClicked?.call(this);
   }
@@ -739,6 +788,7 @@ class _$OpenEpubImpl implements _OpenEpub {
     TResult Function(_OpenEpub value)? bookClicked,
     TResult Function(_Error value)? error,
     TResult Function(_AllBookmarksCountLoaded value)? allBookmarksCountLoaded,
+    TResult Function(_FilteredBooksLoaded value)? filteredBooksLoaded,
     required TResult orElse(),
   }) {
     if (bookClicked != null) {
@@ -834,6 +884,9 @@ class _$ErrorImpl implements _Error {
         bookClicked,
     required TResult Function(Exception error) error,
     required TResult Function(int count) allBookmarksCountLoaded,
+    required TResult Function(
+            List<BookModel> filteredBooks, List<CategoryModel> cats)
+        filteredBooksLoaded,
   }) {
     return error(this.error);
   }
@@ -849,6 +902,8 @@ class _$ErrorImpl implements _Error {
         bookClicked,
     TResult? Function(Exception error)? error,
     TResult? Function(int count)? allBookmarksCountLoaded,
+    TResult? Function(List<BookModel> filteredBooks, List<CategoryModel> cats)?
+        filteredBooksLoaded,
   }) {
     return error?.call(this.error);
   }
@@ -864,6 +919,8 @@ class _$ErrorImpl implements _Error {
         bookClicked,
     TResult Function(Exception error)? error,
     TResult Function(int count)? allBookmarksCountLoaded,
+    TResult Function(List<BookModel> filteredBooks, List<CategoryModel> cats)?
+        filteredBooksLoaded,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -882,6 +939,7 @@ class _$ErrorImpl implements _Error {
     required TResult Function(_Error value) error,
     required TResult Function(_AllBookmarksCountLoaded value)
         allBookmarksCountLoaded,
+    required TResult Function(_FilteredBooksLoaded value) filteredBooksLoaded,
   }) {
     return error(this);
   }
@@ -895,6 +953,7 @@ class _$ErrorImpl implements _Error {
     TResult? Function(_OpenEpub value)? bookClicked,
     TResult? Function(_Error value)? error,
     TResult? Function(_AllBookmarksCountLoaded value)? allBookmarksCountLoaded,
+    TResult? Function(_FilteredBooksLoaded value)? filteredBooksLoaded,
   }) {
     return error?.call(this);
   }
@@ -908,6 +967,7 @@ class _$ErrorImpl implements _Error {
     TResult Function(_OpenEpub value)? bookClicked,
     TResult Function(_Error value)? error,
     TResult Function(_AllBookmarksCountLoaded value)? allBookmarksCountLoaded,
+    TResult Function(_FilteredBooksLoaded value)? filteredBooksLoaded,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -1002,6 +1062,9 @@ class _$AllBookmarksCountLoadedImpl implements _AllBookmarksCountLoaded {
         bookClicked,
     required TResult Function(Exception error) error,
     required TResult Function(int count) allBookmarksCountLoaded,
+    required TResult Function(
+            List<BookModel> filteredBooks, List<CategoryModel> cats)
+        filteredBooksLoaded,
   }) {
     return allBookmarksCountLoaded(count);
   }
@@ -1017,6 +1080,8 @@ class _$AllBookmarksCountLoadedImpl implements _AllBookmarksCountLoaded {
         bookClicked,
     TResult? Function(Exception error)? error,
     TResult? Function(int count)? allBookmarksCountLoaded,
+    TResult? Function(List<BookModel> filteredBooks, List<CategoryModel> cats)?
+        filteredBooksLoaded,
   }) {
     return allBookmarksCountLoaded?.call(count);
   }
@@ -1032,6 +1097,8 @@ class _$AllBookmarksCountLoadedImpl implements _AllBookmarksCountLoaded {
         bookClicked,
     TResult Function(Exception error)? error,
     TResult Function(int count)? allBookmarksCountLoaded,
+    TResult Function(List<BookModel> filteredBooks, List<CategoryModel> cats)?
+        filteredBooksLoaded,
     required TResult orElse(),
   }) {
     if (allBookmarksCountLoaded != null) {
@@ -1050,6 +1117,7 @@ class _$AllBookmarksCountLoadedImpl implements _AllBookmarksCountLoaded {
     required TResult Function(_Error value) error,
     required TResult Function(_AllBookmarksCountLoaded value)
         allBookmarksCountLoaded,
+    required TResult Function(_FilteredBooksLoaded value) filteredBooksLoaded,
   }) {
     return allBookmarksCountLoaded(this);
   }
@@ -1063,6 +1131,7 @@ class _$AllBookmarksCountLoadedImpl implements _AllBookmarksCountLoaded {
     TResult? Function(_OpenEpub value)? bookClicked,
     TResult? Function(_Error value)? error,
     TResult? Function(_AllBookmarksCountLoaded value)? allBookmarksCountLoaded,
+    TResult? Function(_FilteredBooksLoaded value)? filteredBooksLoaded,
   }) {
     return allBookmarksCountLoaded?.call(this);
   }
@@ -1076,6 +1145,7 @@ class _$AllBookmarksCountLoadedImpl implements _AllBookmarksCountLoaded {
     TResult Function(_OpenEpub value)? bookClicked,
     TResult Function(_Error value)? error,
     TResult Function(_AllBookmarksCountLoaded value)? allBookmarksCountLoaded,
+    TResult Function(_FilteredBooksLoaded value)? filteredBooksLoaded,
     required TResult orElse(),
   }) {
     if (allBookmarksCountLoaded != null) {
@@ -1093,4 +1163,209 @@ abstract class _AllBookmarksCountLoaded implements LibraryAllBooksState {
   @JsonKey(ignore: true)
   _$$AllBookmarksCountLoadedImplCopyWith<_$AllBookmarksCountLoadedImpl>
       get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$FilteredBooksLoadedImplCopyWith<$Res> {
+  factory _$$FilteredBooksLoadedImplCopyWith(_$FilteredBooksLoadedImpl value,
+          $Res Function(_$FilteredBooksLoadedImpl) then) =
+      __$$FilteredBooksLoadedImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({List<BookModel> filteredBooks, List<CategoryModel> cats});
+}
+
+/// @nodoc
+class __$$FilteredBooksLoadedImplCopyWithImpl<$Res>
+    extends _$LibraryAllBooksStateCopyWithImpl<$Res, _$FilteredBooksLoadedImpl>
+    implements _$$FilteredBooksLoadedImplCopyWith<$Res> {
+  __$$FilteredBooksLoadedImplCopyWithImpl(_$FilteredBooksLoadedImpl _value,
+      $Res Function(_$FilteredBooksLoadedImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? filteredBooks = null,
+    Object? cats = null,
+  }) {
+    return _then(_$FilteredBooksLoadedImpl(
+      filteredBooks: null == filteredBooks
+          ? _value._filteredBooks
+          : filteredBooks // ignore: cast_nullable_to_non_nullable
+              as List<BookModel>,
+      cats: null == cats
+          ? _value._cats
+          : cats // ignore: cast_nullable_to_non_nullable
+              as List<CategoryModel>,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$FilteredBooksLoadedImpl implements _FilteredBooksLoaded {
+  const _$FilteredBooksLoadedImpl(
+      {required final List<BookModel> filteredBooks,
+      required final List<CategoryModel> cats})
+      : _filteredBooks = filteredBooks,
+        _cats = cats;
+
+  final List<BookModel> _filteredBooks;
+  @override
+  List<BookModel> get filteredBooks {
+    if (_filteredBooks is EqualUnmodifiableListView) return _filteredBooks;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_filteredBooks);
+  }
+
+  final List<CategoryModel> _cats;
+  @override
+  List<CategoryModel> get cats {
+    if (_cats is EqualUnmodifiableListView) return _cats;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_cats);
+  }
+
+  @override
+  String toString() {
+    return 'LibraryAllBooksState.filteredBooksLoaded(filteredBooks: $filteredBooks, cats: $cats)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$FilteredBooksLoadedImpl &&
+            const DeepCollectionEquality()
+                .equals(other._filteredBooks, _filteredBooks) &&
+            const DeepCollectionEquality().equals(other._cats, _cats));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_filteredBooks),
+      const DeepCollectionEquality().hash(_cats));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$FilteredBooksLoadedImplCopyWith<_$FilteredBooksLoadedImpl> get copyWith =>
+      __$$FilteredBooksLoadedImplCopyWithImpl<_$FilteredBooksLoadedImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() init,
+    required TResult Function() loading,
+    required TResult Function(List<BookModel> books, List<CategoryModel> cats)
+        allBooksLoaded,
+    required TResult Function(List<CategoryModel> cats, int id, String bookName)
+        bookClicked,
+    required TResult Function(Exception error) error,
+    required TResult Function(int count) allBookmarksCountLoaded,
+    required TResult Function(
+            List<BookModel> filteredBooks, List<CategoryModel> cats)
+        filteredBooksLoaded,
+  }) {
+    return filteredBooksLoaded(filteredBooks, cats);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? init,
+    TResult? Function()? loading,
+    TResult? Function(List<BookModel> books, List<CategoryModel> cats)?
+        allBooksLoaded,
+    TResult? Function(List<CategoryModel> cats, int id, String bookName)?
+        bookClicked,
+    TResult? Function(Exception error)? error,
+    TResult? Function(int count)? allBookmarksCountLoaded,
+    TResult? Function(List<BookModel> filteredBooks, List<CategoryModel> cats)?
+        filteredBooksLoaded,
+  }) {
+    return filteredBooksLoaded?.call(filteredBooks, cats);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? init,
+    TResult Function()? loading,
+    TResult Function(List<BookModel> books, List<CategoryModel> cats)?
+        allBooksLoaded,
+    TResult Function(List<CategoryModel> cats, int id, String bookName)?
+        bookClicked,
+    TResult Function(Exception error)? error,
+    TResult Function(int count)? allBookmarksCountLoaded,
+    TResult Function(List<BookModel> filteredBooks, List<CategoryModel> cats)?
+        filteredBooksLoaded,
+    required TResult orElse(),
+  }) {
+    if (filteredBooksLoaded != null) {
+      return filteredBooksLoaded(filteredBooks, cats);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) init,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Loaded value) allBooksLoaded,
+    required TResult Function(_OpenEpub value) bookClicked,
+    required TResult Function(_Error value) error,
+    required TResult Function(_AllBookmarksCountLoaded value)
+        allBookmarksCountLoaded,
+    required TResult Function(_FilteredBooksLoaded value) filteredBooksLoaded,
+  }) {
+    return filteredBooksLoaded(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? init,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Loaded value)? allBooksLoaded,
+    TResult? Function(_OpenEpub value)? bookClicked,
+    TResult? Function(_Error value)? error,
+    TResult? Function(_AllBookmarksCountLoaded value)? allBookmarksCountLoaded,
+    TResult? Function(_FilteredBooksLoaded value)? filteredBooksLoaded,
+  }) {
+    return filteredBooksLoaded?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? init,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Loaded value)? allBooksLoaded,
+    TResult Function(_OpenEpub value)? bookClicked,
+    TResult Function(_Error value)? error,
+    TResult Function(_AllBookmarksCountLoaded value)? allBookmarksCountLoaded,
+    TResult Function(_FilteredBooksLoaded value)? filteredBooksLoaded,
+    required TResult orElse(),
+  }) {
+    if (filteredBooksLoaded != null) {
+      return filteredBooksLoaded(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _FilteredBooksLoaded implements LibraryAllBooksState {
+  const factory _FilteredBooksLoaded(
+      {required final List<BookModel> filteredBooks,
+      required final List<CategoryModel> cats}) = _$FilteredBooksLoadedImpl;
+
+  List<BookModel> get filteredBooks;
+  List<CategoryModel> get cats;
+  @JsonKey(ignore: true)
+  _$$FilteredBooksLoadedImplCopyWith<_$FilteredBooksLoadedImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }

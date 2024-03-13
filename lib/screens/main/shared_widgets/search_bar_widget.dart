@@ -9,13 +9,13 @@ import '../../audio/cubit/audio_player_cubit.dart';
 import '../../search/search_screen.dart';
 
 class SearchBarWiget extends StatefulWidget {
-  final BookmarkCubit? bookamrkCubit;
   final Function(String)? onClicked;
+  final Function(String)? onChanged;
   final Function? onClickedMic;
   final String? query;
   final String? hint;
 
-  const SearchBarWiget({super.key, this.bookamrkCubit, this.onClicked, this.onClickedMic, this.query, this.hint});
+  const SearchBarWiget({super.key, this.onClicked, this.onClickedMic, this.query, this.hint, this.onChanged});
 
   @override
   State<SearchBarWiget> createState() => _SearchBarWigetState();
@@ -67,9 +67,9 @@ class _SearchBarWigetState extends State<SearchBarWiget> {
               const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
         ),
         onChanged: (value) {
-            if (widget.bookamrkCubit != null) {
-              widget.bookamrkCubit!.filterBookmarks(value);
-          }
+            if (widget.onChanged != null){
+              widget.onChanged!(value);
+            }
 
         },
 

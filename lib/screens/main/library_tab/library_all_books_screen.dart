@@ -48,6 +48,7 @@ class _LibraryAllBooksScreenState extends State<LibraryAllBooksScreen> {
             _loadAllBookmarksCount();
             return _buildAllBooks(books, cats);
           },
+          filteredBooksLoaded: (filteredBooks, cats) => _buildAllBooks(filteredBooks, cats),
           bookClicked: (cats, id, bookName) => _buildAllBooks(books, this.cats),
           allBookmarksCountLoaded: (count) {
                 bookmarkCount = count;
@@ -103,7 +104,7 @@ class _LibraryAllBooksScreenState extends State<LibraryAllBooksScreen> {
       appBar: AppBar(
         title: Row(
           children: [
-            const Expanded(child: SearchBarWiget(hint: 'ابحث في الكتب',)),
+            Expanded(child: SearchBarWiget(hint: 'ابحث في الكتب', onChanged: _filterBooks,)),
             Stack(
               alignment: Alignment.center,
               children: [
@@ -147,7 +148,7 @@ class _LibraryAllBooksScreenState extends State<LibraryAllBooksScreen> {
 
       ),
 
-      body:       BookListWidget(
+      body: BookListWidget(
           bookList: books, cubit: context.read<LibraryAllBooksCubit>()),
     );
 
@@ -167,5 +168,9 @@ class _LibraryAllBooksScreenState extends State<LibraryAllBooksScreen> {
 
   void _loadAllBookmarksCount() {
     context.read<LibraryAllBooksCubit>().loadAllBookmarks();
+  }
+
+  void _filterBooks(String p1) {
+    context.read<LibraryAllBooksCubit>().filterBooks(p1);
   }
 }
