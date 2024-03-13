@@ -7,7 +7,7 @@
 
     <application
         android:usesCleartextTraffic="true"
-        android:label="ketub_platform"
+        android:label="Hobbollah"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
