@@ -315,7 +315,6 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
             itemPositionsListener: itemPositionsListener,
             scrollOffsetListener: scrollOffsetListener,
             itemBuilder: (BuildContext context, int index) {
-              _storeCurrentPage(currentPageNumber: index);
               double screenHeight = MediaQuery.of(context).size.height; // Get screen height
               return Padding(
                 padding: const EdgeInsets.only(top: 20.0),
@@ -586,15 +585,19 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     itemPositionsListener.itemPositions.addListener(() {
       final positions = itemPositionsListener.itemPositions.value;
       if (positions.isNotEmpty) {
-        final int firstVisibleItemIndex = positions
-            .where((position) => position.itemLeadingEdge < 1)
-            .reduce(
-                (max, position) => position.index > max.index ? position : max)
-            .index;
+        // Find the item that occupies the most space on the screen
+        final visibleItems = positions.where((position) =>
+        position.itemTrailingEdge > 0 && position.itemLeadingEdge < 1);
+        if (visibleItems.isNotEmpty) {
+          final mostVisibleItem = visibleItems.reduce((max, position) =>
+          (position.itemTrailingEdge - position.itemLeadingEdge).abs() >
+              (max.itemTrailingEdge - max.itemLeadingEdge).abs() ? position : max);
+          final int mostVisibleItemIndex = mostVisibleItem.index;
 
-        if (_currentIndex != firstVisibleItemIndex) {
-          _currentIndex = firstVisibleItemIndex;
-          _updateCurrentPage(firstVisibleItemIndex.toDouble());
+          if (_currentIndex != mostVisibleItemIndex) {
+            _currentIndex = mostVisibleItemIndex;
+            _updateCurrentPage(mostVisibleItemIndex.toDouble());
+          }
         }
       }
     });
