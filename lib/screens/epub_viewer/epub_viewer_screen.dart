@@ -309,53 +309,58 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
       children: [
         Expanded(
           child: ScrollablePositionedList.builder(
-              itemCount: _content.length,
-              itemScrollController: itemScrollController,
-              scrollOffsetController: scrollOffsetController,
-              itemPositionsListener: itemPositionsListener,
-              scrollOffsetListener: scrollOffsetListener,
-              itemBuilder: (BuildContext context, int index) {
-                _storeCurrentPage(currentPageNumber: index);
-                return Padding(
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: GestureDetector(
-                    onDoubleTap: () {
-                      setState(() {
-                        isSliderVisible = !isSliderVisible;
-                      });
-                    },
-                    onLongPress: () {
-                      setState(() {
-                        isSliderVisible = !isSliderVisible;
-                      });
-                    },
+            itemCount: _content.length,
+            itemScrollController: itemScrollController,
+            scrollOffsetController: scrollOffsetController,
+            itemPositionsListener: itemPositionsListener,
+            scrollOffsetListener: scrollOffsetListener,
+            itemBuilder: (BuildContext context, int index) {
+              _storeCurrentPage(currentPageNumber: index);
+              double screenHeight = MediaQuery.of(context).size.height; // Get screen height
+              return Padding(
+                padding: const EdgeInsets.only(top: 20.0),
+                child: GestureDetector(
+                  onDoubleTap: () {
+                    setState(() {
+                      isSliderVisible = !isSliderVisible;
+                    });
+                  },
+                  onLongPress: () {
+                    setState(() {
+                      isSliderVisible = !isSliderVisible;
+                    });
+                  },
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: screenHeight), // Set minHeight to screenHeight
                     child: Container(
                       color: Colors.white,
                       child: Html(
                         data: _content[index],
                         style: {
                           "html": Style(
-                              textAlign: TextAlign.justify,
-                              direction: TextDirection.rtl,
-                              fontSize: FontSize(fontSize.size),
-                              padding: HtmlPaddings.only(right: 10, left: 10),
-                              fontFamily: fontFamily.name,
+                            textAlign: TextAlign.justify,
+                            direction: TextDirection.rtl,
+                            fontSize: FontSize(fontSize.size),
+                            padding: HtmlPaddings.only(right: 10, left: 10),
+                            fontFamily: fontFamily.name,
                             lineHeight: LineHeight(lineHeight.size),
                           ),
-
                           "h1,h2,h3,h4,h5,h6": Style(
-                              textAlign: TextAlign.right,
-                              direction: TextDirection.rtl,
-                              padding: HtmlPaddings.only(top: 30),
-                              fontSize: FontSize(fontSize.size * 1.2),
-                              fontWeight: FontWeight.bold,
-                              fontFamily: fontFamily.name),
+                            textAlign: TextAlign.right,
+                            direction: TextDirection.rtl,
+                            padding: HtmlPaddings.only(top: 30),
+                            fontSize: FontSize(fontSize.size * 1.2),
+                            fontWeight: FontWeight.bold,
+                            fontFamily: fontFamily.name,
+                          ),
                         },
                       ),
                     ),
                   ),
-                );
-              }),
+                ),
+              );
+            },
+          ),
         ),
         if (isSliderVisible)
           Column(
