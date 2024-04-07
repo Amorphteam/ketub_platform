@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ketub_platform/models/book_model.dart';
@@ -48,11 +50,12 @@ class _LibraryAllBooksScreenState extends State<LibraryAllBooksScreen> {
             _loadAllBookmarksCount();
             return _buildAllBooks(books, cats);
           },
-          filteredBooksLoaded: (filteredBooks, cats) => _buildAllBooks(filteredBooks, cats),
+          filteredBooksLoaded: (filteredBooks, cats) =>
+              _buildAllBooks(filteredBooks, cats),
           bookClicked: (cats, id, bookName) => _buildAllBooks(books, this.cats),
           allBookmarksCountLoaded: (count) {
-                bookmarkCount = count;
-                return _buildAllBooks(books, cats);
+            bookmarkCount = count;
+            return _buildAllBooks(books, cats);
           },
         );
       },
@@ -81,11 +84,15 @@ class _LibraryAllBooksScreenState extends State<LibraryAllBooksScreen> {
             textAlign: TextAlign.center,
             style: TextStyle(overflow: TextOverflow.ellipsis, fontSize: 16),
             maxLines: 2, // Ensure text does not exceed more than 2 lines
-          ),          content: Column(
+          ),
+          content: Column(
             mainAxisSize: MainAxisSize.min,
             children: cats.map((cat) {
               return ListTile(
-                title: Text(cat.bookName ?? '', style: TextStyle(fontSize: 14),),
+                title: Text(
+                  cat.bookName ?? '',
+                  style: TextStyle(fontSize: 14),
+                ),
                 onTap: () {
                   openEpub(context: context, cat: cat);
                 },
@@ -101,60 +108,70 @@ class _LibraryAllBooksScreenState extends State<LibraryAllBooksScreen> {
     this.cats = cats;
     this.books = books;
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: [
-            Expanded(child: SearchBarWiget(hint: 'ابحث في الكتب', onChanged: _filterBooks,)),
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    _openBookmarkScreen();
-                  },
-                  icon: SvgPicture.asset('assets/icons/bookmark.svg'),
+      body: Column(
+        children: [
+          Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              // Image widget
+              Image.asset(
+                'assets/images/nosos_bk_header.png',
+                height: 200,
+                fit: BoxFit.cover,
+              ),
+              Positioned(
+                bottom: 0,
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: 5),
+                  width: MediaQuery.of(context).size.width - 40,
+                  child: SearchBarWiget(
+                    hint: 'ابحث عن كلمة أو جملة في كلا المجلتين',
+                    onChanged: _filterBooks,
+                  ),
                 ),
-                Positioned(
-                  // Position the badge on the top right corner of the IconButton
-                  top: 4,
-                  right: 4,
-                  child: (bookmarkCount>0) ? Container(
-                    padding: EdgeInsets.only(top: 3), // The padding inside the badge
-                    decoration: BoxDecoration(
-                      color: Colors.red, // Background color of the badge
-                      borderRadius: BorderRadius.circular(20), // Border radius of the badge
-                    ),
-                    constraints: const BoxConstraints(
-                      minWidth: 18, // Minimum width of the badge
-                      minHeight: 18, // Minimum height of the badge
-                    ),
-                    child: Center(
-                      child: Text(
-                        bookmarkCount.toString(),
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                        ),
-                      ),
-                    ),
-                  ): Container(),
-                ),
-              ],
-            )
+              ),
+            ],
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: 3, // Update the count to 3 for the three categories
+              itemBuilder: (context, index) {
+                // Initialize variables that will be modified based on the index
+                late final List<BookModel> currentBookList;
+                late final String logo;
+                late final String title;
 
-          ],
-        ),
+                // Assign the appropriate values based on the index
+                if (index == 0) {
+                  currentBookList = books;
+                  logo = 'assets/images/ejtihad_logo.png';
+                  title = 'الاجتهاد والتجديد';
+                } else if (index == 1) {
+                  // currentBookList = otherBooks; // Replace with your actual otherBooks list
+                  logo = 'assets/images/nosos_logo.png';
+                  title = 'نصوص معاصرة';
+                } else if (index == 2) {
+                  // currentBookList = additionalBooks; // Replace with your actual additionalBooks list
+                  logo = 'assets/images/nosos_logo.png'; // Replace with your actual additional logo
+                  title = 'كتب المجلة'; // Replace with your actual additional title
+                }
 
+                return BookListWidget(
+                  bookList: books,
+                  cubit: context.read<LibraryAllBooksCubit>(),
+                  logo: logo,
+                  title: title,
+                );
+              },
+            ),
+          ),
+
+        ],
       ),
-
-      body: BookListWidget(
-          bookList: books, cubit: context.read<LibraryAllBooksCubit>()),
     );
-
   }
 
-  _openBookmarkScreen (){
+  _openBookmarkScreen() {
     Navigator.push(
       context,
       MaterialPageRoute(

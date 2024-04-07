@@ -1,76 +1,56 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter/widgets.dart';
 
+import '../../utils/common.dart';
 import '../main/nav_screen.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(Duration(seconds: 2), () {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => NavScreen()),
+        );
+      });
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: Stack(
-        children: <Widget>[
-          // Full screen background SVG
-          Positioned.fill(
-            child: SvgPicture.asset(
-              'assets/images/bk_large.svg', // Replace with your SVG file path
-              fit: BoxFit.cover,
+        children: [
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Image.asset(
+              'assets/images/nosos_logo_bk.png',
+              width: 100,
             ),
           ),
-          // Content at the bottom
+          // Align your text in the center or wherever it needs to be
           Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              padding: EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                  // Add decoration if needed
-                  ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Image.asset(
-                    height: 100,
-                    width: 100,
-                    'assets/images/hob.png', // Replace with your image file path
-                    // Set size as needed
-                  ),
-                  SizedBox(height: 40),
-                  Center(
-                    child: Text(
-                      textAlign: TextAlign.center,
-                      "التطبيق الرسمي لحيدر حب الله",
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Center(
-                      child: Text(
-                        textAlign: TextAlign.center,
-                        'يتضمن هذا التطبيق أحدث وأكمل تأليفات ومحاضرات ومقالات الشيخ حيدر حب الله.',
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 40),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NavScreen(),
-                        ),
-                      );                    },
-                    child: Text('إبدأ الآن'),
-                  ),
-                  SizedBox(height: 40),
-                ],
-              ),
+            bottom: 100,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                buildLogoAndTitle(context, 'assets/images/ejtihad_logo.png', 'الاجتهاد والتجديد', 'فصلية متخصصة بقضايا الاجتهاد والتجديد الإسلامي'),
+                SizedBox(height: 40,),
+                buildLogoAndTitle(context, 'assets/images/nosos_logo.png', 'نصوص معاصرة', 'فصلية تعني بالفكر الديني المعاصر'),
+
+              ],
             ),
-          ),
-        ],
+          )],
       ),
+
     );
   }
+
 }

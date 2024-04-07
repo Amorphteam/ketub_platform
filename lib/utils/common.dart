@@ -634,3 +634,38 @@ class _WaveformSeekBarState extends State<WaveformSeekBar> {
   Duration get _remaining => widget.duration - widget.position;
 }
 
+Row buildLogoAndTitle(BuildContext context, String imageUrl, String title, String description) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.start,
+    children: [
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Image.asset(
+          imageUrl,
+          width: 40,
+        ),
+      ),
+      Container(
+        width: MediaQuery.of(context).size.width/2,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              title,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: Colors.white,
+              ),
+            ),
+            (description.isNotEmpty) ? Text(
+              description,
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                color: Colors.amberAccent.withOpacity(0.5),
+              ),
+            ): Container(),
+          ],
+        ),
+      ),
+    ],
+  );
+}

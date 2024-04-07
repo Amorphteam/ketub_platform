@@ -29,24 +29,43 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-
       title: 'Ketub Platform',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        fontFamily: 'tajwal',
-        useMaterial3: true,
+        useMaterial3: true, // Enable Material 3
+        fontFamily: 'tajwal', // Set the font family
       ),
-      home:  FutureBuilder(
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        fontFamily: 'tajwal',
+        brightness: Brightness.dark,
+        // Directly define the color scheme
+        colorScheme: ColorScheme.dark(
+          primary: Color(0xFFA48344), // A gold-like color.
+          onPrimary: Colors.white, // White color for text/icons on top of the primary color.
+          secondary: Color(0xFFA48344), // A softer gold-like color for secondary elements.
+          onSecondary: Colors.white, // White color for text/icons on top of the secondary color.
+          surface: Color(0xFF1F1F1F), // A color for card backgrounds and surfaces.
+          onSurface: Colors.white, // White color for text/icons on top of the surface color.
+          background: Color(0xFF121212), // A dark color for the app's background.
+          onBackground: Colors.white, // White color for text/icons on top of the background color.
+          error: Color(0xFFCF6679), // The Material default error color in dark theme.
+          onError: Colors.white, // Color for text/icons on top of the error color.
+        ),
+      ),
+      themeMode: ThemeMode.dark, // Always use the dark theme
+      home: FutureBuilder<bool>(
         future: isFirstLaunch(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            // Wrap CircularProgressIndicator in a Center widget
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.data == true) {
+            return SplashScreen();
           } else {
-            if (snapshot.data == true) {
-              return SplashScreen();
-            } else {
-              return NavScreen();
-            }
+            return NavScreen();
           }
         },
       ),
@@ -55,11 +74,11 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: [
-        const Locale('ar', ''), // Arabic, no country code
+      supportedLocales: const [
+        Locale('ar', ''), // Arabic, no country code
         // Add other supported locales here
       ],
-      locale: Locale('ar', ''),
+      locale: const Locale('ar', ''),
     );
   }
 

@@ -9,6 +9,7 @@ import 'package:ketub_platform/repositories/book_database.dart';
 import 'package:ketub_platform/repositories/reference_database.dart';
 import 'package:ketub_platform/screens/main/toc_tab/toc_screen.dart';
 
+import 'about/about_app_screen.dart';
 import 'bookmark_tab/bookmark_screen.dart';
 import 'bookmark_tab/cubit/bookmark_cubit.dart';
 import 'home/home_all_cat_screen.dart';
@@ -26,13 +27,18 @@ class _NavScreenState extends State<NavScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    BlocProvider(
-      create: (context) => LibraryAllBooksCubit(),
-      child: homeTabScreen(),
-    ),
+
     BlocProvider(
       create: (context) => LibraryAllBooksCubit(),
       child: LibraryAllBooksScreen(),
+    ),
+    BlocProvider(
+      create: (context) => BookmarkCubit(),
+      child: BookmarkScreen(),
+    ),
+    BlocProvider(
+      create: (context) => BookmarkCubit(),
+      child: AboutAppScreen(),
     ),
   ];
 
@@ -51,13 +57,18 @@ class _NavScreenState extends State<NavScreen> {
           });
         },
         destinations: [
+
           NavigationDestination(
             icon: SvgPicture.asset('assets/icons/home.svg'),
-            label: 'الرئيسية',
+            label: 'الكتب والمؤلفات',
           ),
           NavigationDestination(
-            icon: SvgPicture.asset('assets/icons/books.svg'),
-            label: 'الكتب والمؤلفات',
+            icon: SvgPicture.asset('assets/icons/bookmark.svg'),
+            label: 'المفضلة',
+          ),
+          NavigationDestination(
+            icon: SvgPicture.asset('assets/icons/info.svg'),
+            label: 'حول التطبيق',
           ),
         ],
       ),

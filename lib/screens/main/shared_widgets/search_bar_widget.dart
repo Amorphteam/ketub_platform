@@ -38,17 +38,15 @@ class _SearchBarWigetState extends State<SearchBarWiget> {
         controller: _searchController,
         decoration: InputDecoration(
           filled: true,
-          fillColor: Colors.grey[200],
-          // Adjust the color to match your UI design
-          hintText: widget.hint??'أدخل كلمة لبدء البحث',
+          fillColor: Theme.of(context).colorScheme.background,
+          hintText: widget.hint ?? 'أدخل كلمة لبدء البحث',
           hintStyle: TextStyle(fontSize: 12, color: Colors.grey[500]),
-          // Your hint text in Arabic
           prefixIcon: IconButton(
             icon: SvgPicture.asset(
               'assets/icons/search.svg',
-              color: Colors.grey[600], // Adjust the color as needed
-              width: 20, // Adjust the size as needed
-              height: 20, // Adjust the size as needed
+              color: Theme.of(context).colorScheme.primary,
+              width: 20,
+              height: 20,
             ),
             onPressed: () {
               if (_searchController.text.isNotEmpty) {
@@ -56,24 +54,31 @@ class _SearchBarWigetState extends State<SearchBarWiget> {
                   widget.onClicked!(_searchController.text);
                 }
               }
-              },
+            },
           ),
-
-          border: OutlineInputBorder(
+          // Define border for default state
+          enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30.0),
-            borderSide: BorderSide.none, // No border
+            borderSide: BorderSide(
+              color: Theme.of(context).colorScheme.primary, // Adjust the color to match your design
+            ),
           ),
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+          // Define border when TextField is in focus
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(30.0),
+            borderSide: BorderSide(
+              color: Theme.of(context).colorScheme.primary, // Typically a brighter color
+            ),
+          ),
+          // Adjust the content padding to center the text and icon
+          contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
         ),
         onChanged: (value) {
-            if (widget.onChanged != null){
-              widget.onChanged!(value);
-            }
-
+          if (widget.onChanged != null) {
+            widget.onChanged!(value);
+          }
         },
-
-        onSubmitted: (value){
+        onSubmitted: (value) {
           if (widget.onClicked != null) {
             widget.onClicked!(value);
           }
@@ -81,4 +86,5 @@ class _SearchBarWigetState extends State<SearchBarWiget> {
       ),
     );
   }
+
 }

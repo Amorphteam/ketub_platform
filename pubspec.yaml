@@ -52,7 +52,7 @@ dependencies:
   audio_session: ^0.1.14
   freezed_annotation: ^2.4.1
   json_annotation: ^4.8.1
-
+  url_launcher: ^6.0.20
 dev_dependencies:
   flutter_test:
     sdk: flutter
