@@ -49,28 +49,61 @@ class _NavScreenState extends State<NavScreen> {
       body: SafeArea(
         child: _pages[_currentIndex],
       ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _currentIndex,
-        onDestinationSelected: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        destinations: [
-
-          NavigationDestination(
-            icon: SvgPicture.asset('assets/icons/home.svg'),
-            label: 'الكتب والمؤلفات',
+      bottomNavigationBar: Theme(
+        data: Theme.of(context).copyWith(
+          navigationBarTheme: NavigationBarThemeData(
+            labelTextStyle: MaterialStateProperty.all<TextStyle>(
+              TextStyle(
+                color: Colors.grey, // Color for unselected item labels
+              ),
+            ),
+            labelBehavior: NavigationDestinationLabelBehavior.alwaysShow, // Optional: to always show labels
+            indicatorColor: Theme.of(context).colorScheme.primary, // Color for the selected item indicator
           ),
-          NavigationDestination(
-            icon: SvgPicture.asset('assets/icons/bookmark.svg'),
-            label: 'المفضلة',
-          ),
-          NavigationDestination(
-            icon: SvgPicture.asset('assets/icons/info.svg'),
-            label: 'حول التطبيق',
-          ),
-        ],
+        ),
+        child: NavigationBar(
+          selectedIndex: _currentIndex,
+          onDestinationSelected: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+          },
+          destinations: [
+            NavigationDestination(
+              icon: SvgPicture.asset(
+                'assets/icons/home.svg',
+                color: _currentIndex == 0 ? Theme.of(context).colorScheme.onPrimary : Colors.grey,
+              ),
+              selectedIcon: SvgPicture.asset(
+                'assets/icons/home_filled.svg',
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
+              label: 'الكتب والمؤلفات',
+            ),
+            NavigationDestination(
+              icon: SvgPicture.asset(
+                'assets/icons/bookmark.svg',
+                color: _currentIndex == 1 ? Theme.of(context).colorScheme.onPrimary : Colors.grey,
+              ),
+              selectedIcon: SvgPicture.asset(
+                'assets/icons/bookmarked.svg',
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
+              label: 'المفضلة',
+            ),
+            NavigationDestination(
+              icon: SvgPicture.asset(
+                'assets/icons/info.svg',
+                color: _currentIndex == 2 ? Theme.of(context).colorScheme.onPrimary : Colors.grey,
+              ),
+              selectedIcon: SvgPicture.asset(
+                'assets/icons/info_filled.svg',
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
+              label: 'حول التطبيق',
+            ),
+          ],
+        ),
       ),
     );
   }

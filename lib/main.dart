@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
           primary: Color(0xFFA48344), // A gold-like color.
           onPrimary: Colors.white, // White color for text/icons on top of the primary color.
           secondary: Color(0xFFA48344), // A softer gold-like color for secondary elements.
-          onSecondary: Colors.white, // White color for text/icons on top of the secondary color.
+          onSecondary: Colors.grey, // White color for text/icons on top of the secondary color.
           surface: Color(0xFF1F1F1F), // A color for card backgrounds and surfaces.
           onSurface: Colors.white, // White color for text/icons on top of the surface color.
           background: Color(0xFF121212), // A dark color for the app's background.
