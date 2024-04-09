@@ -340,6 +340,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                             textAlign: TextAlign.justify,
                             direction: TextDirection.rtl,
                             fontSize: FontSize(fontSize.size),
+                            color: Colors.black,
                             padding: HtmlPaddings.only(right: 10, left: 10),
                             fontFamily: fontFamily.name,
                             lineHeight: LineHeight(lineHeight.size),

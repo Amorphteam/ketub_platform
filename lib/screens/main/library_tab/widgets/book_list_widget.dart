@@ -31,36 +31,39 @@ class _BookListWidgetState extends State<BookListWidget> {
             itemCount: widget.bookList.length,
             itemBuilder: (context, index) {
               BookModel bookItem = widget.bookList[index];
-              return Container(
-                width: 120, // Fixed width for each book item
-                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10), // Space around items
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      height: 180, // Height of the book cover image
-                      width: 120, // Width of the book cover image
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
-                          image: AssetImage(
-                            'assets/images/${bookItem.bookCover ?? 'book_sample.png'}',
+              return GestureDetector(
+                onTap: () => _handleOnTap(context, bookItem),
+                child: Container(
+                  width: 120, // Fixed width for each book item
+                  margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10), // Space around items
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 180, // Height of the book cover image
+                        width: 120, // Width of the book cover image
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                            image: AssetImage(
+                              'assets/images/${bookItem.bookCover ?? 'book_sample.png'}',
+                            ),
+                            fit: BoxFit.cover,
                           ),
-                          fit: BoxFit.cover,
                         ),
                       ),
-                    ),
-                    SizedBox(height: 10), // Space between the book cover and title
-                    Text(
-                      bookItem.bookName ?? 'Book Name',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        overflow: TextOverflow.ellipsis,
-                        fontSize: 12,
+                      SizedBox(height: 10), // Space between the book cover and title
+                      Text(
+                        bookItem.bookName ?? 'Book Name',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          overflow: TextOverflow.ellipsis,
+                          fontSize: 12,
+                        ),
+                        maxLines: 2, // Ensure text does not exceed more than 2 lines
                       ),
-                      maxLines: 2, // Ensure text does not exceed more than 2 lines
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               );
             },
