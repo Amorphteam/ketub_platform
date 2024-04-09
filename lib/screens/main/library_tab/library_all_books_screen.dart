@@ -132,40 +132,39 @@ class _LibraryAllBooksScreenState extends State<LibraryAllBooksScreen> {
               ),
             ],
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: 3, // Update the count to 3 for the three categories
-              itemBuilder: (context, index) {
-                // Initialize variables that will be modified based on the index
-                late final List<BookModel> currentBookList;
-                late final String logo;
-                late final String title;
+      Expanded(
+        child: ListView.builder(
+          itemCount: 3, // There are three categories to display
+          itemBuilder: (context, index) {
+            late final List<BookModel> currentBookList;
+            late final String logo;
+            late final String title;
 
-                // Assign the appropriate values based on the index
-                if (index == 0) {
-                  currentBookList = books;
-                  logo = 'assets/images/ejtihad_logo.png';
-                  title = 'الاجتهاد والتجديد';
-                } else if (index == 1) {
-                  // currentBookList = otherBooks; // Replace with your actual otherBooks list
-                  logo = 'assets/images/nosos_logo.png';
-                  title = 'نصوص معاصرة';
-                } else if (index == 2) {
-                  // currentBookList = additionalBooks; // Replace with your actual additionalBooks list
-                  logo = 'assets/images/nosos_logo.png'; // Replace with your actual additional logo
-                  title = 'كتب المجلة'; // Replace with your actual additional title
-                }
+            if (index == 0) {
+              // Filter books containing "نصوص" for the first group
+              currentBookList = books.where((book) => book.bookName?.contains('نصوص') ?? false).toList();
+              logo = 'assets/images/ejtihad_logo.png';
+              title = 'الاجتهاد والتجديد';
+            } else if (index == 1) {
+              // Filter books containing "اجتهاد" for the second group
+              currentBookList = books.where((book) => book.bookName?.contains('اجتهاد') ?? false).toList();
+              logo = 'assets/images/nosos_logo.png';
+              title = 'نصوص معاصرة';
+            } else if (index == 2) {
+              // Filter books containing "کتب المجلة" for the third group
+              currentBookList = books.where((book) => book.bookName?.contains('كتب المجلة') ?? false).toList();
+              logo = 'assets/images/nosos_logo.png'; // Replace with the actual additional logo if different
+              title = 'كتب المجلة';
+            }
 
-                return BookListWidget(
-                  bookList: books,
-                  cubit: context.read<LibraryAllBooksCubit>(),
-                  logo: logo,
-                  title: title,
-                );
-              },
-            ),
-          ),
-
+            return BookListWidget(
+              bookList: currentBookList,
+              cubit: context.read<LibraryAllBooksCubit>(),
+              logo: logo,
+              title: title,
+            );
+          },
+        ),),
         ],
       ),
     );
