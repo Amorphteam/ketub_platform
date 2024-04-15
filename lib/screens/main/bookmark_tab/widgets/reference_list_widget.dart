@@ -18,7 +18,7 @@ class ReferenceListWidget extends StatelessWidget {
       padding: const EdgeInsets.only(top: 16.0, right: 8.0, left: 8.0),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2, // Two items per row
-        childAspectRatio: (1),
+        childAspectRatio: (1.5),
         crossAxisSpacing: 8, // Spacing between columns
         mainAxisSpacing: 8, // Spacing between rows
       ),
@@ -35,7 +35,6 @@ class ReferenceListWidget extends StatelessWidget {
                 width: MediaQuery.of(context).size.width  / 2.2,
                 child: Card(
                   elevation: 0.0,
-                  color: Colors.grey[200],
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
@@ -67,10 +66,10 @@ class ReferenceListWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(referenceList[index].bookName ?? 'Book Name', overflow: TextOverflow.ellipsis, maxLines: 2,),
-              )
+              // Padding(
+              //   padding: const EdgeInsets.all(8.0),
+              //   child: Text(referenceList[index].bookName ?? 'Book Name', overflow: TextOverflow.ellipsis, maxLines: 2,),
+              // )
             ],
           ),
         );

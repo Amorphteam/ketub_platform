@@ -113,10 +113,10 @@ class _LibraryAllBooksScreenState extends State<LibraryAllBooksScreen> {
           Stack(
             alignment: Alignment.topCenter,
             children: [
-              // Image widget
               Image.asset(
                 'assets/images/nosos_bk_header.png',
-                height: 200,
+                height: 220,
+                width: MediaQuery.of(context).size.width,
                 fit: BoxFit.cover,
               ),
               Positioned(
@@ -142,14 +142,14 @@ class _LibraryAllBooksScreenState extends State<LibraryAllBooksScreen> {
 
             if (index == 0) {
               // Filter books containing "نصوص" for the first group
-              currentBookList = books.where((book) => book.bookName?.contains('نصوص') ?? false).toList();
+              currentBookList = books.where((book) => book.bookName?.contains('نصوص معاصرة') ?? false).toList();
               logo = 'assets/images/ejtihad_logo.png';
-              title = 'الاجتهاد والتجديد';
+              title = 'نصوص معاصرة';
             } else if (index == 1) {
               // Filter books containing "اجتهاد" for the second group
-              currentBookList = books.where((book) => book.bookName?.contains('اجتهاد') ?? false).toList();
+              currentBookList = books.where((book) => book.bookName?.contains('الاجتهاد والتجديد') ?? false).toList();
               logo = 'assets/images/nosos_logo.png';
-              title = 'نصوص معاصرة';
+              title = 'الاجتهاد والتجديد';
             } else if (index == 2) {
               // Filter books containing "کتب المجلة" for the third group
               currentBookList = books.where((book) => book.bookName?.contains('كتب المجلة') ?? false).toList();

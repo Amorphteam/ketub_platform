@@ -69,9 +69,14 @@ class _BookListWidgetState extends State<BookListWidget> {
             },
           ),
         ),
-        Container(
-          padding: EdgeInsets.only(left: 16.0),
-            alignment: Alignment.bottomLeft, child: Text('مشاهدة الجميع')),
+        // Container(
+        //   padding: EdgeInsets.only(left: 16.0),
+        //     alignment: Alignment.bottomLeft, child: TextButton(
+        //   onPressed: () {
+        //     print('Button pressed!');
+        //   },
+        //   child: Text('مشاهدة الجميع'), // Optional: style the text
+        // ),),
       ],
     );
   }
