@@ -466,17 +466,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 237;
 				DEVELOPMENT_TEAM = WC62VUYA24;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "محاضرات وتأليفات حيدر حب الله";
+				INFOPLIST_KEY_CFBundleDisplayName = "نصوص معاصرة";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.3;
-				PRODUCT_BUNDLE_IDENTIFIER = com.papyrus.mehdok.hobbollahcom;
+				MARKETING_VERSION = 2.3.7;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.mehdok.papyrus.nosos-mag";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -647,17 +647,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 237;
 				DEVELOPMENT_TEAM = WC62VUYA24;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "محاضرات وتأليفات حيدر حب الله";
+				INFOPLIST_KEY_CFBundleDisplayName = "نصوص معاصرة";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.3;
-				PRODUCT_BUNDLE_IDENTIFIER = com.papyrus.mehdok.hobbollahcom;
+				MARKETING_VERSION = 2.3.7;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.mehdok.papyrus.nosos-mag";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -672,17 +672,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 237;
 				DEVELOPMENT_TEAM = WC62VUYA24;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "محاضرات وتأليفات حيدر حب الله";
+				INFOPLIST_KEY_CFBundleDisplayName = "نصوص معاصرة";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.3;
-				PRODUCT_BUNDLE_IDENTIFIER = com.papyrus.mehdok.hobbollahcom;
+				MARKETING_VERSION = 2.3.7;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.mehdok.papyrus.nosos-mag";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
