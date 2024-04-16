@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:ketub_platform/models/book_model.dart';
 import 'package:ketub_platform/models/category_model.dart';
+import 'package:ketub_platform/models/section.dart';
 
 part 'library_all_books_state.freezed.dart';
 
@@ -13,6 +14,7 @@ class LibraryAllBooksState with _$LibraryAllBooksState {
   const factory LibraryAllBooksState.allBooksLoaded({
     required List<BookModel> books,
     required List<CategoryModel> cats,
+    required List<Section> tocs,
   }) = _Loaded;
 
   const factory LibraryAllBooksState.bookClicked({

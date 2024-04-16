@@ -28,7 +28,7 @@ class SectionDatabase {
       print('database already exists');
       _database = await openDatabase(path);
     } else {
-      print('database does not exist');
+      print('section database does not exist');
       try {
         await Directory(dirname(path)).create(recursive: true);
       } catch (_) {}
@@ -38,16 +38,21 @@ class SectionDatabase {
       final bytes =
       data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
       await file.writeAsBytes(bytes, flush: true);
-      print('database copied');
+      print('section database copied');
       _database = await openDatabase(path);
     }
 
     return _database!;
   }
 
-  Future<List<Section>> readAllSections() async {
+  Future<List<Section>> readRandomSections(int count) async {
     final db = await initDb();
-    final result = await db.query('sections_list');
+    // Using ORDER BY RANDOM() and LIMIT to get random rows
+    final result = await db.query(
+      'sections_list',
+      orderBy: 'RANDOM()',
+      limit: count,
+    );
     return result.map((row) => Section(
       id: row['_id'] as int?,
       title: row['title'] as String,
@@ -56,6 +61,7 @@ class SectionDatabase {
       sectionIndex: row['section_index'] as int,
     )).toList();
   }
+
 
 
 }

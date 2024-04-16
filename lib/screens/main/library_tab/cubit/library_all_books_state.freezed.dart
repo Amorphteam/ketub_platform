@@ -20,7 +20,8 @@ mixin _$LibraryAllBooksState {
   TResult when<TResult extends Object?>({
     required TResult Function() init,
     required TResult Function() loading,
-    required TResult Function(List<BookModel> books, List<CategoryModel> cats)
+    required TResult Function(
+            List<BookModel> books, List<CategoryModel> cats, List<Section> tocs)
         allBooksLoaded,
     required TResult Function(List<CategoryModel> cats, int id, String bookName)
         bookClicked,
@@ -35,7 +36,8 @@ mixin _$LibraryAllBooksState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? init,
     TResult? Function()? loading,
-    TResult? Function(List<BookModel> books, List<CategoryModel> cats)?
+    TResult? Function(List<BookModel> books, List<CategoryModel> cats,
+            List<Section> tocs)?
         allBooksLoaded,
     TResult? Function(List<CategoryModel> cats, int id, String bookName)?
         bookClicked,
@@ -49,7 +51,8 @@ mixin _$LibraryAllBooksState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? loading,
-    TResult Function(List<BookModel> books, List<CategoryModel> cats)?
+    TResult Function(List<BookModel> books, List<CategoryModel> cats,
+            List<Section> tocs)?
         allBooksLoaded,
     TResult Function(List<CategoryModel> cats, int id, String bookName)?
         bookClicked,
@@ -156,7 +159,8 @@ class _$InitialImpl implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() init,
     required TResult Function() loading,
-    required TResult Function(List<BookModel> books, List<CategoryModel> cats)
+    required TResult Function(
+            List<BookModel> books, List<CategoryModel> cats, List<Section> tocs)
         allBooksLoaded,
     required TResult Function(List<CategoryModel> cats, int id, String bookName)
         bookClicked,
@@ -174,7 +178,8 @@ class _$InitialImpl implements _Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? init,
     TResult? Function()? loading,
-    TResult? Function(List<BookModel> books, List<CategoryModel> cats)?
+    TResult? Function(List<BookModel> books, List<CategoryModel> cats,
+            List<Section> tocs)?
         allBooksLoaded,
     TResult? Function(List<CategoryModel> cats, int id, String bookName)?
         bookClicked,
@@ -191,7 +196,8 @@ class _$InitialImpl implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? loading,
-    TResult Function(List<BookModel> books, List<CategoryModel> cats)?
+    TResult Function(List<BookModel> books, List<CategoryModel> cats,
+            List<Section> tocs)?
         allBooksLoaded,
     TResult Function(List<CategoryModel> cats, int id, String bookName)?
         bookClicked,
@@ -299,7 +305,8 @@ class _$LoadingImpl implements _Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() init,
     required TResult Function() loading,
-    required TResult Function(List<BookModel> books, List<CategoryModel> cats)
+    required TResult Function(
+            List<BookModel> books, List<CategoryModel> cats, List<Section> tocs)
         allBooksLoaded,
     required TResult Function(List<CategoryModel> cats, int id, String bookName)
         bookClicked,
@@ -317,7 +324,8 @@ class _$LoadingImpl implements _Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? init,
     TResult? Function()? loading,
-    TResult? Function(List<BookModel> books, List<CategoryModel> cats)?
+    TResult? Function(List<BookModel> books, List<CategoryModel> cats,
+            List<Section> tocs)?
         allBooksLoaded,
     TResult? Function(List<CategoryModel> cats, int id, String bookName)?
         bookClicked,
@@ -334,7 +342,8 @@ class _$LoadingImpl implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? loading,
-    TResult Function(List<BookModel> books, List<CategoryModel> cats)?
+    TResult Function(List<BookModel> books, List<CategoryModel> cats,
+            List<Section> tocs)?
         allBooksLoaded,
     TResult Function(List<CategoryModel> cats, int id, String bookName)?
         bookClicked,
@@ -408,7 +417,8 @@ abstract class _$$LoadedImplCopyWith<$Res> {
           _$LoadedImpl value, $Res Function(_$LoadedImpl) then) =
       __$$LoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<BookModel> books, List<CategoryModel> cats});
+  $Res call(
+      {List<BookModel> books, List<CategoryModel> cats, List<Section> tocs});
 }
 
 /// @nodoc
@@ -424,6 +434,7 @@ class __$$LoadedImplCopyWithImpl<$Res>
   $Res call({
     Object? books = null,
     Object? cats = null,
+    Object? tocs = null,
   }) {
     return _then(_$LoadedImpl(
       books: null == books
@@ -434,6 +445,10 @@ class __$$LoadedImplCopyWithImpl<$Res>
           ? _value._cats
           : cats // ignore: cast_nullable_to_non_nullable
               as List<CategoryModel>,
+      tocs: null == tocs
+          ? _value._tocs
+          : tocs // ignore: cast_nullable_to_non_nullable
+              as List<Section>,
     ));
   }
 }
@@ -443,9 +458,11 @@ class __$$LoadedImplCopyWithImpl<$Res>
 class _$LoadedImpl implements _Loaded {
   const _$LoadedImpl(
       {required final List<BookModel> books,
-      required final List<CategoryModel> cats})
+      required final List<CategoryModel> cats,
+      required final List<Section> tocs})
       : _books = books,
-        _cats = cats;
+        _cats = cats,
+        _tocs = tocs;
 
   final List<BookModel> _books;
   @override
@@ -463,9 +480,17 @@ class _$LoadedImpl implements _Loaded {
     return EqualUnmodifiableListView(_cats);
   }
 
+  final List<Section> _tocs;
+  @override
+  List<Section> get tocs {
+    if (_tocs is EqualUnmodifiableListView) return _tocs;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_tocs);
+  }
+
   @override
   String toString() {
-    return 'LibraryAllBooksState.allBooksLoaded(books: $books, cats: $cats)';
+    return 'LibraryAllBooksState.allBooksLoaded(books: $books, cats: $cats, tocs: $tocs)';
   }
 
   @override
@@ -474,14 +499,16 @@ class _$LoadedImpl implements _Loaded {
         (other.runtimeType == runtimeType &&
             other is _$LoadedImpl &&
             const DeepCollectionEquality().equals(other._books, _books) &&
-            const DeepCollectionEquality().equals(other._cats, _cats));
+            const DeepCollectionEquality().equals(other._cats, _cats) &&
+            const DeepCollectionEquality().equals(other._tocs, _tocs));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(_books),
-      const DeepCollectionEquality().hash(_cats));
+      const DeepCollectionEquality().hash(_cats),
+      const DeepCollectionEquality().hash(_tocs));
 
   @JsonKey(ignore: true)
   @override
@@ -494,7 +521,8 @@ class _$LoadedImpl implements _Loaded {
   TResult when<TResult extends Object?>({
     required TResult Function() init,
     required TResult Function() loading,
-    required TResult Function(List<BookModel> books, List<CategoryModel> cats)
+    required TResult Function(
+            List<BookModel> books, List<CategoryModel> cats, List<Section> tocs)
         allBooksLoaded,
     required TResult Function(List<CategoryModel> cats, int id, String bookName)
         bookClicked,
@@ -504,7 +532,7 @@ class _$LoadedImpl implements _Loaded {
             List<BookModel> filteredBooks, List<CategoryModel> cats)
         filteredBooksLoaded,
   }) {
-    return allBooksLoaded(books, cats);
+    return allBooksLoaded(books, cats, tocs);
   }
 
   @override
@@ -512,7 +540,8 @@ class _$LoadedImpl implements _Loaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? init,
     TResult? Function()? loading,
-    TResult? Function(List<BookModel> books, List<CategoryModel> cats)?
+    TResult? Function(List<BookModel> books, List<CategoryModel> cats,
+            List<Section> tocs)?
         allBooksLoaded,
     TResult? Function(List<CategoryModel> cats, int id, String bookName)?
         bookClicked,
@@ -521,7 +550,7 @@ class _$LoadedImpl implements _Loaded {
     TResult? Function(List<BookModel> filteredBooks, List<CategoryModel> cats)?
         filteredBooksLoaded,
   }) {
-    return allBooksLoaded?.call(books, cats);
+    return allBooksLoaded?.call(books, cats, tocs);
   }
 
   @override
@@ -529,7 +558,8 @@ class _$LoadedImpl implements _Loaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? loading,
-    TResult Function(List<BookModel> books, List<CategoryModel> cats)?
+    TResult Function(List<BookModel> books, List<CategoryModel> cats,
+            List<Section> tocs)?
         allBooksLoaded,
     TResult Function(List<CategoryModel> cats, int id, String bookName)?
         bookClicked,
@@ -540,7 +570,7 @@ class _$LoadedImpl implements _Loaded {
     required TResult orElse(),
   }) {
     if (allBooksLoaded != null) {
-      return allBooksLoaded(books, cats);
+      return allBooksLoaded(books, cats, tocs);
     }
     return orElse();
   }
@@ -596,10 +626,12 @@ class _$LoadedImpl implements _Loaded {
 abstract class _Loaded implements LibraryAllBooksState {
   const factory _Loaded(
       {required final List<BookModel> books,
-      required final List<CategoryModel> cats}) = _$LoadedImpl;
+      required final List<CategoryModel> cats,
+      required final List<Section> tocs}) = _$LoadedImpl;
 
   List<BookModel> get books;
   List<CategoryModel> get cats;
+  List<Section> get tocs;
   @JsonKey(ignore: true)
   _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
@@ -699,7 +731,8 @@ class _$OpenEpubImpl implements _OpenEpub {
   TResult when<TResult extends Object?>({
     required TResult Function() init,
     required TResult Function() loading,
-    required TResult Function(List<BookModel> books, List<CategoryModel> cats)
+    required TResult Function(
+            List<BookModel> books, List<CategoryModel> cats, List<Section> tocs)
         allBooksLoaded,
     required TResult Function(List<CategoryModel> cats, int id, String bookName)
         bookClicked,
@@ -717,7 +750,8 @@ class _$OpenEpubImpl implements _OpenEpub {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? init,
     TResult? Function()? loading,
-    TResult? Function(List<BookModel> books, List<CategoryModel> cats)?
+    TResult? Function(List<BookModel> books, List<CategoryModel> cats,
+            List<Section> tocs)?
         allBooksLoaded,
     TResult? Function(List<CategoryModel> cats, int id, String bookName)?
         bookClicked,
@@ -734,7 +768,8 @@ class _$OpenEpubImpl implements _OpenEpub {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? loading,
-    TResult Function(List<BookModel> books, List<CategoryModel> cats)?
+    TResult Function(List<BookModel> books, List<CategoryModel> cats,
+            List<Section> tocs)?
         allBooksLoaded,
     TResult Function(List<CategoryModel> cats, int id, String bookName)?
         bookClicked,
@@ -878,7 +913,8 @@ class _$ErrorImpl implements _Error {
   TResult when<TResult extends Object?>({
     required TResult Function() init,
     required TResult Function() loading,
-    required TResult Function(List<BookModel> books, List<CategoryModel> cats)
+    required TResult Function(
+            List<BookModel> books, List<CategoryModel> cats, List<Section> tocs)
         allBooksLoaded,
     required TResult Function(List<CategoryModel> cats, int id, String bookName)
         bookClicked,
@@ -896,7 +932,8 @@ class _$ErrorImpl implements _Error {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? init,
     TResult? Function()? loading,
-    TResult? Function(List<BookModel> books, List<CategoryModel> cats)?
+    TResult? Function(List<BookModel> books, List<CategoryModel> cats,
+            List<Section> tocs)?
         allBooksLoaded,
     TResult? Function(List<CategoryModel> cats, int id, String bookName)?
         bookClicked,
@@ -913,7 +950,8 @@ class _$ErrorImpl implements _Error {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? loading,
-    TResult Function(List<BookModel> books, List<CategoryModel> cats)?
+    TResult Function(List<BookModel> books, List<CategoryModel> cats,
+            List<Section> tocs)?
         allBooksLoaded,
     TResult Function(List<CategoryModel> cats, int id, String bookName)?
         bookClicked,
@@ -1056,7 +1094,8 @@ class _$AllBookmarksCountLoadedImpl implements _AllBookmarksCountLoaded {
   TResult when<TResult extends Object?>({
     required TResult Function() init,
     required TResult Function() loading,
-    required TResult Function(List<BookModel> books, List<CategoryModel> cats)
+    required TResult Function(
+            List<BookModel> books, List<CategoryModel> cats, List<Section> tocs)
         allBooksLoaded,
     required TResult Function(List<CategoryModel> cats, int id, String bookName)
         bookClicked,
@@ -1074,7 +1113,8 @@ class _$AllBookmarksCountLoadedImpl implements _AllBookmarksCountLoaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? init,
     TResult? Function()? loading,
-    TResult? Function(List<BookModel> books, List<CategoryModel> cats)?
+    TResult? Function(List<BookModel> books, List<CategoryModel> cats,
+            List<Section> tocs)?
         allBooksLoaded,
     TResult? Function(List<CategoryModel> cats, int id, String bookName)?
         bookClicked,
@@ -1091,7 +1131,8 @@ class _$AllBookmarksCountLoadedImpl implements _AllBookmarksCountLoaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? loading,
-    TResult Function(List<BookModel> books, List<CategoryModel> cats)?
+    TResult Function(List<BookModel> books, List<CategoryModel> cats,
+            List<Section> tocs)?
         allBooksLoaded,
     TResult Function(List<CategoryModel> cats, int id, String bookName)?
         bookClicked,
@@ -1259,7 +1300,8 @@ class _$FilteredBooksLoadedImpl implements _FilteredBooksLoaded {
   TResult when<TResult extends Object?>({
     required TResult Function() init,
     required TResult Function() loading,
-    required TResult Function(List<BookModel> books, List<CategoryModel> cats)
+    required TResult Function(
+            List<BookModel> books, List<CategoryModel> cats, List<Section> tocs)
         allBooksLoaded,
     required TResult Function(List<CategoryModel> cats, int id, String bookName)
         bookClicked,
@@ -1277,7 +1319,8 @@ class _$FilteredBooksLoadedImpl implements _FilteredBooksLoaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? init,
     TResult? Function()? loading,
-    TResult? Function(List<BookModel> books, List<CategoryModel> cats)?
+    TResult? Function(List<BookModel> books, List<CategoryModel> cats,
+            List<Section> tocs)?
         allBooksLoaded,
     TResult? Function(List<CategoryModel> cats, int id, String bookName)?
         bookClicked,
@@ -1294,7 +1337,8 @@ class _$FilteredBooksLoadedImpl implements _FilteredBooksLoaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? loading,
-    TResult Function(List<BookModel> books, List<CategoryModel> cats)?
+    TResult Function(List<BookModel> books, List<CategoryModel> cats,
+            List<Section> tocs)?
         allBooksLoaded,
     TResult Function(List<CategoryModel> cats, int id, String bookName)?
         bookClicked,

@@ -10,6 +10,7 @@ import 'package:ketub_platform/screens/main/library_tab/cubit/library_all_books_
 import 'package:ketub_platform/screens/main/library_tab/widgets/book_list_widget.dart';
 import 'package:ketub_platform/utils/epub_helper.dart';
 
+import '../../../models/section.dart';
 import '../bookmark_tab/bookmark_screen.dart';
 import '../bookmark_tab/cubit/bookmark_cubit.dart';
 import '../shared_widgets/search_bar_widget.dart';
@@ -24,6 +25,7 @@ class LibraryAllBooksScreen extends StatefulWidget {
 class _LibraryAllBooksScreenState extends State<LibraryAllBooksScreen> {
   List<CategoryModel> cats = [];
   List<BookModel> books = [];
+  List<Section> tocs = [];
   int bookmarkCount = 0;
 
   @override
@@ -46,10 +48,12 @@ class _LibraryAllBooksScreenState extends State<LibraryAllBooksScreen> {
           init: () => const Center(child: CircularProgressIndicator()),
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (error) => Center(child: Text('Error: $error')),
-          allBooksLoaded: (books, cats) {
+          allBooksLoaded: (books, cats, tocs) {
             _loadAllBookmarksCount();
+            this.tocs = tocs;
             return _buildAllBooks(books, cats);
           },
+
           filteredBooksLoaded: (filteredBooks, cats) =>
               _buildAllBooks(filteredBooks, cats),
           bookClicked: (cats, id, bookName) => _buildAllBooks(books, this.cats),
@@ -107,64 +111,93 @@ class _LibraryAllBooksScreenState extends State<LibraryAllBooksScreen> {
   Widget _buildAllBooks(List<BookModel> books, List<CategoryModel> cats) {
     this.cats = cats;
     this.books = books;
+
     return Scaffold(
-      body: Column(
-        children: [
-          Stack(
-            alignment: Alignment.topCenter,
-            children: [
-              Image.asset(
-                'assets/images/nosos_bk_header.png',
-                height: 220,
-                width: MediaQuery.of(context).size.width,
-                fit: BoxFit.cover,
-              ),
-              Positioned(
-                bottom: 0,
-                child: Container(
-                  margin: const EdgeInsets.only(bottom: 5),
-                  width: MediaQuery.of(context).size.width - 40,
-                  child: SearchBarWiget(
-                    hint: 'ابحث عن كلمة أو جملة في كلا المجلتين',
-                    onChanged: _filterBooks,
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Stack(
+              alignment: Alignment.topCenter,
+              children: [
+                Image.asset(
+                  'assets/images/nosos_bk_header.png',
+                  height: 220,
+                  width: MediaQuery.of(context).size.width,
+                  fit: BoxFit.cover,
+                ),
+                Positioned(
+                  bottom: 0,
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 5),
+                    width: MediaQuery.of(context).size.width - 40,
+                    child: SearchBarWiget(
+                      hint: 'ابحث عن كلمة أو جملة في كلا المجلتين',
+                      onChanged: _filterBooks,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-      Expanded(
-        child: ListView.builder(
-          itemCount: 3, // There are three categories to display
-          itemBuilder: (context, index) {
-            late final List<BookModel> currentBookList;
-            late final String logo;
-            late final String title;
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                late final List<BookModel> currentBookList;
+                late final String logo;
+                late final String title;
 
-            if (index == 0) {
-              // Filter books containing "نصوص" for the first group
-              currentBookList = books.where((book) => book.bookName?.contains('نصوص معاصرة') ?? false).toList();
-              logo = 'assets/images/ejtihad_logo.png';
-              title = 'نصوص معاصرة';
-            } else if (index == 1) {
-              // Filter books containing "اجتهاد" for the second group
-              currentBookList = books.where((book) => book.bookName?.contains('الاجتهاد والتجديد') ?? false).toList();
-              logo = 'assets/images/nosos_logo.png';
-              title = 'الاجتهاد والتجديد';
-            } else if (index == 2) {
-              // Filter books containing "کتب المجلة" for the third group
-              currentBookList = books.where((book) => book.bookName?.contains('كتب المجلة') ?? false).toList();
-              logo = 'assets/images/nosos_logo.png'; // Replace with the actual additional logo if different
-              title = 'كتب المجلة';
-            }
+                if (index == 0) {
+                  currentBookList = books.where((book) => book.bookName?.contains('نصوص معاصرة') ?? false).toList();
+                  logo = 'assets/images/ejtihad_logo.png';
+                  title = 'نصوص معاصرة';
+                } else if (index == 1) {
+                  currentBookList = books.where((book) => book.bookName?.contains('الاجتهاد والتجديد') ?? false).toList();
+                  logo = 'assets/images/nosos_logo.png';
+                  title = 'الاجتهاد والتجديد';
+                } else if (index == 2) {
+                  currentBookList = books.where((book) => book.bookName?.contains('كتب المجلة') ?? false).toList();
+                  logo = 'assets/images/nosos_logo.png';
+                  title = 'كتب المجلة';
+                } else {
+                  debugPrint('TOC index: $tocs');
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 40.0, bottom: 10.0),
+                    child: Column(
+                      children: [
+                        Text(
+                          'مقالات مهمة',
+                          style: Theme.of(context).textTheme.titleLarge,
+                          textAlign: TextAlign.right,
+                        ),
+                        ...tocs.map((toc) => ListTile(
+                          leading: Image.asset(
+                            toc.bookName.contains('الاجتهاد والتجديد')
+                                ? 'assets/images/ejtihad_logo.png'
+                                : 'assets/images/nosos_logo.png',
+                            width: 40,
+                          ),
+                          title: Text(toc.title),
+                          onTap: () {
+                            // Implement TOC item tap handler
+                          },
+                        ))
 
-            return BookListWidget(
-              bookList: currentBookList,
-              cubit: context.read<LibraryAllBooksCubit>(),
-              logo: logo,
-              title: title,
-            );
-          },
-        ),),
+                      ],
+                    ),
+                  );
+                }
+
+                return BookListWidget(
+                  bookList: currentBookList,
+                  cubit: context.read<LibraryAllBooksCubit>(),
+                  logo: logo,
+                  title: title,
+                );
+              },
+              // Set the child count to the number of categories plus one for the TOC
+              childCount: 4,
+            ),
+          ),
         ],
       ),
     );
