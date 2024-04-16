@@ -178,7 +178,7 @@ class _LibraryAllBooksScreenState extends State<LibraryAllBooksScreen> {
                           ),
                           title: Text(toc.title),
                           onTap: () {
-                            // Implement TOC item tap handler
+                            openEpub(context: context, section: toc);
                           },
                         ))
 

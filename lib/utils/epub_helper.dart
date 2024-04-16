@@ -11,27 +11,29 @@ import 'package:ketub_platform/models/tree_toc_model.dart';
 import 'package:ketub_platform/screens/epub_viewer/cubit/epub_viewer_cubit.dart';
 import 'package:ketub_platform/utils/page_helper.dart';
 import '../models/search_model.dart';
+import '../models/section.dart';
 import '../screens/epub_viewer/epub_viewer_screen.dart';
 
-
-void openEpub({
-  required BuildContext context,
-  CategoryModel? cat,
-  ReferenceModel? reference,
-  EpubChaptersWithBookPath? toc,
-  SearchModel? search
-}) {
+void openEpub(
+    {required BuildContext context,
+    CategoryModel? cat,
+    ReferenceModel? reference,
+    EpubChaptersWithBookPath? toc,
+    SearchModel? search,
+    Section? section}) {
   Navigator.push(
     context,
     MaterialPageRoute(
-      builder: (context) =>
-          BlocProvider(
-            create: (context) => EpubViewerCubit(),
-            child: EpubViewerScreen(catModel: cat,
-                referenceModel: reference,
-                searchModel: search,
-                tocModel: toc),
-          ),
+      builder: (context) => BlocProvider(
+        create: (context) => EpubViewerCubit(),
+        child: EpubViewerScreen(
+          catModel: cat,
+          referenceModel: reference,
+          searchModel: search,
+          tocModel: toc,
+          section: section,
+        ),
+      ),
     ),
   );
 }
@@ -55,9 +57,8 @@ Future<List<HtmlFileInfo>> extractHtmlContentWithEmbeddedImages(
   return htmlContentList;
 }
 
-
-String embedImagesInHtmlContent(EpubTextContentFile htmlFile,
-    Map<String, EpubByteContentFile>? images) {
+String embedImagesInHtmlContent(
+    EpubTextContentFile htmlFile, Map<String, EpubByteContentFile>? images) {
   String htmlContent = htmlFile.Content!;
   final imgRegExp = RegExp(r'<img[^>]*>');
   Iterable<RegExpMatch> imgTags = imgRegExp.allMatches(htmlContent);
@@ -68,7 +69,8 @@ String embedImagesInHtmlContent(EpubTextContentFile htmlFile,
     String? base64Image = convertImageToBase64(images?['Images/$imageName']);
 
     if (base64Image != null) {
-      String replacement = "<img src=\"data:image/jpg;base64,$base64Image\" alt=\"$imageName\" />";
+      String replacement =
+          "<img src=\"data:image/jpg;base64,$base64Image\" alt=\"$imageName\" />";
       htmlContent = htmlContent.replaceFirst(imgTag, replacement);
     }
   }
@@ -80,8 +82,7 @@ Future<double?> getLastPageNumberForBook({required String assetPath}) async {
   final pageHelper = PageHelper();
   final parts = assetPath.split('/'); // Split the string by '/'
   final bookAddress = parts.last;
-  final lastPageNumber =
-  await pageHelper.getLastPageNumberForBook(bookAddress);
+  final lastPageNumber = await pageHelper.getLastPageNumberForBook(bookAddress);
   return lastPageNumber;
 }
 
@@ -89,7 +90,6 @@ String? convertImageToBase64(EpubByteContentFile? imageFile) {
   if (imageFile == null) return null;
   return base64Encode(imageFile.Content!);
 }
-
 
 Future<int> findPageIndexInEpub(EpubBook epubBook, String fileName) async {
   EpubContent? bookContent = epubBook.Content;
@@ -106,7 +106,6 @@ Future<int> findPageIndexInEpub(EpubBook epubBook, String fileName) async {
   // If chapterFileName is not found in the map, return -1 or handle it as needed.
   return -1;
 }
-
 
 String extractImageNameFromTag(String imageTag) {
   // Define a regular expression to extract the image filename
@@ -144,4 +143,3 @@ class HtmlFileInfo {
 
   HtmlFileInfo(this.fileName, this.modifiedHtmlContent, this.pageIndex);
 }
-

@@ -133,6 +133,7 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
 
   Future<void> jumpToPage({String? chapterFileName, int? newPage}) async {
     if (newPage != null) {
+
       emit(EpubViewerState.pageChanged(pageNumber: newPage));
     }
     if (chapterFileName != null) {
