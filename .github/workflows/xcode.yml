@@ -2,9 +2,10 @@ name: Xcode - Build and Analyze
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "config/nosos" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "config/nosos" ]
+    
 
 jobs:
   build:
