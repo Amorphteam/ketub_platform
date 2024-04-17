@@ -2,9 +2,9 @@ name: Xcode - Build and Analyze
 
 on:
   push:
-    branches: [ "config/nosos" ]
+    branches: [ "master" ]
   pull_request:
-    branches: [ "config/nosos" ]
+    branches: [ "master" ]
 
 jobs:
   build:
@@ -19,13 +19,26 @@ jobs:
         run: |
           cd ios
           scheme_list=$(xcodebuild -list -json | tr -d "\n")
-          default_scheme=$(echo $scheme_list | ruby -e "require 'json'; puts JSON.parse(STDIN.gets)['workspace']['schemes'][0]")
-          echo "SCHEME=$default_scheme" >> $GITHUB_ENV
-          echo "Using default scheme: $default_scheme"
+          default=$(echo $scheme_list | ruby -e "require 'json'; puts JSON.parse(STDIN.gets)['workspace']['schemes'][0]")
+          echo "SCHEME=$default" >> $GITHUB_ENV
+          echo Using default scheme: $default
 
       - name: Build
         run: |
           cd ios
-          scheme=$(cat $GITHUB_ENV | grep SCHEME | cut -d '=' -f2)
-          file_to_build="Runner.xcworkspace"
-          xcodebuild clean build analyze -scheme "$scheme" -workspace "$file_to_build" | xcpretty && exit ${PIPESTATUS[0]}
+          scheme=${SCHEME}
+          if [ -z "$scheme" ]; then
+            echo "No scheme is set. Exiting..."
+            exit 1
+          fi
+          if [ -f "Runner.xcworkspace" ]; then
+            filetype_parameter="workspace"
+            file_to_build="Runner.xcworkspace"
+          elif [ -f "Runner.xcodeproj" ]; then
+            filetype_parameter="project"
+            file_to_build="Runner.xcodeproj"
+          else
+            echo "No Xcode workspace or project found. Exiting..."
+            exit 1
+          fi
+          xcodebuild clean build analyze -scheme "$scheme" -"$filetype_parameter" "$file_to_build" | xcpretty && exit ${PIPESTATUS[0]}
