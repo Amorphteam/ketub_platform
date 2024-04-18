@@ -290,7 +290,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                     ],
                   ),
                   onTap: () {
-
+                    _jumpTo(pageNumber: result.pageIndex-1);
                     Navigator.of(context)
                         .pop(); // Close the dialog on selection
                   },
@@ -411,7 +411,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   }
 
   void _search(String value) {
-    context.read<EpubViewerCubit>().search(value);
+    context.read<EpubViewerCubit>().searchUsingHtmlList(value);
   }
 
   _openInternalSearch(BuildContext context) {

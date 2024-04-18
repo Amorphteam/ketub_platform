@@ -9,9 +9,9 @@ class SearchModel {
   final int searchCount;
 
   SearchModel({
-    required this.bookAddress,
-    required this.bookTitle,
-    required this.pageId,
+     this.bookAddress,
+     this.bookTitle,
+     this.pageId,
     required this.pageIndex,
     required this.spanna,
     required this.searchCount,

@@ -62,6 +62,29 @@ class SearchHelper {
     return tempResult;
   }
 
+  Future<List<SearchModel>> searchHtmlContents(List<String> htmlContents, String searchWord) async {
+    List<SearchModel> results = [];
+
+    for (int i = 0; i < htmlContents.length; i++) {
+      String pageContent = _removeHtmlTags(htmlContents[i]);
+      SearchIndex searchIndex = _searchInString(pageContent, searchWord, 0);
+
+      while (searchIndex.startIndex >= 0) {
+        results.add(SearchModel(
+          pageIndex: i +1,  // Use the loop index as the page index
+          searchCount: results.length + 1,  // Directly use the length of results for search count
+          spanna: _getHighlightedSection(searchIndex, pageContent),
+        ));
+
+        // Continue searching from the end of the last found index
+        searchIndex = _searchInString(pageContent, searchWord, searchIndex.lastIndex + 1);
+      }
+    }
+
+    return results;
+  }
+
+
   String _getHighlightedSection(SearchIndex index, String wholeString) {
     final sw = wholeString.substring(index.startIndex, index.lastIndex);
     final swLength = index.lastIndex - index.startIndex;
