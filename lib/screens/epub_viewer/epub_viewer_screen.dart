@@ -59,7 +59,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   final String _pathUrl = 'assets/epubs/';
   List<String> _content = [];
   bool _isSliderChange = false;
-
+  String searchedWord = '';
   bool isSearchOpen = false;
   final focusNode = FocusNode();
   final textEditingController = TextEditingController();
@@ -82,6 +82,9 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
       listener: (context, state) {
         state.maybeWhen(
           pageChanged: (page) {
+            _jumpTo(pageNumber: page);
+          },
+          contentHighlighted: (_, page) {
             _jumpTo(pageNumber: page);
           },
           searchResultsFound: (searchResults) {
@@ -187,33 +190,37 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                         context.read<EpubViewerCubit>().emitLastPageSeen();
                         context.read<EpubViewerCubit>().loadUserPreferences();
                         context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
-                        return _buildCurrentUi(context);
+                        return _buildCurrentUi(context, _content);
                       },
-                      bookmarkAbsent: () => _buildCurrentUi(context),
-                      bookmarkPresent: () => _buildCurrentUi(context),
+                      contentHighlighted: (content, _) {
+                        _content = content;
+                        return _buildCurrentUi(context, content);
+                      },
+                      bookmarkAbsent: () => _buildCurrentUi(context, _content),
+                      bookmarkPresent: () => _buildCurrentUi(context, _content),
                       loading: () => const Center(
                         child: CircularProgressIndicator(),
                       ),
                       error: (error) {
-                        return _buildCurrentUi(context);
+                        return _buildCurrentUi(context, _content);
                       },
                       initial: () => const Center(
                         child: CircularProgressIndicator(),
                       ),
                       pageChanged: (int? pageNumber) {
-                        return _buildCurrentUi(context);
+                        return _buildCurrentUi(context, _content);
                       },
                       styleChanged: (FontSizeCustom? fontSize,
                           LineHeightCustom? lineHeight,
                           FontFamily? fontFamily) {
                         _changeStyle(fontSize, lineHeight, fontFamily);
-                        return _buildCurrentUi(context);
+                        return _buildCurrentUi(context, _content);
                       },
                       bookmarkAdded: (int? status) {
-                        return _buildCurrentUi(context);
+                        return _buildCurrentUi(context, _content);
                       },
                       searchResultsFound: (List<SearchModel> searchResults) {
-                        return _buildCurrentUi(context);
+                        return _buildCurrentUi(context, _content);
                       }),
                 ),
               ),
@@ -290,7 +297,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                     ],
                   ),
                   onTap: () {
-                    _jumpTo(pageNumber: result.pageIndex-1);
+                    this.context.read<EpubViewerCubit>().highlightContent(result.pageIndex, searchedWord);
                     Navigator.of(context)
                         .pop(); // Close the dialog on selection
                   },
@@ -303,13 +310,13 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     );
   }
 
-  Widget _buildCurrentUi(BuildContext context) {
-    var allPagesCount = _content.length.toDouble();
+  Widget _buildCurrentUi(BuildContext context, List<String> content) {
+    var allPagesCount = content.length.toDouble();
     return Column(
       children: [
         Expanded(
           child: ScrollablePositionedList.builder(
-            itemCount: _content.length,
+            itemCount: content.length,
             itemScrollController: itemScrollController,
             scrollOffsetController: scrollOffsetController,
             itemPositionsListener: itemPositionsListener,
@@ -335,7 +342,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                     child: Container(
                       color: Colors.white,
                       child: Html(
-                        data: _content[index],
+                        data: content[index],
                         style: {
                           "html": Style(
                             textAlign: TextAlign.justify,
@@ -411,6 +418,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   }
 
   void _search(String value) {
+    searchedWord = value;
     context.read<EpubViewerCubit>().searchUsingHtmlList(value);
   }
 
