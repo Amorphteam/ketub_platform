@@ -40,11 +40,11 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   int _currentIndex = -1;
   final ItemScrollController itemScrollController = ItemScrollController();
   final ScrollOffsetController scrollOffsetController =
-      ScrollOffsetController();
+  ScrollOffsetController();
   final ItemPositionsListener itemPositionsListener =
-      ItemPositionsListener.create();
+  ItemPositionsListener.create();
   final ScrollOffsetListener scrollOffsetListener =
-      ScrollOffsetListener.create();
+  ScrollOffsetListener.create();
   String _bookName = '';
   PageHelper pageHelper = PageHelper();
   double _currentPage = 0;
@@ -112,66 +112,66 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                   ),
                   title: isSearchOpen
                       ? TextField(
-                          autofocus: true,
-                          focusNode: focusNode,
-                          controller: textEditingController,
-                          decoration: InputDecoration(
-                            hintText: 'أدخل كلمة لبدء البحث ...',
-                            border: InputBorder.none,
-                            suffixIcon: IconButton(
-                              icon: SvgPicture.asset('assets/icons/search.svg'),
-                              // The search icon inside the TextField
-                              onPressed: () {
-                                // Trigger the search logic, similar to what's done in onSubmitted
-                                if (textEditingController.text.isNotEmpty) {
-                                  final String searchQuery =
-                                      textEditingController.text;
-                                  _search(searchQuery);
-                                }
-                              },
-                            ),
-                          ),
-                          onSubmitted: (value) {
-                            _search(value);
-                          },
-                        )
+                    autofocus: true,
+                    focusNode: focusNode,
+                    controller: textEditingController,
+                    decoration: InputDecoration(
+                      hintText: 'أدخل كلمة لبدء البحث ...',
+                      border: InputBorder.none,
+                      suffixIcon: IconButton(
+                        icon: SvgPicture.asset('assets/icons/search.svg'),
+                        // The search icon inside the TextField
+                        onPressed: () {
+                          // Trigger the search logic, similar to what's done in onSubmitted
+                          if (textEditingController.text.isNotEmpty) {
+                            final String searchQuery =
+                                textEditingController.text;
+                            _search(searchQuery);
+                          }
+                        },
+                      ),
+                    ),
+                    onSubmitted: (value) {
+                      _search(value);
+                    },
+                  )
                       : SizedBox.shrink(),
                   actions: isSearchOpen
                       ? null // No actions when search is open
                       : [
-                          IconButton(
-                            icon: SvgPicture.asset('assets/icons/search.svg'),
-                            onPressed: () => _toggleSearch(true),
-                          ),
-                          IconButton(
-                            icon: SvgPicture.asset('assets/icons/style.svg'),
-                            onPressed: () {
-                              _showBottomSheet(
-                                  context, context.read<EpubViewerCubit>());
-                            },
-                          ),
-                          IconButton(
-                            icon: SvgPicture.asset(
-                              isBookmarked
-                                  ? 'assets/icons/bookmarked.svg'
-                                  : 'assets/icons/bookmark.svg',
-                            ),
-                            onPressed: () {
-                              _toggleBookmark();
-                              if (isBookmarked) {
-                                _addBookmark(context);
-                              } else {
-                                _removeBookmark(context);
-                              }
-                            },
-                          ),
-                          IconButton(
-                            icon: SvgPicture.asset('assets/icons/toc.svg'),
-                            onPressed: () {
-                              _openInternalToc(context);
-                            },
-                          )
-                        ],
+                    IconButton(
+                      icon: SvgPicture.asset('assets/icons/search.svg'),
+                      onPressed: () => _toggleSearch(true),
+                    ),
+                    IconButton(
+                      icon: SvgPicture.asset('assets/icons/style.svg'),
+                      onPressed: () {
+                        _showBottomSheet(
+                            context, context.read<EpubViewerCubit>());
+                      },
+                    ),
+                    IconButton(
+                      icon: SvgPicture.asset(
+                        isBookmarked
+                            ? 'assets/icons/bookmarked.svg'
+                            : 'assets/icons/bookmark.svg',
+                      ),
+                      onPressed: () {
+                        _toggleBookmark();
+                        if (isBookmarked) {
+                          _addBookmark(context);
+                        } else {
+                          _removeBookmark(context);
+                        }
+                      },
+                    ),
+                    IconButton(
+                      icon: SvgPicture.asset('assets/icons/toc.svg'),
+                      onPressed: () {
+                        _openInternalToc(context);
+                      },
+                    )
+                  ],
                 ),
               Align(
                 alignment: Alignment.topCenter,
@@ -180,40 +180,40 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                       top: !isSliderVisible
                           ? 0
                           : kToolbarHeight +
-                              MediaQuery.of(context).padding.top),
+                          MediaQuery.of(context).padding.top),
                   child: state.when(
                       loaded: (content, _, tocList) {
                         _storeContentLoaded(content, context, state, tocList);
                         context.read<EpubViewerCubit>().emitLastPageSeen();
                         context.read<EpubViewerCubit>().loadUserPreferences();
                         context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
-                        return _buildCurrentUi(context, state);
+                        return _buildCurrentUi(context);
                       },
-                      bookmarkAbsent: () => _buildCurrentUi(context, state),
-                      bookmarkPresent: () => _buildCurrentUi(context, state),
+                      bookmarkAbsent: () => _buildCurrentUi(context),
+                      bookmarkPresent: () => _buildCurrentUi(context),
                       loading: () => const Center(
-                            child: CircularProgressIndicator(),
-                          ),
+                        child: CircularProgressIndicator(),
+                      ),
                       error: (error) {
-                        return _buildCurrentUi(context, state);
+                        return _buildCurrentUi(context);
                       },
                       initial: () => const Center(
-                            child: CircularProgressIndicator(),
-                          ),
+                        child: CircularProgressIndicator(),
+                      ),
                       pageChanged: (int? pageNumber) {
-                        return _buildCurrentUi(context, state);
+                        return _buildCurrentUi(context);
                       },
                       styleChanged: (FontSizeCustom? fontSize,
                           LineHeightCustom? lineHeight,
                           FontFamily? fontFamily) {
                         _changeStyle(fontSize, lineHeight, fontFamily);
-                        return _buildCurrentUi(context, state);
+                        return _buildCurrentUi(context);
                       },
                       bookmarkAdded: (int? status) {
-                        return _buildCurrentUi(context, state);
+                        return _buildCurrentUi(context);
                       },
                       searchResultsFound: (List<SearchModel> searchResults) {
-                        return _buildCurrentUi(context, state);
+                        return _buildCurrentUi(context);
                       }),
                 ),
               ),
@@ -272,17 +272,17 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                     children: [
                       Flexible(
                           child: Html(
-                        data: result.spanna.toString(),
-                        style: {
-                          "html": Style(
-                            fontSize: FontSize.small,
-                            textAlign: TextAlign.right,
-                          ),
-                          "mark": Style(
-                            backgroundColor: Colors.yellow,
-                          ),
-                        },
-                      )),
+                            data: result.spanna.toString(),
+                            style: {
+                              "html": Style(
+                                fontSize: FontSize.small,
+                                textAlign: TextAlign.right,
+                              ),
+                              "mark": Style(
+                                backgroundColor: Colors.yellow,
+                              ),
+                            },
+                          )),
                       Text(
                         result.pageIndex.toString(),
                         style: Theme.of(context).textTheme.bodySmall,
@@ -290,7 +290,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                     ],
                   ),
                   onTap: () {
-                    _jumpTo(pageNumber: result.pageIndex);
+
                     Navigator.of(context)
                         .pop(); // Close the dialog on selection
                   },
@@ -303,7 +303,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     );
   }
 
-  Widget _buildCurrentUi(BuildContext context, EpubViewerState state) {
+  Widget _buildCurrentUi(BuildContext context) {
     var allPagesCount = _content.length.toDouble();
     return Column(
       children: [
@@ -316,6 +316,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
             scrollOffsetListener: scrollOffsetListener,
             itemBuilder: (BuildContext context, int index) {
               double screenHeight = MediaQuery.of(context).size.height; // Get screen height
+
               return Padding(
                 padding: const EdgeInsets.only(top: 20.0),
                 child: GestureDetector(
@@ -352,6 +353,9 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                             fontWeight: FontWeight.bold,
                             fontFamily: fontFamily.name,
                           ),
+                          "mark": Style(
+                            backgroundColor: Colors.yellow, // Highlight color
+                          ),
                         },
                       ),
                     ),
@@ -382,7 +386,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
               ),
               Padding(
                 padding:
-                    const EdgeInsets.only(right: 16.0, left: 16.0, bottom: 8.0),
+                const EdgeInsets.only(right: 16.0, left: 16.0, bottom: 8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -475,24 +479,24 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                     builder: (context, value, child) {
                       return value
                           ? Positioned(
-                              top: 20,
-                              left: 0,
-                              right: 0,
-                              child: SafeArea(
-                                child: Container(
-                                  height: 56,
-                                  // Standard AppBar height
-                                  padding: EdgeInsets.symmetric(horizontal: 16),
-                                  alignment: Alignment.centerRight,
-                                  color: Colors.transparent,
-                                  // Adjust the color as needed
-                                  child: IconButton(
-                                    icon: Icon(Icons.arrow_back),
-                                    onPressed: () => Navigator.pop(context),
-                                  ),
-                                ),
-                              ),
-                            )
+                        top: 20,
+                        left: 0,
+                        right: 0,
+                        child: SafeArea(
+                          child: Container(
+                            height: 56,
+                            // Standard AppBar height
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            alignment: Alignment.centerRight,
+                            color: Colors.transparent,
+                            // Adjust the color as needed
+                            child: IconButton(
+                              icon: Icon(Icons.arrow_back),
+                              onPressed: () => Navigator.pop(context),
+                            ),
+                          ),
+                        ),
+                      )
                           : SizedBox.shrink(); // If false, don't show anything
                     },
                   ),
@@ -653,4 +657,8 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     context.read<EpubViewerCubit>().removeBookmark(_bookPath!, _currentPage.toString());
     context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
   }
+
+
 }
+
+

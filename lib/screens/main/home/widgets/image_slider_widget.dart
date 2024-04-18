@@ -87,8 +87,7 @@ class _ImageSliderWidgetState extends State<ImageSliderWidget> {
                           // Handle button tap
                         },
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.grey.withOpacity(0.5), // Set the background color with opacity
-                          onPrimary: Colors.white, // This is the text color
+                          foregroundColor: Colors.white, backgroundColor: Colors.grey.withOpacity(0.5), // This is the text color
                           elevation: 0,
                         ),
                         child: Text(''),
