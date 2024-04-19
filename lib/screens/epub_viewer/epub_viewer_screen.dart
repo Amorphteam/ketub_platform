@@ -237,6 +237,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   _storeContentLoaded(List<String> htmlContent, BuildContext context,
       EpubViewerState state, List<EpubChapter>? tocList) {
     _content = htmlContent;
+    _orginalContent = _content;
     _bookName = _getAppBarTitle(state);
     _tocList = tocList;
   }
