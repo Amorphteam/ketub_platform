@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:collection/collection.dart';
+import 'package:html/parser.dart' as html_parser;
 
 import 'package:bloc/bloc.dart';
 import 'package:epub_parser/epub_parser.dart';
@@ -213,6 +214,46 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
     } catch (error) {
       emit(EpubViewerState.error(error: error.toString()));
     }
+  }
+
+  Future<void> searchUsingHtmlList(String searchTerm) async {
+    if (_assetPath == null || searchTerm.isEmpty || _spineHtmlContent == null) {
+      return; // Ensure there is content to search and a term to search for
+    }
+
+    try {
+      // Assuming searchHtmlContents expects the book title, which we stored in _bookTitle
+      List<SearchModel> results = await searchHelper.searchHtmlContents(_spineHtmlContent!, searchTerm);
+
+      // Emit the search results to the state
+      emit(EpubViewerState.searchResultsFound(searchResults: results));
+    } catch (error) {
+      emit(EpubViewerState.error(error: error.toString()));
+    }
+  }
+
+  Future<void> highlightContent(int pageIndex, String searchTerm) async {
+    if (_spineHtmlContent == null || _spineHtmlContent!.isEmpty) return;
+
+    // Decode HTML entities and remove extra HTML tags from searchTerm
+    var decodedSearchTerm = html_parser.parse(searchTerm).documentElement?.text ?? "";
+    decodedSearchTerm = RegExp.escape(decodedSearchTerm);
+    final regex = RegExp(decodedSearchTerm, caseSensitive: false);
+
+    // Create a new list to store updated content
+    List<String> updatedContent = [];
+
+    // Apply highlighting to each page content
+    for (var content in _spineHtmlContent!) {
+      var highlightedContent = content.replaceAllMapped(
+        regex,
+            (match) => '<mark>${match[0]}</mark>',
+      );
+      updatedContent.add(highlightedContent);
+    }
+
+    // Emit the new state with updated content
+    emit(EpubViewerState.contentHighlighted(content: updatedContent, highlightedIndex: pageIndex-1));
   }
 
 }

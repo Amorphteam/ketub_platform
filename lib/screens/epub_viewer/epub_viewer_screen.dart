@@ -61,8 +61,10 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   FontFamily fontFamily = FontFamily.font1;
   final String _pathUrl = 'assets/epubs/';
   List<String> _content = [];
-  bool _isSliderChange = false;
+  List<String> _orginalContent = [];
 
+  bool _isSliderChange = false;
+  String searchedWord = '';
   bool isSearchOpen = false;
   final focusNode = FocusNode();
   final textEditingController = TextEditingController();
@@ -87,6 +89,9 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
           pageChanged: (page) {
             _jumpTo(pageNumber: page);
           },
+          contentHighlighted: (_, page) {
+            _jumpTo(pageNumber: page);
+          },
           searchResultsFound: (searchResults) {
             showSearchResultsDialog(context, searchResults);
           },
@@ -103,7 +108,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                 AppBar(
                   leading: IconButton(
                     icon: isSearchOpen
-                        ? Icon(Icons.close, color: Colors.black38)
+                        ? Icon(Icons.close)
                         : Icon(Icons.arrow_back),
                     onPressed: () {
                       if (isSearchOpen) {
@@ -187,42 +192,43 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                   child: state.when(
                       loaded: (content, _, tocList) {
                         _storeContentLoaded(content, context, state, tocList);
-                        if (widget.section !=null){
-                          context.read<EpubViewerCubit>().jumpToPage(newPage: (widget.section?.sectionIndex)!-1);
-                        }else {
-                          context.read<EpubViewerCubit>().emitLastPageSeen();
-                        }
+                        context.read<EpubViewerCubit>().emitLastPageSeen();
                         context.read<EpubViewerCubit>().loadUserPreferences();
                         context
                             .read<EpubViewerCubit>()
                             .checkBookmark(_bookPath!, _currentPage.toString());
-                        return _buildCurrentUi(context, state);
+                        return _buildCurrentUi(context, _content);
                       },
-                      bookmarkAbsent: () => _buildCurrentUi(context, state),
-                      bookmarkPresent: () => _buildCurrentUi(context, state),
+                      contentHighlighted: (content, _) {
+                        _orginalContent = _content;
+                        _content = content;
+                        return _buildCurrentUi(context, content);
+                      },
+                      bookmarkAbsent: () => _buildCurrentUi(context, _content),
+                      bookmarkPresent: () => _buildCurrentUi(context, _content),
                       loading: () => const Center(
                             child: CircularProgressIndicator(),
                           ),
                       error: (error) {
-                        return _buildCurrentUi(context, state);
+                        return _buildCurrentUi(context, _content);
                       },
                       initial: () => const Center(
                             child: CircularProgressIndicator(),
                           ),
                       pageChanged: (int? pageNumber) {
-                        return _buildCurrentUi(context, state);
+                        return _buildCurrentUi(context, _content);
                       },
                       styleChanged: (FontSizeCustom? fontSize,
                           LineHeightCustom? lineHeight,
                           FontFamily? fontFamily) {
                         _changeStyle(fontSize, lineHeight, fontFamily);
-                        return _buildCurrentUi(context, state);
+                        return _buildCurrentUi(context, _content);
                       },
                       bookmarkAdded: (int? status) {
-                        return _buildCurrentUi(context, state);
+                        return _buildCurrentUi(context, _content);
                       },
                       searchResultsFound: (List<SearchModel> searchResults) {
-                        return _buildCurrentUi(context, state);
+                        return _buildCurrentUi(context, _content);
                       }),
                 ),
               ),
@@ -236,6 +242,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   _storeContentLoaded(List<String> htmlContent, BuildContext context,
       EpubViewerState state, List<EpubChapter>? tocList) {
     _content = htmlContent;
+    _orginalContent = _content;
     _bookName = _getAppBarTitle(state);
     _tocList = tocList;
   }
@@ -250,6 +257,9 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
         FocusScope.of(context).requestFocus(focusNode);
       });
     } else {
+      setState(() {
+        _content = _orginalContent;
+      });
       focusNode.unfocus();
       textEditingController.clear();
     }
@@ -299,7 +309,10 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                     ],
                   ),
                   onTap: () {
-                    _jumpTo(pageNumber: result.pageIndex);
+                    this
+                        .context
+                        .read<EpubViewerCubit>()
+                        .highlightContent(result.pageIndex, searchedWord);
                     Navigator.of(context)
                         .pop(); // Close the dialog on selection
                   },
@@ -312,13 +325,13 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     );
   }
 
-  Widget _buildCurrentUi(BuildContext context, EpubViewerState state) {
-    var allPagesCount = _content.length.toDouble();
+  Widget _buildCurrentUi(BuildContext context, List<String> content) {
+    var allPagesCount = content.length.toDouble();
     return Column(
       children: [
         Expanded(
           child: ScrollablePositionedList.builder(
-            itemCount: _content.length,
+            itemCount: content.length,
             itemScrollController: itemScrollController,
             scrollOffsetController: scrollOffsetController,
             itemPositionsListener: itemPositionsListener,
@@ -326,6 +339,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
             itemBuilder: (BuildContext context, int index) {
               double screenHeight =
                   MediaQuery.of(context).size.height; // Get screen height
+
               return Padding(
                 padding: const EdgeInsets.only(top: 20.0),
                 child: GestureDetector(
@@ -345,13 +359,13 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                     child: Container(
                       color: Colors.white,
                       child: Html(
-                        data: _content[index],
+                        data: content[index],
                         style: {
                           "html": Style(
                             textAlign: TextAlign.justify,
                             direction: TextDirection.rtl,
                             fontSize: FontSize(fontSize.size),
-                            color: Colors.black,
+                            color: Colors.black87,
                             padding: HtmlPaddings.only(right: 10, left: 10),
                             fontFamily: fontFamily.name,
                             lineHeight: LineHeight(lineHeight.size),
@@ -363,6 +377,9 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                             fontSize: FontSize(fontSize.size * 1.2),
                             fontWeight: FontWeight.bold,
                             fontFamily: fontFamily.name,
+                          ),
+                          "mark": Style(
+                            backgroundColor: Colors.yellow, // Highlight color
                           ),
                         },
                       ),
@@ -419,7 +436,8 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   }
 
   void _search(String value) {
-    context.read<EpubViewerCubit>().search(value);
+    searchedWord = value;
+    context.read<EpubViewerCubit>().searchUsingHtmlList(value);
   }
 
   _openInternalSearch(BuildContext context) {
@@ -559,8 +577,6 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
       _loadEpubFromTableOfContents();
     } else if (widget.searchModel != null) {
       _loadEpubFromSearchResult();
-    } else if (widget.section != null) {
-      _loadEpubFromSection();
     } else {
       _loadEpubFromCategory();
     }
@@ -586,10 +602,6 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
         bookPath: widget.searchModel!.bookAddress!, fileName: _bookPath!);
   }
 
-  _loadEpubFromSection() {
-    _bookPath = widget.section!.bookPath;
-    _loadAndParseEpub(bookPath: _bookPath!);
-  }
   _loadEpubFromCategory() {
     _bookPath = widget.catModel!.bookPath!;
     _loadAndParseEpub(bookPath: _bookPath!);
@@ -604,7 +616,6 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   void initState() {
     super.initState();
     _determineEpubSourceAndLoad();
-
     itemPositionsListener.itemPositions.addListener(() {
       final positions = itemPositionsListener.itemPositions.value;
       if (positions.isNotEmpty) {
@@ -634,15 +645,14 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   }
 
   @override
-  void dispose() {
-    if (widget.catModel?.bookPath != null) {
-      pageHelper.saveBookData(widget.catModel!.bookPath!, _currentPage);
-    }
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+  dispose() {
+    final pageHelper = PageHelper();
+    pageHelper.saveBookData(widget.catModel!.bookPath!, _currentPage);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: SystemUiOverlay.values);
     itemPositionsListener.itemPositions.removeListener(() {});
     focusNode.dispose();
     textEditingController.dispose();
-
     super.dispose();
   }
 
@@ -683,5 +693,4 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
         .read<EpubViewerCubit>()
         .checkBookmark(_bookPath!, _currentPage.toString());
   }
-
 }

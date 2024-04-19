@@ -12,5 +12,7 @@ class EpubViewerState with _$EpubViewerState {
   const factory EpubViewerState.searchResultsFound({required List<SearchModel> searchResults}) = _SearchResultsFound;
   const factory EpubViewerState.bookmarkPresent() = _BookmarkPresent;
   const factory EpubViewerState.bookmarkAbsent() = _BookmarkAbsent;
+  const factory EpubViewerState.contentHighlighted({required List<String> content, required int highlightedIndex}) = _ContentHighlighted;
+
 
 }
