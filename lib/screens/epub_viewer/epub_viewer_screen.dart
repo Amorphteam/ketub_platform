@@ -58,6 +58,8 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   FontFamily fontFamily = FontFamily.font1;
   final String _pathUrl = 'assets/epubs/';
   List<String> _content = [];
+  List<String> _orginalContent = [];
+
   bool _isSliderChange = false;
   String searchedWord = '';
   bool isSearchOpen = false;
@@ -193,6 +195,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                         return _buildCurrentUi(context, _content);
                       },
                       contentHighlighted: (content, _) {
+                        _orginalContent = _content;
                         _content = content;
                         return _buildCurrentUi(context, content);
                       },
@@ -248,6 +251,9 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
         FocusScope.of(context).requestFocus(focusNode);
       });
     } else {
+      setState(() {
+        _content = _orginalContent;
+      });
       focusNode.unfocus();
       textEditingController.clear();
     }
@@ -593,7 +599,6 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   void initState() {
     super.initState();
     _determineEpubSourceAndLoad();
-
     itemPositionsListener.itemPositions.addListener(() {
       final positions = itemPositionsListener.itemPositions.value;
       if (positions.isNotEmpty) {
@@ -665,6 +670,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     context.read<EpubViewerCubit>().removeBookmark(_bookPath!, _currentPage.toString());
     context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
   }
+
 
 
 }
