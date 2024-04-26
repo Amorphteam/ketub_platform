@@ -52,11 +52,11 @@ class _NavScreenState extends State<NavScreen> {
         },
         destinations: [
           NavigationDestination(
-            icon: SvgPicture.asset('assets/icons/home.svg'),
+            icon: SvgPicture.asset('assets/icons/home.svg', color: Theme.of(context).colorScheme.onSurfaceVariant,),
             label: 'الرئيسية',
           ),
           NavigationDestination(
-            icon: SvgPicture.asset('assets/icons/books.svg'),
+            icon: SvgPicture.asset('assets/icons/books.svg', color: Theme.of(context).colorScheme.onSurfaceVariant,),
             label: 'الكتب والمؤلفات',
           ),
         ],

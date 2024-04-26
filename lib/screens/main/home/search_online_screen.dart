@@ -74,7 +74,7 @@ class _SearchOnlineScreenState extends State<SearchOnlineScreen> {
               Expanded(
                 child: Card(
                   elevation: 0.0,
-                  color: Colors.grey[200],
+                  color: Theme.of(context).colorScheme.surfaceVariant,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),

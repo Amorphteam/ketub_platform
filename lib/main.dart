@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const ColorScheme colorScheme = ColorScheme(
+    const ColorScheme lightColorScheme = ColorScheme(
       brightness: Brightness.light,
       primary: Color(0xFF4C6707), // Replace with actual color code from the screenshot
       onPrimary: Color(0xFFFFFFFF), // And so on for the rest of the colors
@@ -53,18 +53,33 @@ class MyApp extends StatelessWidget {
       background: Color(0xFFFBF9F1),
       onBackground: Color(0xFF1B1C17),
     );
-    final ThemeData theme = ThemeData(
+
+
+
+    final ThemeData lightTheme = ThemeData(
       useMaterial3: true,
-      colorScheme: colorScheme,
-      // Define other theme properties if necessary
+      colorScheme: lightColorScheme,
       fontFamily: 'tajwal',
     );
+
+    final ThemeData darkTheme = ThemeData(
+      useMaterial3: true,
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: lightColorScheme.primary,
+        brightness: Brightness.dark,
+      ),
+      fontFamily: 'tajwal',
+    );
+
+
 
 
     return MaterialApp(
       title: 'Ketub Platform',
       debugShowCheckedModeBanner: false,
-      theme: theme,
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      themeMode: ThemeMode.system,
       home:  FutureBuilder(
         future: isFirstLaunch(),
         builder: (context, snapshot) {

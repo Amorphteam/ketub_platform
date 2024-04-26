@@ -83,7 +83,7 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
                 ),
                 if (widget.hasLoadMore)
                   IconButton(
-                    icon: SvgPicture.asset('assets/icons/load_more.svg'),
+                    icon: SvgPicture.asset('assets/icons/load_more.svg', color: Theme.of(context).colorScheme.onSurfaceVariant),
                     onPressed: () {
                       _openCategoryScreen(catName: widget.title);
                     },

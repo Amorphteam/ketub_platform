@@ -160,7 +160,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                         isBookmarked
                             ? 'assets/icons/bookmarked.svg'
                             : 'assets/icons/bookmark.svg',
-                      ),
+                       color: Theme.of(context).colorScheme.onSurfaceVariant),
                       onPressed: () {
                         _toggleBookmark();
                         if (isBookmarked) {
