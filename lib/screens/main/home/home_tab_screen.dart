@@ -2,10 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart'; // Import this if you are using SVG images
+import 'package:ketub_platform/repositories/online_repository.dart';
 import 'package:ketub_platform/screens/html_viewer/cubit/html_viewer_cubit.dart';
 import 'package:ketub_platform/screens/html_viewer/html_viewer_screen.dart';
 import 'package:ketub_platform/screens/main/about/about_app_screen.dart';
 import 'package:ketub_platform/screens/main/home/cubit/home_all_cat_cubit.dart';
+import 'package:ketub_platform/screens/main/home/cubit/home_tree_cat_cubit.dart';
 import 'package:ketub_platform/screens/main/home/cubit/search_online_cubit.dart';
 import 'package:ketub_platform/screens/main/home/home_tree_cat_screen.dart';
 import 'package:ketub_platform/screens/main/shared_widgets/search_bar_widget.dart';
@@ -44,8 +46,8 @@ class _homeTabScreenState extends State<homeTabScreen>
           children: [
             Expanded(
                 child: SearchBarWiget(hint: 'ابحث في كل المحتوى',
-              onClicked: startOnlineSearch,
-            )),
+                  onClicked: startOnlineSearch,
+                )),
             PopupMenuButton<String>(
               onSelected: (String result) {
                 // Handle the menu item action here
@@ -57,10 +59,11 @@ class _homeTabScreenState extends State<homeTabScreen>
                     _openAboutAppScreen();
 
                     break;
-                  // Add more cases for each menu option
+                // Add more cases for each menu option
                 }
               },
-              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              itemBuilder: (BuildContext context) =>
+              <PopupMenuEntry<String>>[
                 const PopupMenuItem<String>(
                   value: 'cv',
                   child: Text('السيرة الذاتية'),
@@ -104,18 +107,22 @@ class _homeTabScreenState extends State<homeTabScreen>
 
 
   Widget _buildTreeContent() {
-    return HomeTreeCatScreen();
+    return BlocProvider(
+      create: (context) => HomeTreeCatCubit(),
+      child: HomeTreeCatScreen(),
+    );
   }
 
   _openCvScreen() {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => BlocProvider(
-            create: (context) => HtmlViewerCubit(),
-            child: HtmlViewerScreen(
-              id: 49482,
-            )),
+        builder: (context) =>
+            BlocProvider(
+                create: (context) => HtmlViewerCubit(),
+                child: HtmlViewerScreen(
+                  id: 49482,
+                )),
       ),
     );
   }
@@ -124,10 +131,11 @@ class _homeTabScreenState extends State<homeTabScreen>
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => BlocProvider(
-          create: (context) => SearchOnlineCubit(),
-          child: SearchOnlineScreen(query: p1),
-        ),
+        builder: (context) =>
+            BlocProvider(
+              create: (context) => SearchOnlineCubit(),
+              child: SearchOnlineScreen(query: p1),
+            ),
       ),
     );
   }
