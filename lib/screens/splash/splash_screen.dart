@@ -55,6 +55,10 @@ class SplashScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 40),
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                    ),
+
                     onPressed: () {
                       Navigator.pushReplacement(
                         context,
@@ -62,7 +66,7 @@ class SplashScreen extends StatelessWidget {
                           builder: (context) => NavScreen(),
                         ),
                       );                    },
-                    child: Text('إبدأ الآن'),
+                    child: Text('ابدأ الآن', style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.onPrimary)),
                   ),
                   SizedBox(height: 40),
                 ],

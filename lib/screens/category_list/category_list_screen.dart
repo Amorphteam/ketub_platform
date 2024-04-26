@@ -113,8 +113,6 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
                   .loadArticlesList(catId: selectedCatId);
             }
           },
-          selectedColor: Colors.green,
-          backgroundColor: Colors.white,
         ),
       ));
     } else {
@@ -187,8 +185,8 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
               child: GridItemWidget(
                 title: article?.name ?? '',
                 imagePath: 'assets/images/bk3.jpg',
-                height: 60,
-                width: 60,
+                height: 50,
+                width: 50,
                 insideTitlePosition: true,
                 withTitle: true,
                 withBk: true,
