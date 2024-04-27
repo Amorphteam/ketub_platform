@@ -104,7 +104,7 @@ class _LibraryAllBooksScreenState extends State<LibraryAllBooksScreen> {
       appBar: AppBar(
         title: Row(
           children: [
-            Expanded(child: SearchBarWiget(hint: 'ابحث في الكتب', onChanged: _filterBooks,)),
+            Expanded(child: SearchBarWiget(hint: 'ابحث عن كتاب', onChanged: _filterBooks,)),
             Stack(
               alignment: Alignment.center,
               children: [

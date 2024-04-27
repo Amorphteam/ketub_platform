@@ -20,7 +20,7 @@ class ControlButtonsWidget extends StatelessWidget {
           onPressed: () {
             showSliderDialog(
               context: context,
-              title: "Adjust volume",
+              title: "درجة الصوت",
               divisions: 10,
               min: 0.0,
               max: 1.0,
@@ -30,16 +30,17 @@ class ControlButtonsWidget extends StatelessWidget {
           },
         ),
         IconButton(
-          icon: SvgPicture.asset('assets/icons/reply.svg'),
+          icon: SvgPicture.asset('assets/icons/forword.svg'),
           onPressed: () async {
             // Get the current position
             final currentPosition = await player.position;
             // Calculate the new position by adding 5 seconds
-            final newPosition = currentPosition + Duration(seconds: 10);
+            final newPosition = currentPosition - Duration(seconds: 5);
             // Seek to the new position
             player.seek(newPosition);
           },
         ),
+
         StreamBuilder<PlayerState>(
           stream: player.playerStateStream,
           builder: (context, snapshot) {
@@ -77,12 +78,12 @@ class ControlButtonsWidget extends StatelessWidget {
           },
         ),
         IconButton(
-          icon: SvgPicture.asset('assets/icons/forword.svg'),
+          icon: SvgPicture.asset('assets/icons/reply.svg'),
           onPressed: () async {
             // Get the current position
             final currentPosition = await player.position;
             // Calculate the new position by adding 5 seconds
-            final newPosition = currentPosition - Duration(seconds: 5);
+            final newPosition = currentPosition + Duration(seconds: 10);
             // Seek to the new position
             player.seek(newPosition);
           },
@@ -95,7 +96,7 @@ class ControlButtonsWidget extends StatelessWidget {
             onPressed: () {
               showSliderDialog(
                 context: context,
-                title: "Adjust speed",
+                title: "سرعة القراءة",
                 divisions: 10,
                 min: 0.5,
                 max: 1.5,
