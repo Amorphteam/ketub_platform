@@ -63,7 +63,7 @@ class ControlButtonsWidget extends StatelessWidget {
               );
             } else if (processingState != ProcessingState.completed) {
               return IconButton(
-                icon: const Icon(Icons.pause),
+                icon: SvgPicture.asset('assets/icons/pause.svg'),
                 iconSize: 64.0,
                 onPressed: player.pause,
               );

@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:ketub_platform/screens/audio/widgets/control_buttons_widget.dart';
+import 'package:ketub_platform/screens/audio/widgets/waveform_seek_bar.dart';
 import 'package:ketub_platform/utils/data_helper.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -149,13 +150,16 @@ class _AudioScreenState extends State<AudioScreen> {
           Container(
               height: 100.0,
               child: Center(
-                child: WaveformSeekBar(
-                  duration: positionData.duration,
-                  position: positionData.position,
-                  bufferedPosition: positionData.bufferedPosition,
-                  onChangeEnd: (newPosition) {
-                    player.seek(newPosition);
-                  },
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: WaveformSeekBar(
+                    duration: positionData.duration,
+                    position: positionData.position,
+                    bufferedPosition: positionData.bufferedPosition,
+                    onChangeEnd: (newPosition) {
+                      player.seek(newPosition);
+                    },
+                  ),
                 ),
               ),
             ),

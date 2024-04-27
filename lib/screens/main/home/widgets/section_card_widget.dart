@@ -184,7 +184,7 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
                       'Amorph',
                       style: Theme.of(context)
                           .textTheme
-                          .titleLarge
+                          .displaySmall
                           ?.copyWith(color: Colors.white),
                       textAlign: TextAlign.right, // Align text to the right
                     ),
