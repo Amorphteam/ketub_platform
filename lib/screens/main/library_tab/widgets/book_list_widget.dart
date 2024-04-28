@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ketub_platform/models/book_model.dart';
@@ -39,7 +40,7 @@ class _BookListWidgetState extends State<BookListWidget> {
                 child: LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
                     return Container(
-                      height: 150,
+                      height: 160,
                       // Set the width to one third of the screen width minus the horizontal padding
                       width: (MediaQuery.of(context).size.width - 24) / 3,
                       decoration: BoxDecoration(
@@ -55,7 +56,7 @@ class _BookListWidgetState extends State<BookListWidget> {
                   },
                 ),
               ),
-              Flexible(
+              Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(right: 8.0, left: 8.0),
                   child: Text(

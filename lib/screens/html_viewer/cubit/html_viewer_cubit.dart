@@ -9,10 +9,7 @@ class HtmlViewerCubit extends Cubit<HtmlViewerState> {
     try {
       emit(const HtmlViewerState.loading());
       final article = await OnlineRepository().getArticles(id ?? 44621);
-      final htmlString  = article.description ?? '';
-      final htmlTitle = article.name ?? '';
-      final htmlpubDate = article.createdAt ?? '';
-      emit(HtmlViewerState.loaded(htmlContent: htmlString, htmlTitle: htmlTitle, date: htmlpubDate));
+      emit(HtmlViewerState.loaded(articleModel: article));
     } catch (e) {
       emit(HtmlViewerState.error(error: e.toString()));
     }
