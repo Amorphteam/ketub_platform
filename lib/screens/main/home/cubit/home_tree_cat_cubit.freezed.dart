@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'html_viewer_state.dart';
+part of 'home_tree_cat_cubit.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,29 +15,29 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-mixin _$HtmlViewerState {
+mixin _$HomeTreeCatState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(ArticleModel articleModel) loaded,
-    required TResult Function(String? error) error,
+    required TResult Function(List<Category> categories) loaded,
+    required TResult Function(String message) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(ArticleModel articleModel)? loaded,
-    TResult? Function(String? error)? error,
+    TResult? Function(List<Category> categories)? loaded,
+    TResult? Function(String message)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(ArticleModel articleModel)? loaded,
-    TResult Function(String? error)? error,
+    TResult Function(List<Category> categories)? loaded,
+    TResult Function(String message)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -69,16 +69,16 @@ mixin _$HtmlViewerState {
 }
 
 /// @nodoc
-abstract class $HtmlViewerStateCopyWith<$Res> {
-  factory $HtmlViewerStateCopyWith(
-          HtmlViewerState value, $Res Function(HtmlViewerState) then) =
-      _$HtmlViewerStateCopyWithImpl<$Res, HtmlViewerState>;
+abstract class $HomeTreeCatStateCopyWith<$Res> {
+  factory $HomeTreeCatStateCopyWith(
+          HomeTreeCatState value, $Res Function(HomeTreeCatState) then) =
+      _$HomeTreeCatStateCopyWithImpl<$Res, HomeTreeCatState>;
 }
 
 /// @nodoc
-class _$HtmlViewerStateCopyWithImpl<$Res, $Val extends HtmlViewerState>
-    implements $HtmlViewerStateCopyWith<$Res> {
-  _$HtmlViewerStateCopyWithImpl(this._value, this._then);
+class _$HomeTreeCatStateCopyWithImpl<$Res, $Val extends HomeTreeCatState>
+    implements $HomeTreeCatStateCopyWith<$Res> {
+  _$HomeTreeCatStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -95,7 +95,7 @@ abstract class _$$InitialImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$InitialImplCopyWithImpl<$Res>
-    extends _$HtmlViewerStateCopyWithImpl<$Res, _$InitialImpl>
+    extends _$HomeTreeCatStateCopyWithImpl<$Res, _$InitialImpl>
     implements _$$InitialImplCopyWith<$Res> {
   __$$InitialImplCopyWithImpl(
       _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
@@ -109,7 +109,7 @@ class _$InitialImpl implements _Initial {
 
   @override
   String toString() {
-    return 'HtmlViewerState.initial()';
+    return 'HomeTreeCatState.initial()';
   }
 
   @override
@@ -126,8 +126,8 @@ class _$InitialImpl implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(ArticleModel articleModel) loaded,
-    required TResult Function(String? error) error,
+    required TResult Function(List<Category> categories) loaded,
+    required TResult Function(String message) error,
   }) {
     return initial();
   }
@@ -137,8 +137,8 @@ class _$InitialImpl implements _Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(ArticleModel articleModel)? loaded,
-    TResult? Function(String? error)? error,
+    TResult? Function(List<Category> categories)? loaded,
+    TResult? Function(String message)? error,
   }) {
     return initial?.call();
   }
@@ -148,8 +148,8 @@ class _$InitialImpl implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(ArticleModel articleModel)? loaded,
-    TResult Function(String? error)? error,
+    TResult Function(List<Category> categories)? loaded,
+    TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -196,7 +196,7 @@ class _$InitialImpl implements _Initial {
   }
 }
 
-abstract class _Initial implements HtmlViewerState {
+abstract class _Initial implements HomeTreeCatState {
   const factory _Initial() = _$InitialImpl;
 }
 
@@ -209,7 +209,7 @@ abstract class _$$LoadingImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$LoadingImplCopyWithImpl<$Res>
-    extends _$HtmlViewerStateCopyWithImpl<$Res, _$LoadingImpl>
+    extends _$HomeTreeCatStateCopyWithImpl<$Res, _$LoadingImpl>
     implements _$$LoadingImplCopyWith<$Res> {
   __$$LoadingImplCopyWithImpl(
       _$LoadingImpl _value, $Res Function(_$LoadingImpl) _then)
@@ -223,7 +223,7 @@ class _$LoadingImpl implements _Loading {
 
   @override
   String toString() {
-    return 'HtmlViewerState.loading()';
+    return 'HomeTreeCatState.loading()';
   }
 
   @override
@@ -240,8 +240,8 @@ class _$LoadingImpl implements _Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(ArticleModel articleModel) loaded,
-    required TResult Function(String? error) error,
+    required TResult Function(List<Category> categories) loaded,
+    required TResult Function(String message) error,
   }) {
     return loading();
   }
@@ -251,8 +251,8 @@ class _$LoadingImpl implements _Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(ArticleModel articleModel)? loaded,
-    TResult? Function(String? error)? error,
+    TResult? Function(List<Category> categories)? loaded,
+    TResult? Function(String message)? error,
   }) {
     return loading?.call();
   }
@@ -262,8 +262,8 @@ class _$LoadingImpl implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(ArticleModel articleModel)? loaded,
-    TResult Function(String? error)? error,
+    TResult Function(List<Category> categories)? loaded,
+    TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -310,7 +310,7 @@ class _$LoadingImpl implements _Loading {
   }
 }
 
-abstract class _Loading implements HtmlViewerState {
+abstract class _Loading implements HomeTreeCatState {
   const factory _Loading() = _$LoadingImpl;
 }
 
@@ -320,12 +320,12 @@ abstract class _$$LoadedImplCopyWith<$Res> {
           _$LoadedImpl value, $Res Function(_$LoadedImpl) then) =
       __$$LoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({ArticleModel articleModel});
+  $Res call({List<Category> categories});
 }
 
 /// @nodoc
 class __$$LoadedImplCopyWithImpl<$Res>
-    extends _$HtmlViewerStateCopyWithImpl<$Res, _$LoadedImpl>
+    extends _$HomeTreeCatStateCopyWithImpl<$Res, _$LoadedImpl>
     implements _$$LoadedImplCopyWith<$Res> {
   __$$LoadedImplCopyWithImpl(
       _$LoadedImpl _value, $Res Function(_$LoadedImpl) _then)
@@ -334,13 +334,13 @@ class __$$LoadedImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? articleModel = null,
+    Object? categories = null,
   }) {
     return _then(_$LoadedImpl(
-      articleModel: null == articleModel
-          ? _value.articleModel
-          : articleModel // ignore: cast_nullable_to_non_nullable
-              as ArticleModel,
+      null == categories
+          ? _value._categories
+          : categories // ignore: cast_nullable_to_non_nullable
+              as List<Category>,
     ));
   }
 }
@@ -348,14 +348,20 @@ class __$$LoadedImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$LoadedImpl implements _Loaded {
-  const _$LoadedImpl({required this.articleModel});
+  const _$LoadedImpl(final List<Category> categories)
+      : _categories = categories;
 
+  final List<Category> _categories;
   @override
-  final ArticleModel articleModel;
+  List<Category> get categories {
+    if (_categories is EqualUnmodifiableListView) return _categories;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_categories);
+  }
 
   @override
   String toString() {
-    return 'HtmlViewerState.loaded(articleModel: $articleModel)';
+    return 'HomeTreeCatState.loaded(categories: $categories)';
   }
 
   @override
@@ -363,12 +369,13 @@ class _$LoadedImpl implements _Loaded {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LoadedImpl &&
-            (identical(other.articleModel, articleModel) ||
-                other.articleModel == articleModel));
+            const DeepCollectionEquality()
+                .equals(other._categories, _categories));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, articleModel);
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(_categories));
 
   @JsonKey(ignore: true)
   @override
@@ -381,10 +388,10 @@ class _$LoadedImpl implements _Loaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(ArticleModel articleModel) loaded,
-    required TResult Function(String? error) error,
+    required TResult Function(List<Category> categories) loaded,
+    required TResult Function(String message) error,
   }) {
-    return loaded(articleModel);
+    return loaded(categories);
   }
 
   @override
@@ -392,10 +399,10 @@ class _$LoadedImpl implements _Loaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(ArticleModel articleModel)? loaded,
-    TResult? Function(String? error)? error,
+    TResult? Function(List<Category> categories)? loaded,
+    TResult? Function(String message)? error,
   }) {
-    return loaded?.call(articleModel);
+    return loaded?.call(categories);
   }
 
   @override
@@ -403,12 +410,12 @@ class _$LoadedImpl implements _Loaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(ArticleModel articleModel)? loaded,
-    TResult Function(String? error)? error,
+    TResult Function(List<Category> categories)? loaded,
+    TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(articleModel);
+      return loaded(categories);
     }
     return orElse();
   }
@@ -451,11 +458,10 @@ class _$LoadedImpl implements _Loaded {
   }
 }
 
-abstract class _Loaded implements HtmlViewerState {
-  const factory _Loaded({required final ArticleModel articleModel}) =
-      _$LoadedImpl;
+abstract class _Loaded implements HomeTreeCatState {
+  const factory _Loaded(final List<Category> categories) = _$LoadedImpl;
 
-  ArticleModel get articleModel;
+  List<Category> get categories;
   @JsonKey(ignore: true)
   _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
@@ -467,12 +473,12 @@ abstract class _$$ErrorImplCopyWith<$Res> {
           _$ErrorImpl value, $Res Function(_$ErrorImpl) then) =
       __$$ErrorImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String? error});
+  $Res call({String message});
 }
 
 /// @nodoc
 class __$$ErrorImplCopyWithImpl<$Res>
-    extends _$HtmlViewerStateCopyWithImpl<$Res, _$ErrorImpl>
+    extends _$HomeTreeCatStateCopyWithImpl<$Res, _$ErrorImpl>
     implements _$$ErrorImplCopyWith<$Res> {
   __$$ErrorImplCopyWithImpl(
       _$ErrorImpl _value, $Res Function(_$ErrorImpl) _then)
@@ -481,13 +487,13 @@ class __$$ErrorImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? error = freezed,
+    Object? message = null,
   }) {
     return _then(_$ErrorImpl(
-      error: freezed == error
-          ? _value.error
-          : error // ignore: cast_nullable_to_non_nullable
-              as String?,
+      null == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -495,14 +501,14 @@ class __$$ErrorImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$ErrorImpl implements _Error {
-  const _$ErrorImpl({this.error});
+  const _$ErrorImpl(this.message);
 
   @override
-  final String? error;
+  final String message;
 
   @override
   String toString() {
-    return 'HtmlViewerState.error(error: $error)';
+    return 'HomeTreeCatState.error(message: $message)';
   }
 
   @override
@@ -510,11 +516,11 @@ class _$ErrorImpl implements _Error {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ErrorImpl &&
-            (identical(other.error, error) || other.error == error));
+            (identical(other.message, message) || other.message == message));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, error);
+  int get hashCode => Object.hash(runtimeType, message);
 
   @JsonKey(ignore: true)
   @override
@@ -527,10 +533,10 @@ class _$ErrorImpl implements _Error {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(ArticleModel articleModel) loaded,
-    required TResult Function(String? error) error,
+    required TResult Function(List<Category> categories) loaded,
+    required TResult Function(String message) error,
   }) {
-    return error(this.error);
+    return error(message);
   }
 
   @override
@@ -538,10 +544,10 @@ class _$ErrorImpl implements _Error {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(ArticleModel articleModel)? loaded,
-    TResult? Function(String? error)? error,
+    TResult? Function(List<Category> categories)? loaded,
+    TResult? Function(String message)? error,
   }) {
-    return error?.call(this.error);
+    return error?.call(message);
   }
 
   @override
@@ -549,12 +555,12 @@ class _$ErrorImpl implements _Error {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(ArticleModel articleModel)? loaded,
-    TResult Function(String? error)? error,
+    TResult Function(List<Category> categories)? loaded,
+    TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
-      return error(this.error);
+      return error(message);
     }
     return orElse();
   }
@@ -597,10 +603,10 @@ class _$ErrorImpl implements _Error {
   }
 }
 
-abstract class _Error implements HtmlViewerState {
-  const factory _Error({final String? error}) = _$ErrorImpl;
+abstract class _Error implements HomeTreeCatState {
+  const factory _Error(final String message) = _$ErrorImpl;
 
-  String? get error;
+  String get message;
   @JsonKey(ignore: true)
   _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;

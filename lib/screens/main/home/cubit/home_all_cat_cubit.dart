@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:ketub_platform/utils/data_helper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../models/card_type_model.dart';
 import '../../../../models/slie_online.dart';
@@ -13,37 +16,56 @@ part 'home_all_cat_cubit.freezed.dart';
 class HomeAllCatCubit extends Cubit<HomeAllCatState> {
   HomeAllCatCubit() : super(const HomeAllCatState.initial());
 
+
   Future<void> loadCards() async {
     try {
       emit(const HomeAllCatState.loading());
-      List<CardTypeModel> cards = [];
-      List<Future<void>> futures = [];
+      final prefs = await SharedPreferences.getInstance();
+      String? cachedData = prefs.getString('cachedCardList');
 
-      DataHelper.categories.forEach((key, value) {
-        // Collect futures of async operations
-        futures.add(
-          OnlineRepository()
-              .getArticlesList(6, 0, value)
-              .then((articlesList) {
-            cards.add(CardTypeModel(
-              cardType: getCardType(title: value),
-              title: key,
-              hasLoadMore: true,
-              featureImageUrl: getFeatureImage(title: value),
-              articles: articlesList.posts!,
-            ));
-          }),
-        );
-      });
-      futures.add(addBannerToList(cards));
-
-      // Wait for all futures to complete
-      await Future.wait(futures);
-      reorderTheList(cards);
-      emit(HomeAllCatState.loaded(cardList: cards));
+      if (cachedData != null) {
+        // Load from cache
+        List<dynamic> cachedList = jsonDecode(cachedData);
+        List<CardTypeModel> cards = cachedList
+            .map((jsonCard) => CardTypeModel.fromJson(jsonCard))
+            .toList();
+        emit(HomeAllCatState.loaded(cardList: cards));
+      } else {
+        // Load from network
+        List<CardTypeModel> cards = await _fetchCardsFromNetwork();
+        // Cache the data
+        prefs.setString('cachedCardList', jsonEncode(cards.map((card) => card.toJson()).toList()));
+        emit(HomeAllCatState.loaded(cardList: cards));
+      }
     } catch (e) {
       emit(HomeAllCatState.error(e.toString()));
     }
+  }
+
+  Future<List<CardTypeModel>> _fetchCardsFromNetwork() async {
+    List<CardTypeModel> cards = [];
+    List<Future<void>> futures = [];
+
+    DataHelper.categories.forEach((key, value) {
+      futures.add(
+        OnlineRepository()
+            .getArticlesList(6, 0, value)
+            .then((articlesList) {
+          cards.add(CardTypeModel(
+            cardType: getCardType(title: value),
+            title: key,
+            hasLoadMore: true,
+            featureImageUrl: getFeatureImage(title: value),
+            articles: articlesList.posts!,
+          ));
+        }),
+      );
+    });
+    futures.add(addBannerToList(cards));
+
+    await Future.wait(futures);
+    reorderTheList(cards);
+    return cards;
   }
 
 

@@ -51,7 +51,7 @@ class _GridItemWidgetState extends State<GridItemWidget> {
     );
 
     Widget? titleText = widget.withTitle ? Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.only(right: 8.0, left: 8.0),
       child: Text(widget.title, style: Theme.of(context).textTheme.labelMedium, overflow: TextOverflow.ellipsis, maxLines: 3,),
     ) : null;
 
@@ -59,7 +59,7 @@ class _GridItemWidgetState extends State<GridItemWidget> {
     return widget.insideTitlePosition
         ? Container(
       decoration: BoxDecoration(
-        color: widget.withBk ?? false ? Colors.grey[200] : null,
+        color: widget.withBk ?? false ? Theme.of(context).colorScheme.surfaceVariant : null,
         borderRadius: BorderRadius.circular(16), // Set rounded corners
       ),
       padding: const EdgeInsets.all(8.0),

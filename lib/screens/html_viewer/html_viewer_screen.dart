@@ -6,12 +6,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/parser.dart';
 import 'package:ketub_platform/screens/html_viewer/cubit/html_viewer_cubit.dart';
 import 'package:ketub_platform/utils/html_helper.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'cubit/html_viewer_state.dart';
 
 class HtmlViewerScreen extends StatefulWidget {
   int? id;
   String? data;
+
   HtmlViewerScreen({super.key, this.id, this.data});
 
   @override
@@ -46,8 +48,13 @@ class _HtmlViewerScreenState extends State<HtmlViewerScreen> {
                         : opacity > 1
                             ? 1
                             : opacity;
-                    double scale = 0 + (top - kToolbarHeight) / (200.0 - kToolbarHeight);
-                    scale = scale < 0.5 ? 0.7 : scale > 1 ? 1 : scale;
+                    double scale =
+                        0 + (top - kToolbarHeight) / (200.0 - kToolbarHeight);
+                    scale = scale < 0.5
+                        ? 0.7
+                        : scale > 1
+                            ? 1
+                            : scale;
 
                     return Stack(
                       fit: StackFit.expand,
@@ -70,28 +77,26 @@ class _HtmlViewerScreenState extends State<HtmlViewerScreen> {
                               children: [
                                 Text(
                                   _getAppBarTitle(state),
-                                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                    fontSize: Theme.of(context).textTheme.titleLarge!.fontSize! * scale,
-                                  ),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge
+                                      ?.copyWith(
+                                        fontSize: Theme.of(context)
+                                                .textTheme
+                                                .titleLarge!
+                                                .fontSize! *
+                                            scale,
+                                      ),
                                   maxLines: opacity > 0 ? null : 1,
-                                  overflow: opacity > 0 ? TextOverflow.visible : TextOverflow.ellipsis,
+                                  overflow: opacity > 0
+                                      ? TextOverflow.visible
+                                      : TextOverflow.ellipsis,
                                 ),
-                                opacity > 0.4 ? Opacity(
-                                  opacity: opacity,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        _getAppBarDate(state),
-                                        style: Theme.of(context).textTheme.labelLarge,
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: _getAppBarDateIcon(state),
-                                      ),
-                                    ],
-                                  ),
-                                ) : SizedBox(),
+                                opacity > 0.4
+                                    ? Opacity(
+                                        opacity: opacity,
+                                        child: _getHeaderDetails(state))
+                                    : SizedBox(),
                               ],
                             ),
                           ),
@@ -115,21 +120,23 @@ class _HtmlViewerScreenState extends State<HtmlViewerScreen> {
 
   String _getAppBarDate(HtmlViewerState state) {
     return state.maybeWhen(
-      loaded: (_, __, date) => date.split('T')[0],
+      loaded: (article) => article.createdAt?.split('T')[0] ?? '',
       orElse: () => '',
     );
   }
 
   Widget _getAppBarDateIcon(HtmlViewerState state) {
     return state.maybeWhen(
-      loaded: (_, __, ___) => SvgPicture.asset('assets/icons/calendar.svg'),
+      loaded: (article) {
+        return SvgPicture.asset('assets/icons/calendar.svg');
+      },
       orElse: () => const Text(''),
     );
   }
 
   String _getAppBarTitle(HtmlViewerState state) {
     return state.maybeWhen(
-      loaded: (_, title, __) => title,
+      loaded: (article) => article.name ?? '',
       orElse: () => '',
     );
   }
@@ -141,10 +148,59 @@ class _HtmlViewerScreenState extends State<HtmlViewerScreen> {
         padding: EdgeInsets.only(top: 20.0),
         child: Center(child: CircularProgressIndicator()),
       ),
-      loaded: (data, _, __) => HtmlHelper.loadHtml(data),
+      loaded: (article) => HtmlHelper.loadHtml(article.description ?? ''),
       error: (error) => Text(error ?? 'Error'),
     );
   }
+
+  Widget _getHeaderDetails(HtmlViewerState state) {
+    return state.maybeWhen(
+      loaded: (article) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            (article.docDownloadLink != null &&
+                    article.docDownloadLink!.isNotEmpty)
+                ? TextButton(
+                    onPressed: () {
+                      _downloadFile(article.docDownloadLink ?? '');
+                    },
+                    child: const Text('تحميل Word'),
+                  )
+                : SizedBox(),
+            (article.pdfDownloadLink != null &&
+                    article.pdfDownloadLink!.isNotEmpty)
+                ? TextButton(
+                    onPressed: (){
+                      _downloadFile(article.pdfDownloadLink ?? '');
+                    },
+                    child: const Text('تحميل PDF'),
+                  )
+                : SizedBox(),
+            Row(
+              children: [
+                Text(
+                  article.createdAt?.split('T')[0] ?? '',
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SvgPicture.asset('assets/icons/calendar.svg'),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+      orElse: () => Text(''),
+    );
+  }
+
+  Future<void> _downloadFile(String url) async {
+    var googleDocsUrl = 'https://docs.google.com/gview?embedded=true&url=${Uri.encodeQueryComponent(url)}';
+    final Uri uri = Uri.parse(googleDocsUrl);
+    launchUrl(uri);
+  }
+
+
 }
-
-

@@ -8,6 +8,7 @@ import 'package:ketub_platform/utils/data_helper.dart';
 
 import '../../category_list/category_list_screen.dart';
 import '../../category_list/cubit/category_list_cubit.dart';
+import 'cubit/home_tree_cat_cubit.dart';
 
 class HomeTreeCatScreen extends StatefulWidget {
   @override
@@ -20,42 +21,26 @@ class _HomeTreeCatScreenState extends State<HomeTreeCatScreen> {
   @override
   void initState() {
     super.initState();
-    combinedCategoriesFuture = _getCombinedCategories();
+    context.read<HomeTreeCatCubit>().loadCategories();
   }
-
-  Future<List<Category>> _getCombinedCategories() async {
-    List<Category> combinedCategories = [];
-
-    for (var entry in DataHelper.categories.entries) {
-      var treeCat = await OnlineRepository().getTreeCat(entry.value);
-      combinedCategories.add(
-          Category(name: entry.key, children: treeCat.categories));
-    }
-
-    return combinedCategories;
-  }
-
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Category>>(
-      future: combinedCategoriesFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done &&
-            snapshot.hasData) {
-          return ListView.builder(
-            itemCount: snapshot.data!.length,
-            itemBuilder: (context, index) {
-              return buildTreeNode(snapshot.data![index], 0, context, isRoot: true);
-            },
-          );
-        } else if (snapshot.hasError) {
-          return Text("Error: ${snapshot.error}");
-        }
-        return Center(child: CircularProgressIndicator());
+    return BlocBuilder<HomeTreeCatCubit, HomeTreeCatState>(
+      builder: (context, state) {
+        return state.when(
+          initial: () => const Center(child: CircularProgressIndicator()),
+          loading: () => const Center(child: CircularProgressIndicator()),
+          loaded: (categories) => ListView.builder(
+            itemCount: categories.length,
+            itemBuilder: (context, index) => buildTreeNode(categories[index], 0, context, isRoot: true),
+          ),
+          error: (message) => Text("Error: $message"),
+        );
       },
     );
   }
+
 
   _openCategoryScreen({required String catId, String? catName}) {
     Navigator.push(

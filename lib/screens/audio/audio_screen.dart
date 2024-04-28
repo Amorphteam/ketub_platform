@@ -6,8 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:ketub_platform/screens/audio/widgets/control_buttons_widget.dart';
+import 'package:ketub_platform/screens/audio/widgets/waveform_seek_bar.dart';
 import 'package:ketub_platform/utils/data_helper.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:volume_watcher/volume_watcher.dart';
 
 import '../../utils/common.dart';
 import 'cubit/audio_player_cubit.dart';
@@ -145,17 +147,22 @@ class _AudioScreenState extends State<AudioScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(height: 20,),
-        ControlButtonsWidget(player),
+        ControlButtonsWidget(player, onPlayClicked: (){
+          initPlatformState();
+        },),
           Container(
               height: 100.0,
               child: Center(
-                child: WaveformSeekBar(
-                  duration: positionData.duration,
-                  position: positionData.position,
-                  bufferedPosition: positionData.bufferedPosition,
-                  onChangeEnd: (newPosition) {
-                    player.seek(newPosition);
-                  },
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: WaveformSeekBar(
+                    duration: positionData.duration,
+                    position: positionData.position,
+                    bufferedPosition: positionData.bufferedPosition,
+                    onChangeEnd: (newPosition) {
+                      player.seek(newPosition);
+                    },
+                  ),
                 ),
               ),
             ),
@@ -210,7 +217,23 @@ class _AudioScreenState extends State<AudioScreen> {
     );
   }
 
+
+  Future<void> initPlatformState() async {
+    double volume = await VolumeWatcher.getCurrentVolume;
+
+      if (volume <= 0.2) {
+        final snackBar = SnackBar(
+          content: Text('الصوت منخفض جداً'),
+          duration: Duration(seconds: 2),
+        );
+
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+  }
+
 }
+
+
 
 
 class AudioPlayerService {

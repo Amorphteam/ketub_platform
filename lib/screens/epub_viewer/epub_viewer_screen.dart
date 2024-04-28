@@ -108,8 +108,8 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                 AppBar(
                   leading: IconButton(
                     icon: isSearchOpen
-                        ? Icon(Icons.close)
-                        : Icon(Icons.arrow_back),
+                        ? Icon(Icons.close, color: Theme.of(context).colorScheme.onSurfaceVariant)
+                        : Icon(Icons.arrow_back, color: Theme.of(context).colorScheme.onSurfaceVariant),
                     onPressed: () {
                       if (isSearchOpen) {
                         _toggleSearch(false);
@@ -120,66 +120,67 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                   ),
                   title: isSearchOpen
                       ? TextField(
-                          autofocus: true,
-                          focusNode: focusNode,
-                          controller: textEditingController,
-                          decoration: InputDecoration(
-                            hintText: 'أدخل كلمة لبدء البحث ...',
-                            border: InputBorder.none,
-                            suffixIcon: IconButton(
-                              icon: SvgPicture.asset('assets/icons/search.svg'),
-                              // The search icon inside the TextField
-                              onPressed: () {
-                                // Trigger the search logic, similar to what's done in onSubmitted
-                                if (textEditingController.text.isNotEmpty) {
-                                  final String searchQuery =
-                                      textEditingController.text;
-                                  _search(searchQuery);
-                                }
-                              },
-                            ),
-                          ),
-                          onSubmitted: (value) {
-                            _search(value);
-                          },
-                        )
+                    autofocus: true,
+                    focusNode: focusNode,
+                    controller: textEditingController,
+                    decoration: InputDecoration(
+                      hintText: 'أدخل كلمة لبدء البحث ...',
+                      border: InputBorder.none,
+                      suffixIcon: IconButton(
+                        icon: SvgPicture.asset('assets/icons/search.svg', color: Theme.of(context).colorScheme.onSurfaceVariant),
+                        // The search icon inside the TextField
+                        onPressed: () {
+                          // Trigger the search logic, similar to what's done in onSubmitted
+                          if (textEditingController.text.isNotEmpty) {
+                            final String searchQuery =
+                                textEditingController.text;
+                            _search(searchQuery);
+                          }
+                        },
+                      ),
+                    ),
+                    onSubmitted: (value) {
+                      _search(value);
+                    },
+                  )
                       : SizedBox.shrink(),
                   actions: isSearchOpen
                       ? null // No actions when search is open
                       : [
-                          IconButton(
-                            icon: SvgPicture.asset('assets/icons/search.svg'),
-                            onPressed: () => _toggleSearch(true),
-                          ),
-                          IconButton(
-                            icon: SvgPicture.asset('assets/icons/style.svg'),
-                            onPressed: () {
-                              _showBottomSheet(
-                                  context, context.read<EpubViewerCubit>());
-                            },
-                          ),
-                          IconButton(
-                            icon: SvgPicture.asset(
-                              isBookmarked
-                                  ? 'assets/icons/bookmarked.svg'
-                                  : 'assets/icons/bookmark.svg',
-                            ),
-                            onPressed: () {
-                              _toggleBookmark();
-                              if (isBookmarked) {
-                                _addBookmark(context);
-                              } else {
-                                _removeBookmark(context);
-                              }
-                            },
-                          ),
-                          IconButton(
-                            icon: SvgPicture.asset('assets/icons/toc.svg'),
-                            onPressed: () {
-                              _openInternalToc(context);
-                            },
-                          )
-                        ],
+
+                    IconButton(
+                      icon: SvgPicture.asset('assets/icons/search.svg', color: Theme.of(context).colorScheme.onSurfaceVariant),
+                      onPressed: () => _toggleSearch(true),
+                    ),
+                    IconButton(
+                      icon: SvgPicture.asset('assets/icons/style.svg', color: Theme.of(context).colorScheme.onSurfaceVariant),
+                      onPressed: () {
+                        _showBottomSheet(
+                            context, context.read<EpubViewerCubit>());
+                      },
+                    ),
+                    IconButton(
+                      icon: SvgPicture.asset(
+                        isBookmarked
+                            ? 'assets/icons/bookmarked.svg'
+                            : 'assets/icons/bookmark.svg',
+                       color: Theme.of(context).colorScheme.onSurfaceVariant),
+                      onPressed: () {
+                        _toggleBookmark();
+                        if (isBookmarked) {
+                          _addBookmark(context);
+                        } else {
+                          _removeBookmark(context);
+                        }
+                      },
+                    ),
+                    IconButton(
+                      icon: SvgPicture.asset('assets/icons/toc.svg', color: Theme.of(context).colorScheme.onSurfaceVariant),
+                      onPressed: () {
+                        _openInternalToc(context);
+                      },
+                    )
+                  ],
                 ),
               Align(
                 alignment: Alignment.topCenter,
@@ -291,17 +292,17 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                     children: [
                       Flexible(
                           child: Html(
-                        data: result.spanna.toString(),
-                        style: {
-                          "html": Style(
-                            fontSize: FontSize.small,
-                            textAlign: TextAlign.right,
-                          ),
-                          "mark": Style(
-                            backgroundColor: Colors.yellow,
-                          ),
-                        },
-                      )),
+                            data: result.spanna.toString(),
+                            style: {
+                              "html": Style(
+                                fontSize: FontSize.medium,
+                                textAlign: TextAlign.right,
+                              ),
+                              "mark": Style(
+                                backgroundColor: Colors.yellow,
+                              ),
+                            },
+                          )),
                       Text(
                         result.pageIndex.toString(),
                         style: Theme.of(context).textTheme.bodySmall,
@@ -357,7 +358,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                     constraints: BoxConstraints(minHeight: screenHeight),
                     // Set minHeight to screenHeight
                     child: Container(
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.onBackground,
                       child: Html(
                         data: content[index],
                         style: {
@@ -405,7 +406,6 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                 },
                 onChangeEnd: (newValue) {
                   _jumpTo(pageNumber: newValue.toInt());
-                  // Reset the flag after the jump to prevent affecting subsequent updates.
                   _isSliderChange = false;
                 },
               ),
@@ -422,10 +422,16 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                         maxLines: 1,
                       ),
                     ),
-                    Text(
-                      '${_currentPage.toInt() + 1}/${allPagesCount.toInt()}',
-                      style: Theme.of(context).textTheme.labelMedium,
-                    ),
+                    TextButton(
+                      onPressed: () {
+                        _showPageJumpDialog(context);
+                      },
+                      child: Text(
+                        '${_currentPage.toInt() + 1}/${allPagesCount.toInt()}',
+                        style: Theme.of(context).textTheme.labelMedium,
+                      ),
+                    )
+
                   ],
                 ),
               ),
@@ -434,6 +440,67 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
       ],
     );
   }
+
+  void _showPageJumpDialog(BuildContext context) {
+    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+    final TextEditingController pageController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Form(
+            key: _formKey,
+            child: TextFormField(
+              controller: pageController,
+              autofocus: true,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                hintText: "أدخل رقم الصفحة (بين 1 و ${_content.length})",
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'يرجى إدخال رقم الصفحة';
+                }
+                int? pageNumber = int.tryParse(value);
+                if (pageNumber == null || pageNumber <= 0 || pageNumber > _content.length) {
+                  return ' الرقم يجب أن يكون بين ١ و ${_content.length}';
+                }
+                return null;  // Means the input is valid
+              },
+              onFieldSubmitted: (value) {
+                if (_formKey.currentState!.validate()) {
+                  int? pageNumber = int.tryParse(value);
+                  _jumpTo(pageNumber: pageNumber! - 1);
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('إلغاء'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('انتقل'),
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  int? pageNumber = int.tryParse(pageController.text);
+                  _jumpTo(pageNumber: pageNumber! - 1);
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
 
   void _search(String value) {
     searchedWord = value;

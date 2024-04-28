@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:ketub_platform/screens/main/no_internet_tab/no_internet_screen.dart';
 import 'package:ketub_platform/utils/epub_helper.dart';
 
 import '../../epub_viewer/cubit/epub_cubit.dart';
@@ -54,6 +56,43 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
         child: CircularProgressIndicator(),
       );
     } else if (state is AllBookmarksLoadedState) {
+      if (state.bookmarks.isEmpty) {
+        return Padding(
+          padding: const EdgeInsets.only(top: 100.0),
+          child: Container(
+            height: MediaQuery.of(context).size.height/3,
+            padding: EdgeInsets.all(24),
+            child: Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 40.0, left: 40.0),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 120),
+                      Text(
+                        'قائمة الإشارات المرجعية فارغة',
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'يمكنك إضافة إشارات مرجعية من الكتب التي تقرأها.',
+                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                        ),
+
+                      ),
+                      SizedBox(height: 80),
+
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }
       return _buildList(state);
     } else if (state is BookmarkErrorState) {
       return Center(

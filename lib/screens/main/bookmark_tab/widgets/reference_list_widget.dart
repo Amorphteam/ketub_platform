@@ -48,7 +48,7 @@ class ReferenceListWidget extends StatelessWidget {
                                 .deleteBookmark(referenceList[index].id!);
                           },
                           child: SvgPicture.asset(
-                            'assets/icons/bookmarked.svg',
+                            'assets/icons/bookmarked.svg', color: Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
                         ),
                         Expanded(

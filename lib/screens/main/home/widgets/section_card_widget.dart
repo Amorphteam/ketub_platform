@@ -11,6 +11,9 @@ import 'package:ketub_platform/screens/category_list/cubit/category_list_cubit.d
 import 'package:ketub_platform/screens/html_viewer/cubit/html_viewer_cubit.dart';
 import 'package:ketub_platform/screens/html_viewer/html_viewer_screen.dart';
 import 'package:ketub_platform/utils/data_helper.dart';
+import 'package:lottie/lottie.dart';
+import 'package:mailto/mailto.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../models/article_model.dart';
 import '../../../../models/slie_online.dart';
@@ -25,13 +28,14 @@ class SectionCardWidget extends StatefulWidget {
   final List<ArticleModel> posts;
   final List<SlideOnline>? slides;
 
-  const SectionCardWidget({super.key,
-    required this.posts,
-    required this.cardType,
-    required this.title,
-    required this.hasLoadMore,
-    required this.featureImageUrl,
-    this.slides});
+  const SectionCardWidget(
+      {super.key,
+      required this.posts,
+      required this.cardType,
+      required this.title,
+      required this.hasLoadMore,
+      required this.featureImageUrl,
+      this.slides});
 
   @override
   State<SectionCardWidget> createState() => _SectionCardWidgetState();
@@ -76,14 +80,12 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
               children: [
                 Text(
                   widget.title,
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .titleLarge,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
                 if (widget.hasLoadMore)
                   IconButton(
-                    icon: SvgPicture.asset('assets/icons/load_more.svg'),
+                    icon: SvgPicture.asset('assets/icons/load_more.svg',
+                        color: Theme.of(context).colorScheme.onSurfaceVariant),
                     onPressed: () {
                       _openCategoryScreen(catName: widget.title);
                     },
@@ -158,26 +160,90 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
   }
 
   Widget buildImageBanner(BuildContext context) {
-    return Image.asset('assets/images/instagram_add.jpg', fit: BoxFit.cover);
+    return GestureDetector(
+      onTap: _sendEmailToAmorph,
+      child: Container(
+        color: Colors.black87,
+        child: Stack(
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Lottie.asset(
+                'assets/jsons/amorph.json',
+                repeat: false,
+                height: 200,
+                fit: BoxFit.cover,
+              ),
+            ),
+            Positioned(
+              child: Padding(
+                padding: const EdgeInsets.all(26.0),
+                child: Column(
+                  children: [
+                    Text(
+                      'Amorph',
+                      style: Theme.of(context)
+                          .textTheme
+                          .displaySmall
+                          ?.copyWith(color: Colors.white),
+                      textAlign: TextAlign.right, // Align text to the right
+                    ),
+                    Text(
+                      'لتصميم تطبيق مشابه، اتصل بنا',
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelLarge
+                          ?.copyWith(color: Colors.white),
+                      textAlign: TextAlign.right, // Align text to the right
+                    ),
+                  ],
+                ),
+              ),
+              bottom: 50,
+              right: 0,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget buildDynamicBanner(BuildContext context) {
-    return Container(height: 170, child: ImageSliderWidget(slides: widget.slides,));
+    return Container(
+        height: 170,
+        child: ImageSliderWidget(
+          slides: widget.slides,
+        ));
   }
 
   _openCategoryScreen({required String catName}) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            BlocProvider(
-              create: (context) => CategoryListCubit(),
-              child: CategoryListScreen(catName: catName),
-            ),
+        builder: (context) => BlocProvider(
+          create: (context) => CategoryListCubit(),
+          child: CategoryListScreen(catName: catName),
+        ),
       ),
     );
   }
 
+  void _sendEmailToAmorph() async {
+    final mailtoLink = Mailto(
+      to: ['amorphteam@gmail.com'],
+      bcc: ['johar.ali1@gmail.com'],
+      subject: 'New App from hobbollah app',
+      body: 'I am interested in creating a new app.',
+    );
 
+    // Convert the Mailto instance into a string URL.
+    final urlString = mailtoLink.toString();
+
+    // Use url_launcher to launch the mail app.
+    if (await canLaunch(urlString)) {
+      await launch(urlString);
+    } else {
+      throw 'Could not launch $urlString';
+    }
+  }
 }
-

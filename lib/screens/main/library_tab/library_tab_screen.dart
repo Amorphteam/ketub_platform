@@ -47,7 +47,7 @@ class _LibraryTabScreenState extends State<LibraryTabScreen> with SingleTickerPr
                   onPressed: () {
                     _openBookmarkScreen();
                   },
-                  icon: SvgPicture.asset('assets/icons/bookmark.svg'),
+                  icon: SvgPicture.asset('assets/icons/bookmark.svg', color: Theme.of(context).colorScheme.onSurfaceVariant),
                 ),
                 Positioned(
                   // Position the badge on the top right corner of the IconButton

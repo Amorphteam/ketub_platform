@@ -37,6 +37,7 @@ dependencies:
   epub_parser: ^3.0.1
   flutter_svg: ^1.0.3
   xml: ^5.0.2
+  lottie: ^3.1.0
   scrollable_positioned_list: ^0.3.8
   flutter_html: ^3.0.0-beta.2
   html: ^0.15.4
@@ -53,6 +54,9 @@ dependencies:
   freezed_annotation: ^2.4.1
   json_annotation: ^4.8.1
   url_launcher: ^6.0.20
+  mailto: ^2.0.0
+  volume_watcher: ^2.0.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
