@@ -181,7 +181,7 @@ class _HtmlViewerScreenState extends State<HtmlViewerScreen> {
               children: [
                 Text(
                   article.createdAt?.split('T')[0] ?? '',
-                  style: Theme.of(context).textTheme.labelLarge,
+                  style: Theme.of(context).textTheme.labelMedium,
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
