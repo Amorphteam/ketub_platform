@@ -231,6 +231,13 @@ class _StyleSheetState extends State<StyleSheet> {
                   _handleChipSelection(isSelected ? 3 : -1);
                 },
               ),
+              InputChip(
+                label: Text('خط ٥'),
+                selected: _selectedChipIndex == 4,
+                onSelected: (isSelected) {
+                  _handleChipSelection(isSelected ? 4 : -1);
+                },
+              ),
             ],
           ),
 
