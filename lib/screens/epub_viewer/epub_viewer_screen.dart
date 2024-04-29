@@ -92,6 +92,11 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
           searchResultsFound: (searchResults) {
             showSearchResultsDialog(context, searchResults);
           },
+          styleChanged: (fontSize, lineSpace, fontFamily){
+            print('loadUserPreferences ${lineSpace} add ${fontFamily}');
+
+            _changeStyle(fontSize, lineSpace, fontFamily);
+          },
           bookmarkPresent: () => setState(() => isBookmarked = true),
           bookmarkAbsent: () => setState(() => isBookmarked = false),
           orElse: () {},
@@ -213,10 +218,9 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                       pageChanged: (int? pageNumber) {
                         return _buildCurrentUi(context, _content);
                       },
-                      styleChanged: (FontSizeCustom? fontSize,
-                          LineHeightCustom? lineHeight,
-                          FontFamily? fontFamily) {
-                        _changeStyle(fontSize, lineHeight, fontFamily);
+                      styleChanged: (fontSize,
+                          lineHeight,
+                          fontFamily) {
                         return _buildCurrentUi(context, _content);
                       },
                       bookmarkAdded: (int? status) {
@@ -702,6 +706,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     itemPositionsListener.itemPositions.removeListener(() {});
     focusNode.dispose();
     textEditingController.dispose();
+
     super.dispose();
   }
 
@@ -711,6 +716,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
       orElse: () => '',
     );
   }
+
 
   _changeStyle(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
       FontFamily? fontFamily) {

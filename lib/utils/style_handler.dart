@@ -352,6 +352,7 @@ Future<String> addFontsToHtml(String htmlContent) async {
     "font2": "assets/fonts/font2.ttf",
     "font3": "assets/fonts/font3.ttf",
     "font4": "assets/fonts/font4.ttf",
+    "font5": "assets/fonts/font5.ttf",
   };
 
   String fontCss = '';
