@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ketub_platform/models/articelType.dart';
 import 'package:ketub_platform/models/card_type_model.dart';
@@ -161,7 +162,7 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
 
   Widget buildImageBanner(BuildContext context) {
     return GestureDetector(
-      onTap: _sendEmailToAmorph,
+      onTap: _openAmorphWebsite,
       child: Container(
         color: Colors.black87,
         child: Stack(
@@ -228,22 +229,11 @@ class _SectionCardWidgetState extends State<SectionCardWidget> {
     );
   }
 
-  void _sendEmailToAmorph() async {
-    final mailtoLink = Mailto(
-      to: ['amorphteam@gmail.com'],
-      bcc: ['johar.ali1@gmail.com'],
-      subject: 'New App from hobbollah app',
-      body: 'I am interested in creating a new app.',
-    );
-
-    // Convert the Mailto instance into a string URL.
-    final urlString = mailtoLink.toString();
-
-    // Use url_launcher to launch the mail app.
-    if (await canLaunch(urlString)) {
-      await launch(urlString);
-    } else {
-      throw 'Could not launch $urlString';
-    }
+  void _openAmorphWebsite() async {
+    var googleDocsUrl = 'https://amorphteam.com/ar';
+    final Uri uri = Uri.parse(googleDocsUrl);
+    launchUrl(uri);
   }
+
+
 }
