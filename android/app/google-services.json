@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "830678219852",
+    "project_id": "ketub-platform",
+    "storage_bucket": "ketub-platform.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:830678219852:android:ff2985d1334da5ce59c8e9",
+        "android_client_info": {
+          "package_name": "com.amorphteam.ketub.hb"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApGN9djV0HrC28_CcG4Wcfnwc1M0zlpRk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

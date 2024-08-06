@@ -1,0 +1,9 @@
+{
+  "projects": {
+    "default": "ketub-platform",
+    "ketub-platform": "ketub-platform"
+  },
+  "targets": {},
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
+}
