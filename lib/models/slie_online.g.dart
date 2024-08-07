@@ -8,8 +8,8 @@ part of 'slie_online.dart';
 
 _$SlideOnlineImpl _$$SlideOnlineImplFromJson(Map<String, dynamic> json) =>
     _$SlideOnlineImpl(
-      id: json['id'] as int?,
-      priority: json['priority'] as int?,
+      id: (json['id'] as num?)?.toInt(),
+      priority: (json['priority'] as num?)?.toInt(),
       title: json['title'] as String?,
       description: json['description'] as String?,
       url: json['url'] as String?,

@@ -12,7 +12,20 @@
           "package_name": "com.amorphteam.ketub.hb"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "830678219852-o4o6l7r4s1itscjs05n5lrd43v8r8d8m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.amorphteam.ketub.hb",
+            "certificate_hash": "f14bd1ab588e9375fd47d74b0eb53a4f9f098270"
+          }
+        },
+        {
+          "client_id": "830678219852-7lop4lfer21f3fvlau7n9uf5v8bbr6ms.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyApGN9djV0HrC28_CcG4Wcfnwc1M0zlpRk"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "830678219852-7lop4lfer21f3fvlau7n9uf5v8bbr6ms.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "830678219852-l8dcdn0i7v6vivb8cep0ohtjt3t2mgjp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.papyrus.mehdok.hobbollahcom"
+              }
+            }
+          ]
         }
       }
     }
