@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "830678219852-o4o6l7r4s1itscjs05n5lrd43v8r8d8m.apps.googleusercontent.com",
+          "client_id": "830678219852-jb7m9sq3ukcp6jht89tprpgi1ul58k91.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.amorphteam.ketub.hb",
-            "certificate_hash": "f14bd1ab588e9375fd47d74b0eb53a4f9f098270"
+            "certificate_hash": "de13f2a16b7dc3a247f2ff3ce504fa75692840d7"
           }
         },
         {
