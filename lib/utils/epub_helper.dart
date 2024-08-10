@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ketub_platform/models/category_model.dart';
+import 'package:ketub_platform/models/firestore_reference_model.dart';
 import 'package:ketub_platform/models/reference_model.dart';
 import 'package:ketub_platform/models/tree_toc_model.dart';
 import 'package:ketub_platform/screens/epub_viewer/cubit/epub_viewer_cubit.dart';
@@ -18,6 +19,7 @@ void openEpub({
   required BuildContext context,
   CategoryModel? cat,
   ReferenceModel? reference,
+  FirestoreReferenceModel? firestoreReferenceModel,
   EpubChaptersWithBookPath? toc,
   SearchModel? search
 }) {
@@ -30,7 +32,9 @@ void openEpub({
             child: EpubViewerScreen(catModel: cat,
                 referenceModel: reference,
                 searchModel: search,
-                tocModel: toc),
+                tocModel: toc,
+                firestoreReferenceModel: firestoreReferenceModel
+                ),
           ),
     ),
   );

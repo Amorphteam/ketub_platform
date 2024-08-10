@@ -1,17 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../models/firestore_reference_model.dart';
+import '../utils/auth_helper.dart';
 
 class FirestoreReferencesDatabase {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<void> addOrUpdateReference(FirestoreReferenceModel referenceModel) async {
-    if (FirebaseAuth.instance.currentUser == null) {
-      throw Exception('User is not authenticated');
+  Future<int> addOrUpdateReference(FirestoreReferenceModel referenceModel) async {
+    User user = AuthHelper.getAuthenticatedUser();
+
+    if (referenceModel.userId != user.uid) {
+      throw Exception('User ID does not match the authenticated user.');
     }
 
     QuerySnapshot query = await _firestore.collection('references')
-        .where('userId', isEqualTo: referenceModel.userId)
+        .where('userId', isEqualTo: user.uid)
         .where('bookPath', isEqualTo: referenceModel.bookPath)
         .where('navIndex', isEqualTo: referenceModel.navIndex)
         .get();
@@ -22,44 +25,42 @@ class FirestoreReferencesDatabase {
     } else {
       await _firestore.collection('references').add(referenceModel.toJson());
     }
+    return 1;
   }
 
-  Future<List<FirestoreReferenceModel>> getAllReferences(String userId) async {
-    // Check if the user is authenticated
-    if (FirebaseAuth.instance.currentUser == null) {
-      throw Exception('User is not authenticated');
-    }
+  Future<List<FirestoreReferenceModel>> getAllReferences() async {
+    User user = AuthHelper.getAuthenticatedUser();
 
     QuerySnapshot snapshot = await _firestore
         .collection('references')
-        .where('userId', isEqualTo: userId)
+        .where('userId', isEqualTo: user.uid)
         .get();
+
     return snapshot.docs.map((doc) {
       return FirestoreReferenceModel.fromFirestore(doc);
     }).toList();
   }
 
-  Future<int> getCountOfAllReferences(String userId) async {
-    // Check if the user is authenticated
-    if (FirebaseAuth.instance.currentUser == null) {
-      throw Exception('User is not authenticated');
-    }
+  Future<int> getCountOfAllReferences() async {
+    User user = AuthHelper.getAuthenticatedUser();
 
     QuerySnapshot snapshot = await _firestore
         .collection('references')
-        .where('userId', isEqualTo: userId)
+        .where('userId', isEqualTo: user.uid)
         .get();
+
     return snapshot.size;
   }
 
   Future<void> updateReference(FirestoreReferenceModel referenceModel) async {
-    // Check if the user is authenticated
-    if (FirebaseAuth.instance.currentUser == null) {
-      throw Exception('User is not authenticated');
+    User user = AuthHelper.getAuthenticatedUser();
+
+    if (referenceModel.userId != user.uid) {
+      throw Exception('User ID does not match the authenticated user.');
     }
 
     QuerySnapshot query = await _firestore.collection('references')
-        .where('userId', isEqualTo: referenceModel.userId)
+        .where('userId', isEqualTo: user.uid)
         .where('bookPath', isEqualTo: referenceModel.bookPath)
         .where('navIndex', isEqualTo: referenceModel.navIndex)
         .get();
@@ -72,15 +73,12 @@ class FirestoreReferencesDatabase {
     }
   }
 
-  Future<List<FirestoreReferenceModel>> getReferenceByBookTitleAndPage(String userId, String bookPath, String pageNumber) async {
-    // Check if the user is authenticated
-    if (FirebaseAuth.instance.currentUser == null) {
-      throw Exception('User is not authenticated');
-    }
+  Future<List<FirestoreReferenceModel>> getReferenceByBookTitleAndPage(String bookPath, String pageNumber) async {
+    User user = AuthHelper.getAuthenticatedUser();
 
     QuerySnapshot snapshot = await _firestore
         .collection('references')
-        .where('userId', isEqualTo: userId)
+        .where('userId', isEqualTo: user.uid)
         .where('bookPath', isEqualTo: bookPath)
         .where('navIndex', isEqualTo: pageNumber)
         .get();
@@ -90,15 +88,12 @@ class FirestoreReferencesDatabase {
     }).toList();
   }
 
-  Future<List<FirestoreReferenceModel>> getFilterReference(String userId, String query) async {
-    // Check if the user is authenticated
-    if (FirebaseAuth.instance.currentUser == null) {
-      throw Exception('User is not authenticated');
-    }
+  Future<List<FirestoreReferenceModel>> getFilterReference(String query) async {
+    User user = AuthHelper.getAuthenticatedUser();
 
     QuerySnapshot snapshot = await _firestore
         .collection('references')
-        .where('userId', isEqualTo: userId)
+        .where('userId', isEqualTo: user.uid)
         .get();
 
     List<FirestoreReferenceModel> filteredList = snapshot.docs.map((doc) {
@@ -114,15 +109,12 @@ class FirestoreReferencesDatabase {
     return filteredList;
   }
 
-  Future<bool> isBookmarkExist(String userId, String bookPath, String pageNumber) async {
-    // Check if the user is authenticated
-    if (FirebaseAuth.instance.currentUser == null) {
-      throw Exception('User is not authenticated');
-    }
+  Future<bool> isBookmarkExist(String bookPath, String pageNumber) async {
+    User user = AuthHelper.getAuthenticatedUser();
 
     QuerySnapshot snapshot = await _firestore
         .collection('references')
-        .where('userId', isEqualTo: userId)
+        .where('userId', isEqualTo: user.uid)
         .where('bookPath', isEqualTo: bookPath)
         .where('navIndex', isEqualTo: pageNumber)
         .get();
@@ -130,15 +122,12 @@ class FirestoreReferencesDatabase {
     return snapshot.docs.isNotEmpty;
   }
 
-  Future<void> deleteReference(String userId, String bookPath, String navIndex) async {
-    // Check if the user is authenticated
-    if (FirebaseAuth.instance.currentUser == null) {
-      throw Exception('User is not authenticated');
-    }
+  Future<void> deleteReference(String bookPath, String navIndex) async {
+    User user = AuthHelper.getAuthenticatedUser();
 
     QuerySnapshot snapshot = await _firestore
         .collection('references')
-        .where('userId', isEqualTo: userId)
+        .where('userId', isEqualTo: user.uid)
         .where('bookPath', isEqualTo: bookPath)
         .where('navIndex', isEqualTo: navIndex)
         .get();
@@ -148,21 +137,23 @@ class FirestoreReferencesDatabase {
     }
   }
 
-  Future<void> deleteReferenceByBookPathAndPageNumber(String userId, String bookPath, String pageNumber) async {
-    // Check if the user is authenticated
-    if (FirebaseAuth.instance.currentUser == null) {
-      throw Exception('User is not authenticated');
-    }
+  Future<int> deleteReferenceByBookPathAndPageNumber(String bookPath, String pageNumber) async {
+    User user = AuthHelper.getAuthenticatedUser();
 
     QuerySnapshot snapshot = await _firestore
         .collection('references')
-        .where('userId', isEqualTo: userId)
+        .where('userId', isEqualTo: user.uid)
         .where('bookPath', isEqualTo: bookPath)
         .where('navIndex', isEqualTo: pageNumber)
         .get();
 
+    int deletedCount = 0;
+
     for (DocumentSnapshot doc in snapshot.docs) {
       await doc.reference.delete();
+      deletedCount++;
     }
+
+    return deletedCount;
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:ketub_platform/screens/authentication/user_screen.dart';
 import '../../models/user_model.dart';
+import '../main/nav_screen.dart';
 
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
@@ -67,7 +68,7 @@ class AuthGate extends StatelessWidget {
             );
           } else {
             _createUserInFirestore(user);
-            return UserScreen(user: user);
+            return NavScreen();
           }
         }
         return const Scaffold(

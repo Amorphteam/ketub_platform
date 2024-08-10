@@ -1,18 +1,21 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:collection/collection.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:html/parser.dart' as html_parser;
 
 import 'package:bloc/bloc.dart';
 import 'package:epub_parser/epub_parser.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:ketub_platform/models/firestore_reference_model.dart';
 import 'package:ketub_platform/screens/main/bookmark_tab/cubit/bookmark_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../models/reference_model.dart';
 import '../../../models/search_model.dart';
 import '../../../models/style_model.dart';
+import '../../../repositories/firestore_references_database.dart';
 import '../../../repositories/reference_database.dart';
 import '../../../utils/epub_helper.dart';
 import '../../../utils/search_helper.dart';
@@ -28,6 +31,7 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
   List<String>? _spineHtmlFileName;
   List<int>? _spineHtmlFileIndex;
   List<HtmlFileInfo>? _epubContent;
+  final FirestoreReferencesDatabase _firestoreReferencesDatabase = FirestoreReferencesDatabase();
 
   String? _assetPath;
   String? _bookTitle;
@@ -43,6 +47,18 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
     emit(isBookmarked ? const EpubViewerState.bookmarkPresent() : const EpubViewerState.bookmarkAbsent());
   }
 
+  Future<void> checkBookmarkFirestore(String bookPath, String pageIndex) async {
+    try {
+      bool isBookmarked = await _firestoreReferencesDatabase.isBookmarkExist( bookPath, pageIndex);
+      if (isBookmarked) {
+        emit(const EpubViewerState.bookmarkPresent());
+      } else {
+        emit(const EpubViewerState.bookmarkAbsent());
+      }
+    } catch (error) {
+      emit(EpubViewerState.error(error: error.toString()));
+    }
+  }
 
   Future<void> removeBookmark(String bookPath, String pageNumber) async {
     try {
@@ -54,6 +70,19 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
     } catch (error) {
       emit(EpubViewerState.error(error: error.toString()));
     }
+  }
+
+  Future<void> removeBookmarkFirestore(String bookPath, String pageNumber) async {
+    try {
+      int result = await _firestoreReferencesDatabase.deleteReferenceByBookPathAndPageNumber(bookPath, pageNumber);
+      if (result != 0) {
+        emit(EpubViewerState.bookmarkAbsent());
+      } else {
+      }
+    } catch (error) {
+      emit(EpubViewerState.error(error: error.toString()));
+    }
+
   }
 
 
@@ -181,6 +210,25 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
       }
     }
   }
+
+  Future<void> addBookmarkFirestore(FirestoreReferenceModel bookmark) async {
+    try {
+
+      final existingReferences = await _firestoreReferencesDatabase.getReferenceByBookTitleAndPage(bookmark.bookPath, bookmark.navIndex);
+      if (existingReferences.isEmpty) {
+        final int addStatus = await _firestoreReferencesDatabase.addOrUpdateReference(bookmark);
+        emit(EpubViewerState.bookmarkAdded(status: addStatus));
+      } else {
+        emit(EpubViewerState.bookmarkAdded(status: -1));
+      }
+    } catch (error) {
+      if (error is Exception) {
+        emit(EpubViewerState.error(error: error.toString()));
+      }
+    }
+  }
+
+
 
   Future<void> openEpubByChapter(EpubChapter item) async {
     for (String fileName in _spineHtmlFileName!){

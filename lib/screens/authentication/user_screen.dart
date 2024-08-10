@@ -81,12 +81,12 @@ class _UserScreenState extends State<UserScreen> {
   }
 
   Future<void> _getAllReferences() async {
-    List<FirestoreReferenceModel> references = await _firestoreReferencesDatabase.getAllReferences(widget.user.uid);
+    List<FirestoreReferenceModel> references = await _firestoreReferencesDatabase.getAllReferences();
     print('References: $references');
   }
 
   Future<void> _getCountOfAllReferences() async {
-    int count = await _firestoreReferencesDatabase.getCountOfAllReferences(widget.user.uid);
+    int count = await _firestoreReferencesDatabase.getCountOfAllReferences();
     print('Count of References: $count');
   }
 
@@ -102,25 +102,25 @@ class _UserScreenState extends State<UserScreen> {
   }
 
   Future<void> _getReferenceByBookTitleAndPage() async {
-    List<FirestoreReferenceModel> references = await _firestoreReferencesDatabase.getReferenceByBookTitleAndPage(widget.user.uid, 'sample/book/path', '1');
+    List<FirestoreReferenceModel> references = await _firestoreReferencesDatabase.getReferenceByBookTitleAndPage( 'sample/book/path', '1');
     print('References: $references');
   }
 
   Future<void> _getFilterReference() async {
-    List<FirestoreReferenceModel> references = await _firestoreReferencesDatabase.getFilterReference(widget.user.uid, 'sample');
+    List<FirestoreReferenceModel> references = await _firestoreReferencesDatabase.getFilterReference( 'sample');
     print('References: $references');
   }
 
   Future<void> _isBookmarkExist() async {
-    bool exists = await _firestoreReferencesDatabase.isBookmarkExist(widget.user.uid, 'sample/book/path', '1');
+    bool exists = await _firestoreReferencesDatabase.isBookmarkExist( 'sample/book/path', '1');
     print('Bookmark exists: $exists');
   }
 
   Future<void> _deleteReference() async {
-    await _firestoreReferencesDatabase.deleteReference(widget.user.uid, 'sample/book/path', '1');
+    await _firestoreReferencesDatabase.deleteReference( 'sample/book/path', '1');
   }
 
   Future<void> _deleteReferenceByBookPathAndPageNumber() async {
-    await _firestoreReferencesDatabase.deleteReferenceByBookPathAndPageNumber(widget.user.uid, 'sample/book/path', '1');
+    await _firestoreReferencesDatabase.deleteReferenceByBookPathAndPageNumber('sample/book/path', '1');
   }
 }
