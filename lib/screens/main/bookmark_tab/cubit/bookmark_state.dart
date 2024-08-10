@@ -7,6 +7,11 @@ class AllBookmarksLoadedState extends BookmarkState {
   AllBookmarksLoadedState(this.bookmarks);
 }
 
+class AllBookmarksLoadedFirestoreState extends BookmarkState {
+  final List<FirestoreReferenceModel> bookmarks;
+  AllBookmarksLoadedFirestoreState(this.bookmarks);
+}
+
 
 class BookmarkDeletedState extends BookmarkState {}
 
@@ -22,6 +27,11 @@ class BookmarkErrorState extends BookmarkState {
 class BookmarkTappedState extends BookmarkState {
   final ReferenceModel item;
   BookmarkTappedState(this.item);
+}
+
+class BookmarkTappedFirestoreState extends BookmarkState {
+  final FirestoreReferenceModel item;
+  BookmarkTappedFirestoreState(this.item);
 }
 
 

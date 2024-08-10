@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:ketub_platform/screens/authentication/user_screen.dart';
 import '../../models/user_model.dart';
 import '../main/nav_screen.dart';
 

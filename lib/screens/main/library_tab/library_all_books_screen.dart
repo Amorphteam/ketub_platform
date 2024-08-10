@@ -45,7 +45,8 @@ class _LibraryAllBooksScreenState extends State<LibraryAllBooksScreen> {
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (error) => Center(child: Text('Error: $error')),
           allBooksLoaded: (books, cats) {
-            _loadAllBookmarksCount();
+            // _loadAllBookmarksCount();
+            _loadAllBookmarksCountFromFirestore();
             return _buildAllBooks(books, cats);
           },
           filteredBooksLoaded: (filteredBooks, cats) => _buildAllBooks(filteredBooks, cats),
@@ -169,7 +170,9 @@ class _LibraryAllBooksScreenState extends State<LibraryAllBooksScreen> {
   void _loadAllBookmarksCount() {
     context.read<LibraryAllBooksCubit>().loadAllBookmarks();
   }
-
+  void _loadAllBookmarksCountFromFirestore(){
+    context.read<LibraryAllBooksCubit>().loadAllBookmarksFromFirestore();
+  }
   void _filterBooks(String p1) {
     context.read<LibraryAllBooksCubit>().filterBooks(p1);
   }

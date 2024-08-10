@@ -3,6 +3,7 @@ import 'package:ketub_platform/models/book_model.dart';
 import 'package:ketub_platform/models/category_model.dart';
 import 'package:ketub_platform/repositories/book_database.dart';
 
+import '../../../../repositories/firestore_references_database.dart';
 import '../../../../repositories/reference_database.dart';
 import 'library_all_books_state.dart';
 
@@ -11,6 +12,7 @@ class LibraryAllBooksCubit extends Cubit<LibraryAllBooksState> {
   List<BookModel>? books;
   List<CategoryModel>? cats;
   final BooksDatabase booksDatabase = BooksDatabase.instance;
+  final FirestoreReferencesDatabase _firestoreReferencesDatabase = FirestoreReferencesDatabase();
 
   Future<void> loadAllBooks() async {
     emit(const LibraryAllBooksState.loading());
@@ -42,6 +44,17 @@ class LibraryAllBooksCubit extends Cubit<LibraryAllBooksState> {
   Future<void> loadAllBookmarks() async {
     try {
       final bookmarksCount = await referencesDatabase.getCountOfAllReferences();
+      emit(LibraryAllBooksState.allBookmarksCountLoaded(count: bookmarksCount));
+    } catch (error) {
+      if (error is Exception) {
+        emit(LibraryAllBooksState.error(error: error));
+      }
+    }
+  }
+
+  Future<void> loadAllBookmarksFromFirestore() async {
+    try {
+      final bookmarksCount = await _firestoreReferencesDatabase.getCountOfAllReferences();
       emit(LibraryAllBooksState.allBookmarksCountLoaded(count: bookmarksCount));
     } catch (error) {
       if (error is Exception) {
