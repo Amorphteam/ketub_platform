@@ -19,7 +19,6 @@ void openEpub({
   required BuildContext context,
   CategoryModel? cat,
   ReferenceModel? reference,
-  FirestoreReferenceModel? firestoreReferenceModel,
   EpubChaptersWithBookPath? toc,
   SearchModel? search
 }) {
@@ -33,7 +32,6 @@ void openEpub({
                 referenceModel: reference,
                 searchModel: search,
                 tocModel: toc,
-                firestoreReferenceModel: firestoreReferenceModel
                 ),
           ),
     ),

@@ -1,46 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:ketub_platform/models/firestore_reference_model.dart';
 import 'package:ketub_platform/models/reference_model.dart';
-import 'package:ketub_platform/utils/epub_helper.dart';
-
+import '../../../../utils/epub_helper.dart';
 import '../cubit/bookmark_cubit.dart';
 
 class ReferenceListWidget extends StatelessWidget {
-  final List<ReferenceModel>? referenceList;
-  final List<FirestoreReferenceModel>? referenceFirestoreList;
+  final List<ReferenceModel> referenceList;
 
-  const ReferenceListWidget({Key? key, this.referenceList, this.referenceFirestoreList})
-      : super(key: key);
+  const ReferenceListWidget({Key? key, required this.referenceList}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Combine both lists to show them in the GridView
-    final combinedList = [
-      ...(referenceList ?? []),
-      ...(referenceFirestoreList ?? [])
-    ];
-
     return GridView.builder(
       padding: const EdgeInsets.only(top: 16.0, right: 8.0, left: 8.0),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2, // Two items per row
+        crossAxisCount: 2,
         childAspectRatio: (1),
-        crossAxisSpacing: 8, // Spacing between columns
-        mainAxisSpacing: 8, // Spacing between rows
+        crossAxisSpacing: 8,
+        mainAxisSpacing: 8,
       ),
-      itemCount: combinedList.length,
+      itemCount: referenceList.length,
       itemBuilder: (context, index) {
-        final item = combinedList[index];
-
+        final item = referenceList[index];
         return GestureDetector(
           onTap: () {
-            if (item is ReferenceModel) {
-              openEpub(context: context, reference: item);
-            } else if (item is FirestoreReferenceModel) {
-              openEpub(context: context, firestoreReferenceModel: item);
-            }
+            openEpub(context: context, reference: item);
           },
           child: Column(
             children: [
@@ -59,13 +44,8 @@ class ReferenceListWidget extends StatelessWidget {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            if (item is ReferenceModel) {
-                              BlocProvider.of<BookmarkCubit>(context)
-                                  .deleteBookmark(item.id!);
-                            } else if (item is FirestoreReferenceModel) {
-                              BlocProvider.of<BookmarkCubit>(context)
-                                  .deleteBookmarkFromFirestore(item.bookPath, item.navIndex);
-                            }
+                            BlocProvider.of<BookmarkCubit>(context)
+                                .deleteBookmark(item.id ?? 0);
                           },
                           child: SvgPicture.asset(
                             'assets/icons/bookmarked.svg',
@@ -76,10 +56,7 @@ class ReferenceListWidget extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: Text(
-                              // Check the type before accessing the fields
-                              item is ReferenceModel
-                                  ? item.title ?? 'Title'
-                                  : (item as FirestoreReferenceModel).title ?? 'Title',
+                              item.title,
                               style: Theme.of(context).textTheme.labelSmall,
                               textAlign: TextAlign.right,
                             ),
@@ -93,14 +70,11 @@ class ReferenceListWidget extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  // Check the type before accessing the fields
-                  item is ReferenceModel
-                      ? item.bookName ?? 'Book Name'
-                      : (item as FirestoreReferenceModel).bookName ?? 'Book Name',
+                  item.bookName,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
                 ),
-              )
+              ),
             ],
           ),
         );

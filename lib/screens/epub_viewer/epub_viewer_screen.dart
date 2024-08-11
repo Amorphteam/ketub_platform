@@ -22,7 +22,6 @@ typedef DataCallback = void Function(dynamic data);
 
 class EpubViewerScreen extends StatefulWidget {
   final ReferenceModel? referenceModel;
-  final FirestoreReferenceModel? firestoreReferenceModel;
   final CategoryModel? catModel;
   final EpubChaptersWithBookPath? tocModel;
   final SearchModel? searchModel;
@@ -33,7 +32,6 @@ class EpubViewerScreen extends StatefulWidget {
     this.catModel,
     this.tocModel,
     this.searchModel,
-    required this.firestoreReferenceModel,
   }) : super(key: key);
 
   @override
@@ -174,11 +172,9 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                       onPressed: () {
                         _toggleBookmark();
                         if (isBookmarked) {
-                          // _addBookmark(context);
-                          _addBookmarkFirestore(context);
+                          _addBookmark(context);
                         } else {
-                          // _removeBookmark(context);
-                          _removeBookmarkFirestore(context);
+                          _removeBookmark(context);
                         }
                       },
                     ),
@@ -203,9 +199,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                         _storeContentLoaded(content, context, state, tocList);
                         context.read<EpubViewerCubit>().emitLastPageSeen();
                         context.read<EpubViewerCubit>().loadUserPreferences();
-                        // context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
-                        context.read<EpubViewerCubit>().checkBookmarkFirestore(_bookPath!, _currentPage.toString());
-
+                        context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
                         return _buildCurrentUi(context, _content);
                       },
                       contentHighlighted: (content, _) {
@@ -518,30 +512,32 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     );
   }
 
-  _addBookmark(BuildContext context) {
+  Future<void> _addBookmark(BuildContext context) async {
+
     final reference = ReferenceModel(
-      title: ' علامة مرجعية على كتاب $_bookName',
+      title: 'علامة مرجعية على كتاب $_bookName',
       bookName: _bookName,
       bookPath: widget.catModel!.bookPath!,
       navIndex: _currentPage.toString(),
     );
 
-    BlocProvider.of<EpubViewerCubit>(context).addBookmark(reference);
+    await BlocProvider.of<EpubViewerCubit>(context).addBookmark(reference);
     context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
   }
 
-  Future<void> _addBookmarkFirestore(BuildContext context) async {
-    User? user = FirebaseAuth.instance.currentUser;
-
-    final reference = FirestoreReferenceModel(
-        userId: user!.uid,
-        title: ' علامة مرجعية على كتاب $_bookName',
-        bookName: _bookName,
-        bookPath: widget.catModel!.bookPath!,
-        navIndex: _currentPage.toString());
-    BlocProvider.of<EpubViewerCubit>(context).addBookmarkFirestore(reference);
-    context.read<EpubViewerCubit>().checkBookmarkFirestore(_bookPath!, _currentPage.toString());
-  }
+  // Future<void> _addBookmarkToFirestore(BuildContext context, ReferenceModel reference) async {
+  //   User? user = FirebaseAuth.instance.currentUser;
+  //
+  //   final firestoreReference = FirestoreReferenceModel(
+  //     userId: user!.uid,
+  //     title: reference.title,
+  //     bookName: reference.bookName,
+  //     bookPath: reference.bookPath,
+  //     navIndex: reference.navIndex,
+  //   );
+  //
+  //   await BlocProvider.of<EpubViewerCubit>(context).addBookmarkFirestore(firestoreReference);
+  // }
 
   void _openInternalToc(BuildContext context) {
     // This variable holds the state of the AppBar visibility
@@ -646,12 +642,9 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   }
 
   _determineEpubSourceAndLoad() {
-    if (widget.firestoreReferenceModel != null) {
-      _loadEpubFromBookmarkFirestore();
+    if(widget.referenceModel != null){
+      _loadEpubFromBookmark();
     }
-    // else if(widget.referenceModel != null){
-    //   _loadEpubFromBookmark();
-    // }
     else if (widget.tocModel != null) {
       _loadEpubFromTableOfContents();
     } else if (widget.searchModel != null) {
@@ -669,13 +662,6 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     _loadAndParseEpub(bookPath: _bookPath!);
   }
 
-  _loadEpubFromBookmarkFirestore() {
-    final int bookmarkPageNumber =
-        int.tryParse(widget.firestoreReferenceModel?.navIndex ?? '') ?? 0;
-    // _pageController.jumpToPage(bookmarkPageNumber);
-    _bookPath = widget.firestoreReferenceModel!.bookPath;
-    _loadAndParseEpub(bookPath: _bookPath!);
-  }
 
   _loadEpubFromTableOfContents() {
     _bookPath = widget.tocModel!.epubChapter.ContentFileName;
@@ -726,8 +712,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
         _currentPage = newPage;
       });
     }
-    // context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
-    context.read<EpubViewerCubit>().checkBookmarkFirestore(_bookPath!, _currentPage.toString());
+    context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
 
   }
 
@@ -762,8 +747,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   _jumpTo({int? pageNumber}) {
     itemScrollController.jumpTo(index: pageNumber ?? 0);
     _currentPage = pageNumber?.toDouble() ?? _currentPage;
-    // context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
-    context.read<EpubViewerCubit>().checkBookmarkFirestore(_bookPath!, _currentPage.toString());
+    context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
 
 
   }
@@ -775,14 +759,9 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     }
   }
 
-  void _removeBookmark(BuildContext context) {
-    context.read<EpubViewerCubit>().removeBookmark(_bookPath!, _currentPage.toString());
-    context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
-  }
-
-  Future<void> _removeBookmarkFirestore(BuildContext context) async {
-    context.read<EpubViewerCubit>().removeBookmarkFirestore(_bookPath!, _currentPage.toString());
-    context.read<EpubViewerCubit>().checkBookmarkFirestore(_bookPath!, _currentPage.toString());
+  Future<void> _removeBookmark(BuildContext context) async {
+      await context.read<EpubViewerCubit>().removeBookmark(_bookPath!, _currentPage.toString());
+      context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
   }
 
 }

@@ -11,13 +11,13 @@ class BookmarkCubit extends Cubit<BookmarkState> {
   BookmarkCubit() : super(BookmarkInitState());
 
   final ReferencesDatabase referencesDatabase = ReferencesDatabase.instance;
-  final FirestoreReferencesDatabase _firestoreReferencesDatabase = FirestoreReferencesDatabase();
-
   Future<void> loadAllBookmarks() async {
     emit(BookmarkLoadingState());
     try {
-      final bookmarks = await referencesDatabase.getAllReferences();
-      emit(AllBookmarksLoadedState(bookmarks));
+      final localBookmarks =  await referencesDatabase.getAllReferences();
+      emit(AllBookmarksLoadedState(localBookmarks));
+
+
     } catch (error) {
       if (error is Exception) {
         emit(BookmarkErrorState(error));
@@ -25,37 +25,13 @@ class BookmarkCubit extends Cubit<BookmarkState> {
     }
   }
 
-  Future<void> loadAllBookmarkFromFirestore() async {
-    emit(BookmarkLoadingState());
-    try {
-      final bookmarks = await _firestoreReferencesDatabase.getAllReferences();
-      emit(AllBookmarksLoadedFirestoreState(bookmarks));
-    } catch (error) {
-      if (error is Exception) {
-        emit(BookmarkErrorState(error));
-      }
-    }
-  }
-
-  Future<void> deleteBookmarkFromFirestore(String bookPath, String navIndex) async {
-    emit(BookmarkLoadingState());
-    try {
-      await _firestoreReferencesDatabase.deleteReference(bookPath, navIndex);
-      emit(BookmarkDeletedState());
-      loadAllBookmarkFromFirestore();
-    } catch (error) {
-      if (error is Exception) {
-        emit(BookmarkErrorState(error));
-      }
-    }
-  }
 
   Future<void> deleteBookmark(int id) async {
     emit(BookmarkLoadingState());
     try {
       await referencesDatabase.deleteReference(id);
-      emit(BookmarkDeletedState());
       loadAllBookmarks();
+      emit(BookmarkDeletedState());
     } catch (error){
       if (error is Exception){
         emit(BookmarkErrorState(error));
@@ -74,23 +50,11 @@ class BookmarkCubit extends Cubit<BookmarkState> {
       }
     }
   }
-  Future<void> filterBookmarksFromFirestore(String query) async {
-    emit(BookmarkLoadingState());
-    try {
-      final bookmarks = await _firestoreReferencesDatabase.getFilterReference(query);
-      emit(AllBookmarksLoadedFirestoreState(bookmarks));
-    } catch (error) {
-      if (error is Exception) {
-        emit(BookmarkErrorState(error));
-      }
-    }
-  }
+
 
   void openEpub(ReferenceModel item){
     emit(BookmarkTappedState(item));
   }
 
-  void openEpubFromFirestore(FirestoreReferenceModel item){
-    emit(BookmarkTappedFirestoreState(item));
-  }
+
 }

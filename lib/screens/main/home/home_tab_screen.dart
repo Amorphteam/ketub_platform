@@ -12,6 +12,7 @@ import 'package:ketub_platform/screens/main/home/cubit/search_online_cubit.dart'
 import 'package:ketub_platform/screens/main/home/home_tree_cat_screen.dart';
 import 'package:ketub_platform/screens/main/shared_widgets/search_bar_widget.dart';
 
+import '../../../repositories/sync_service.dart';
 import 'home_all_cat_screen.dart';
 import 'search_online_screen.dart';
 
@@ -25,6 +26,7 @@ class homeTabScreen extends StatefulWidget {
 class _homeTabScreenState extends State<homeTabScreen>
     with SingleTickerProviderStateMixin {
   TabController? _tabController;
+
 
   @override
   void initState() {

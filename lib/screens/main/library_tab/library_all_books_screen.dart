@@ -8,6 +8,7 @@ import 'package:ketub_platform/screens/main/library_tab/cubit/library_all_books_
 import 'package:ketub_platform/screens/main/library_tab/widgets/book_list_widget.dart';
 import 'package:ketub_platform/utils/epub_helper.dart';
 
+import '../../../repositories/sync_service.dart';
 import '../bookmark_tab/bookmark_screen.dart';
 import '../bookmark_tab/cubit/bookmark_cubit.dart';
 import '../shared_widgets/search_bar_widget.dart';
@@ -29,7 +30,10 @@ class _LibraryAllBooksScreenState extends State<LibraryAllBooksScreen> {
     super.initState();
     _loadAllBooks();
   }
-
+  @override
+  void dispose() {
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<LibraryAllBooksCubit, LibraryAllBooksState>(
@@ -45,8 +49,7 @@ class _LibraryAllBooksScreenState extends State<LibraryAllBooksScreen> {
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (error) => Center(child: Text('Error: $error')),
           allBooksLoaded: (books, cats) {
-            // _loadAllBookmarksCount();
-            _loadAllBookmarksCountFromFirestore();
+            _loadAllBookmarksCount();
             return _buildAllBooks(books, cats);
           },
           filteredBooksLoaded: (filteredBooks, cats) => _buildAllBooks(filteredBooks, cats),
@@ -170,9 +173,7 @@ class _LibraryAllBooksScreenState extends State<LibraryAllBooksScreen> {
   void _loadAllBookmarksCount() {
     context.read<LibraryAllBooksCubit>().loadAllBookmarks();
   }
-  void _loadAllBookmarksCountFromFirestore(){
-    context.read<LibraryAllBooksCubit>().loadAllBookmarksFromFirestore();
-  }
+
   void _filterBooks(String p1) {
     context.read<LibraryAllBooksCubit>().filterBooks(p1);
   }

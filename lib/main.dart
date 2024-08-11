@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:ketub_platform/repositories/sync_service.dart';
 import 'package:ketub_platform/screens/authentication/auth_gate.dart';
 import 'package:ketub_platform/screens/main/nav_screen.dart';
 import 'package:ketub_platform/screens/splash/splash_screen.dart';
@@ -15,6 +17,7 @@ import 'firebase_options.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FirebaseFirestore.instance.settings = const Settings(persistenceEnabled: true);
 
   await AudioHelper.handleBackgroundAudio();
   SystemChrome.setSystemUIOverlayStyle(

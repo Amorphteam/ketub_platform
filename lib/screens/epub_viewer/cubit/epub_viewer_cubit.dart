@@ -31,7 +31,6 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
   List<String>? _spineHtmlFileName;
   List<int>? _spineHtmlFileIndex;
   List<HtmlFileInfo>? _epubContent;
-  final FirestoreReferencesDatabase _firestoreReferencesDatabase = FirestoreReferencesDatabase();
 
   String? _assetPath;
   String? _bookTitle;
@@ -41,20 +40,11 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
   final ReferencesDatabase referencesDatabase = ReferencesDatabase.instance;
   final searchHelper = SearchHelper();
 
-
   Future<void> checkBookmark(String bookPath, String pageIndex) async {
-    bool isBookmarked = await referencesDatabase.isBookmarkExist(bookPath, pageIndex);
-    emit(isBookmarked ? const EpubViewerState.bookmarkPresent() : const EpubViewerState.bookmarkAbsent());
-  }
-
-  Future<void> checkBookmarkFirestore(String bookPath, String pageIndex) async {
     try {
-      bool isBookmarked = await _firestoreReferencesDatabase.isBookmarkExist( bookPath, pageIndex);
-      if (isBookmarked) {
-        emit(const EpubViewerState.bookmarkPresent());
-      } else {
-        emit(const EpubViewerState.bookmarkAbsent());
-      }
+      bool isBookmarked = await referencesDatabase.isBookmarkExist(bookPath, pageIndex);
+
+      emit(isBookmarked ? const EpubViewerState.bookmarkPresent() : const EpubViewerState.bookmarkAbsent());
     } catch (error) {
       emit(EpubViewerState.error(error: error.toString()));
     }
@@ -71,19 +61,25 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
       emit(EpubViewerState.error(error: error.toString()));
     }
   }
-
-  Future<void> removeBookmarkFirestore(String bookPath, String pageNumber) async {
+  Future<void> addBookmark(ReferenceModel bookmark) async {
     try {
-      int result = await _firestoreReferencesDatabase.deleteReferenceByBookPathAndPageNumber(bookPath, pageNumber);
-      if (result != 0) {
-        emit(EpubViewerState.bookmarkAbsent());
+      final referencesDatabase = ReferencesDatabase.instance;
+      final existingReferences = await referencesDatabase
+          .getReferenceByBookTitleAndPage(bookmark.bookPath, bookmark.navIndex);
+      if (existingReferences.isEmpty) {
+        final int addStatus = await referencesDatabase.addReference(bookmark);
+        emit(EpubViewerState.bookmarkAdded(status: addStatus));
       } else {
+        emit(EpubViewerState.bookmarkAdded(status: -1));
       }
     } catch (error) {
-      emit(EpubViewerState.error(error: error.toString()));
+      if (error is Exception) {
+        emit(EpubViewerState.error(error: error.toString()));
+      }
     }
-
   }
+
+
 
 
   Future<void> loadAndParseEpub(String assetPath) async {
@@ -193,40 +189,6 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
     });
   }
 
-  Future<void> addBookmark(ReferenceModel bookmark) async {
-    try {
-      final referencesDatabase = ReferencesDatabase.instance;
-      final existingReferences = await referencesDatabase
-          .getReferenceByBookTitleAndPage(bookmark.bookPath, bookmark.navIndex);
-      if (existingReferences.isEmpty) {
-        final int addStatus = await referencesDatabase.addReference(bookmark);
-        emit(EpubViewerState.bookmarkAdded(status: addStatus));
-      } else {
-        emit(EpubViewerState.bookmarkAdded(status: -1));
-      }
-    } catch (error) {
-      if (error is Exception) {
-        emit(EpubViewerState.error(error: error.toString()));
-      }
-    }
-  }
-
-  Future<void> addBookmarkFirestore(FirestoreReferenceModel bookmark) async {
-    try {
-
-      final existingReferences = await _firestoreReferencesDatabase.getReferenceByBookTitleAndPage(bookmark.bookPath, bookmark.navIndex);
-      if (existingReferences.isEmpty) {
-        final int addStatus = await _firestoreReferencesDatabase.addOrUpdateReference(bookmark);
-        emit(EpubViewerState.bookmarkAdded(status: addStatus));
-      } else {
-        emit(EpubViewerState.bookmarkAdded(status: -1));
-      }
-    } catch (error) {
-      if (error is Exception) {
-        emit(EpubViewerState.error(error: error.toString()));
-      }
-    }
-  }
 
 
 

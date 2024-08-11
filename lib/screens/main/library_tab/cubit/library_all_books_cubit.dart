@@ -12,7 +12,6 @@ class LibraryAllBooksCubit extends Cubit<LibraryAllBooksState> {
   List<BookModel>? books;
   List<CategoryModel>? cats;
   final BooksDatabase booksDatabase = BooksDatabase.instance;
-  final FirestoreReferencesDatabase _firestoreReferencesDatabase = FirestoreReferencesDatabase();
 
   Future<void> loadAllBooks() async {
     emit(const LibraryAllBooksState.loading());
@@ -52,16 +51,6 @@ class LibraryAllBooksCubit extends Cubit<LibraryAllBooksState> {
     }
   }
 
-  Future<void> loadAllBookmarksFromFirestore() async {
-    try {
-      final bookmarksCount = await _firestoreReferencesDatabase.getCountOfAllReferences();
-      emit(LibraryAllBooksState.allBookmarksCountLoaded(count: bookmarksCount));
-    } catch (error) {
-      if (error is Exception) {
-        emit(LibraryAllBooksState.error(error: error));
-      }
-    }
-  }
 
   void filterBooks(String query) {
       List<BookModel>? filteredBooks;

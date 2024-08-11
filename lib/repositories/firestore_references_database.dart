@@ -121,7 +121,16 @@ class FirestoreReferencesDatabase {
 
     return snapshot.docs.isNotEmpty;
   }
+  Future<void> clearAllReferencesForUser(String userId) async {
+    QuerySnapshot snapshot = await _firestore
+        .collection('references')
+        .where('userId', isEqualTo: userId)
+        .get();
 
+    for (DocumentSnapshot doc in snapshot.docs) {
+      await doc.reference.delete();
+    }
+  }
   Future<void> deleteReference(String bookPath, String navIndex) async {
     User user = AuthHelper.getAuthenticatedUser();
 
