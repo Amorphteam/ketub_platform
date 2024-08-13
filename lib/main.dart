@@ -1,15 +1,24 @@
+import 'dart:io' show Platform;  // اضافه کردن این import
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:just_audio_background/just_audio_background.dart';
 import 'package:ketub_platform/screens/main/nav_screen.dart';
 import 'package:ketub_platform/screens/splash/splash_screen.dart';
 import 'package:ketub_platform/utils/audio_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
+import 'firebase_options.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   await AudioHelper.handleBackgroundAudio();
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
@@ -22,7 +31,6 @@ Future<void> main() async {
 }
 
 
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -30,8 +38,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     const ColorScheme lightColorScheme = ColorScheme(
       brightness: Brightness.light,
-      primary: Color(0xFF4C6707), // Replace with actual color code from the screenshot
-      onPrimary: Color(0xFFFFFFFF), // And so on for the rest of the colors
+      primary: Color(0xFF4C6707),
+      onPrimary: Color(0xFFFFFFFF),
       secondary: Color(0xFF5A6147),
       onSecondary: Color(0xFFFFFFFF),
       error: Color(0xFFBA1A1A),
@@ -54,8 +62,6 @@ class MyApp extends StatelessWidget {
       onBackground: Color(0xFF1B1C17),
     );
 
-
-
     final ThemeData lightTheme = ThemeData(
       useMaterial3: true,
       colorScheme: lightColorScheme,
@@ -71,16 +77,17 @@ class MyApp extends StatelessWidget {
       fontFamily: 'tajwal',
     );
 
-
-
-
     return MaterialApp(
       title: 'Ketub Platform',
       debugShowCheckedModeBanner: false,
+      navigatorKey: navigatorKey,
+      navigatorObservers: [
+        FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
+      ],
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: ThemeMode.system,
-      home:  FutureBuilder(
+      home: FutureBuilder(
         future: isFirstLaunch(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -100,8 +107,7 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: [
-        const Locale('ar', ''), // Arabic, no country code
-        // Add other supported locales here
+        const Locale('ar', ''),
       ],
       locale: Locale('ar', ''),
     );
@@ -117,3 +123,4 @@ class MyApp extends StatelessWidget {
   }
 }
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();

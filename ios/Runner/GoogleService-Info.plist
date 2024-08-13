@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>830678219852-l8dcdn0i7v6vivb8cep0ohtjt3t2mgjp.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.830678219852-l8dcdn0i7v6vivb8cep0ohtjt3t2mgjp</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>830678219852-jb7m9sq3ukcp6jht89tprpgi1ul58k91.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBmXNE6ynBLbEAgdu9oWXlQwRR_FboWWV8</string>
+	<key>GCM_SENDER_ID</key>
+	<string>830678219852</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.papyrus.mehdok.hobbollahcom</string>
+	<key>PROJECT_ID</key>
+	<string>ketub-platform</string>
+	<key>STORAGE_BUCKET</key>
+	<string>ketub-platform.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:830678219852:ios:8b089d57eb86bef159c8e9</string>
+</dict>
+</plist>
