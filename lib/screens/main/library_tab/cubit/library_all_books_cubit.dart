@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:ketub_platform/models/book_model.dart';
 import 'package:ketub_platform/models/category_model.dart';
 import 'package:ketub_platform/repositories/book_database.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../repositories/reference_database.dart';
 import 'library_all_books_state.dart';
@@ -18,6 +19,7 @@ class LibraryAllBooksCubit extends Cubit<LibraryAllBooksState> {
       final books = await booksDatabase.getAllBooks();
       final cats = await booksDatabase.getAllCats();
       _storeData(books, cats);
+      await _checkAndRequestReview();
       emit(LibraryAllBooksState.allBooksLoaded(books: books, cats: cats));
     } catch (error) {
       if (error is Exception) {
@@ -36,6 +38,18 @@ class LibraryAllBooksCubit extends Cubit<LibraryAllBooksState> {
       }
     }
   }
+
+  Future<void> _checkAndRequestReview() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int screenViewCount = prefs.getInt('library_screen_view_count') ?? 0;
+    screenViewCount++;
+    await prefs.setInt('library_screen_view_count', screenViewCount);
+    print('screenViewCount${screenViewCount}');
+    if (screenViewCount == 7) {
+      emit(const LibraryAllBooksState.showReviewRequest());
+    }
+  }
+
 
   final ReferencesDatabase referencesDatabase = ReferencesDatabase.instance;
 

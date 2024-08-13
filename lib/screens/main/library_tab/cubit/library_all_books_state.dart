@@ -31,4 +31,6 @@ class LibraryAllBooksState with _$LibraryAllBooksState {
     required List<CategoryModel> cats,
   }) = _FilteredBooksLoaded;
 
+  const factory LibraryAllBooksState.showReviewRequest() = _ShowReviewRequest;
+
 }

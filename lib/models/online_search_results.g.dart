@@ -13,7 +13,7 @@ _$OnlineSearchResultsImpl _$$OnlineSearchResultsImplFromJson(
         (k, e) =>
             MapEntry(k, (e as List<dynamic>).map(Category.fromJson).toList()),
       ),
-      count: json['count'] as int?,
+      count: (json['count'] as num?)?.toInt(),
       posts: (json['posts'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(
             k, (e as List<dynamic>).map(ArticleModel.fromJson).toList()),

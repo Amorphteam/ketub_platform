@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:ketub_platform/models/book_model.dart';
 import 'package:ketub_platform/models/category_model.dart';
 import 'package:ketub_platform/screens/main/library_tab/cubit/library_all_books_cubit.dart';
 import 'package:ketub_platform/screens/main/library_tab/cubit/library_all_books_state.dart';
 import 'package:ketub_platform/screens/main/library_tab/widgets/book_list_widget.dart';
 import 'package:ketub_platform/utils/epub_helper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../bookmark_tab/bookmark_screen.dart';
 import '../bookmark_tab/cubit/bookmark_cubit.dart';
@@ -23,6 +25,7 @@ class _LibraryAllBooksScreenState extends State<LibraryAllBooksScreen> {
   List<CategoryModel> cats = [];
   List<BookModel> books = [];
   int bookmarkCount = 0;
+  final InAppReview _inAppReview = InAppReview.instance;
 
   @override
   void initState() {
@@ -53,7 +56,10 @@ class _LibraryAllBooksScreenState extends State<LibraryAllBooksScreen> {
           allBookmarksCountLoaded: (count) {
                 bookmarkCount = count;
                 return _buildAllBooks(books, cats);
-          },
+          }, showReviewRequest: () {
+            _showReviewDialog();
+        return _buildAllBooks(books, cats);
+        },
         );
       },
     );
@@ -172,5 +178,16 @@ class _LibraryAllBooksScreenState extends State<LibraryAllBooksScreen> {
 
   void _filterBooks(String p1) {
     context.read<LibraryAllBooksCubit>().filterBooks(p1);
+  }
+
+  void _showReviewDialog() {
+    final inAppReview = InAppReview.instance;
+    inAppReview.isAvailable().then((isAvailable) {
+      if (isAvailable) {
+        inAppReview.requestReview();
+      } else {
+        inAppReview.openStoreListing(appStoreId: '1102746215');
+      }
+    });
   }
 }
