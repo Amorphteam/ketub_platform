@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:in_app_update/in_app_update.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -16,6 +17,8 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  AppUpdateInfo? _updateInfo;
+
   @override
   void initState() {
     super.initState();
@@ -47,7 +50,18 @@ class _SplashScreenState extends State<SplashScreen> {
       String updateMessage = remoteConfig.getString('update_message');
       bool updateRequired = remoteConfig.getBool('update_required');
 
-      if (Platform.isAndroid || Platform.isIOS) {
+      if (Platform.isAndroid) {
+        PackageInfo packageInfo = await PackageInfo.fromPlatform();
+        String currentVersion = packageInfo.version;
+
+        if (compareVersions(currentVersion, minSupportedVersion) < 0) {
+          _checkForInAppUpdate(updateMessage, updateRequired);
+        } else if (compareVersions(currentVersion, latestVersion) < 0) {
+          _checkForInAppUpdate(updateMessage, updateRequired);
+        } else {
+          _navigateToHome();
+        }
+      } else if (Platform.isIOS){
         PackageInfo packageInfo = await PackageInfo.fromPlatform();
         String currentVersion = packageInfo.version;
 
@@ -58,11 +72,28 @@ class _SplashScreenState extends State<SplashScreen> {
         } else {
           _navigateToHome();
         }
-      } else {
+
+      } else
+      {
         _navigateToHome();
       }
     } catch (e) {
       print('Remote Config fetch failed: $e');
+      _navigateToHome();
+    }
+  }
+
+  Future<void> _checkForInAppUpdate(String message, bool isRequired) async {
+    _updateInfo = await InAppUpdate.checkForUpdate();
+    if (_updateInfo?.updateAvailability == UpdateAvailability.updateAvailable) {
+      if (isRequired || _updateInfo?.immediateUpdateAllowed == true) {
+        InAppUpdate.performImmediateUpdate().catchError((e) {
+          // Handle error
+        });
+      } else {
+        _showUpdateDialog(message, isRequired);
+      }
+    } else {
       _navigateToHome();
     }
   }
@@ -113,10 +144,20 @@ class _SplashScreenState extends State<SplashScreen> {
                 style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
               ),
               onPressed: () {
-                String url = Platform.isAndroid
-                    ? 'https://play.google.com/store/apps/details?id=com.amorphteam.ketub.hb'
-                    : 'https://apps.apple.com/us/app/%D8%A7%D9%84%D9%85%D9%88%D9%82%D8%B9-%D8%A7%D9%84%D8%B1%D8%B3%D9%85%D9%8A-%D9%84%D8%AD%D9%8A%D8%AF%D8%B1-%D8%AD%D8%A8-%D8%A7%D9%84%D9%84%D9%87/id1102746215';
-                launch(url);
+                if (Platform.isIOS){
+                  launch('https://apps.apple.com/us/app/%D8%A7%D9%84%D9%85%D9%88%D9%82%D8%B9-%D8%A7%D9%84%D8%B1%D8%B3%D9%85%D9%8A-%D9%84%D8%AD%D9%8A%D8%AF%D8%B1-%D8%AD%D8%A8-%D8%A7%D9%84%D9%84%D9%87/id1102746215');
+
+                }else{
+                  if (_updateInfo?.flexibleUpdateAllowed == true) {
+                    InAppUpdate.startFlexibleUpdate().catchError((e) {
+                      // Handle error
+                    });
+                  } else {
+                    Navigator.of(context).pop();
+                    _navigateToHome();
+                  }
+                }
+
               },
             ),
           ],
@@ -124,6 +165,7 @@ class _SplashScreenState extends State<SplashScreen> {
       );
     });
   }
+
   int compareVersions(String v1, String v2) {
     List<int> v1Parts = v1.split('.').map(int.parse).toList();
     List<int> v2Parts = v2.split('.').map(int.parse).toList();
